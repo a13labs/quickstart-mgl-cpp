@@ -21,15 +21,15 @@
 namespace AppCore
 {
 
-	class Log
-	{
-	public:
-		static void Init();
-		static Ref<spdlog::logger>& GetLogger() { return sLogger; }
+  class Log
+  {
+public:
+    static void Init();
+    static Ref<spdlog::logger>& GetLogger() { return sLogger; }
 
-	private:
-		static Ref<spdlog::logger> sLogger;
-	};
+private:
+    static Ref<spdlog::logger> sLogger;
+  };
 
 } // namespace AppCore
 

@@ -22,67 +22,67 @@
 
 namespace AppCore
 {
-	typedef struct
-	{
-		std::string Title = "Application";
-		uint32_t Width = 800;
-		uint32_t Height = 600;
-		uint32_t GLMajor = 3;
-		uint32_t GLMinor = 3;
-		bool Fullscreen = false;
-		bool Resizable = true;
-		bool VSync = true;
-		uint32_t Samples = 0;
-		bool Cursor = true;
-		Input::Key::Enum ExitKey = Input::Key::Esc;
-		Input::Key::Enum FullScreenKey = Input::Key::F11;
-	} ApplicationConfig;
+  typedef struct
+  {
+    std::string Title = "Application";
+    uint32_t Width = 800;
+    uint32_t Height = 600;
+    uint32_t GLMajor = 3;
+    uint32_t GLMinor = 3;
+    bool Fullscreen = false;
+    bool Resizable = true;
+    bool VSync = true;
+    uint32_t Samples = 0;
+    bool Cursor = true;
+    Input::Key::Enum ExitKey = Input::Key::Esc;
+    Input::Key::Enum FullScreenKey = Input::Key::F11;
+  } ApplicationConfig;
 
-	typedef struct
-	{
-		EventHandler Handler;
-		ApplicationConfig Config = ApplicationConfig();
-		bool Fullscreen = false;
-	} ApplicationStateData;
+  typedef struct
+  {
+    EventHandler Handler;
+    ApplicationConfig Config = ApplicationConfig();
+    bool Fullscreen = false;
+  } ApplicationStateData;
 
-	class Application
-	{
+  class Application
+  {
 
-	public:
-		Application(const ApplicationConfig& config = ApplicationConfig());
-		virtual ~Application() = default;
+public:
+    Application(const ApplicationConfig& config = ApplicationConfig());
+    virtual ~Application() = default;
 
-	public:
-		void Run();
-		void Quit();
-		void ToggleFullScreen();
+public:
+    void Run();
+    void Quit();
+    void ToggleFullScreen();
 
-	public:
-		static Application& Current() { return *sInstance; }
+public:
+    static Application& Current() { return *sInstance; }
 
-		// Events
-		void OnEvent(Events::Event& event);
+    // Events
+    void OnEvent(Events::Event& event);
 
-		// Windows Events
-		virtual bool OnWindowClose(Events::WindowCloseEvent& event);
-		virtual bool OnWindowResize(Events::WindowResizeEvent& event);
+    // Windows Events
+    virtual bool OnWindowClose(Events::WindowCloseEvent& event);
+    virtual bool OnWindowResize(Events::WindowResizeEvent& event);
 
-		// Keys Events
-		virtual bool OnKeyPressed(Events::KeyPressedEvent& event) { return true; }
-		virtual bool OnKeyReleased(Events::KeyReleasedEvent& event) { return true; }
+    // Keys Events
+    virtual bool OnKeyPressed(Events::KeyPressedEvent& event) { return true; }
+    virtual bool OnKeyReleased(Events::KeyReleasedEvent& event) { return true; }
 
-		// Mouse Events
-		virtual bool OnMouseMoved(Events::MouseMovedEvent& event) { return true; }
-		virtual bool OnMouseScrolled(Events::MouseScrolledEvent& event) { return true; }
-		virtual bool OnMouseButtonPressed(Events::MouseButtonPressedEvent& event) { return true; }
-		virtual bool OnMouseButtonReleased(Events::MouseButtonReleasedEvent& event) { return true; }
+    // Mouse Events
+    virtual bool OnMouseMoved(Events::MouseMovedEvent& event) { return true; }
+    virtual bool OnMouseScrolled(Events::MouseScrolledEvent& event) { return true; }
+    virtual bool OnMouseButtonPressed(Events::MouseButtonPressedEvent& event) { return true; }
+    virtual bool OnMouseButtonReleased(Events::MouseButtonReleasedEvent& event) { return true; }
 
-	private:
-		static Application* sInstance;
+private:
+    static Application* sInstance;
 
-		bool mRunning;
-		SDL_Window* mWindow;
-		SDL_GLContext mGLContext;
-		ApplicationStateData mData;
-	};
+    bool mRunning;
+    SDL_Window* mWindow;
+    SDL_GLContext mGLContext;
+    ApplicationStateData mData;
+  };
 } // namespace AppCore

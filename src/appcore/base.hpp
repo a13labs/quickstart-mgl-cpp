@@ -20,30 +20,30 @@
 #define APPCORE_PROFILE 0
 
 #ifdef APPCORE_DEBUG
-#	if defined(APPCORE_PLATFORM_WINDOWS)
-#		define APPCORE_DEBUGBREAK() __debugbreak()
-#	elif defined(APPCORE_PLATFORM_LINUX)
-#		include <signal.h>
-#		define APPCORE_DEBUGBREAK() raise(SIGTRAP)
-#	else
-#		error "Platform doesn't support debugbreak yet!"
-#	endif
-#	define APPCORE_ENABLE_ASSERTS
+#  if defined(APPCORE_PLATFORM_WINDOWS)
+#    define APPCORE_DEBUGBREAK() __debugbreak()
+#  elif defined(APPCORE_PLATFORM_LINUX)
+#    include <signal.h>
+#    define APPCORE_DEBUGBREAK() raise(SIGTRAP)
+#  else
+#    error "Platform doesn't support debugbreak yet!"
+#  endif
+#  define APPCORE_ENABLE_ASSERTS
 #else
-#	define APPCORE_DEBUGBREAK()
+#  define APPCORE_DEBUGBREAK()
 #endif
 
 #ifdef APPCORE_ENABLE_ASSERTS
-#	define APPCORE_ASSERT(x, ...)                                                                                                                   \
-		{                                                                                                                                            \
-			if(!(x))                                                                                                                                 \
-			{                                                                                                                                        \
-				APPCORE_TRACE("Assertion Failed: {0}", __VA_ARGS__);                                                                                 \
-				APPCORE_DEBUGBREAK();                                                                                                                \
-			}                                                                                                                                        \
-		}
+#  define APPCORE_ASSERT(x, ...)                                                                   \
+    {                                                                                              \
+      if(!(x))                                                                                     \
+      {                                                                                            \
+        APPCORE_TRACE("Assertion Failed: {0}", __VA_ARGS__);                                       \
+        APPCORE_DEBUGBREAK();                                                                      \
+      }                                                                                            \
+    }
 #else
-#	define APPCORE_ASSERT(x, y, ...)
+#  define APPCORE_ASSERT(x, y, ...)
 #endif
 
 #define BIT(x) 1 << x
@@ -53,56 +53,56 @@
 namespace AppCore
 {
 
-	/*************************************************************
+  /*************************************************************
  * Generics
  *************************************************************/
 
-	template <typename T>
-	using Scope = std::unique_ptr<T>;
+  template <typename T>
+  using Scope = std::unique_ptr<T>;
 
-	template <typename T, typename... Args>
-	constexpr Scope<T> CreateScope(Args&&... args)
-	{
-		return std::make_unique<T>(std::forward<Args>(args)...);
-	}
+  template <typename T, typename... Args>
+  constexpr Scope<T> CreateScope(Args&&... args)
+  {
+    return std::make_unique<T>(std::forward<Args>(args)...);
+  }
 
-	template <typename T>
-	using Ref = std::shared_ptr<T>;
+  template <typename T>
+  using Ref = std::shared_ptr<T>;
 
-	template <typename T>
-	using VectorRef = std::vector<Ref<T>>;
+  template <typename T>
+  using VectorRef = std::vector<Ref<T>>;
 
-	template <typename T>
-	using QueueRef = std::queue<Ref<T>>;
+  template <typename T>
+  using QueueRef = std::queue<Ref<T>>;
 
-	template <typename T, typename... Args>
-	constexpr Ref<T> CreateRef(Args&&... args)
-	{
-		return std::make_shared<T>(std::forward<Args>(args)...);
-	}
+  template <typename T, typename... Args>
+  constexpr Ref<T> CreateRef(Args&&... args)
+  {
+    return std::make_shared<T>(std::forward<Args>(args)...);
+  }
 
-	/* Core */
+  /* Core */
 
-	class Application;
-	class Log;
+  class Application;
+  class Log;
 
-	/* Event */
+  /* Event */
 
-	namespace Events
-	{
-		class Event;
-		// class EventListener;
-		class WindowCloseEvent;
-		class WindowResizeEvent;
-		class KeyPressedEvent;
-		class KeyReleasedEvent;
-		class KeyTypedEvent;
-		class MouseMovedEvent;
-		class MouseScrolledEvent;
-		class MouseButtonPressedEvent;
-		class MouseButtonReleasedEvent;
-	} // namespace Events
+  namespace Events
+  {
+    class Event;
+    // class EventListener;
+    class WindowCloseEvent;
+    class WindowResizeEvent;
+    class KeyPressedEvent;
+    class KeyReleasedEvent;
+    class KeyTypedEvent;
+    class MouseMovedEvent;
+    class MouseScrolledEvent;
+    class MouseButtonPressedEvent;
+    class MouseButtonReleasedEvent;
+  } // namespace Events
 
-	using EventHandler = std::function<void(Events::Event&)>;
+  using EventHandler = std::function<void(Events::Event&)>;
 
 } // namespace AppCore
