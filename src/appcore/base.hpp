@@ -88,18 +88,21 @@ namespace AppCore
 
 	/* Event */
 
-	class Event;
-	// class EventListener;
-	// class WindowCloseEvent;
-	// class WindowResizeEvent;
-	// class KeyPressedEvent;
-	// class KeyReleasedEvent;
-	// class KeyTypedEvent;
-	// class MouseMovedEvent;
-	// class MouseScrolledEvent;
-	// class MouseButtonPressedEvent;
-	// class MouseButtonReleasedEvent;
+	namespace Events
+	{
+		class Event;
+		// class EventListener;
+		class WindowCloseEvent;
+		class WindowResizeEvent;
+		class KeyPressedEvent;
+		class KeyReleasedEvent;
+		class KeyTypedEvent;
+		class MouseMovedEvent;
+		class MouseScrolledEvent;
+		class MouseButtonPressedEvent;
+		class MouseButtonReleasedEvent;
+	} // namespace Events
 
-	using EventHandler = std::function<void(Event&)>;
+	using EventHandler = std::function<void(Events::Event&)>;
 
 } // namespace AppCore
