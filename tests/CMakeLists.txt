@@ -1,0 +1,6 @@
+ListTests(UNITTESTS ${CMAKE_CURRENT_SOURCE_DIR})
+
+foreach(UNITTEST ${UNITTESTS})
+    AddUnitTest(${UNITTEST})
+endforeach(UNITTEST ${UNITTESTS})
+
