@@ -20,42 +20,40 @@ namespace AppCore
 {
   namespace Input
   {
-
-    static InputState sInputState;
+    InputState State;
 
     inline void AddKeyTranslation(uint16_t src, Key::Enum tgt)
     {
-      sInputState.KeyForwardMap[src & 0xff] = (uint8_t)tgt;
-      sInputState.KeyReverseMap[tgt & 0xff] = (uint8_t)src;
+      State.KeyForwardMap[src & 0xff] = (uint8_t)tgt;
+      State.KeyReverseMap[tgt & 0xff] = (uint8_t)src;
     }
 
     inline int FromKey(Key::Enum key)
     {
-      return (int)sInputState.KeyReverseMap[key & 0xff];
+      return (int)State.KeyReverseMap[key & 0xff];
     }
 
     inline Key::Enum ToKey(int key)
     {
-      return (Key::Enum)sInputState.KeyForwardMap[key & 0xff];
+      return (Key::Enum)State.KeyForwardMap[key & 0xff];
     }
 
     inline void ClearKeyMap()
     {
-      std::memset(sInputState.KeyForwardMap, 0, sizeof(sInputState.KeyForwardMap));
-      std::memset(sInputState.KeyReverseMap, 0, sizeof(sInputState.KeyReverseMap));
-      std::memset(sInputState.PressedKeys, 0, sizeof(sInputState.PressedKeys));
-      std::memset(sInputState.PressedMouseButtons, 0, sizeof(sInputState.PressedMouseButtons));
+      std::memset(State.KeyForwardMap, 0, sizeof(State.KeyForwardMap));
+      std::memset(State.KeyReverseMap, 0, sizeof(State.KeyReverseMap));
+      std::memset(State.PressedKeys, 0, sizeof(State.PressedKeys));
+      std::memset(State.PressedMouseButtons, 0, sizeof(State.PressedMouseButtons));
     }
 
     inline void SetKeyPressedState(Key::Enum key, bool value)
     {
-      sInputState.PressedKeys[key & 0xff] = value;
-      APPCORE_INFO("SetKeyPressedState: {0}:{1}", key, value);
+      State.PressedKeys[key & 0xff] = value;
     }
 
     inline void SetMouseButtonPressedState(MouseButton::Enum button, bool value)
     {
-      sInputState.PressedMouseButtons[button & 0xff] = value;
+      State.PressedMouseButtons[button & 0xff] = value;
     }
 
     void Init()
@@ -222,16 +220,6 @@ namespace AppCore
         break;
         default: break;
       }
-    }
-
-    bool IsKeyPressed(Key::Enum key)
-    {
-      return sInputState.PressedKeys[key & 0xff];
-    }
-
-    bool IsMouseButtonPressed(MouseButton::Enum button)
-    {
-      return sInputState.PressedMouseButtons[button & 0xff];
     }
 
   } // namespace Input

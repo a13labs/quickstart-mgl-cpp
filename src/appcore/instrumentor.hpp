@@ -70,7 +70,7 @@ public:
         // Subsequent profiling output meant for the original session will end up in the
         // newly opened session instead.  That's better than having badly formatted
         // profiling output.
-        if(Log::GetLogger()) // Edge case: BeginSession() might be before Log::Init()
+        if(Log::Logger) // Edge case: BeginSession() might be before Log::Init()
         {
           APPCORE_ERROR("Instrumentor::BeginSession('{0}') when session '{1}' already open.",
                         name,
@@ -239,13 +239,12 @@ private:
 #    define APPCORE_FUNC_SIG "APPCORE_FUNC_SIG unknown!"
 #  endif
 
-#  define APPCORE_PROFILE_BEGIN_SESSION()                                                          \
-    ::Antomic::Instrumentor::Get().BeginSession("Antomic Engine")
-#  define APPCORE_PROFILE_END_SESSION() ::Antomic::Instrumentor::Get().EndSession()
+#  define APPCORE_PROFILE_BEGIN_SESSION() ::AppCore::Instrumentor::Get().BeginSession("AppCore")
+#  define APPCORE_PROFILE_END_SESSION() ::AppCore::Instrumentor::Get().EndSession()
 #  define APPCORE_PROFILE_SCOPE(name, category)                                                    \
     constexpr auto fixedName =                                                                     \
-        ::Antomic::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");                       \
-    ::Antomic::InstrumentationTimer timer##__LINE__(fixedName.Data, category)
+        ::AppCore::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");                       \
+    ::AppCore::InstrumentationTimer timer##__LINE__(fixedName.Data, category)
 #  define APPCORE_PROFILE_FUNCTION(category) APPCORE_PROFILE_SCOPE(APPCORE_FUNC_SIG, category)
 #else
 #  define APPCORE_PROFILE_BEGIN_SESSION()

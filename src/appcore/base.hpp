@@ -19,18 +19,18 @@
 
 #define APPCORE_PROFILE 0
 
-#ifdef APPCORE_DEBUG
-#  if defined(APPCORE_PLATFORM_WINDOWS)
-#    define APPCORE_DEBUGBREAK() __debugbreak()
-#  elif defined(APPCORE_PLATFORM_LINUX)
+#ifdef APP_DEBUG
+#  if defined(APP_PLATFORM_WINDOWS)
+#    define APP_DEBUGBREAK() __debugbreak()
+#  elif defined(APP_PLATFORM_LINUX)
 #    include <signal.h>
-#    define APPCORE_DEBUGBREAK() raise(SIGTRAP)
+#    define APP_DEBUGBREAK() raise(SIGTRAP)
 #  else
 #    error "Platform doesn't support debugbreak yet!"
 #  endif
 #  define APPCORE_ENABLE_ASSERTS
 #else
-#  define APPCORE_DEBUGBREAK()
+#  define APP_DEBUGBREAK()
 #endif
 
 #ifdef APPCORE_ENABLE_ASSERTS
@@ -39,7 +39,7 @@
       if(!(x))                                                                                     \
       {                                                                                            \
         APPCORE_TRACE("Assertion Failed: {0}", __VA_ARGS__);                                       \
-        APPCORE_DEBUGBREAK();                                                                      \
+        APP_DEBUGBREAK();                                                                          \
       }                                                                                            \
     }
 #else
@@ -83,15 +83,16 @@ namespace AppCore
 
   /* Core */
 
-  class Application;
-  class Log;
+  namespace Application
+  {
+    class BaseWindow;
+  }
 
   /* Event */
 
   namespace Events
   {
     class Event;
-    // class EventListener;
     class WindowCloseEvent;
     class WindowResizeEvent;
     class KeyPressedEvent;

@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[])
 {
-  AppCore::Application app;
+  AppCore::Application::BaseWindow app;
   app.Run();
   return 0;
 }

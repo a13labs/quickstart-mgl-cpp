@@ -21,21 +21,17 @@
 namespace AppCore
 {
 
-  class Log
+  namespace Log
   {
-public:
-    static void Init();
-    static Ref<spdlog::logger>& GetLogger() { return sLogger; }
-
-private:
-    static Ref<spdlog::logger> sLogger;
-  };
+    void Init(const std::string& file = "app.log");
+    extern Ref<spdlog::logger> Logger;
+  }; // namespace Log
 
 } // namespace AppCore
 
 // log macros
-#define APPCORE_TRACE(...) ::AppCore::Log::GetLogger()->trace(__VA_ARGS__)
-#define APPCORE_INFO(...) ::AppCore::Log::GetLogger()->info(__VA_ARGS__)
-#define APPCORE_WARN(...) ::AppCore::Log::GetLogger()->warn(__VA_ARGS__)
-#define APPCORE_ERROR(...) ::AppCore::Log::GetLogger()->error(__VA_ARGS__)
-#define APPCORE_CRITICAL(...) ::AppCore::Log::GetLogger()->critical(__VA_ARGS__)
+#define APPCORE_TRACE(...) ::AppCore::Log::Logger->trace(__VA_ARGS__)
+#define APPCORE_INFO(...) ::AppCore::Log::Logger->info(__VA_ARGS__)
+#define APPCORE_WARN(...) ::AppCore::Log::Logger->warn(__VA_ARGS__)
+#define APPCORE_ERROR(...) ::AppCore::Log::Logger->error(__VA_ARGS__)
+#define APPCORE_CRITICAL(...) ::AppCore::Log::Logger->critical(__VA_ARGS__)

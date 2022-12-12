@@ -19,26 +19,30 @@
 
 namespace AppCore
 {
-  Ref<spdlog::logger> Log::sLogger;
-
-  void Log::Init()
+  namespace Log
   {
 
-    std::vector<spdlog::sink_ptr> logSinks;
+    Ref<spdlog::logger> Logger;
 
-    // By default we have only a file logger
-    logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("engine.log", true));
-    logSinks[0]->set_pattern("[%T] [%l] %n: %v");
+    void Init(const std::string& logfile)
+    {
 
-#ifdef ANTOMIC_DEBUG
-    // For debugging purposes we attach a logger to the console
-    logSinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-    logSinks[1]->set_pattern("%^[%T] %n: %v%$");
+      std::vector<spdlog::sink_ptr> logSinks;
+
+      // By default we have only a file logger
+      logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(logfile, true));
+      logSinks[0]->set_pattern("[%T] [%l] %n: %v");
+
+#ifdef APP_DEBUG
+      // For debugging purposes we attach a logger to the console
+      logSinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
+      logSinks[1]->set_pattern("%^[%T] %n: %v%$");
 #endif
 
-    sLogger = std::make_shared<spdlog::logger>("AppCore", begin(logSinks), end(logSinks));
-    spdlog::register_logger(sLogger);
-    sLogger->set_level(spdlog::level::trace);
-    sLogger->flush_on(spdlog::level::trace);
-  }
+      Logger = std::make_shared<spdlog::logger>("AppCore", begin(logSinks), end(logSinks));
+      spdlog::register_logger(Logger);
+      Logger->set_level(spdlog::level::trace);
+      Logger->flush_on(spdlog::level::trace);
+    }
+  } // namespace Log
 } // namespace AppCore

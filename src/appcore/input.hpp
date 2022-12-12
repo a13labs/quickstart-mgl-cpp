@@ -182,10 +182,19 @@ namespace AppCore
       bool PressedMouseButtons[MouseButton::Count];
     } InputState;
 
+    extern InputState State;
+
     void Init();
     void UpdateState(SDL_Event* event, const EventHandler& handler);
-    bool IsKeyPressed(Key::Enum key);
-    bool IsMouseButtonPressed(MouseButton::Enum button);
+    inline bool IsKeyPressed(Key::Enum key)
+    {
+      return State.PressedKeys[key & 0xff];
+    }
+
+    inline bool IsMouseButtonPressed(MouseButton::Enum button)
+    {
+      return State.PressedMouseButtons[button & 0xff];
+    }
 
   } // namespace Input
 } // namespace AppCore
