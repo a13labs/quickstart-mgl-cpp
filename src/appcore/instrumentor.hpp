@@ -14,7 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "base.hpp"
+#include "appcore.hpp"
 #include "log.hpp"
 #include <nlohmann/json.hpp>
 #include <sys/types.h>
@@ -33,18 +33,18 @@ namespace AppCore
 
   struct ProfileResult
   {
-    std::string Name;
+    String Name;
 
     FloatingPointMicroseconds Start;
     std::chrono::microseconds ElapsedTime;
     std::thread::id ThreadID;
     int ProcessID;
-    std::string Category;
+    String Category;
   };
 
   struct InstrumentationSession
   {
-    std::string Name;
+    String Name;
   };
 
   class Instrumentor
@@ -52,7 +52,7 @@ namespace AppCore
 private:
     std::mutex mMutex;
     InstrumentationSession* mCurrentSession;
-    std::string mFilepath;
+    String mFilepath;
     nlohmann::json mTraceEvents;
 
 public:
@@ -60,7 +60,7 @@ public:
         : mCurrentSession(nullptr)
     { }
 
-    void BeginSession(const std::string& name, const std::string& filepath = "results.json")
+    void BeginSession(const String& name, const String& filepath = "results.json")
     {
       std::lock_guard lock(mMutex);
       mFilepath = filepath;

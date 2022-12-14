@@ -14,8 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "base.hpp"
-#include "glm/glm.hpp"
+#include "appcore.hpp"
 #include "log.hpp"
 
 #include "SDL2/SDL.h"

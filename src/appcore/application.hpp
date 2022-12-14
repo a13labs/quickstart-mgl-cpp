@@ -14,7 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "base.hpp"
+#include "appcore.hpp"
 #include "event.hpp"
 #include "input.hpp"
 
@@ -27,11 +27,9 @@ namespace AppCore
 
     typedef struct
     {
-      std::string Title = "BaseWindow";
+      String Title = "BaseWindow";
       uint32_t Width = 800;
       uint32_t Height = 600;
-      uint32_t GLMajor = 3;
-      uint32_t GLMinor = 3;
       bool Fullscreen = false;
       bool Resizable = true;
       bool VSync = true;
@@ -46,7 +44,6 @@ namespace AppCore
       EventHandler Handler;
       WindowConfig CurrentConfig = WindowConfig();
       SDL_Window* NativeWindow = nullptr;
-      SDL_GLContext Context = nullptr;
       bool Fullscreen = false;
     } WindowState;
 
@@ -58,19 +55,23 @@ namespace AppCore
       virtual ~BaseWindow() = default;
 
   public:
+      virtual bool CreateWindow() = 0;
+      virtual void DestroyWindow() = 0;
+      virtual void SwapBuffers() = 0;
+
       void Run();
       void Quit();
       void ToggleFullScreen();
 
   public:
-      static BaseWindow& Current() { return *sInstance; }
+      inline static BaseWindow& Current() { return *sInstance; }
 
       // Events
       void OnEvent(Events::Event& event);
 
       // Windows Events
       virtual bool OnWindowClose(Events::WindowCloseEvent& event);
-      virtual bool OnWindowResize(Events::WindowResizeEvent& event);
+      virtual bool OnWindowResize(Events::WindowResizeEvent& event) { return true; }
 
       // Keys Events
       virtual bool OnKeyPressed(Events::KeyPressedEvent& event) { return true; }
@@ -81,15 +82,17 @@ namespace AppCore
       virtual bool OnMouseScrolled(Events::MouseScrolledEvent& event) { return true; }
       virtual bool OnMouseButtonPressed(Events::MouseButtonPressedEvent& event) { return true; }
       virtual bool OnMouseButtonReleased(Events::MouseButtonReleasedEvent& event) { return true; }
+      virtual void Draw(){};
+
+  protected:
+      WindowState mState;
 
   private:
       static BaseWindow* sInstance;
-
       bool mRunning;
-      WindowState mState;
     };
 
-    WindowConfig LoadWindowConfiguration(const std::string& filename);
+    WindowConfig LoadWindowConfiguration(const String& filename);
   } // namespace Application
 
 } // namespace AppCore

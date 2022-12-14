@@ -81,27 +81,23 @@ namespace AppCore
     return std::make_shared<T>(std::forward<Args>(args)...);
   }
 
-  /* Core */
+  template <typename T>
+  using RefFromThis = std::enable_shared_from_this<T>;
 
-  namespace Application
-  {
-    class BaseWindow;
-  }
+#define MakeThisRef shared_from_this
 
-  /* Event */
+  template <typename T>
+  using List = std::list<T>;
+
+  template <typename k, typename v>
+  using Dict = std::map<k, v>;
+
+  using String = std::string;
+  using StringList = List<String>;
 
   namespace Events
   {
     class Event;
-    class WindowCloseEvent;
-    class WindowResizeEvent;
-    class KeyPressedEvent;
-    class KeyReleasedEvent;
-    class KeyTypedEvent;
-    class MouseMovedEvent;
-    class MouseScrolledEvent;
-    class MouseButtonPressedEvent;
-    class MouseButtonReleasedEvent;
   } // namespace Events
 
   using EventHandler = std::function<void(Events::Event&)>;

@@ -19,7 +19,6 @@
 #include "log.hpp"
 
 #include "SDL2/SDL_syswm.h"
-#include "glad/glad.h"
 
 namespace AppCore
 {
@@ -34,93 +33,57 @@ namespace AppCore
 
       mState.CurrentConfig = config;
       mState.NativeWindow = nullptr;
-      mState.Context = nullptr;
+      sInstance = this;
+      mRunning = false;
+    }
+
+    void BaseWindow::OnEvent(Events::Event& event)
+    {
+      Events::EventDispatcher dispatcher(event);
+
+      // Dispatch Windows Events
+      dispatcher.Dispatch<Events::WindowCloseEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::OnWindowClose));
+      dispatcher.Dispatch<Events::WindowResizeEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::OnWindowResize));
+
+      // Dispatch key events to be handled by the application
+      dispatcher.Dispatch<Events::KeyPressedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::OnKeyPressed));
+      dispatcher.Dispatch<Events::KeyReleasedEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::OnKeyReleased));
+
+      // Dispatch mouse events to be handled by the application
+      dispatcher.Dispatch<Events::MouseMovedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseMoved));
+      dispatcher.Dispatch<Events::MouseScrolledEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseScrolled));
+      dispatcher.Dispatch<Events::MouseButtonPressedEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseButtonPressed));
+      dispatcher.Dispatch<Events::MouseButtonReleasedEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseButtonReleased));
+    }
+
+    bool BaseWindow::OnWindowClose(Events::WindowCloseEvent& event)
+    {
+      mRunning = false;
+      return true;
+    }
+
+    void BaseWindow::Run()
+    {
+      if(mRunning)
+        return;
+
       if(SDL_Init(SDL_INIT_VIDEO) < 0)
       {
         APPCORE_TRACE("BaseWindow: Error initializing SDL");
         return;
       }
 
-      SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, mState.CurrentConfig.GLMajor);
-      SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, mState.CurrentConfig.GLMinor);
-      SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-      // SDL_GL_SetAttribute(SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG, 1);
-      SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-      SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
-      if(mState.CurrentConfig.Samples > 1)
+      if(!CreateWindow())
       {
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, mState.CurrentConfig.Samples);
-      }
-
-      auto flags = SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI;
-
-      mState.Fullscreen = mState.CurrentConfig.Fullscreen;
-      if(mState.CurrentConfig.Fullscreen)
-      {
-        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-      }
-      else
-      {
-        if(mState.CurrentConfig.Resizable)
-        {
-          flags |= SDL_WINDOW_RESIZABLE;
-        }
-      }
-
-      APPCORE_INFO("BaseWindow: Creating window {0},{1} with OpenGL support",
-                   mState.CurrentConfig.Width,
-                   mState.CurrentConfig.Height);
-      mState.NativeWindow = SDL_CreateWindow(mState.CurrentConfig.Title.c_str(),
-                                             SDL_WINDOWPOS_CENTERED,
-                                             SDL_WINDOWPOS_CENTERED,
-                                             mState.CurrentConfig.Width,
-                                             mState.CurrentConfig.Height,
-                                             flags);
-
-      if(!mState.NativeWindow)
-      {
-        auto error = SDL_GetError();
-        APPCORE_TRACE("BaseWindow: Error creating window, '{0}'.", error);
+        APPCORE_TRACE("BaseWindow: Error creating Window");
         SDL_Quit();
-      }
-
-      mState.Context = SDL_GL_CreateContext(mState.NativeWindow);
-      if(!mState.Context)
-      {
-        auto error = SDL_GetError();
-        APPCORE_TRACE("BaseWindow: Error creating OpenGL context, '{0}'.", error);
-        SDL_DestroyWindow(mState.NativeWindow);
-        mState.NativeWindow = nullptr;
-        SDL_Quit();
-      }
-
-      SDL_GL_SetSwapInterval(mState.CurrentConfig.VSync ? 1 : 0);
-
-      if(!gladLoadGL())
-      {
-        APPCORE_TRACE("BaseWindow: Error initializing GL extensions.");
-        SDL_GL_DeleteContext(mState.Context);
-        SDL_DestroyWindow(mState.NativeWindow);
-        mState.Context = nullptr;
-        mState.NativeWindow = nullptr;
-        SDL_Quit();
-      }
-
-      SDL_SysWMinfo wmi;
-      SDL_VERSION(&wmi.version);
-
-      if(!SDL_GetWindowWMInfo(mState.NativeWindow, &wmi))
-      {
-        auto error = SDL_GetError();
-        APPCORE_TRACE("BaseWindow: Error retrieving window information: {0}.", error);
-        SDL_GL_DeleteContext(mState.Context);
-        mState.Context = nullptr;
-
-        SDL_DestroyWindow(mState.NativeWindow);
-        mState.NativeWindow = nullptr;
-        SDL_Quit();
+        return;
       }
 
       Input::Init();
@@ -175,51 +138,6 @@ namespace AppCore
           },
           &mState);
 
-      sInstance = this;
-      mRunning = false;
-    }
-
-    void BaseWindow::OnEvent(Events::Event& event)
-    {
-      Events::EventDispatcher dispatcher(event);
-
-      // Dispatch Windows Events
-      dispatcher.Dispatch<Events::WindowCloseEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnWindowClose));
-      dispatcher.Dispatch<Events::WindowResizeEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnWindowResize));
-
-      // Dispatch key events to be handled by the application
-      dispatcher.Dispatch<Events::KeyPressedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::OnKeyPressed));
-      dispatcher.Dispatch<Events::KeyReleasedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnKeyReleased));
-
-      // Dispatch mouse events to be handled by the application
-      dispatcher.Dispatch<Events::MouseMovedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseMoved));
-      dispatcher.Dispatch<Events::MouseScrolledEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseScrolled));
-      dispatcher.Dispatch<Events::MouseButtonPressedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseButtonPressed));
-      dispatcher.Dispatch<Events::MouseButtonReleasedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseButtonReleased));
-    }
-
-    bool BaseWindow::OnWindowClose(Events::WindowCloseEvent& event)
-    {
-      mRunning = false;
-      return true;
-    }
-
-    bool BaseWindow::OnWindowResize(Events::WindowResizeEvent& event)
-    {
-      return true;
-    }
-
-    void BaseWindow::Run()
-    {
-      if(mRunning)
-        return;
-
       mRunning = true;
 
       APPCORE_PROFILE_BEGIN_SESSION();
@@ -228,7 +146,8 @@ namespace AppCore
       {
         SDL_Event e;
         SDL_PollEvent(&e);
-        SDL_GL_SwapWindow(mState.NativeWindow);
+        Draw();
+        SwapBuffers();
 #if APPCORE_PROFILE
         // Since we are profiling we just render one frame
         mRunning = false;
@@ -236,8 +155,7 @@ namespace AppCore
       }
 
       APPCORE_PROFILE_END_SESSION();
-      SDL_GL_DeleteContext(mState.Context);
-      SDL_DestroyWindow(mState.NativeWindow);
+      DestroyWindow();
       SDL_Quit();
     }
 
@@ -262,7 +180,7 @@ namespace AppCore
       SDL_SetWindowFullscreen(mState.NativeWindow, 0);
     }
 
-    WindowConfig LoadWindowConfiguration(const std::string& filename)
+    WindowConfig LoadWindowConfiguration(const String& filename)
     {
       // TODO: Implement load from JSON
       return WindowConfig();

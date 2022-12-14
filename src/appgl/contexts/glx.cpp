@@ -1,3 +1,4 @@
+
 /*
    Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
 
@@ -13,29 +14,37 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#pragma once
+#ifdef APPGL_GLX
 
-#include <algorithm>
-#include <any>
-#include <array>
-#include <chrono>
-#include <cstdint>
-#include <cstring>
-#include <filesystem>
-#include <fstream>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <map>
-#include <memory>
-#include <mutex>
-#include <queue>
-#include <sstream>
-#include <stack>
-#include <string>
-#include <thread>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
-#include <vector>
+#  include "appcore/log.hpp"
+#  include "appgl/context.hpp"
+#  include <dlfcn.h>
+
+namespace AppGL
+{
+  ContextGLX::ContextGLX(ContextMode::Enum mode, int glversion)
+  {
+    mMode = mode;
+    mContext = nullptr;
+  }
+
+  ContextGLX::~ContextGLX() { }
+
+  GLFunction ContextGLX::Load(const AppCore::String& method)
+  {
+    return nullptr;
+  }
+
+  void ContextGLX::Enter() { }
+
+  void ContextGLX::Exit() { }
+
+  void ContextGLX::Release() { }
+
+  bool ContextGLX::IsValid()
+  {
+    return false;
+  }
+
+} // namespace AppGL
+#endif

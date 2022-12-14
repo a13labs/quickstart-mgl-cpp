@@ -14,7 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "base.hpp"
+#include "appcore.hpp"
 #include "input.hpp"
 #include "instrumentor.hpp"
 #include "log.hpp"
@@ -85,7 +85,7 @@ namespace AppCore
       virtual EventType GetEventType() const = 0;
       virtual const char* GetName() const = 0;
       virtual int GetCategoryFlags() const = 0;
-      virtual std::string ToString() const { return GetName(); }
+      virtual String ToString() const { return GetName(); }
 
       bool IsCategory(EventCategory category) { return GetCategoryFlags() & category; }
 
@@ -136,7 +136,7 @@ namespace AppCore
       uint32_t GetWidth() const { return mWidth; }
       uint32_t GetHeight() const { return mHeight; }
 
-      std::string ToString() const override
+      String ToString() const override
       {
         std::stringstream ss;
         ss << "WindowResizeEvent: " << mWidth << ", " << mHeight;
@@ -169,7 +169,7 @@ namespace AppCore
       float GetX() const { return mMouseX; }
       float GetY() const { return mMouseY; }
 
-      std::string ToString() const override
+      String ToString() const override
       {
         std::stringstream ss;
         ss << "MouseMovedEvent: " << mMouseX << ", " << mMouseY;
@@ -193,7 +193,7 @@ namespace AppCore
       float GetXOffset() const { return mXOffset; }
       float GetYOffset() const { return mYOffset; }
 
-      std::string ToString() const override
+      String ToString() const override
       {
         std::stringstream ss;
         ss << "MouseScrolledEvent: " << GetXOffset() << ", " << GetYOffset();
@@ -227,7 +227,7 @@ namespace AppCore
           : MouseButtonEvent(button)
       { }
 
-      std::string ToString() const override
+      String ToString() const override
       {
         std::stringstream ss;
         ss << "MouseButtonPressedEvent: " << mButton;
@@ -244,7 +244,7 @@ namespace AppCore
           : MouseButtonEvent(button)
       { }
 
-      std::string ToString() const override
+      String ToString() const override
       {
         std::stringstream ss;
         ss << "MouseButtonReleasedEvent: " << mButton;
@@ -281,7 +281,7 @@ namespace AppCore
 
       int GetRepeatCount() const { return mRepeat; }
 
-      std::string ToString() const override
+      String ToString() const override
       {
         std::stringstream ss;
         ss << "KeyPressedEvent: " << mKeyCode << " ( repeat:" << mRepeat << ")";
@@ -300,7 +300,7 @@ namespace AppCore
           : KeyEvent(keycode, modifiers)
       { }
 
-      std::string ToString() const override
+      String ToString() const override
       {
         std::stringstream ss;
         ss << "KeyReleasedEvent: " << mKeyCode;
@@ -317,7 +317,7 @@ namespace AppCore
           : KeyEvent(keycode, modifiers)
       { }
 
-      std::string ToString() const override
+      String ToString() const override
       {
         std::stringstream ss;
         ss << "KeyTypedEvent: " << mKeyCode;

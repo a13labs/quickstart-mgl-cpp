@@ -19,5 +19,5 @@ set(
     json    "https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent" v3.9.1 
 )
 
-set(APP_LIBRARIES "appcore")
+set(APP_LIBRARIES "appcore" "appgl")
 set(APP_EXECUTABLES "app")

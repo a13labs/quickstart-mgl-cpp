@@ -1,8 +1,8 @@
-#include "application.hpp"
+#include "appgl/window.hpp"
 
 int main(int argc, char* argv[])
 {
-  AppCore::Application::BaseWindow app;
+  AppGL::Window app;
   app.Run();
   return 0;
 }

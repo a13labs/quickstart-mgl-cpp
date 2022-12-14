@@ -15,27 +15,15 @@
 */
 #pragma once
 
-#include <algorithm>
-#include <any>
-#include <array>
-#include <chrono>
-#include <cstdint>
-#include <cstring>
-#include <filesystem>
-#include <fstream>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <map>
-#include <memory>
-#include <mutex>
-#include <queue>
-#include <sstream>
-#include <stack>
-#include <string>
-#include <thread>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
-#include <vector>
+namespace AppGL
+{
+
+  using GLFunction = void*;
+  using GLContext = void*;
+
+  class Window;
+  class Context;
+  class Framebuffer;
+  class Texture;
+  class RenderBuffer;
+} // namespace AppGL

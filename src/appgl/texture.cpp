@@ -1,3 +1,4 @@
+
 /*
    Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
 
@@ -13,29 +14,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#pragma once
+#include "texture.hpp"
+#include "appcore/log.hpp"
 
-#include <algorithm>
-#include <any>
-#include <array>
-#include <chrono>
-#include <cstdint>
-#include <cstring>
-#include <filesystem>
-#include <fstream>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <map>
-#include <memory>
-#include <mutex>
-#include <queue>
-#include <sstream>
-#include <stack>
-#include <string>
-#include <thread>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
-#include <vector>
+namespace AppGL
+{
+  Texture::Texture() { }
+
+  Texture::~Texture() { }
+} // namespace AppGL

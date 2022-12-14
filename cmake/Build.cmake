@@ -35,6 +35,12 @@ function(AddExecutable TGT_NAME)
     PUBLIC ${APP_CPP_STD}
   )
 
+  target_include_directories( 
+    ${APP_CURRENT_TARGET}
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+  )
+
   # Include custom configuration if required
   if(EXISTS "${APP_CURRENT_SOURCE}/config.cmake")
     message(STATUS "Adding custom configuration: ${APP_CURRENT_SOURCE}/config.cmake")
@@ -86,6 +92,12 @@ function(AddLibrary TGT_NAME)
   target_compile_features(
     ${APP_CURRENT_TARGET} 
     PUBLIC ${APP_CPP_STD}
+  )
+
+  target_include_directories( 
+    ${APP_CURRENT_TARGET}
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
   )
 
   # Include custom configuration if required

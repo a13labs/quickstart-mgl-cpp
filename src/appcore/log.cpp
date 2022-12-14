@@ -24,7 +24,7 @@ namespace AppCore
 
     Ref<spdlog::logger> Logger;
 
-    void Init(const std::string& logfile)
+    void Init(const String& logfile)
     {
 
       std::vector<spdlog::sink_ptr> logSinks;

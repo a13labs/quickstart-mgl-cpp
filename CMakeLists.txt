@@ -1,4 +1,8 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.7...3.25)
+
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 
 include(Project.cmake)
 include(cmake/Unittest.cmake)
@@ -29,7 +33,7 @@ if(WIN32)
   add_definitions(-DAPP_PLATFORM_WINDOWS)
 elseif (UNIX)
   add_definitions(-DAPP_PLATFORM_LINUX)
-endif(WIN32)
+endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
@@ -113,8 +117,8 @@ if(APP_BUILD_TESTS)
 endif() 
 
 # Debug CMake Vars, uncomment to show CMake vars
-# get_cmake_property(_variableNames VARIABLES)
-# list (SORT _variableNames)
-# foreach (_variableName ${_variableNames})
-#     message(STATUS "${_variableName}=${${_variableName}}")
-# endforeach()
+get_cmake_property(_variableNames VARIABLES)
+list (SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()

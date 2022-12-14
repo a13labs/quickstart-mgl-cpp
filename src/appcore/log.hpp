@@ -14,7 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "base.hpp"
+#include "appcore.hpp"
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/spdlog.h>
 
@@ -23,7 +23,7 @@ namespace AppCore
 
   namespace Log
   {
-    void Init(const std::string& file = "app.log");
+    void Init(const String& file = "app.log");
     extern Ref<spdlog::logger> Logger;
   }; // namespace Log
 
