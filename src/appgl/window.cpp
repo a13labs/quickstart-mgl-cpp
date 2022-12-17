@@ -83,7 +83,7 @@ namespace AppGL
 
     SDL_GL_SetSwapInterval(mState.CurrentConfig.VSync ? 1 : 0);
 
-    mSharedContext = Context::New(ContextMode::Share, 330);
+    mSharedContext = Context::create_context(ContextMode::Share, 330);
 
     if(!mSharedContext)
     {
@@ -113,7 +113,7 @@ namespace AppGL
     {
       auto error = SDL_GetError();
       APPCORE_TRACE("BaseWindow: Error retrieving window information: {0}.", error);
-      mSharedContext->Release();
+      mSharedContext->release();
       SDL_GL_DeleteContext(mContext);
       SDL_DestroyWindow(mState.NativeWindow);
       mSharedContext = nullptr;
@@ -127,7 +127,7 @@ namespace AppGL
 
   void Window::DestroyWindow()
   {
-    mSharedContext->Release();
+    mSharedContext->release();
     SDL_GL_DeleteContext(mContext);
     SDL_DestroyWindow(mState.NativeWindow);
     mSharedContext = nullptr;

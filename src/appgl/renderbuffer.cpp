@@ -20,16 +20,16 @@
 
 namespace AppGL
 {
-  void RenderBuffer::Release()
+  void RenderBuffer::release()
   {
-    if(mReleased)
+    if(m_released)
     {
       return;
     }
 
-    mReleased = true;
+    m_released = true;
 
-    const GLMethods& gl = mContext->GL();
-    gl.DeleteRenderbuffers(1, (GLuint*)&mGLObject);
+    const GLMethods& gl = m_context->gl();
+    gl.DeleteRenderbuffers(1, (GLuint*)&m_renderbuffer_obj);
   }
 } // namespace AppGL

@@ -22,11 +22,11 @@ namespace AppGL
   class FrameBuffer : public AppCore::RefFromThis<FrameBuffer>
   {
 public:
-    ~FrameBuffer() { Release(); }
+    ~FrameBuffer() { release(); }
 
-    void Clear(float r, float g, float b, float a, float depth, const Rect& rect);
-    void Use();
-    AppCore::Ref<uint8_t> Read(const Rect& v,
+    void clear(float r, float g, float b, float a, float depth, const Rect& rect);
+    void use();
+    AppCore::Ref<uint8_t> read(const Rect& v,
                                int c,
                                int att,
                                int align,
@@ -34,71 +34,71 @@ public:
                                const char* dtype,
                                size_t dsize,
                                int w_offset);
-    void ReadInto(AppCore::Ref<uint8_t> buffer,
-                  const Rect& v,
-                  int c,
-                  int att,
-                  int align,
-                  int clmp,
-                  const char* dtype,
-                  size_t dsize,
-                  int w_offset);
-    void Release();
+    void read_into(AppCore::Ref<uint8_t> buffer,
+                   const Rect& v,
+                   int c,
+                   int att,
+                   int align,
+                   int clmp,
+                   const char* dtype,
+                   size_t dsize,
+                   int w_offset);
+    void release();
 
-    inline const Rect& Viewport() { return mViewport; }
-    inline void SetViewport(const Rect& r) { mViewport = r; }
+    inline const Rect& viewport() { return m_viewport; }
+    inline void set_viewport(const Rect& r) { m_viewport = r; }
 
-    inline const Rect& Scissor() { return mScissor; }
-    inline void SetScissor(const Rect& r) { mScissor = r; }
+    inline const Rect& scissor() { return m_scissor; }
+    inline void set_scissor(const Rect& r) { m_scissor = r; }
 
-    inline void EnableScissor() { mScissorEnabled = true; }
-    inline void DisableScissor() { mScissorEnabled = false; }
+    inline void enable_scissor() { m_scissor_enabled = true; }
+    inline void disable_scissor() { m_scissor_enabled = false; }
 
-    inline void Clear(float r, float g, float b, float a, float depth)
+    inline void clear(float r, float g, float b, float a, float depth)
     {
-      Clear(r, g, b, a, depth, {0, 0, mWidth, mHeight});
+      clear(r, g, b, a, depth, {0, 0, m_width, m_height});
     }
 
-    inline void Clear(float r, float g, float b, float a, float depth, int w, int h)
+    inline void clear(float r, float g, float b, float a, float depth, int w, int h)
     {
-      Clear(r, g, b, a, depth, {0, 0, w, h});
+      clear(r, g, b, a, depth, {0, 0, w, h});
     }
 
-    inline void Clear(const glm::vec4& color, float depth)
+    inline void clear(const glm::vec4& color, float depth)
     {
-      Clear(color.r, color.g, color.b, color.a, depth, {0, 0, mWidth, mHeight});
+      clear(color.r, color.g, color.b, color.a, depth, {0, 0, m_width, m_height});
     }
 
-    inline void Clear(const glm::vec4& color, float depth, int w, int h)
+    inline void clear(const glm::vec4& color, float depth, int w, int h)
     {
-      Clear(color.r, color.g, color.b, color.a, depth, {0, 0, w, h});
+      clear(color.r, color.g, color.b, color.a, depth, {0, 0, w, h});
     }
 
-    inline void Clear(const glm::vec4& color, float depth, const Rect& rect)
+    inline void clear(const glm::vec4& color, float depth, const Rect& rect)
     {
-      Clear(color.r, color.g, color.b, color.a, depth, rect);
+      clear(color.r, color.g, color.b, color.a, depth, rect);
     }
 
 private:
     friend class Context;
     FrameBuffer(){};
 
-    Context* mContext;
-    Rect mViewport;
-    bool mScissorEnabled;
-    Rect mScissor;
-    bool* mColorMask;
-    int mDrawBuffersLen;
-    unsigned* mDrawBuffers;
-    int mGLObject;
+    Context* m_context;
+    Rect m_viewport;
+    bool m_scissor_enabled;
+    Rect m_scissor;
+    bool* m_color_mask;
+    int m_draw_buffers_len;
+    unsigned* m_draw_buffers;
+    int m_framebuffer_obj;
 
     // Flags this as a detected framebuffer we don't control the size of
-    bool mDynamic;
-    int mWidth;
-    int mHeight;
+    bool m_dynamic;
+    int m_width;
+    int m_height;
 
-    int mSamples;
-    bool mDepthMask;
-    bool mReleased;
+    int m_samples;
+    bool m_depth_mask;
+    bool m_released;
   };
 } // namespace AppGL

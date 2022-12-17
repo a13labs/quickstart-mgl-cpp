@@ -21,22 +21,22 @@ namespace AppGL
   class RenderBuffer
   {
 public:
-    ~RenderBuffer() { Release(); }
+    ~RenderBuffer() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;
     RenderBuffer(){};
 
-    Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
-    bool mReleased;
+    Context* m_context;
+    DataType* m_data_type;
+    int m_renderbuffer_obj;
+    uint32_t m_width;
+    uint32_t m_height;
+    uint8_t m_components;
+    uint8_t m_samples;
+    bool m_depth;
+    bool m_released;
   };
 } // namespace AppGL

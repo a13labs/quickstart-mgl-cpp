@@ -107,11 +107,11 @@ namespace AppGL
 {
   ContextEGL::ContextEGL(ContextMode::Enum mode, int glversion)
   {
-    mMode = mode;
-    mReleased = true;
+    m_mode = mode;
+    m_released = true;
     int device_index = 0;
 
-    mContext = nullptr;
+    m_context = nullptr;
 
     auto res = new EGLContextData;
 
@@ -434,22 +434,22 @@ namespace AppGL
       break;
     }
 
-    mContext = res;
-    mReleased = false;
+    m_context = res;
+    m_released = false;
   }
 
   ContextEGL::~ContextEGL()
   {
-    if(mContext != nullptr)
-      delete(EGLContextData*)mContext;
+    if(m_context != nullptr)
+      delete(EGLContextData*)m_context;
   }
 
-  GLFunction ContextEGL::Load(const AppCore::String& method)
+  GLFunction ContextEGL::load(const AppCore::String& method)
   {
-    if(!mContext)
+    if(!m_context)
       return nullptr;
 
-    auto self = (EGLContextData*)mContext;
+    auto self = (EGLContextData*)m_context;
 
     void* proc = (void*)dlsym(self->libgl, method.c_str());
     if(!proc)
@@ -460,37 +460,37 @@ namespace AppGL
     return proc;
   }
 
-  void ContextEGL::Enter()
+  void ContextEGL::enter()
   {
-    if(!mContext)
+    if(!m_context)
       return;
 
-    auto self = (EGLContextData*)mContext;
+    auto self = (EGLContextData*)m_context;
     self->m_eglMakeCurrent(self->dpy, self->wnd, self->wnd, self->ctx);
   }
 
-  void ContextEGL::Exit()
+  void ContextEGL::exit()
   {
-    if(!mContext)
+    if(!m_context)
       return;
 
-    auto self = (EGLContextData*)mContext;
+    auto self = (EGLContextData*)m_context;
     self->m_eglMakeCurrent(self->dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
   }
 
-  void ContextEGL::Release()
+  void ContextEGL::release()
   {
-    if(!mContext)
+    if(!m_context)
       return;
 
-    auto self = (EGLContextData*)mContext;
+    auto self = (EGLContextData*)m_context;
     self->m_eglDestroyContext(self->dpy, self->ctx);
-    mReleased = true;
+    m_released = true;
   }
 
-  bool ContextEGL::IsValid()
+  bool ContextEGL::is_valid()
   {
-    return mContext != nullptr && !mReleased;
+    return m_context != nullptr && !m_released;
   }
 
 } // namespace AppGL

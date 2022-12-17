@@ -35,94 +35,90 @@ public:
     virtual ~Context() = default;
 
 public:
-    virtual GLFunction Load(const AppCore::String& method) = 0;
-    virtual void Enter() = 0;
-    virtual void Exit() = 0;
-    virtual void Release() = 0;
-    virtual bool IsValid() = 0;
+    virtual GLFunction load(const AppCore::String& method) = 0;
+    virtual void enter() = 0;
+    virtual void exit() = 0;
+    virtual void release() = 0;
+    virtual bool is_valid() = 0;
 
-    inline ContextMode::Enum Mode() { return mMode; };
-    inline const GLMethods& GL() const { return mGL; }
-    inline bool Released() { return mReleased; };
-    inline int VersionCode() { return mVersionCode; };
-    inline int MaxSamples() { return mMaxSamples; }
-    inline int MaxIntegerSamples() { return mMaxIntegerSamples; }
-    inline int MaxColorAttachments() { return mMaxColorAttachments; }
-    inline int MaxTextureUnits() { return mMaxTextureUnits; }
-    inline int DefaultTextureUnit() { return mDefaultTextureUnit; }
-    inline float MaxAnisotropy() { return mMaxAnisotropy; }
-    inline const AppCore::StringList& Extensions() const { return mExtensions; }
+    inline ContextMode::Enum mode() { return m_mode; }
+    inline const GLMethods& gl() const { return m_gl; }
+    inline bool released() { return m_released; }
+    inline int version_code() { return m_version_code; }
+    inline int max_samples() { return m_max_samples; }
+    inline int max_integer_samples() { return m_max_integer_samples; }
+    inline int max_color_attachments() { return m_max_color_attachments; }
+    inline int max_texture_units() { return m_max_texture_units; }
+    inline int default_texture_unit() { return m_default_texture_unit; }
+    inline float max_anisotropy() { return m_max_anisotropy; }
+    inline const AppCore::StringList& extensions() const { return m_extensions; }
 
-    inline const AppCore::Ref<FrameBuffer> DefaultFrameBuffer() const
-    {
-      return mDefaultFrameBuffer;
-    }
+    inline const AppCore::Ref<FrameBuffer> framebuffer() const { return m_default_framebuffer; }
 
-    inline int EnableFlags() { return mEnableFlags; }
-    inline int FrontFace() { return mFrontFace; }
-    inline int CullFace() { return mCullFace; }
-    inline int DepthFunc() { return mDepthFunc; }
-    inline int BlendFuncSrc() { return mBlendFuncSrc; }
-    inline int BlendFuncDst() { return mBlendFuncDst; }
-    inline bool Wireframe() { return mWireframe; }
-    inline bool Multisample() { return mMultisample; }
-    inline int ProvokingVertex() { return mProvokingVertex; }
-    inline float PolygonOffsetFactor() { return mPolygonOffsetFactor; }
-    inline float PolygonOffsetUnits() { return mPolygonOffsetUnits; }
+    inline int enable_flags() { return m_enable_flags; }
+    inline int front_face() { return m_front_face; }
+    inline int cull_face() { return m_cull_face; }
+    inline int depth_func() { return m_depth_func; }
+    inline int blend_func_src() { return m_blend_func_src; }
+    inline int blend_func_dst() { return m_blend_func_dst; }
+    inline bool wireframe() { return m_wireframe; }
+    inline bool multisample() { return m_multisample; }
+    inline int provoking_vertex() { return m_provoking_vertex; }
+    inline float polygon_offset_factor() { return m_polygon_offset_factor; }
+    inline float polygon_offset_units() { return m_polygon_offset_units; }
 
-    static AppCore::Ref<Context> New(ContextMode::Enum mode, int glversion);
+    static AppCore::Ref<Context> create_context(ContextMode::Enum mode, int glversion);
 
-    AppCore::Ref<Buffer> NewBuffer(const uint8_t* data, size_t length, bool dynamic);
+    AppCore::Ref<Buffer> buffer(const uint8_t* data, size_t length, bool dynamic);
 
-    AppCore::Ref<FrameBuffer> NewFrameBuffer(const AppCore::List<Texture> color_attachments,
-                                             const Texture& depth_attachment);
-    AppCore::Ref<FrameBuffer> NewFrameBuffer(const AppCore::List<Texture> color_attachments,
-                                             const RenderBuffer& depth_attachment);
-    AppCore::Ref<FrameBuffer> NewFrameBuffer(const AppCore::List<RenderBuffer> color_attachments,
-                                             const Texture& depth_attachment);
-    AppCore::Ref<FrameBuffer> NewFrameBuffer(const AppCore::List<RenderBuffer> color_attachments,
-                                             const RenderBuffer& depth_attachment);
+    AppCore::Ref<FrameBuffer> framebuffer(const AppCore::List<Texture> color_attachments,
+                                          const Texture& depth_attachment);
+    AppCore::Ref<FrameBuffer> framebuffer(const AppCore::List<Texture> color_attachments,
+                                          const RenderBuffer& depth_attachment);
+    AppCore::Ref<FrameBuffer> framebuffer(const AppCore::List<RenderBuffer> color_attachments,
+                                          const Texture& depth_attachment);
+    AppCore::Ref<FrameBuffer> framebuffer(const AppCore::List<RenderBuffer> color_attachments,
+                                          const RenderBuffer& depth_attachment);
 
-    AppCore::Ref<RenderBuffer> NewRenderBuffer(uint32_t w,
-                                               uint32_t h,
-                                               uint8_t components,
-                                               uint8_t samples,
-                                               const char* dtype,
-                                               size_t dtype_size);
+    AppCore::Ref<RenderBuffer> renderbuffer(uint32_t w,
+                                            uint32_t h,
+                                            uint8_t components,
+                                            uint8_t samples,
+                                            const char* dtype,
+                                            size_t dtype_size);
 
 private:
-    void LoadFunctions();
+    void load_functions();
 
 protected:
-    ContextMode::Enum mMode;
-    bool mReleased;
+    ContextMode::Enum m_mode;
+    bool m_released;
 
 private:
     friend class FrameBuffer;
 
-    GLMethods mGL;
-    int mVersionCode;
-    int mMaxSamples;
-    int mMaxIntegerSamples;
-    int mMaxColorAttachments;
-    int mMaxTextureUnits;
-    int mDefaultTextureUnit;
-    float mMaxAnisotropy;
-    int mEnableFlags;
-    int mFrontFace;
-    int mCullFace;
-    int mDepthFunc;
-    int mBlendFuncSrc;
-    int mBlendFuncDst;
-    bool mWireframe;
-    bool mMultisample;
-    int mProvokingVertex;
-    float mPolygonOffsetFactor;
-    float mPolygonOffsetUnits;
-
-    AppCore::StringList mExtensions;
-    AppCore::Ref<FrameBuffer> mDefaultFrameBuffer;
-    AppCore::Ref<FrameBuffer> mBoundFrameBuffer;
+    GLMethods m_gl;
+    int m_version_code;
+    int m_max_samples;
+    int m_max_integer_samples;
+    int m_max_color_attachments;
+    int m_max_texture_units;
+    int m_default_texture_unit;
+    float m_max_anisotropy;
+    int m_enable_flags;
+    int m_front_face;
+    int m_cull_face;
+    int m_depth_func;
+    int m_blend_func_src;
+    int m_blend_func_dst;
+    bool m_wireframe;
+    bool m_multisample;
+    int m_provoking_vertex;
+    float m_polygon_offset_factor;
+    float m_polygon_offset_units;
+    AppCore::StringList m_extensions;
+    AppCore::Ref<FrameBuffer> m_default_framebuffer;
+    AppCore::Ref<FrameBuffer> m_bound_framebuffer;
   };
 
 #ifdef APPGL_EGL
@@ -134,14 +130,14 @@ public:
     virtual ~ContextEGL() override;
 
 public:
-    virtual GLFunction Load(const AppCore::String& method) override;
-    virtual void Enter() override;
-    virtual void Exit() override;
-    virtual void Release() override;
-    virtual bool IsValid() override;
+    virtual GLFunction load(const AppCore::String& method) override;
+    virtual void enter() override;
+    virtual void exit() override;
+    virtual void release() override;
+    virtual bool is_valid() override;
 
 private:
-    GLContext mContext;
+    GLContext m_context;
   };
 #endif
 
@@ -155,14 +151,14 @@ public:
     virtual ~ContextGLX() override;
 
 public:
-    virtual GLFunction Load(const AppCore::String& method) override;
-    virtual void Enter() override;
-    virtual void Exit() override;
-    virtual void Release() override;
-    virtual bool IsValid() override;
+    virtual GLFunction load(const AppCore::String& method) override;
+    virtual void enter() override;
+    virtual void exit() override;
+    virtual void release() override;
+    virtual bool is_valid() override;
 
 private:
-    GLContext mContext;
+    GLContext m_context;
   };
 #endif
 

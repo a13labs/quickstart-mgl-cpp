@@ -20,38 +20,39 @@
 
 namespace AppGL
 {
-  static int floatBaseFormat[5] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-  static int intBaseFormat[5] = {0, GL_RED_INTEGER, GL_RG_INTEGER, GL_RGB_INTEGER, GL_RGBA_INTEGER};
+  static int float_base_format[5] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+  static int int_base_format[5] = {
+      0, GL_RED_INTEGER, GL_RG_INTEGER, GL_RGB_INTEGER, GL_RGBA_INTEGER};
 
-  static int f1InternalFormat[5] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
-  static int f2InternalFormat[5] = {0, GL_R16F, GL_RG16F, GL_RGB16F, GL_RGBA16F};
-  static int f4InternalFormat[5] = {0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F};
-  static int u1InternalFormat[5] = {0, GL_R8UI, GL_RG8UI, GL_RGB8UI, GL_RGBA8UI};
-  static int u2InternalFormat[5] = {0, GL_R16UI, GL_RG16UI, GL_RGB16UI, GL_RGBA16UI};
-  static int u4InternalFormat[5] = {0, GL_R32UI, GL_RG32UI, GL_RGB32UI, GL_RGBA32UI};
-  static int i1InternalFormat[5] = {0, GL_R8I, GL_RG8I, GL_RGB8I, GL_RGBA8I};
-  static int i2InternalFormat[5] = {0, GL_R16I, GL_RG16I, GL_RGB16I, GL_RGBA16I};
-  static int i4InternalFormat[5] = {0, GL_R32I, GL_RG32I, GL_RGB32I, GL_RGBA32I};
+  static int f1_internal_format[5] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
+  static int f2_internal_format[5] = {0, GL_R16F, GL_RG16F, GL_RGB16F, GL_RGBA16F};
+  static int f4_internal_format[5] = {0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F};
+  static int u1_internal_format[5] = {0, GL_R8UI, GL_RG8UI, GL_RGB8UI, GL_RGBA8UI};
+  static int u2_internal_format[5] = {0, GL_R16UI, GL_RG16UI, GL_RGB16UI, GL_RGBA16UI};
+  static int u4_internal_format[5] = {0, GL_R32UI, GL_RG32UI, GL_RGB32UI, GL_RGBA32UI};
+  static int i1_internal_format[5] = {0, GL_R8I, GL_RG8I, GL_RGB8I, GL_RGBA8I};
+  static int i2_internal_format[5] = {0, GL_R16I, GL_RG16I, GL_RGB16I, GL_RGBA16I};
+  static int i4_internal_format[5] = {0, GL_R32I, GL_RG32I, GL_RGB32I, GL_RGBA32I};
 
-  static int n1InternalFormat[5] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
-  static int n2InternalFormat[5] = {0, GL_R16, GL_RG16, GL_RGB16, GL_RGBA16};
+  static int n1_internal_format[5] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
+  static int n2_internal_format[5] = {0, GL_R16, GL_RG16, GL_RGB16, GL_RGBA16};
 
-  static DataType f1 = {floatBaseFormat, f1InternalFormat, GL_UNSIGNED_BYTE, 1, true};
-  static DataType f2 = {floatBaseFormat, f2InternalFormat, GL_HALF_FLOAT, 2, true};
-  static DataType f4 = {floatBaseFormat, f4InternalFormat, GL_FLOAT, 4, true};
-  static DataType u1 = {intBaseFormat, u1InternalFormat, GL_UNSIGNED_BYTE, 1, false};
-  static DataType u2 = {intBaseFormat, u2InternalFormat, GL_UNSIGNED_SHORT, 2, false};
-  static DataType u4 = {intBaseFormat, u4InternalFormat, GL_UNSIGNED_INT, 4, false};
-  static DataType i1 = {intBaseFormat, i1InternalFormat, GL_BYTE, 1, false};
-  static DataType i2 = {intBaseFormat, i2InternalFormat, GL_SHORT, 2, false};
-  static DataType i4 = {intBaseFormat, i4InternalFormat, GL_INT, 4, false};
+  static DataType f1 = {float_base_format, f1_internal_format, GL_UNSIGNED_BYTE, 1, true};
+  static DataType f2 = {float_base_format, f2_internal_format, GL_HALF_FLOAT, 2, true};
+  static DataType f4 = {float_base_format, f4_internal_format, GL_FLOAT, 4, true};
+  static DataType u1 = {int_base_format, u1_internal_format, GL_UNSIGNED_BYTE, 1, false};
+  static DataType u2 = {int_base_format, u2_internal_format, GL_UNSIGNED_SHORT, 2, false};
+  static DataType u4 = {int_base_format, u4_internal_format, GL_UNSIGNED_INT, 4, false};
+  static DataType i1 = {int_base_format, i1_internal_format, GL_BYTE, 1, false};
+  static DataType i2 = {int_base_format, i2_internal_format, GL_SHORT, 2, false};
+  static DataType i4 = {int_base_format, i4_internal_format, GL_INT, 4, false};
 
-  static DataType nu1 = {floatBaseFormat, n1InternalFormat, GL_UNSIGNED_BYTE, 1, false};
-  static DataType nu2 = {floatBaseFormat, n2InternalFormat, GL_UNSIGNED_SHORT, 2, false};
-  static DataType ni1 = {floatBaseFormat, n1InternalFormat, GL_BYTE, 1, false};
-  static DataType ni2 = {floatBaseFormat, n2InternalFormat, GL_SHORT, 2, false};
+  static DataType nu1 = {float_base_format, n1_internal_format, GL_UNSIGNED_BYTE, 1, false};
+  static DataType nu2 = {float_base_format, n2_internal_format, GL_UNSIGNED_SHORT, 2, false};
+  static DataType ni1 = {float_base_format, n1_internal_format, GL_BYTE, 1, false};
+  static DataType ni2 = {float_base_format, n2_internal_format, GL_SHORT, 2, false};
 
-  DataType* FromDType(const char* dtype, size_t size)
+  DataType* from_dtype(const char* dtype, size_t size)
   {
     if(size < 2 || size > 3)
       return 0;

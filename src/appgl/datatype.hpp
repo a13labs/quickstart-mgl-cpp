@@ -21,13 +21,13 @@ namespace AppGL
 
   struct DataType
   {
-    int* BaseFormat;
-    int* InternalFormat;
-    int GLType;
-    int Size;
-    bool FloatType;
+    int* base_format;
+    int* internal_format;
+    int gl_type;
+    int size;
+    bool float_type;
   };
 
-  DataType* FromDType(const char* dtype, size_t size);
+  DataType* from_dtype(const char* dtype, size_t size);
 
 } // namespace AppGL

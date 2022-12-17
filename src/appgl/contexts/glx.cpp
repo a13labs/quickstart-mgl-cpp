@@ -24,24 +24,24 @@ namespace AppGL
 {
   ContextGLX::ContextGLX(ContextMode::Enum mode, int glversion)
   {
-    mMode = mode;
-    mContext = nullptr;
+    m_mode = mode;
+    m_context = nullptr;
   }
 
   ContextGLX::~ContextGLX() { }
 
-  GLFunction ContextGLX::Load(const AppCore::String& method)
+  GLFunction ContextGLX::load(const AppCore::String& method)
   {
     return nullptr;
   }
 
-  void ContextGLX::Enter() { }
+  void ContextGLX::enter() { }
 
-  void ContextGLX::Exit() { }
+  void ContextGLX::exit() { }
 
-  void ContextGLX::Release() { }
+  void ContextGLX::release() { }
 
-  bool ContextGLX::IsValid()
+  bool ContextGLX::is_valid()
   {
     return false;
   }
