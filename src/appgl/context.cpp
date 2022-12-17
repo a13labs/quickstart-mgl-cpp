@@ -16,6 +16,11 @@
 */
 #include "context.hpp"
 #include "appcore/log.hpp"
+#include "buffer.hpp"
+#include "datatype.hpp"
+#include "framebuffer.hpp"
+#include "renderbuffer.hpp"
+#include "texture.hpp"
 
 namespace AppGL
 {
@@ -32,17 +37,18 @@ namespace AppGL
     }
   }
 
-  AppCore::Ref<Context> Context::Create(ContextMode::Enum mode, int glversion)
+  AppCore::Ref<Context> Context::New(ContextMode::Enum mode, int glversion)
   {
 
-    AppCore::Ref<Context> ctx = nullptr;
+    Context* ctx = nullptr;
 
 #ifdef APPGL_EGL
     APPCORE_INFO("Trying EGL context!");
-    ctx = AppCore::CreateRef<ContextEGL>(mode, glversion);
+    ctx = new ContextEGL(mode, glversion);
     if(!ctx->IsValid())
     {
       APPCORE_INFO("EGL not supported!");
+      delete(ctx);
       ctx = nullptr;
     }
     else
@@ -54,10 +60,11 @@ namespace AppGL
     if(!ctx)
     {
       APPCORE_INFO("Trying GLX context!");
-      ctx = AppCore::CreateRef<ContextGLX>(mode, glversion);
+      ctx = new ContextGLX(mode, glversion);
       if(!ctx->IsValid())
       {
         APPCORE_INFO("GLX not supported!");
+        delete(ctx);
         ctx = nullptr;
       }
     }
@@ -70,10 +77,11 @@ namespace AppGL
     if(!ctx)
     {
       APPCORE_INFO("Trying WGL context!");
-      ctx = AppCore::CreateRef<ContextWGL>(mode, glversion);
+      ctx = new ContextWGL(mode, glversion);
       if(!ctx->IsValid())
       {
         APPCORE_INFO("WGL not supported!");
+        delete(ctx);
         ctx = nullptr;
       }
     }
@@ -89,13 +97,18 @@ namespace AppGL
       return nullptr;
     }
 
+    const GLMethods& gl = ctx->GL();
+
+    ctx->mReleased = false;
+    ctx->mWireframe = false;
+
     ctx->LoadFunctions();
 
     int major = 0;
     int minor = 0;
 
-    ctx->GL().GetIntegerv(GL_MAJOR_VERSION, &major);
-    ctx->GL().GetIntegerv(GL_MINOR_VERSION, &minor);
+    gl.GetIntegerv(GL_MAJOR_VERSION, &major);
+    gl.GetIntegerv(GL_MINOR_VERSION, &minor);
 
     APPCORE_INFO("GL Version: {0}.{1}", major, minor);
 
@@ -103,39 +116,109 @@ namespace AppGL
 
     // Load extensions
     int num_extensions = 0;
-    ctx->GL().GetIntegerv(GL_NUM_EXTENSIONS, &num_extensions);
+    gl.GetIntegerv(GL_NUM_EXTENSIONS, &num_extensions);
 
     for(int i = 0; i < num_extensions; i++)
     {
-      const char* ext = (const char*)ctx->GL().GetStringi(GL_EXTENSIONS, i);
+      const char* ext = (const char*)gl.GetStringi(GL_EXTENSIONS, i);
       APPCORE_INFO("Found GL extension: {0}", ext);
       ctx->mExtensions.push_front(ext);
     }
 
-    ctx->GL().BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    gl.BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    ctx->GL().Enable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+    gl.Enable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
-    ctx->GL().Enable(GL_PRIMITIVE_RESTART);
-    ctx->GL().PrimitiveRestartIndex(-1);
+    gl.Enable(GL_PRIMITIVE_RESTART);
+    gl.PrimitiveRestartIndex(-1);
 
     ctx->mMaxSamples = 0;
-    ctx->GL().GetIntegerv(GL_MAX_SAMPLES, (GLint*)&ctx->mMaxSamples);
+    gl.GetIntegerv(GL_MAX_SAMPLES, (GLint*)&ctx->mMaxSamples);
 
     ctx->mMaxIntegerSamples = 0;
-    ctx->GL().GetIntegerv(GL_MAX_INTEGER_SAMPLES, (GLint*)&ctx->mMaxIntegerSamples);
+    gl.GetIntegerv(GL_MAX_INTEGER_SAMPLES, (GLint*)&ctx->mMaxIntegerSamples);
 
     ctx->mMaxColorAttachments = 0;
-    ctx->GL().GetIntegerv(GL_MAX_COLOR_ATTACHMENTS, (GLint*)&ctx->mMaxColorAttachments);
+    gl.GetIntegerv(GL_MAX_COLOR_ATTACHMENTS, (GLint*)&ctx->mMaxColorAttachments);
 
     ctx->mMaxTextureUnits = 0;
-    ctx->GL().GetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint*)&ctx->mMaxTextureUnits);
+    gl.GetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint*)&ctx->mMaxTextureUnits);
     ctx->mDefaultTextureUnit = ctx->mMaxTextureUnits - 1;
 
     ctx->mMaxAnisotropy = 0.0;
-    ctx->GL().GetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, (GLfloat*)&ctx->mMaxAnisotropy);
+    gl.GetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, (GLfloat*)&ctx->mMaxAnisotropy);
 
-    ctx->mDefaultFrameBuffer = AppCore::CreateRef<FrameBuffer>(ctx);
+    int bound_framebuffer = 0;
+    gl.GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &bound_framebuffer);
+
+#ifdef APP_OSX
+
+    if(ctx->Mode() == ContextMode::Standalone)
+    {
+      int bound_framebuffer = 0;
+      gl.GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &bound_framebuffer);
+
+      int renderbuffer = 0;
+      gl.GenRenderbuffers(1, (GLuint*)&renderbuffer);
+      gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+      gl.RenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, 4, 4);
+      int framebuffer = 0;
+      gl.GenFrameBuffers(1, (GLuint*)&framebuffer);
+      gl.BindFrameBuffer(GL_FRAMEBUFFER, framebuffer);
+      gl.FrameBufferRenderbuffer(
+          GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
+      bound_framebuffer = framebuffer;
+    }
+#endif
+    {
+      auto fb = new FrameBuffer();
+
+      fb->mReleased = false;
+      fb->mGLObject = 0;
+
+      fb->mDrawBuffersLen = 1;
+      fb->mDrawBuffers = new unsigned[fb->mDrawBuffersLen];
+
+      // According to glGet docs:
+      // The initial value is GL_BACK if there are back buffers, otherwise it is GL_FRONT.
+
+      // According to glDrawBuffer docs:
+      // The symbolic constants GL_FRONT, GL_BACK, GL_LEFT, GL_RIGHT, and GL_FRONT_AND_BACK
+      // are not allowed in the bufs array since they may refer to multiple buffers.
+
+      // GL_COLOR_ATTACHMENT0 is causes error: 1282
+      // This value is temporarily ignored
+
+      // framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
+      // framebuffer->draw_buffers[0] = GL_BACK_LEFT;
+
+      gl.BindFramebuffer(GL_FRAMEBUFFER, 0);
+      gl.GetIntegerv(GL_DRAW_BUFFER, (int*)&fb->mDrawBuffers[0]);
+      gl.BindFramebuffer(GL_FRAMEBUFFER, bound_framebuffer);
+
+      fb->mColorMask = new bool[4];
+      fb->mColorMask[0] = true;
+      fb->mColorMask[1] = true;
+      fb->mColorMask[2] = true;
+      fb->mColorMask[3] = true;
+
+      fb->mDepthMask = true;
+      fb->mContext = ctx;
+
+      int scissor_box[4] = {};
+      gl.GetIntegerv(GL_SCISSOR_BOX, scissor_box);
+
+      Rect r = {scissor_box[0], scissor_box[1], scissor_box[2], scissor_box[3]};
+      fb->mScissorEnabled = false;
+      fb->mViewport = r;
+      fb->mScissor = r;
+
+      fb->mWidth = r.W;
+      fb->mHeight = r.H;
+      fb->mDynamic = true;
+
+      ctx->mDefaultFrameBuffer = AppCore::Ref<FrameBuffer>(fb);
+    }
 
     ctx->mBoundFrameBuffer = ctx->mDefaultFrameBuffer;
 
@@ -154,37 +237,138 @@ namespace AppGL
     ctx->mPolygonOffsetFactor = 0.0f;
     ctx->mPolygonOffsetUnits = 0.0f;
 
-    ctx->GL().GetError(); // clear errors
+    gl.GetError(); // clear errors
 
-    return ctx;
+    return AppCore::Ref<Context>(ctx);
   }
 
-  AppCore::Ref<FrameBuffer>
-  Context::CreateFramebuffer(const AppCore::List<Texture> color_attachments,
-                             const Texture& depth_attachment)
+  AppCore::Ref<Buffer> Context::NewBuffer(const uint8_t* data, size_t length, bool dynamic)
+  {
+
+    if(!length)
+    {
+      APPCORE_ERROR("Missing data length");
+      return nullptr;
+    }
+
+    Buffer* buffer = new Buffer();
+    buffer->m_released = false;
+
+    buffer->m_size = length;
+    buffer->m_dynamic = dynamic;
+
+    const GLMethods& gl = mGL;
+
+    buffer->m_buffer_obj = 0;
+    gl.GenBuffers(1, (GLuint*)&buffer->m_buffer_obj);
+
+    if(!buffer->m_buffer_obj)
+    {
+      APPCORE_ERROR("Cannot create buffer");
+      delete(buffer);
+      return nullptr;
+    }
+
+    gl.BindBuffer(GL_ARRAY_BUFFER, buffer->m_buffer_obj);
+    gl.BufferData(GL_ARRAY_BUFFER, length, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+
+    buffer->m_context = this;
+
+    return AppCore::Ref<Buffer>(buffer);
+  }
+
+  AppCore::Ref<FrameBuffer> Context::NewFrameBuffer(const AppCore::List<Texture> color_attachments,
+                                                    const Texture& depth_attachment)
+  {
+    return nullptr;
+  }
+
+  AppCore::Ref<FrameBuffer> Context::NewFrameBuffer(const AppCore::List<Texture> color_attachments,
+                                                    const RenderBuffer& depth_attachment)
   {
     return nullptr;
   }
 
   AppCore::Ref<FrameBuffer>
-  Context::CreateFramebuffer(const AppCore::List<Texture> color_attachments,
-                             const RenderBuffer& depth_attachment)
+  Context::NewFrameBuffer(const AppCore::List<RenderBuffer> color_attachments,
+                          const Texture& depth_attachment)
   {
     return nullptr;
   }
 
   AppCore::Ref<FrameBuffer>
-  Context::CreateFramebuffer(const AppCore::List<RenderBuffer> color_attachments,
-                             const Texture& depth_attachment)
+  Context::NewFrameBuffer(const AppCore::List<RenderBuffer> color_attachments,
+                          const RenderBuffer& depth_attachment)
   {
     return nullptr;
   }
 
-  AppCore::Ref<FrameBuffer>
-  Context::CreateFramebuffer(const AppCore::List<RenderBuffer> color_attachments,
-                             const RenderBuffer& depth_attachment)
+  AppCore::Ref<RenderBuffer> Context::NewRenderBuffer(uint32_t w,
+                                                      uint32_t h,
+                                                      uint8_t components,
+                                                      uint8_t samples,
+                                                      const char* dtype,
+                                                      size_t dtype_size)
   {
-    return nullptr;
+
+    if(components < 1 || components > 4)
+    {
+      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      return nullptr;
+    }
+
+    if((samples & (samples - 1)) || samples > mMaxSamples)
+    {
+      APPCORE_ERROR("The number of samples is invalid: {0}", samples);
+      return nullptr;
+    }
+
+    DataType* dataType = FromDType(dtype, dtype_size);
+
+    if(!dataType)
+    {
+      APPCORE_ERROR("Invalid data type: '{0}'", dtype);
+      return nullptr;
+    }
+
+    int format = dataType->InternalFormat[components];
+
+    const GLMethods& gl = mGL;
+
+    RenderBuffer* renderbuffer = new RenderBuffer();
+    renderbuffer->mReleased = false;
+
+    renderbuffer->mGLObject = 0;
+    gl.GenRenderbuffers(1, (GLuint*)&renderbuffer->mGLObject);
+
+    if(!renderbuffer->mGLObject)
+    {
+      APPCORE_ERROR("Cannot create RenderBuffer");
+      delete(renderbuffer);
+      return nullptr;
+    }
+
+    gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->mGLObject);
+
+    if(samples == 0)
+    {
+      gl.RenderbufferStorage(GL_RENDERBUFFER, format, w, h);
+    }
+    else
+    {
+      gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, format, w, h);
+    }
+
+    renderbuffer->mWidth = w;
+    renderbuffer->mHeight = h;
+    renderbuffer->mComponents = components;
+    renderbuffer->mSamples = samples;
+    renderbuffer->mDataType = dataType;
+    renderbuffer->mDepth = false;
+
+    renderbuffer->mContext = this;
+
+    return AppCore::Ref<RenderBuffer>(renderbuffer);
   }
 
 } // namespace AppGL

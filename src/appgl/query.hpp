@@ -18,25 +18,19 @@
 
 namespace AppGL
 {
-  class RenderBuffer
+  class Query
   {
 public:
-    ~RenderBuffer() { Release(); }
+    ~Query() { Release(); }
 
     void Release();
 
 private:
     friend class Context;
-    RenderBuffer(){};
+    Query();
 
     Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
+    int mQueryObj[4];
     bool mReleased;
   };
 } // namespace AppGL

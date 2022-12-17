@@ -18,25 +18,30 @@
 
 namespace AppGL
 {
-  class RenderBuffer
+  class Texture3D
   {
 public:
-    ~RenderBuffer() { Release(); }
+    ~Texture3D() { Release(); }
 
     void Release();
 
 private:
     friend class Context;
-    RenderBuffer(){};
+    Texture3D();
 
     Context* mContext;
     DataType* mDataType;
     int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
+    int mWidth;
+    int mHeight;
+    int mDepth;
+    int mComponents;
+    int mMinFilter;
+    int mMagFilter;
+    int mMaxLevel;
+    bool mRepeatX;
+    bool mRepeatY;
+    bool mRepeatZ;
     bool mReleased;
   };
 } // namespace AppGL

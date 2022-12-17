@@ -20,102 +20,6 @@
 
 namespace AppGL
 {
-  FrameBuffer::FrameBuffer(const AppCore::Ref<Context>& ctx)
-  {
-
-    const GLMethods& gl = ctx->GL();
-
-    mContext = ctx;
-    mReleased = false;
-
-    int bound_framebuffer = 0;
-    gl.GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &bound_framebuffer);
-
-#ifdef APP_OSX
-
-    if(ctx->Mode() == ContextMode::Standalone)
-    {
-      int renderbuffer = 0;
-      gl.GenRenderbuffers(1, (GLuint*)&renderbuffer);
-      gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
-      gl.RenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, 4, 4);
-      int framebuffer = 0;
-      gl.GenFrameBuffers(1, (GLuint*)&framebuffer);
-      gl.BindFrameBuffer(GL_FRAMEBUFFER, framebuffer);
-      gl.FrameBufferRenderbuffer(
-          GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
-      bound_framebuffer = framebuffer;
-    }
-#endif
-
-    mFrameBufferObj = 0;
-
-    mDrawBuffersLen = 1;
-    mDrawBuffers = new unsigned[mDrawBuffersLen];
-
-    // According to glGet docs:
-    // The initial value is GL_BACK if there are back buffers, otherwise it is GL_FRONT.
-
-    // According to glDrawBuffer docs:
-    // The symbolic constants GL_FRONT, GL_BACK, GL_LEFT, GL_RIGHT, and GL_FRONT_AND_BACK
-    // are not allowed in the bufs array since they may refer to multiple buffers.
-
-    // GL_COLOR_ATTACHMENT0 is causes error: 1282
-    // This value is temporarily ignored
-
-    // framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
-    // framebuffer->draw_buffers[0] = GL_BACK_LEFT;
-
-    gl.BindFramebuffer(GL_FRAMEBUFFER, 0);
-    gl.GetIntegerv(GL_DRAW_BUFFER, (int*)&mDrawBuffers[0]);
-    gl.BindFramebuffer(GL_FRAMEBUFFER, bound_framebuffer);
-
-    mColorMask = new bool[4];
-    mColorMask[0] = true;
-    mColorMask[1] = true;
-    mColorMask[2] = true;
-    mColorMask[3] = true;
-
-    mDepthMask = true;
-
-    int scissor_box[4] = {};
-    gl.GetIntegerv(GL_SCISSOR_BOX, scissor_box);
-
-    DisableScissor();
-    SetViewport(scissor_box[0], scissor_box[1], scissor_box[2], scissor_box[3]);
-    SetScissor(scissor_box[0], scissor_box[1], scissor_box[2], scissor_box[3]);
-
-    mWidth = scissor_box[2];
-    mHeight = scissor_box[3];
-    mDynamic = true;
-  }
-
-  FrameBuffer::FrameBuffer(const AppCore::Ref<Context>& ctx,
-                           const AppCore::List<Texture> color_attachments,
-                           const Texture& depth_attachment)
-  { }
-
-  FrameBuffer::FrameBuffer(const AppCore::Ref<Context>& ctx,
-                           const AppCore::List<Texture> color_attachments,
-                           const RenderBuffer& depth_attachment)
-  { }
-
-  FrameBuffer::FrameBuffer(const AppCore::Ref<Context>& ctx,
-                           const AppCore::List<RenderBuffer> color_attachments,
-                           const Texture& depth_attachment)
-  { }
-
-  FrameBuffer::FrameBuffer(const AppCore::Ref<Context>& ctx,
-                           const AppCore::List<RenderBuffer> color_attachments,
-                           const RenderBuffer& depth_attachment)
-  { }
-
-  FrameBuffer::~FrameBuffer()
-  {
-    if(!mReleased)
-      Release();
-  }
-
   void FrameBuffer::Release()
   {
     const GLMethods& gl = mContext->GL();
@@ -127,25 +31,24 @@ namespace AppGL
 
     mReleased = true;
 
-    if(mFrameBufferObj)
+    if(mGLObject)
     {
-      gl.DeleteFramebuffers(1, (GLuint*)&mFrameBufferObj);
+      gl.DeleteFramebuffers(1, (GLuint*)&mGLObject);
       delete[] mDrawBuffers;
       delete[] mColorMask;
     }
   }
 
-  void
-  FrameBuffer::Clear(float r, float g, float b, float a, float depth, int x, int y, int w, int h)
+  void FrameBuffer::Clear(float r, float g, float b, float a, float depth, const Rect& rect)
   {
     if(mReleased)
       return;
 
     const GLMethods& gl = mContext->GL();
 
-    gl.BindFramebuffer(GL_FRAMEBUFFER, mFrameBufferObj);
+    gl.BindFramebuffer(GL_FRAMEBUFFER, mGLObject);
 
-    if(mFrameBufferObj)
+    if(mGLObject)
     {
       gl.DrawBuffers(mDrawBuffersLen, mDrawBuffers);
     }
@@ -164,19 +67,19 @@ namespace AppGL
 
     gl.DepthMask(mDepthMask);
 
-    bool viewport = !(x == 0 && y == 0 && w == mWidth && h == mHeight);
+    bool viewport = !(rect.X == 0 && rect.Y == 0 && rect.W == mWidth && rect.H == mHeight);
 
     // Respect the passed in viewport even with scissor enabled
     if(viewport)
     {
       gl.Enable(GL_SCISSOR_TEST);
-      gl.Scissor(x, y, w, h);
+      gl.Scissor(rect.X, rect.Y, rect.W, rect.H);
       gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
       // restore scissor if enabled
       if(mScissorEnabled)
       {
-        gl.Scissor(mScissorX, mScissorY, mScissorWidth, mScissorHeight);
+        gl.Scissor(mScissor.X, mScissor.Y, mScissor.W, mScissor.H);
       }
       else
       {
@@ -189,12 +92,12 @@ namespace AppGL
       if(mScissorEnabled)
       {
         gl.Enable(GL_SCISSOR_TEST);
-        gl.Scissor(mScissorX, mScissorY, mScissorWidth, mScissorHeight);
+        gl.Scissor(mScissor.X, mScissor.Y, mScissor.W, mScissor.H);
       }
       gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     }
 
-    gl.BindFramebuffer(GL_FRAMEBUFFER, mContext->BoundFrameBuffer()->mFrameBufferObj);
+    gl.BindFramebuffer(GL_FRAMEBUFFER, mContext->mBoundFrameBuffer->mGLObject);
   }
 
   void FrameBuffer::Use()
@@ -204,19 +107,19 @@ namespace AppGL
 
     const GLMethods& gl = mContext->GL();
 
-    gl.BindFramebuffer(GL_FRAMEBUFFER, mFrameBufferObj);
+    gl.BindFramebuffer(GL_FRAMEBUFFER, mGLObject);
 
-    if(mFrameBufferObj)
+    if(mGLObject)
     {
       gl.DrawBuffers(mDrawBuffersLen, mDrawBuffers);
     }
 
-    gl.Viewport(mViewportX, mViewportY, mViewportWidth, mViewportHeight);
+    gl.Viewport(mViewport.X, mViewport.Y, mViewport.W, mViewport.H);
 
     if(mScissorEnabled)
     {
       gl.Enable(GL_SCISSOR_TEST);
-      gl.Scissor(mScissorX, mScissorY, mScissorWidth, mScissorHeight);
+      gl.Scissor(mScissor.X, mScissor.Y, mScissor.W, mScissor.H);
     }
     else
     {
@@ -234,6 +137,29 @@ namespace AppGL
 
     gl.DepthMask(mDepthMask);
 
-    mContext->SetBoundFrameBuffer(MakeThisRef());
+    mContext->mBoundFrameBuffer = MakeThisRef();
   }
+
+  AppCore::Ref<uint8_t> FrameBuffer::Read(const Rect& v,
+                                          int c,
+                                          int att,
+                                          int align,
+                                          int clmp,
+                                          const char* dtype,
+                                          size_t dsize,
+                                          int w_offset)
+  {
+    return nullptr;
+  }
+
+  void FrameBuffer::ReadInto(AppCore::Ref<uint8_t> buffer,
+                             const Rect& v,
+                             int c,
+                             int att,
+                             int align,
+                             int clmp,
+                             const char* dtype,
+                             size_t dsize,
+                             int w_offset)
+  { }
 } // namespace AppGL

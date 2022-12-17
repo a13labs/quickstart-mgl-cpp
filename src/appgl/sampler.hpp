@@ -18,25 +18,30 @@
 
 namespace AppGL
 {
-  class RenderBuffer
+  class Sampler
   {
 public:
-    ~RenderBuffer() { Release(); }
+    ~Sampler() { Release(); }
 
+public:
     void Release();
 
 private:
     friend class Context;
-    RenderBuffer(){};
+    Sampler();
 
     Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
+    int mSamplerObj;
+    int mMinFilter;
+    int mMagFilter;
+    float mAnisotropy;
+    int mCompareFunc;
+    bool mRepeatX;
+    bool mRepeatY;
+    bool mRepeatZ;
+    float mBorderColor;
+    float mMinLod;
+    float mMaxLod;
     bool mReleased;
   };
 } // namespace AppGL

@@ -18,25 +18,27 @@
 
 namespace AppGL
 {
-  class RenderBuffer
+  class Scope
   {
 public:
-    ~RenderBuffer() { Release(); }
+    ~Scope() { Release(); }
 
     void Release();
 
 private:
     friend class Context;
-    RenderBuffer(){};
+    Scope();
 
     Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
+    FrameBuffer* mFramebuffer;
+    FrameBuffer* mOldFramebuffer;
+    AppCore::List<AppCore::Ref<Sampler>> mSamplers;
+    int* mTextures;
+    int* mBuffers;
+    int mNumTextures;
+    int mNumBuffers;
+    int mEnableFlags;
+    int mOldEnableFlags;
     bool mReleased;
   };
 } // namespace AppGL

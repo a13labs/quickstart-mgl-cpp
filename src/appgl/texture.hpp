@@ -14,7 +14,6 @@
    limitations under the License.
 */
 #pragma once
-#include "appcore/appcore.hpp"
 #include "appgl.hpp"
 
 namespace AppGL
@@ -22,7 +21,30 @@ namespace AppGL
   class Texture
   {
 public:
+    ~Texture() { Release(); }
+
+    void Release();
+
+private:
+    friend class Context;
     Texture();
-    ~Texture();
+
+    Context* mContext;
+    DataType* mDataType;
+    int mGLObject;
+    int mWidth;
+    int mHeight;
+    int mComponents;
+    int mSamples;
+    int mMinFilter;
+    int mMagFilter;
+    int mMaxLevel;
+    int mCompareFunc;
+    float mAnisotropy;
+    bool mDepth;
+    bool mRepeatX;
+    bool mRepeatY;
+    bool mExternal;
+    bool mReleased;
   };
 } // namespace AppGL

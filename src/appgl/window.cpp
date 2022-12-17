@@ -16,6 +16,7 @@
 */
 #include "window.hpp"
 #include "appcore/log.hpp"
+#include "context.hpp"
 
 #include "SDL2/SDL_syswm.h"
 // #include "glad/glad.h"
@@ -82,7 +83,7 @@ namespace AppGL
 
     SDL_GL_SetSwapInterval(mState.CurrentConfig.VSync ? 1 : 0);
 
-    mSharedContext = Context::Create(ContextMode::Share, 330);
+    mSharedContext = Context::New(ContextMode::Share, 330);
 
     if(!mSharedContext)
     {

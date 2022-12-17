@@ -17,7 +17,7 @@
 #include "appcore/application.hpp"
 #include "appcore/event.hpp"
 #include "appcore/input.hpp"
-#include "context.hpp"
+#include "appgl.hpp"
 
 namespace AppGL
 {

@@ -18,25 +18,16 @@
 
 namespace AppGL
 {
-  class RenderBuffer
+
+  struct DataType
   {
-public:
-    ~RenderBuffer() { Release(); }
-
-    void Release();
-
-private:
-    friend class Context;
-    RenderBuffer(){};
-
-    Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
-    bool mReleased;
+    int* BaseFormat;
+    int* InternalFormat;
+    int GLType;
+    int Size;
+    bool FloatType;
   };
+
+  DataType* FromDType(const char* dtype, size_t size);
+
 } // namespace AppGL

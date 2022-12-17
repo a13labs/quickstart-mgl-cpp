@@ -18,25 +18,28 @@
 
 namespace AppGL
 {
-  class RenderBuffer
+  class TextureCube
   {
 public:
-    ~RenderBuffer() { Release(); }
+    ~TextureCube() { Release(); }
 
     void Release();
 
 private:
     friend class Context;
-    RenderBuffer(){};
+    TextureCube();
 
     Context* mContext;
     DataType* mDataType;
     int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
+    int mWidth;
+    int mHeight;
+    int mDepth;
+    int mComponents;
+    int mMinFilter;
+    int mMagFilter;
+    int mMaxLevel;
+    float mAnisotropy;
     bool mReleased;
   };
 } // namespace AppGL

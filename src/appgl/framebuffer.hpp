@@ -14,7 +14,6 @@
    limitations under the License.
 */
 #pragma once
-#include "appcore/appcore.hpp"
 #include "appgl.hpp"
 #include "glm/glm.hpp"
 
@@ -23,105 +22,75 @@ namespace AppGL
   class FrameBuffer : public AppCore::RefFromThis<FrameBuffer>
   {
 public:
-    FrameBuffer(const AppCore::Ref<Context>& ctx);
+    ~FrameBuffer() { Release(); }
 
-    FrameBuffer(const AppCore::Ref<Context>& ctx,
-                const AppCore::List<Texture> color_attachments,
-                const Texture& depth_attachment);
+    void Clear(float r, float g, float b, float a, float depth, const Rect& rect);
+    void Use();
+    AppCore::Ref<uint8_t> Read(const Rect& v,
+                               int c,
+                               int att,
+                               int align,
+                               int clmp,
+                               const char* dtype,
+                               size_t dsize,
+                               int w_offset);
+    void ReadInto(AppCore::Ref<uint8_t> buffer,
+                  const Rect& v,
+                  int c,
+                  int att,
+                  int align,
+                  int clmp,
+                  const char* dtype,
+                  size_t dsize,
+                  int w_offset);
+    void Release();
 
-    FrameBuffer(const AppCore::Ref<Context>& ctx,
-                const AppCore::List<Texture> color_attachments,
-                const RenderBuffer& depth_attachment);
+    inline const Rect& Viewport() { return mViewport; }
+    inline void SetViewport(const Rect& r) { mViewport = r; }
 
-    FrameBuffer(const AppCore::Ref<Context>& ctx,
-                const AppCore::List<RenderBuffer> color_attachments,
-                const Texture& depth_attachment);
-
-    FrameBuffer(const AppCore::Ref<Context>& ctx,
-                const AppCore::List<RenderBuffer> color_attachments,
-                const RenderBuffer& depth_attachment);
-
-    ~FrameBuffer();
-
-    inline void SetViewport(int x, int y, int w, int h)
-    {
-      mViewportX = x;
-      mViewportY = y;
-      mViewportWidth = w;
-      mViewportHeight = h;
-    }
-
-    inline void SetScissor(int x, int y, int w, int h)
-    {
-      mScissorX = x;
-      mScissorY = y;
-      mScissorWidth = w;
-      mScissorHeight = h;
-    }
+    inline const Rect& Scissor() { return mScissor; }
+    inline void SetScissor(const Rect& r) { mScissor = r; }
 
     inline void EnableScissor() { mScissorEnabled = true; }
     inline void DisableScissor() { mScissorEnabled = false; }
 
-    inline int ViewportX() { return mViewportX; }
-    inline int ViewportY() { return mViewportY; }
-    inline int ViewportWidth() { return mViewportWidth; }
-    inline int ViewportHeight() { return mViewportHeight; }
-
-    inline int ScissorX() { return mScissorX; }
-    inline int ScissorY() { return mScissorY; }
-    inline int ScissorWidth() { return mScissorWidth; }
-    inline int ScissorHeight() { return mScissorHeight; }
-
-    void Release();
-
     inline void Clear(float r, float g, float b, float a, float depth)
     {
-      Clear(r, g, b, a, depth, 0, 0, mWidth, mHeight);
+      Clear(r, g, b, a, depth, {0, 0, mWidth, mHeight});
     }
 
     inline void Clear(float r, float g, float b, float a, float depth, int w, int h)
     {
-      Clear(r, g, b, a, depth, 0, 0, w, h);
+      Clear(r, g, b, a, depth, {0, 0, w, h});
     }
 
     inline void Clear(const glm::vec4& color, float depth)
     {
-      Clear(color.r, color.g, color.b, color.a, depth, 0, 0, mWidth, mHeight);
+      Clear(color.r, color.g, color.b, color.a, depth, {0, 0, mWidth, mHeight});
     }
 
     inline void Clear(const glm::vec4& color, float depth, int w, int h)
     {
-      Clear(color.r, color.g, color.b, color.a, depth, 0, 0, w, h);
+      Clear(color.r, color.g, color.b, color.a, depth, {0, 0, w, h});
     }
 
-    inline void Clear(const glm::vec4& color, float depth, int x, int y, int w, int h)
+    inline void Clear(const glm::vec4& color, float depth, const Rect& rect)
     {
-      Clear(color.r, color.g, color.b, color.a, depth, x, y, w, h);
+      Clear(color.r, color.g, color.b, color.a, depth, rect);
     }
-
-    void Clear(float r, float g, float b, float a, float depth, int x, int y, int w, int h);
-    void Use();
 
 private:
-    AppCore::Ref<Context> mContext;
+    friend class Context;
+    FrameBuffer(){};
 
-    int mViewportX;
-    int mViewportY;
-    int mViewportWidth;
-    int mViewportHeight;
-
+    Context* mContext;
+    Rect mViewport;
     bool mScissorEnabled;
-    int mScissorX;
-    int mScissorY;
-    int mScissorWidth;
-    int mScissorHeight;
-
+    Rect mScissor;
     bool* mColorMask;
-
     int mDrawBuffersLen;
     unsigned* mDrawBuffers;
-
-    int mFrameBufferObj;
+    int mGLObject;
 
     // Flags this as a detected framebuffer we don't control the size of
     bool mDynamic;

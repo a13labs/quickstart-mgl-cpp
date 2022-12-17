@@ -18,25 +18,20 @@
 
 namespace AppGL
 {
-  class RenderBuffer
+  class ComputeShader
   {
 public:
-    ~RenderBuffer() { Release(); }
+    ~ComputeShader() { Release(); }
 
     void Release();
 
 private:
     friend class Context;
-    RenderBuffer(){};
+    ComputeShader();
 
     Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
+    int mProgramObj;
+    int mShaderObj;
     bool mReleased;
   };
 } // namespace AppGL

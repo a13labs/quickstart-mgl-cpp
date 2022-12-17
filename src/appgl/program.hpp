@@ -14,15 +14,32 @@
    limitations under the License.
 */
 #pragma once
-#include "appcore/appcore.hpp"
-#include "glm/glm.hpp"
+#include "appgl.hpp"
 
 namespace AppGL
 {
   class Program
   {
 public:
+    ~Program() { Release(); }
+
+    void Release();
+
+private:
+    friend class Context;
     Program();
-    virtual ~Program();
+
+    Context* mContext;
+    int mGeometryInput;
+    int mGeometryOutput;
+    int mGLObject;
+    int mNumVertexShaderSubroutines;
+    int mNumFragmentShaderSubroutines;
+    int mNumGeometryShaderSubroutines;
+    int mNumTessEvaluationShaderSubroutines;
+    int mNumTessControlShaderSubroutines;
+    int mGeometryVertices;
+    int mNumVaryings;
+    bool mReleased;
   };
 } // namespace AppGL

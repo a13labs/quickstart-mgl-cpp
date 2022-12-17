@@ -16,10 +16,20 @@
 */
 #include "renderbuffer.hpp"
 #include "appcore/log.hpp"
+#include "context.hpp"
 
 namespace AppGL
 {
-  RenderBuffer::RenderBuffer() { }
+  void RenderBuffer::Release()
+  {
+    if(mReleased)
+    {
+      return;
+    }
 
-  RenderBuffer::~RenderBuffer() { }
+    mReleased = true;
+
+    const GLMethods& gl = mContext->GL();
+    gl.DeleteRenderbuffers(1, (GLuint*)&mGLObject);
+  }
 } // namespace AppGL

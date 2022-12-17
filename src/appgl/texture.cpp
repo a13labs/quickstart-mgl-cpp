@@ -19,7 +19,5 @@
 
 namespace AppGL
 {
-  Texture::Texture() { }
-
-  Texture::~Texture() { }
+  void Texture::Release() { }
 } // namespace AppGL

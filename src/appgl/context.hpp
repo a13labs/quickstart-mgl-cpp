@@ -14,9 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "appcore/appcore.hpp"
 #include "appgl.hpp"
-#include "framebuffer.hpp"
 #include "glmethods.hpp"
 
 namespace AppGL
@@ -72,19 +70,25 @@ public:
     inline float PolygonOffsetFactor() { return mPolygonOffsetFactor; }
     inline float PolygonOffsetUnits() { return mPolygonOffsetUnits; }
 
-    AppCore::Ref<FrameBuffer> CreateFramebuffer(const AppCore::List<Texture> color_attachments,
-                                                const Texture& depth_attachment);
-    AppCore::Ref<FrameBuffer> CreateFramebuffer(const AppCore::List<Texture> color_attachments,
-                                                const RenderBuffer& depth_attachment);
-    AppCore::Ref<FrameBuffer> CreateFramebuffer(const AppCore::List<RenderBuffer> color_attachments,
-                                                const Texture& depth_attachment);
-    AppCore::Ref<FrameBuffer> CreateFramebuffer(const AppCore::List<RenderBuffer> color_attachments,
-                                                const RenderBuffer& depth_attachment);
+    static AppCore::Ref<Context> New(ContextMode::Enum mode, int glversion);
 
-    inline const AppCore::Ref<FrameBuffer> BoundFrameBuffer() const { return mBoundFrameBuffer; }
-    inline void SetBoundFrameBuffer(const AppCore::Ref<FrameBuffer> fb) { mBoundFrameBuffer = fb; }
+    AppCore::Ref<Buffer> NewBuffer(const uint8_t* data, size_t length, bool dynamic);
 
-    static AppCore::Ref<Context> Create(ContextMode::Enum mode, int glversion);
+    AppCore::Ref<FrameBuffer> NewFrameBuffer(const AppCore::List<Texture> color_attachments,
+                                             const Texture& depth_attachment);
+    AppCore::Ref<FrameBuffer> NewFrameBuffer(const AppCore::List<Texture> color_attachments,
+                                             const RenderBuffer& depth_attachment);
+    AppCore::Ref<FrameBuffer> NewFrameBuffer(const AppCore::List<RenderBuffer> color_attachments,
+                                             const Texture& depth_attachment);
+    AppCore::Ref<FrameBuffer> NewFrameBuffer(const AppCore::List<RenderBuffer> color_attachments,
+                                             const RenderBuffer& depth_attachment);
+
+    AppCore::Ref<RenderBuffer> NewRenderBuffer(uint32_t w,
+                                               uint32_t h,
+                                               uint8_t components,
+                                               uint8_t samples,
+                                               const char* dtype,
+                                               size_t dtype_size);
 
 private:
     void LoadFunctions();
@@ -94,6 +98,8 @@ protected:
     bool mReleased;
 
 private:
+    friend class FrameBuffer;
+
     GLMethods mGL;
     int mVersionCode;
     int mMaxSamples;

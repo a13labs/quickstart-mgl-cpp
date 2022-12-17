@@ -18,25 +18,30 @@
 
 namespace AppGL
 {
-  class RenderBuffer
+  class TextureArray
   {
 public:
-    ~RenderBuffer() { Release(); }
+    ~TextureArray() { Release(); }
 
     void Release();
 
 private:
     friend class Context;
-    RenderBuffer(){};
+    TextureArray();
 
     Context* mContext;
     DataType* mDataType;
     int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
+    int mWidth;
+    int mHeight;
+    int mLayers;
+    int mComponents;
+    int mMinFilter;
+    int mMagFilter;
+    int mMaxLevel;
+    bool mRepeatX;
+    bool mRepeatY;
+    float mAnisotropy;
     bool mReleased;
   };
 } // namespace AppGL

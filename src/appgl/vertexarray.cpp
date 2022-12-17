@@ -1,3 +1,4 @@
+
 /*
    Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
 
@@ -13,30 +14,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#pragma once
-#include "appgl.hpp"
+#include "vertexarray.hpp"
+#include "appcore/log.hpp"
 
 namespace AppGL
 {
-  class RenderBuffer
-  {
-public:
-    ~RenderBuffer() { Release(); }
-
-    void Release();
-
-private:
-    friend class Context;
-    RenderBuffer(){};
-
-    Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint8_t mComponents;
-    uint8_t mSamples;
-    bool mDepth;
-    bool mReleased;
-  };
+  void VertexArray::Release() { }
 } // namespace AppGL

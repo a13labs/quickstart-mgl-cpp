@@ -14,22 +14,32 @@
    limitations under the License.
 */
 #pragma once
-#include "appcore/appcore.hpp"
-#include "glad/glad.h"
-#include "glm/glm.hpp"
+#include "appgl.hpp"
 
 namespace AppGL
 {
   class VertexArray
   {
 public:
-    VertexArray();
-    virtual ~VertexArray() = default;
+    ~VertexArray() { Release(); }
 
 public:
     void Release();
 
 private:
-    GLuint mGLObject;
+    friend class Context;
+    VertexArray();
+
+    Context* mContext;
+    Program* mProgram;
+    Buffer* mIndexBuffer;
+    int mIndexElementSize;
+    int mIndexElementType;
+    unsigned* mSubroutines;
+    int mNumSubroutines;
+    int mGLObject;
+    int mNumVertices;
+    int mNumInstances;
+    bool mReleased;
   };
 } // namespace AppGL
