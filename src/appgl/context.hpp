@@ -53,7 +53,7 @@ public:
     inline float max_anisotropy() { return m_max_anisotropy; }
     inline const AppCore::StringList& extensions() const { return m_extensions; }
 
-    inline const AppCore::Ref<FrameBuffer> framebuffer() const { return m_default_framebuffer; }
+    inline const AppCore::Ref<Framebuffer> framebuffer() const { return m_default_framebuffer; }
 
     inline int enable_flags() { return m_enable_flags; }
     inline int front_face() { return m_front_face; }
@@ -71,16 +71,16 @@ public:
 
     AppCore::Ref<Buffer> buffer(const uint8_t* data, size_t length, bool dynamic);
 
-    AppCore::Ref<FrameBuffer> framebuffer(const AppCore::List<Texture> color_attachments,
+    AppCore::Ref<Framebuffer> framebuffer(const AppCore::List<Texture> color_attachments,
                                           const Texture& depth_attachment);
-    AppCore::Ref<FrameBuffer> framebuffer(const AppCore::List<Texture> color_attachments,
-                                          const RenderBuffer& depth_attachment);
-    AppCore::Ref<FrameBuffer> framebuffer(const AppCore::List<RenderBuffer> color_attachments,
+    AppCore::Ref<Framebuffer> framebuffer(const AppCore::List<Texture> color_attachments,
+                                          const Renderbuffer& depth_attachment);
+    AppCore::Ref<Framebuffer> framebuffer(const AppCore::List<Renderbuffer> color_attachments,
                                           const Texture& depth_attachment);
-    AppCore::Ref<FrameBuffer> framebuffer(const AppCore::List<RenderBuffer> color_attachments,
-                                          const RenderBuffer& depth_attachment);
+    AppCore::Ref<Framebuffer> framebuffer(const AppCore::List<Renderbuffer> color_attachments,
+                                          const Renderbuffer& depth_attachment);
 
-    AppCore::Ref<RenderBuffer> renderbuffer(uint32_t w,
+    AppCore::Ref<Renderbuffer> renderbuffer(uint32_t w,
                                             uint32_t h,
                                             uint8_t components,
                                             uint8_t samples,
@@ -95,7 +95,7 @@ protected:
     bool m_released;
 
 private:
-    friend class FrameBuffer;
+    friend class Framebuffer;
 
     GLMethods m_gl;
     int m_version_code;
@@ -117,8 +117,8 @@ private:
     float m_polygon_offset_factor;
     float m_polygon_offset_units;
     AppCore::StringList m_extensions;
-    AppCore::Ref<FrameBuffer> m_default_framebuffer;
-    AppCore::Ref<FrameBuffer> m_bound_framebuffer;
+    AppCore::Ref<Framebuffer> m_default_framebuffer;
+    AppCore::Ref<Framebuffer> m_bound_framebuffer;
   };
 
 #ifdef APPGL_EGL

@@ -21,27 +21,27 @@ namespace AppGL
   class Texture3D
   {
 public:
-    ~Texture3D() { Release(); }
+    ~Texture3D() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;
     Texture3D();
 
-    Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    int mWidth;
-    int mHeight;
-    int mDepth;
-    int mComponents;
-    int mMinFilter;
-    int mMagFilter;
-    int mMaxLevel;
-    bool mRepeatX;
-    bool mRepeatY;
-    bool mRepeatZ;
-    bool mReleased;
+    Context* m_context;
+    DataType* m_data_type;
+    int m_texture_obj;
+    int m_width;
+    int m_height;
+    int m_depth;
+    int m_components;
+    int m_min_filter;
+    int m_mag_filter;
+    int m_max_level;
+    bool m_repeat_x;
+    bool m_repeat_y;
+    bool m_repeat_z;
+    bool m_released;
   };
 } // namespace AppGL

@@ -19,10 +19,10 @@
 
 namespace AppGL
 {
-  class FrameBuffer : public AppCore::RefFromThis<FrameBuffer>
+  class Framebuffer : public AppCore::RefFromThis<Framebuffer>
   {
 public:
-    ~FrameBuffer() { release(); }
+    ~Framebuffer() { release(); }
 
     void clear(float r, float g, float b, float a, float depth, const Rect& rect);
     void use();
@@ -81,7 +81,7 @@ public:
 
 private:
     friend class Context;
-    FrameBuffer(){};
+    Framebuffer(){};
 
     Context* m_context;
     Rect m_viewport;

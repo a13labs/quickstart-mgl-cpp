@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void Query::Release() { }
+  void Query::release() { }
 } // namespace AppGL

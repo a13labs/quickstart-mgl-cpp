@@ -21,25 +21,25 @@ namespace AppGL
   class Program
   {
 public:
-    ~Program() { Release(); }
+    ~Program() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;
     Program();
 
-    Context* mContext;
-    int mGeometryInput;
-    int mGeometryOutput;
-    int mGLObject;
-    int mNumVertexShaderSubroutines;
-    int mNumFragmentShaderSubroutines;
-    int mNumGeometryShaderSubroutines;
-    int mNumTessEvaluationShaderSubroutines;
-    int mNumTessControlShaderSubroutines;
-    int mGeometryVertices;
-    int mNumVaryings;
-    bool mReleased;
+    Context* m_context;
+    int m_geometry_input;
+    int m_geometry_output;
+    int m_program_obj;
+    int m_num_vertex_shader_subroutines;
+    int m_num_fragment_shader_subroutines;
+    int m_num_geometry_shader_subroutines;
+    int m_num_tess_evaluation_shader_subroutines;
+    int m_num_tess_control_shader_subroutines;
+    int m_geometry_vertices;
+    int m_num_varyings;
+    bool m_released;
   };
 } // namespace AppGL

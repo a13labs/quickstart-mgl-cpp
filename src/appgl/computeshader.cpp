@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void ComputeShader::Release() { }
+  void ComputeShader::release() { }
 } // namespace AppGL

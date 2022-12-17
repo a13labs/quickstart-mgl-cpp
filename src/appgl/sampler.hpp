@@ -21,27 +21,27 @@ namespace AppGL
   class Sampler
   {
 public:
-    ~Sampler() { Release(); }
+    ~Sampler() { release(); }
 
 public:
-    void Release();
+    void release();
 
 private:
     friend class Context;
     Sampler();
 
-    Context* mContext;
-    int mSamplerObj;
-    int mMinFilter;
-    int mMagFilter;
-    float mAnisotropy;
-    int mCompareFunc;
-    bool mRepeatX;
-    bool mRepeatY;
-    bool mRepeatZ;
-    float mBorderColor;
-    float mMinLod;
-    float mMaxLod;
-    bool mReleased;
+    Context* m_context;
+    int m_sampler_obj;
+    int m_min_filter;
+    int m_mag_filter;
+    float m_anisotropy;
+    int m_compare_func;
+    bool m_repeat_x;
+    bool m_repeat_y;
+    bool m_repeat_z;
+    float m_border_color;
+    float m_min_lod;
+    float m_max_lod;
+    bool m_released;
   };
 } // namespace AppGL

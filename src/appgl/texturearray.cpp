@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void TextureArray::Release() { }
+  void TextureArray::release() { }
 } // namespace AppGL

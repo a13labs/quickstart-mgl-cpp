@@ -18,16 +18,16 @@
 
 namespace AppGL
 {
-  class RenderBuffer
+  class Renderbuffer
   {
 public:
-    ~RenderBuffer() { release(); }
+    ~Renderbuffer() { release(); }
 
     void release();
 
 private:
     friend class Context;
-    RenderBuffer(){};
+    Renderbuffer(){};
 
     Context* m_context;
     DataType* m_data_type;

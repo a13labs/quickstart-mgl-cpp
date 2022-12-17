@@ -21,25 +21,25 @@ namespace AppGL
   class TextureCube
   {
 public:
-    ~TextureCube() { Release(); }
+    ~TextureCube() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;
     TextureCube();
 
-    Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    int mWidth;
-    int mHeight;
-    int mDepth;
-    int mComponents;
-    int mMinFilter;
-    int mMagFilter;
-    int mMaxLevel;
-    float mAnisotropy;
-    bool mReleased;
+    Context* m_context;
+    DataType* m_data_type;
+    int m_texture_obj;
+    int m_width;
+    int m_height;
+    int m_depth;
+    int m_components;
+    int m_min_filter;
+    int m_mag_filter;
+    int m_max_level;
+    float m_anisotropy;
+    bool m_released;
   };
 } // namespace AppGL

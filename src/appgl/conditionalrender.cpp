@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void ConditionalRender::Release() { }
+  void ConditionalRender::release() { }
 } // namespace AppGL

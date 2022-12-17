@@ -21,30 +21,30 @@ namespace AppGL
   class Texture
   {
 public:
-    ~Texture() { Release(); }
+    ~Texture() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;
     Texture();
 
-    Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    int mWidth;
-    int mHeight;
-    int mComponents;
-    int mSamples;
-    int mMinFilter;
-    int mMagFilter;
-    int mMaxLevel;
-    int mCompareFunc;
-    float mAnisotropy;
-    bool mDepth;
-    bool mRepeatX;
-    bool mRepeatY;
-    bool mExternal;
-    bool mReleased;
+    Context* m_context;
+    DataType* m_data_type;
+    int m_texture_obj;
+    int m_width;
+    int m_height;
+    int m_components;
+    int m_samples;
+    int m_min_filter;
+    int m_mag_filter;
+    int m_max_level;
+    int m_compare_func;
+    float m_anisotropy;
+    bool m_depth;
+    bool m_repeat_x;
+    bool m_repeat_y;
+    bool m_external;
+    bool m_released;
   };
 } // namespace AppGL

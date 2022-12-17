@@ -21,27 +21,27 @@ namespace AppGL
   class TextureArray
   {
 public:
-    ~TextureArray() { Release(); }
+    ~TextureArray() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;
     TextureArray();
 
-    Context* mContext;
-    DataType* mDataType;
-    int mGLObject;
-    int mWidth;
-    int mHeight;
-    int mLayers;
-    int mComponents;
-    int mMinFilter;
-    int mMagFilter;
-    int mMaxLevel;
-    bool mRepeatX;
-    bool mRepeatY;
-    float mAnisotropy;
-    bool mReleased;
+    Context* m_context;
+    DataType* m_data_type;
+    int m_texture_obj;
+    int m_width;
+    int m_height;
+    int m_layers;
+    int m_components;
+    int m_min_filter;
+    int m_mag_filter;
+    int m_max_level;
+    bool m_repeat_x;
+    bool m_repeat_y;
+    float m_anisotropy;
+    bool m_released;
   };
 } // namespace AppGL

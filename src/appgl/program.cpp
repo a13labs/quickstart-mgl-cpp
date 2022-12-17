@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void Program::Release() { }
+  void Program::release() { }
 } // namespace AppGL

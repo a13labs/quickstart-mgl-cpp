@@ -21,16 +21,16 @@ namespace AppGL
   class Query
   {
 public:
-    ~Query() { Release(); }
+    ~Query() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;
     Query();
 
-    Context* mContext;
-    int mQueryObj[4];
-    bool mReleased;
+    Context* m_context;
+    int m_query_obj[4];
+    bool m_released;
   };
 } // namespace AppGL

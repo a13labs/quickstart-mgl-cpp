@@ -21,9 +21,9 @@ namespace AppGL
   class ConditionalRender
   {
 public:
-    ~ConditionalRender() { Release(); }
+    ~ConditionalRender() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;

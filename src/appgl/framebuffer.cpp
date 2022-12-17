@@ -20,7 +20,7 @@
 
 namespace AppGL
 {
-  void FrameBuffer::release()
+  void Framebuffer::release()
   {
     const GLMethods& gl = m_context->gl();
 
@@ -39,7 +39,7 @@ namespace AppGL
     }
   }
 
-  void FrameBuffer::clear(float r, float g, float b, float a, float depth, const Rect& rect)
+  void Framebuffer::clear(float r, float g, float b, float a, float depth, const Rect& rect)
   {
     if(m_released)
       return;
@@ -100,7 +100,7 @@ namespace AppGL
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
   }
 
-  void FrameBuffer::use()
+  void Framebuffer::use()
   {
     if(m_released)
       return;
@@ -140,7 +140,7 @@ namespace AppGL
     m_context->m_bound_framebuffer = MakeThisRef();
   }
 
-  AppCore::Ref<uint8_t> FrameBuffer::read(const Rect& v,
+  AppCore::Ref<uint8_t> Framebuffer::read(const Rect& v,
                                           int c,
                                           int att,
                                           int align,
@@ -152,7 +152,7 @@ namespace AppGL
     return nullptr;
   }
 
-  void FrameBuffer::read_into(AppCore::Ref<uint8_t> buffer,
+  void Framebuffer::read_into(AppCore::Ref<uint8_t> buffer,
                               const Rect& v,
                               int c,
                               int att,

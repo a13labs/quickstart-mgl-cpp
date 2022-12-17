@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void VertexArray::Release() { }
+  void VertexArray::release() { }
 } // namespace AppGL

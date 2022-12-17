@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void Scope::Release() { }
+  void Scope::release() { }
 } // namespace AppGL

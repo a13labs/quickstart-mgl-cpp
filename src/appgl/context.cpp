@@ -171,7 +171,7 @@ namespace AppGL
     }
 #endif
     {
-      auto fb = new FrameBuffer();
+      auto fb = new Framebuffer();
 
       fb->m_released = false;
       fb->m_framebuffer_obj = 0;
@@ -217,7 +217,7 @@ namespace AppGL
       fb->m_height = r.H;
       fb->m_dynamic = true;
 
-      ctx->m_default_framebuffer = AppCore::Ref<FrameBuffer>(fb);
+      ctx->m_default_framebuffer = AppCore::Ref<Framebuffer>(fb);
     }
 
     ctx->m_bound_framebuffer = ctx->m_default_framebuffer;
@@ -277,33 +277,33 @@ namespace AppGL
     return AppCore::Ref<Buffer>(buffer);
   }
 
-  AppCore::Ref<FrameBuffer> Context::framebuffer(const AppCore::List<Texture> color_attachments,
+  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Texture> color_attachments,
                                                  const Texture& depth_attachment)
   {
     return nullptr;
   }
 
-  AppCore::Ref<FrameBuffer> Context::framebuffer(const AppCore::List<Texture> color_attachments,
-                                                 const RenderBuffer& depth_attachment)
+  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Texture> color_attachments,
+                                                 const Renderbuffer& depth_attachment)
   {
     return nullptr;
   }
 
-  AppCore::Ref<FrameBuffer>
-  Context::framebuffer(const AppCore::List<RenderBuffer> color_attachments,
+  AppCore::Ref<Framebuffer>
+  Context::framebuffer(const AppCore::List<Renderbuffer> color_attachments,
                        const Texture& depth_attachment)
   {
     return nullptr;
   }
 
-  AppCore::Ref<FrameBuffer>
-  Context::framebuffer(const AppCore::List<RenderBuffer> color_attachments,
-                       const RenderBuffer& depth_attachment)
+  AppCore::Ref<Framebuffer>
+  Context::framebuffer(const AppCore::List<Renderbuffer> color_attachments,
+                       const Renderbuffer& depth_attachment)
   {
     return nullptr;
   }
 
-  AppCore::Ref<RenderBuffer> Context::renderbuffer(uint32_t w,
+  AppCore::Ref<Renderbuffer> Context::renderbuffer(uint32_t w,
                                                    uint32_t h,
                                                    uint8_t components,
                                                    uint8_t samples,
@@ -335,7 +335,7 @@ namespace AppGL
 
     const GLMethods& gl = m_gl;
 
-    RenderBuffer* renderbuffer = new RenderBuffer();
+    Renderbuffer* renderbuffer = new Renderbuffer();
     renderbuffer->m_released = false;
 
     renderbuffer->m_renderbuffer_obj = 0;
@@ -368,7 +368,7 @@ namespace AppGL
 
     renderbuffer->m_context = this;
 
-    return AppCore::Ref<RenderBuffer>(renderbuffer);
+    return AppCore::Ref<Renderbuffer>(renderbuffer);
   }
 
 } // namespace AppGL

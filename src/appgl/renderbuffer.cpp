@@ -20,7 +20,7 @@
 
 namespace AppGL
 {
-  void RenderBuffer::release()
+  void Renderbuffer::release()
   {
     if(m_released)
     {

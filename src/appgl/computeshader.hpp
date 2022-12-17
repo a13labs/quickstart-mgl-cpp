@@ -21,17 +21,17 @@ namespace AppGL
   class ComputeShader
   {
 public:
-    ~ComputeShader() { Release(); }
+    ~ComputeShader() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;
     ComputeShader();
 
-    Context* mContext;
-    int mProgramObj;
-    int mShaderObj;
-    bool mReleased;
+    Context* m_context;
+    int m_program_obj;
+    int m_shader_obj;
+    bool m_released;
   };
 } // namespace AppGL

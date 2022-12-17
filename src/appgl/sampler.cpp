@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void Sampler::Release() { }
+  void Sampler::release() { }
 } // namespace AppGL

@@ -21,24 +21,24 @@ namespace AppGL
   class Scope
   {
 public:
-    ~Scope() { Release(); }
+    ~Scope() { release(); }
 
-    void Release();
+    void release();
 
 private:
     friend class Context;
     Scope();
 
-    Context* mContext;
-    FrameBuffer* mFramebuffer;
-    FrameBuffer* mOldFramebuffer;
-    AppCore::List<AppCore::Ref<Sampler>> mSamplers;
-    int* mTextures;
-    int* mBuffers;
-    int mNumTextures;
-    int mNumBuffers;
-    int mEnableFlags;
-    int mOldEnableFlags;
-    bool mReleased;
+    Context* m_context;
+    Framebuffer* m_framebuffer;
+    Framebuffer* m_old_framebuffer;
+    AppCore::List<AppCore::Ref<Sampler>> m_samplers;
+    int* m_textures;
+    int* m_buffers;
+    int m_num_textures;
+    int m_num_buffers;
+    int m_enable_flags;
+    int m_old_enable_flags;
+    bool m_released;
   };
 } // namespace AppGL

@@ -80,8 +80,8 @@ namespace AppGL
   class TextureArray;
   class Texture3D;
   class TextureCube;
-  class FrameBuffer;
-  class RenderBuffer;
+  class Framebuffer;
+  class Renderbuffer;
   class Scope;
   class Query;
   class ConditionalRender;

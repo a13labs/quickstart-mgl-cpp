@@ -21,25 +21,25 @@ namespace AppGL
   class VertexArray
   {
 public:
-    ~VertexArray() { Release(); }
+    ~VertexArray() { release(); }
 
 public:
-    void Release();
+    void release();
 
 private:
     friend class Context;
     VertexArray();
 
-    Context* mContext;
-    Program* mProgram;
-    Buffer* mIndexBuffer;
-    int mIndexElementSize;
-    int mIndexElementType;
-    unsigned* mSubroutines;
-    int mNumSubroutines;
-    int mGLObject;
-    int mNumVertices;
-    int mNumInstances;
-    bool mReleased;
+    Context* m_context;
+    Program* m_program;
+    Buffer* m_index_buffer;
+    int m_index_element_size;
+    int m_index_element_type;
+    unsigned* m_subroutines;
+    int m_num_subroutines;
+    int m_vertex_array_obj;
+    int m_num_vertices;
+    int m_num_instances;
+    bool m_released;
   };
 } // namespace AppGL

@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void Texture3D::Release() { }
+  void Texture3D::release() { }
 } // namespace AppGL

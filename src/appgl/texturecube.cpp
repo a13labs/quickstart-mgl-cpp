@@ -19,5 +19,5 @@
 
 namespace AppGL
 {
-  void TextureCube::Release() { }
+  void TextureCube::release() { }
 } // namespace AppGL
