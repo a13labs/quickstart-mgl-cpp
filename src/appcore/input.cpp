@@ -20,139 +20,139 @@ namespace AppCore
 {
   namespace Input
   {
-    InputState State;
+    InputState input_state;
 
-    inline void AddKeyTranslation(uint16_t src, Key::Enum tgt)
+    inline void add_key_translation(uint16_t src, Key::Enum tgt)
     {
-      State.KeyForwardMap[src & 0xff] = (uint8_t)tgt;
-      State.KeyReverseMap[tgt & 0xff] = (uint8_t)src;
+      input_state.key_forward_map[src & 0xff] = (uint8_t)tgt;
+      input_state.key_reverse_map[tgt & 0xff] = (uint8_t)src;
     }
 
-    inline int FromKey(Key::Enum key)
+    inline int from_key(Key::Enum key)
     {
-      return (int)State.KeyReverseMap[key & 0xff];
+      return (int)input_state.key_reverse_map[key & 0xff];
     }
 
-    inline Key::Enum ToKey(int key)
+    inline Key::Enum to_key(int key)
     {
-      return (Key::Enum)State.KeyForwardMap[key & 0xff];
+      return (Key::Enum)input_state.key_forward_map[key & 0xff];
     }
 
-    inline void ClearKeyMap()
+    inline void clear_key_map()
     {
-      std::memset(State.KeyForwardMap, 0, sizeof(State.KeyForwardMap));
-      std::memset(State.KeyReverseMap, 0, sizeof(State.KeyReverseMap));
-      std::memset(State.PressedKeys, 0, sizeof(State.PressedKeys));
-      std::memset(State.PressedMouseButtons, 0, sizeof(State.PressedMouseButtons));
+      std::memset(input_state.key_forward_map, 0, sizeof(input_state.key_forward_map));
+      std::memset(input_state.key_reverse_map, 0, sizeof(input_state.key_reverse_map));
+      std::memset(input_state.pressed_keys, 0, sizeof(input_state.pressed_keys));
+      std::memset(input_state.pressed_mouse_buttons, 0, sizeof(input_state.pressed_mouse_buttons));
     }
 
-    inline void SetKeyPressedState(Key::Enum key, bool value)
+    inline void set_key_pressed_state(Key::Enum key, bool value)
     {
-      State.PressedKeys[key & 0xff] = value;
+      input_state.pressed_keys[key & 0xff] = value;
     }
 
-    inline void SetMouseButtonPressedState(MouseButton::Enum button, bool value)
+    inline void set_mouse_button_pressed_state(MouseButton::Enum button, bool value)
     {
-      State.PressedMouseButtons[button & 0xff] = value;
+      input_state.pressed_mouse_buttons[button & 0xff] = value;
     }
 
-    void Init()
+    void init()
     {
-      ClearKeyMap();
-      AddKeyTranslation(SDL_SCANCODE_ESCAPE, Key::Esc);
-      AddKeyTranslation(SDL_SCANCODE_RETURN, Key::Return);
-      AddKeyTranslation(SDL_SCANCODE_TAB, Key::Tab);
-      AddKeyTranslation(SDL_SCANCODE_BACKSPACE, Key::Backspace);
-      AddKeyTranslation(SDL_SCANCODE_SPACE, Key::Space);
-      AddKeyTranslation(SDL_SCANCODE_UP, Key::Up);
-      AddKeyTranslation(SDL_SCANCODE_DOWN, Key::Down);
-      AddKeyTranslation(SDL_SCANCODE_LEFT, Key::Left);
-      AddKeyTranslation(SDL_SCANCODE_RIGHT, Key::Right);
-      AddKeyTranslation(SDL_SCANCODE_PAGEUP, Key::PageUp);
-      AddKeyTranslation(SDL_SCANCODE_PAGEDOWN, Key::PageDown);
-      AddKeyTranslation(SDL_SCANCODE_HOME, Key::Home);
-      AddKeyTranslation(SDL_SCANCODE_END, Key::End);
-      AddKeyTranslation(SDL_SCANCODE_PRINTSCREEN, Key::Print);
-      AddKeyTranslation(SDL_SCANCODE_KP_PLUS, Key::Plus);
-      AddKeyTranslation(SDL_SCANCODE_EQUALS, Key::Plus);
-      AddKeyTranslation(SDL_SCANCODE_KP_MINUS, Key::Minus);
-      AddKeyTranslation(SDL_SCANCODE_MINUS, Key::Minus);
-      AddKeyTranslation(SDL_SCANCODE_GRAVE, Key::Tilde);
-      AddKeyTranslation(SDL_SCANCODE_KP_COMMA, Key::Comma);
-      AddKeyTranslation(SDL_SCANCODE_COMMA, Key::Comma);
-      AddKeyTranslation(SDL_SCANCODE_KP_PERIOD, Key::Period);
-      AddKeyTranslation(SDL_SCANCODE_PERIOD, Key::Period);
-      AddKeyTranslation(SDL_SCANCODE_SLASH, Key::Slash);
-      AddKeyTranslation(SDL_SCANCODE_F1, Key::F1);
-      AddKeyTranslation(SDL_SCANCODE_F2, Key::F2);
-      AddKeyTranslation(SDL_SCANCODE_F3, Key::F3);
-      AddKeyTranslation(SDL_SCANCODE_F4, Key::F4);
-      AddKeyTranslation(SDL_SCANCODE_F5, Key::F5);
-      AddKeyTranslation(SDL_SCANCODE_F6, Key::F6);
-      AddKeyTranslation(SDL_SCANCODE_F7, Key::F7);
-      AddKeyTranslation(SDL_SCANCODE_F8, Key::F8);
-      AddKeyTranslation(SDL_SCANCODE_F9, Key::F9);
-      AddKeyTranslation(SDL_SCANCODE_F10, Key::F10);
-      AddKeyTranslation(SDL_SCANCODE_F11, Key::F11);
-      AddKeyTranslation(SDL_SCANCODE_F12, Key::F12);
-      AddKeyTranslation(SDL_SCANCODE_KP_0, Key::NumPad0);
-      AddKeyTranslation(SDL_SCANCODE_KP_1, Key::NumPad1);
-      AddKeyTranslation(SDL_SCANCODE_KP_2, Key::NumPad2);
-      AddKeyTranslation(SDL_SCANCODE_KP_3, Key::NumPad3);
-      AddKeyTranslation(SDL_SCANCODE_KP_4, Key::NumPad4);
-      AddKeyTranslation(SDL_SCANCODE_KP_5, Key::NumPad5);
-      AddKeyTranslation(SDL_SCANCODE_KP_6, Key::NumPad6);
-      AddKeyTranslation(SDL_SCANCODE_KP_7, Key::NumPad7);
-      AddKeyTranslation(SDL_SCANCODE_KP_8, Key::NumPad8);
-      AddKeyTranslation(SDL_SCANCODE_KP_9, Key::NumPad9);
-      AddKeyTranslation(SDL_SCANCODE_KP_ENTER, Key::NumPadEnter);
-      AddKeyTranslation(SDL_SCANCODE_0, Key::Key0);
-      AddKeyTranslation(SDL_SCANCODE_1, Key::Key1);
-      AddKeyTranslation(SDL_SCANCODE_2, Key::Key2);
-      AddKeyTranslation(SDL_SCANCODE_3, Key::Key3);
-      AddKeyTranslation(SDL_SCANCODE_4, Key::Key4);
-      AddKeyTranslation(SDL_SCANCODE_5, Key::Key5);
-      AddKeyTranslation(SDL_SCANCODE_6, Key::Key6);
-      AddKeyTranslation(SDL_SCANCODE_7, Key::Key7);
-      AddKeyTranslation(SDL_SCANCODE_8, Key::Key8);
-      AddKeyTranslation(SDL_SCANCODE_9, Key::Key9);
-      AddKeyTranslation(SDL_SCANCODE_A, Key::KeyA);
-      AddKeyTranslation(SDL_SCANCODE_B, Key::KeyB);
-      AddKeyTranslation(SDL_SCANCODE_C, Key::KeyC);
-      AddKeyTranslation(SDL_SCANCODE_D, Key::KeyD);
-      AddKeyTranslation(SDL_SCANCODE_E, Key::KeyE);
-      AddKeyTranslation(SDL_SCANCODE_F, Key::KeyF);
-      AddKeyTranslation(SDL_SCANCODE_G, Key::KeyG);
-      AddKeyTranslation(SDL_SCANCODE_H, Key::KeyH);
-      AddKeyTranslation(SDL_SCANCODE_I, Key::KeyI);
-      AddKeyTranslation(SDL_SCANCODE_J, Key::KeyJ);
-      AddKeyTranslation(SDL_SCANCODE_K, Key::KeyK);
-      AddKeyTranslation(SDL_SCANCODE_L, Key::KeyL);
-      AddKeyTranslation(SDL_SCANCODE_M, Key::KeyM);
-      AddKeyTranslation(SDL_SCANCODE_N, Key::KeyN);
-      AddKeyTranslation(SDL_SCANCODE_O, Key::KeyO);
-      AddKeyTranslation(SDL_SCANCODE_P, Key::KeyP);
-      AddKeyTranslation(SDL_SCANCODE_Q, Key::KeyQ);
-      AddKeyTranslation(SDL_SCANCODE_R, Key::KeyR);
-      AddKeyTranslation(SDL_SCANCODE_S, Key::KeyS);
-      AddKeyTranslation(SDL_SCANCODE_T, Key::KeyT);
-      AddKeyTranslation(SDL_SCANCODE_U, Key::KeyU);
-      AddKeyTranslation(SDL_SCANCODE_V, Key::KeyV);
-      AddKeyTranslation(SDL_SCANCODE_W, Key::KeyW);
-      AddKeyTranslation(SDL_SCANCODE_X, Key::KeyX);
-      AddKeyTranslation(SDL_SCANCODE_Y, Key::KeyY);
-      AddKeyTranslation(SDL_SCANCODE_Z, Key::KeyZ);
-      AddKeyTranslation(SDL_SCANCODE_LALT, Key::LeftAlt);
-      AddKeyTranslation(SDL_SCANCODE_RALT, Key::RightAlt);
-      AddKeyTranslation(SDL_SCANCODE_LCTRL, Key::LeftCtrl);
-      AddKeyTranslation(SDL_SCANCODE_RCTRL, Key::RightCtrl);
-      AddKeyTranslation(SDL_SCANCODE_LSHIFT, Key::LeftShift);
-      AddKeyTranslation(SDL_SCANCODE_RSHIFT, Key::RightShift);
-      AddKeyTranslation(SDL_SCANCODE_LGUI, Key::LeftMeta);
-      AddKeyTranslation(SDL_SCANCODE_RGUI, Key::RightMeta);
+      clear_key_map();
+      add_key_translation(SDL_SCANCODE_ESCAPE, Key::Esc);
+      add_key_translation(SDL_SCANCODE_RETURN, Key::Return);
+      add_key_translation(SDL_SCANCODE_TAB, Key::Tab);
+      add_key_translation(SDL_SCANCODE_BACKSPACE, Key::Backspace);
+      add_key_translation(SDL_SCANCODE_SPACE, Key::Space);
+      add_key_translation(SDL_SCANCODE_UP, Key::Up);
+      add_key_translation(SDL_SCANCODE_DOWN, Key::Down);
+      add_key_translation(SDL_SCANCODE_LEFT, Key::Left);
+      add_key_translation(SDL_SCANCODE_RIGHT, Key::Right);
+      add_key_translation(SDL_SCANCODE_PAGEUP, Key::PageUp);
+      add_key_translation(SDL_SCANCODE_PAGEDOWN, Key::PageDown);
+      add_key_translation(SDL_SCANCODE_HOME, Key::Home);
+      add_key_translation(SDL_SCANCODE_END, Key::End);
+      add_key_translation(SDL_SCANCODE_PRINTSCREEN, Key::Print);
+      add_key_translation(SDL_SCANCODE_KP_PLUS, Key::Plus);
+      add_key_translation(SDL_SCANCODE_EQUALS, Key::Plus);
+      add_key_translation(SDL_SCANCODE_KP_MINUS, Key::Minus);
+      add_key_translation(SDL_SCANCODE_MINUS, Key::Minus);
+      add_key_translation(SDL_SCANCODE_GRAVE, Key::Tilde);
+      add_key_translation(SDL_SCANCODE_KP_COMMA, Key::Comma);
+      add_key_translation(SDL_SCANCODE_COMMA, Key::Comma);
+      add_key_translation(SDL_SCANCODE_KP_PERIOD, Key::Period);
+      add_key_translation(SDL_SCANCODE_PERIOD, Key::Period);
+      add_key_translation(SDL_SCANCODE_SLASH, Key::Slash);
+      add_key_translation(SDL_SCANCODE_F1, Key::F1);
+      add_key_translation(SDL_SCANCODE_F2, Key::F2);
+      add_key_translation(SDL_SCANCODE_F3, Key::F3);
+      add_key_translation(SDL_SCANCODE_F4, Key::F4);
+      add_key_translation(SDL_SCANCODE_F5, Key::F5);
+      add_key_translation(SDL_SCANCODE_F6, Key::F6);
+      add_key_translation(SDL_SCANCODE_F7, Key::F7);
+      add_key_translation(SDL_SCANCODE_F8, Key::F8);
+      add_key_translation(SDL_SCANCODE_F9, Key::F9);
+      add_key_translation(SDL_SCANCODE_F10, Key::F10);
+      add_key_translation(SDL_SCANCODE_F11, Key::F11);
+      add_key_translation(SDL_SCANCODE_F12, Key::F12);
+      add_key_translation(SDL_SCANCODE_KP_0, Key::NumPad0);
+      add_key_translation(SDL_SCANCODE_KP_1, Key::NumPad1);
+      add_key_translation(SDL_SCANCODE_KP_2, Key::NumPad2);
+      add_key_translation(SDL_SCANCODE_KP_3, Key::NumPad3);
+      add_key_translation(SDL_SCANCODE_KP_4, Key::NumPad4);
+      add_key_translation(SDL_SCANCODE_KP_5, Key::NumPad5);
+      add_key_translation(SDL_SCANCODE_KP_6, Key::NumPad6);
+      add_key_translation(SDL_SCANCODE_KP_7, Key::NumPad7);
+      add_key_translation(SDL_SCANCODE_KP_8, Key::NumPad8);
+      add_key_translation(SDL_SCANCODE_KP_9, Key::NumPad9);
+      add_key_translation(SDL_SCANCODE_KP_ENTER, Key::NumPadEnter);
+      add_key_translation(SDL_SCANCODE_0, Key::Key0);
+      add_key_translation(SDL_SCANCODE_1, Key::Key1);
+      add_key_translation(SDL_SCANCODE_2, Key::Key2);
+      add_key_translation(SDL_SCANCODE_3, Key::Key3);
+      add_key_translation(SDL_SCANCODE_4, Key::Key4);
+      add_key_translation(SDL_SCANCODE_5, Key::Key5);
+      add_key_translation(SDL_SCANCODE_6, Key::Key6);
+      add_key_translation(SDL_SCANCODE_7, Key::Key7);
+      add_key_translation(SDL_SCANCODE_8, Key::Key8);
+      add_key_translation(SDL_SCANCODE_9, Key::Key9);
+      add_key_translation(SDL_SCANCODE_A, Key::KeyA);
+      add_key_translation(SDL_SCANCODE_B, Key::KeyB);
+      add_key_translation(SDL_SCANCODE_C, Key::KeyC);
+      add_key_translation(SDL_SCANCODE_D, Key::KeyD);
+      add_key_translation(SDL_SCANCODE_E, Key::KeyE);
+      add_key_translation(SDL_SCANCODE_F, Key::KeyF);
+      add_key_translation(SDL_SCANCODE_G, Key::KeyG);
+      add_key_translation(SDL_SCANCODE_H, Key::KeyH);
+      add_key_translation(SDL_SCANCODE_I, Key::KeyI);
+      add_key_translation(SDL_SCANCODE_J, Key::KeyJ);
+      add_key_translation(SDL_SCANCODE_K, Key::KeyK);
+      add_key_translation(SDL_SCANCODE_L, Key::KeyL);
+      add_key_translation(SDL_SCANCODE_M, Key::KeyM);
+      add_key_translation(SDL_SCANCODE_N, Key::KeyN);
+      add_key_translation(SDL_SCANCODE_O, Key::KeyO);
+      add_key_translation(SDL_SCANCODE_P, Key::KeyP);
+      add_key_translation(SDL_SCANCODE_Q, Key::KeyQ);
+      add_key_translation(SDL_SCANCODE_R, Key::KeyR);
+      add_key_translation(SDL_SCANCODE_S, Key::KeyS);
+      add_key_translation(SDL_SCANCODE_T, Key::KeyT);
+      add_key_translation(SDL_SCANCODE_U, Key::KeyU);
+      add_key_translation(SDL_SCANCODE_V, Key::KeyV);
+      add_key_translation(SDL_SCANCODE_W, Key::KeyW);
+      add_key_translation(SDL_SCANCODE_X, Key::KeyX);
+      add_key_translation(SDL_SCANCODE_Y, Key::KeyY);
+      add_key_translation(SDL_SCANCODE_Z, Key::KeyZ);
+      add_key_translation(SDL_SCANCODE_LALT, Key::LeftAlt);
+      add_key_translation(SDL_SCANCODE_RALT, Key::RightAlt);
+      add_key_translation(SDL_SCANCODE_LCTRL, Key::LeftCtrl);
+      add_key_translation(SDL_SCANCODE_RCTRL, Key::RightCtrl);
+      add_key_translation(SDL_SCANCODE_LSHIFT, Key::LeftShift);
+      add_key_translation(SDL_SCANCODE_RSHIFT, Key::RightShift);
+      add_key_translation(SDL_SCANCODE_LGUI, Key::LeftMeta);
+      add_key_translation(SDL_SCANCODE_RGUI, Key::RightMeta);
     }
 
-    void UpdateState(SDL_Event* event, const EventHandler& handler)
+    void update_state(SDL_Event* event, const EventHandler& handler)
     {
       switch(event->type)
       {
@@ -178,13 +178,13 @@ namespace AppCore
           {
             default:
             case SDL_PRESSED: {
-              SetMouseButtonPressedState(button, true);
+              set_mouse_button_pressed_state(button, true);
               Events::MouseButtonPressedEvent event(button);
               handler(event);
             }
             break;
             case SDL_RELEASED: {
-              SetMouseButtonPressedState(button, false);
+              set_mouse_button_pressed_state(button, false);
               Events::MouseButtonReleasedEvent event(button);
               handler(event);
             }
@@ -201,9 +201,9 @@ namespace AppCore
         case SDL_KEYDOWN: {
           const SDL_KeyboardEvent& kev = event->key;
           uint8_t modifiers = (uint8_t)(kev.keysym.mod);
-          Input::Key::Enum key = Input::ToKey(kev.keysym.scancode);
+          Input::Key::Enum key = Input::to_key(kev.keysym.scancode);
 
-          SetKeyPressedState(key, true);
+          set_key_pressed_state(key, true);
           Events::KeyPressedEvent event(key, modifiers, kev.repeat);
           handler(event);
         }
@@ -211,9 +211,9 @@ namespace AppCore
         case SDL_KEYUP: {
           const SDL_KeyboardEvent& kev = event->key;
           uint8_t modifiers = (uint8_t)(kev.keysym.mod);
-          Input::Key::Enum key = Input::ToKey(kev.keysym.scancode);
+          Input::Key::Enum key = Input::to_key(kev.keysym.scancode);
 
-          SetKeyPressedState(key, false);
+          set_key_pressed_state(key, false);
           Events::KeyReleasedEvent event(key, modifiers);
           handler(event);
         }

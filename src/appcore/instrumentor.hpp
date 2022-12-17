@@ -33,107 +33,107 @@ namespace AppCore
 
   struct ProfileResult
   {
-    String Name;
+    String name;
 
-    FloatingPointMicroseconds Start;
-    std::chrono::microseconds ElapsedTime;
-    std::thread::id ThreadID;
-    int ProcessID;
-    String Category;
+    FloatingPointMicroseconds start;
+    std::chrono::microseconds elapsed_time;
+    std::thread::id thread_id;
+    int process_id;
+    String category;
   };
 
   struct InstrumentationSession
   {
-    String Name;
+    String name;
   };
 
   class Instrumentor
   {
 private:
-    std::mutex mMutex;
-    InstrumentationSession* mCurrentSession;
-    String mFilepath;
-    nlohmann::json mTraceEvents;
+    std::mutex m_mutex;
+    InstrumentationSession* m_current_session;
+    String m_filepath;
+    nlohmann::json m_trace_events;
 
 public:
     Instrumentor()
-        : mCurrentSession(nullptr)
+        : m_current_session(nullptr)
     { }
 
-    void BeginSession(const String& name, const String& filepath = "results.json")
+    void begin_session(const String& name, const String& filepath = "results.json")
     {
-      std::lock_guard lock(mMutex);
-      mFilepath = filepath;
-      if(mCurrentSession)
+      std::lock_guard lock(m_mutex);
+      m_filepath = filepath;
+      if(m_current_session)
       {
         // If there is already a current session, then close it before beginning new one.
         // Subsequent profiling output meant for the original session will end up in the
         // newly opened session instead.  That's better than having badly formatted
         // profiling output.
-        if(Log::Logger) // Edge case: BeginSession() might be before Log::Init()
+        if(Log::logger) // Edge case: begin_session() might be before Log::Init()
         {
-          APPCORE_ERROR("Instrumentor::BeginSession('{0}') when session '{1}' already open.",
+          APPCORE_ERROR("Instrumentor::begin_session('{0}') when session '{1}' already open.",
                         name,
-                        mCurrentSession->Name);
+                        m_current_session->name);
         }
-        InternalEndSession();
+        internal_end_session();
       }
-      mCurrentSession = new InstrumentationSession({name});
+      m_current_session = new InstrumentationSession({name});
     }
 
-    void EndSession()
+    void end_session()
     {
-      std::lock_guard lock(mMutex);
-      InternalEndSession();
+      std::lock_guard lock(m_mutex);
+      internal_end_session();
     }
 
-    void WriteProfile(const ProfileResult& result)
+    void write_profile(const ProfileResult& result)
     {
       std::stringstream tidss;
-      tidss << result.ThreadID;
+      tidss << result.thread_id;
       uint64_t tid = std::stoull(tidss.str());
 
       nlohmann::json traceEvent;
-      traceEvent["cat"] = "function," + result.Category;
-      traceEvent["dur"] = result.ElapsedTime.count();
-      traceEvent["name"] = result.Name;
+      traceEvent["cat"] = "function," + result.category;
+      traceEvent["dur"] = result.elapsed_time.count();
+      traceEvent["name"] = result.name;
       traceEvent["ph"] = "X";
-      traceEvent["pid"] = result.ProcessID;
+      traceEvent["pid"] = result.process_id;
       traceEvent["tid"] = tid;
-      traceEvent["ts"] = result.Start.count();
+      traceEvent["ts"] = result.start.count();
 
-      std::lock_guard lock(mMutex);
-      mTraceEvents.push_back(traceEvent);
+      std::lock_guard lock(m_mutex);
+      m_trace_events.push_back(traceEvent);
     }
 
-    static Instrumentor& Get()
+    static Instrumentor& get()
     {
       static Instrumentor instance;
       return instance;
     }
 
 private:
-    void WriteTraceDocument()
+    void write_trace_document()
     {
       nlohmann::json document;
 
       document["otherData"] = "{ \"version\":\"AppCore v" APP_SEM_VERSION "\"}"_json;
-      document["traceEvents"] = mTraceEvents;
+      document["traceEvents"] = m_trace_events;
 
-      std::ofstream o(mFilepath);
+      std::ofstream o(m_filepath);
       o << std::setw(4) << document << std::endl;
       o.flush();
     }
 
-    // Note: you must already own lock on mMutex before
-    // calling InternalEndSession()
-    void InternalEndSession()
+    // Note: you must already own lock on m_mutex before
+    // calling internal_end_session()
+    void internal_end_session()
     {
-      if(mCurrentSession)
+      if(m_current_session)
       {
-        WriteTraceDocument();
-        delete mCurrentSession;
-        mCurrentSession = nullptr;
+        write_trace_document();
+        delete m_current_session;
+        m_current_session = nullptr;
       }
     }
   };
@@ -142,42 +142,42 @@ private:
   {
 public:
     InstrumentationTimer(const char* name, const char* category)
-        : mName(name)
-        , mCategory(category)
-        , mStopped(false)
+        : m_name(name)
+        , m_category(category)
+        , m_stopped(false)
     {
-      mStartTimepoint = std::chrono::steady_clock::now();
+      m_start_timepoint = std::chrono::steady_clock::now();
     }
 
     ~InstrumentationTimer()
     {
-      if(!mStopped)
-        Stop();
+      if(!m_stopped)
+        stop();
     }
 
-    void Stop()
+    void stop()
     {
-      auto endTimepoint = std::chrono::steady_clock::now();
-      auto highResStart = FloatingPointMicroseconds{mStartTimepoint.time_since_epoch()};
-      auto elapsedTime =
-          std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch() -
-          std::chrono::time_point_cast<std::chrono::microseconds>(mStartTimepoint)
-              .time_since_epoch();
+      auto end_timepoint = std::chrono::steady_clock::now();
+      auto high_res_start = FloatingPointMicroseconds{m_start_timepoint.time_since_epoch()};
+      auto elapsed_time = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint)
+                              .time_since_epoch() -
+                          std::chrono::time_point_cast<std::chrono::microseconds>(m_start_timepoint)
+                              .time_since_epoch();
 
-      Instrumentor::Get().WriteProfile({mName,
-                                        highResStart,
-                                        elapsedTime,
-                                        std::this_thread::get_id(),
-                                        GET_PROCESS_ID(),
-                                        mCategory});
+      Instrumentor::get().write_profile({m_name,
+                                         high_res_start,
+                                         elapsed_time,
+                                         std::this_thread::get_id(),
+                                         GET_PROCESS_ID(),
+                                         m_category});
 
-      mStopped = true;
+      m_stopped = true;
     }
 
 private:
-    const char *mName, *mCategory;
-    std::chrono::time_point<std::chrono::steady_clock> mStartTimepoint;
-    bool mStopped;
+    const char *m_name, *m_category;
+    std::chrono::time_point<std::chrono::steady_clock> m_start_timepoint;
+    bool m_stopped;
   };
 
   namespace InstrumentorUtils
@@ -190,22 +190,22 @@ private:
     };
 
     template <size_t N, size_t K>
-    constexpr auto CleanupOutputString(const char (&expr)[N], const char (&remove)[K])
+    constexpr auto cleanup_output_string(const char (&expr)[N], const char (&remove)[K])
     {
       ChangeResult<N> result = {};
 
-      size_t srcIndex = 0;
-      size_t dstIndex = 0;
-      while(srcIndex < N)
+      size_t src_index = 0;
+      size_t dst_index = 0;
+      while(src_index < N)
       {
         size_t matchIndex = 0;
-        while(matchIndex < K - 1 && srcIndex + matchIndex < N - 1 &&
-              expr[srcIndex + matchIndex] == remove[matchIndex])
+        while(matchIndex < K - 1 && src_index + matchIndex < N - 1 &&
+              expr[src_index + matchIndex] == remove[matchIndex])
           matchIndex++;
         if(matchIndex == K - 1)
-          srcIndex += matchIndex;
-        result.Data[dstIndex++] = expr[srcIndex] == '"' ? '\'' : expr[srcIndex];
-        srcIndex++;
+          src_index += matchIndex;
+        result.Data[dst_index++] = expr[src_index] == '"' ? '\'' : expr[src_index];
+        src_index++;
       }
       return result;
     }
@@ -239,11 +239,11 @@ private:
 #    define APPCORE_FUNC_SIG "APPCORE_FUNC_SIG unknown!"
 #  endif
 
-#  define APPCORE_PROFILE_BEGIN_SESSION() ::AppCore::Instrumentor::Get().BeginSession("AppCore")
-#  define APPCORE_PROFILE_END_SESSION() ::AppCore::Instrumentor::Get().EndSession()
+#  define APPCORE_PROFILE_BEGIN_SESSION() ::AppCore::Instrumentor::get().begin_session("AppCore")
+#  define APPCORE_PROFILE_END_SESSION() ::AppCore::Instrumentor::get().end_session()
 #  define APPCORE_PROFILE_SCOPE(name, category)                                                    \
     constexpr auto fixedName =                                                                     \
-        ::AppCore::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");                       \
+        ::AppCore::InstrumentorUtils::cleanup_output_string(name, "__cdecl ");                     \
     ::AppCore::InstrumentationTimer timer##__LINE__(fixedName.Data, category)
 #  define APPCORE_PROFILE_FUNCTION(category) APPCORE_PROFILE_SCOPE(APPCORE_FUNC_SIG, category)
 #else

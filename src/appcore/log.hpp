@@ -23,15 +23,15 @@ namespace AppCore
 
   namespace Log
   {
-    void Init(const String& file = "app.log");
-    extern Ref<spdlog::logger> Logger;
+    void init(const String& file = "app.log");
+    extern Ref<spdlog::logger> logger;
   }; // namespace Log
 
 } // namespace AppCore
 
 // log macros
-#define APPCORE_TRACE(...) ::AppCore::Log::Logger->trace(__VA_ARGS__)
-#define APPCORE_INFO(...) ::AppCore::Log::Logger->info(__VA_ARGS__)
-#define APPCORE_WARN(...) ::AppCore::Log::Logger->warn(__VA_ARGS__)
-#define APPCORE_ERROR(...) ::AppCore::Log::Logger->error(__VA_ARGS__)
-#define APPCORE_CRITICAL(...) ::AppCore::Log::Logger->critical(__VA_ARGS__)
+#define APPCORE_TRACE(...) ::AppCore::Log::logger->trace(__VA_ARGS__)
+#define APPCORE_INFO(...) ::AppCore::Log::logger->info(__VA_ARGS__)
+#define APPCORE_WARN(...) ::AppCore::Log::logger->warn(__VA_ARGS__)
+#define APPCORE_ERROR(...) ::AppCore::Log::logger->error(__VA_ARGS__)
+#define APPCORE_CRITICAL(...) ::AppCore::Log::logger->critical(__VA_ARGS__)

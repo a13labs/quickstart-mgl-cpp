@@ -3,6 +3,6 @@
 int main(int argc, char* argv[])
 {
   AppGL::Window app;
-  app.Run();
+  app.run();
   return 0;
 }

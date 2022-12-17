@@ -67,7 +67,7 @@ public:
     inline float polygon_offset_factor() { return m_polygon_offset_factor; }
     inline float polygon_offset_units() { return m_polygon_offset_units; }
 
-    static AppCore::Ref<Context> create_context(ContextMode::Enum mode, int glversion);
+    static AppCore::Ref<Context> create_context(ContextMode::Enum mode, int required);
 
     AppCore::Ref<Buffer> buffer(const uint8_t* data, size_t length, bool dynamic);
 
@@ -126,7 +126,7 @@ private:
   {
 
 public:
-    ContextEGL(ContextMode::Enum mode, int glversion);
+    ContextEGL(ContextMode::Enum mode, int required);
     virtual ~ContextEGL() override;
 
 public:
@@ -146,7 +146,7 @@ private:
   {
 
 public:
-    ContextGLX(ContextMode::Enum mode, int glversion);
+    ContextGLX(ContextMode::Enum mode, int required);
     ContextGLX(){};
     virtual ~ContextGLX() override;
 

@@ -22,9 +22,9 @@ namespace AppCore
   namespace Log
   {
 
-    Ref<spdlog::logger> Logger;
+    Ref<spdlog::logger> logger;
 
-    void Init(const String& logfile)
+    void init(const String& logfile)
     {
 
       std::vector<spdlog::sink_ptr> logSinks;
@@ -39,10 +39,10 @@ namespace AppCore
       logSinks[1]->set_pattern("%^[%T] %n: %v%$");
 #endif
 
-      Logger = std::make_shared<spdlog::logger>("AppCore", begin(logSinks), end(logSinks));
-      spdlog::register_logger(Logger);
-      Logger->set_level(spdlog::level::trace);
-      Logger->flush_on(spdlog::level::trace);
+      logger = std::make_shared<spdlog::logger>("AppCore", begin(logSinks), end(logSinks));
+      spdlog::register_logger(logger);
+      logger->set_level(spdlog::level::trace);
+      logger->flush_on(spdlog::level::trace);
     }
   } // namespace Log
 } // namespace AppCore

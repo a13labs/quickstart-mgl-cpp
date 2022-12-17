@@ -37,14 +37,14 @@ namespace AppGL
     }
   }
 
-  AppCore::Ref<Context> Context::create_context(ContextMode::Enum mode, int glversion)
+  AppCore::Ref<Context> Context::create_context(ContextMode::Enum mode, int required)
   {
 
     Context* ctx = nullptr;
 
 #ifdef APPGL_EGL
     APPCORE_INFO("Trying EGL context!");
-    ctx = new ContextEGL(mode, glversion);
+    ctx = new ContextEGL(mode, required);
     if(!ctx->is_valid())
     {
       APPCORE_INFO("EGL not supported!");
@@ -60,7 +60,7 @@ namespace AppGL
     if(!ctx)
     {
       APPCORE_INFO("Trying GLX context!");
-      ctx = new ContextGLX(mode, glversion);
+      ctx = new ContextGLX(mode, required);
       if(!ctx->is_valid())
       {
         APPCORE_INFO("GLX not supported!");
@@ -77,7 +77,7 @@ namespace AppGL
     if(!ctx)
     {
       APPCORE_INFO("Trying WGL context!");
-      ctx = new ContextWGL(mode, glversion);
+      ctx = new ContextWGL(mode, required);
       if(!ctx->is_valid())
       {
         APPCORE_INFO("WGL not supported!");

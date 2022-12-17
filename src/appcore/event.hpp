@@ -60,21 +60,21 @@ namespace AppCore
     };
 
 #define EVENT_CLASS_TYPE(type)                                                                     \
-  static EventType GetStaticType()                                                                 \
+  static EventType get_static_type()                                                               \
   {                                                                                                \
     return EventType::type;                                                                        \
   }                                                                                                \
-  virtual EventType GetEventType() const override                                                  \
+  virtual EventType get_event_type() const override                                                \
   {                                                                                                \
-    return GetStaticType();                                                                        \
+    return get_static_type();                                                                      \
   }                                                                                                \
-  virtual const char* GetName() const override                                                     \
+  virtual const char* get_name() const override                                                    \
   {                                                                                                \
     return #type;                                                                                  \
   }
 
 #define EVENT_CLASS_CATEGORY(category)                                                             \
-  virtual int GetCategoryFlags() const override                                                    \
+  virtual int get_category_flags() const override                                                  \
   {                                                                                                \
     return category;                                                                               \
   }
@@ -82,16 +82,16 @@ namespace AppCore
     class Event
     {
   public:
-      virtual EventType GetEventType() const = 0;
-      virtual const char* GetName() const = 0;
-      virtual int GetCategoryFlags() const = 0;
-      virtual String ToString() const { return GetName(); }
+      virtual EventType get_event_type() const = 0;
+      virtual const char* get_name() const = 0;
+      virtual int get_category_flags() const = 0;
+      virtual String to_string() const { return get_name(); }
 
-      bool IsCategory(EventCategory category) { return GetCategoryFlags() & category; }
+      bool is_category(EventCategory category) { return get_category_flags() & category; }
 
-      inline bool IsHandled() const { return mHandled; }
+      inline bool is_handled() const { return mHandled; }
 
-      inline void SetHandled(bool handled) { mHandled = handled; }
+      inline void set_handled(bool handled) { mHandled = handled; }
 
   protected:
       bool mHandled = false;
@@ -106,11 +106,11 @@ namespace AppCore
 
       // F will be deduced by the compiler
       template <typename T, typename F>
-      bool Dispatch(const F& func)
+      bool dispatch(const F& func)
       {
-        if(mEvent.GetEventType() == T::GetStaticType())
+        if(mEvent.get_event_type() == T::get_static_type())
         {
-          mEvent.SetHandled(func(static_cast<T&>(mEvent)));
+          mEvent.set_handled(func(static_cast<T&>(mEvent)));
           return true;
         }
         return false;
@@ -122,31 +122,31 @@ namespace AppCore
 
     inline std::ostream& operator<<(std::ostream& os, const Event& e)
     {
-      return os << e.ToString();
+      return os << e.to_string();
     }
 
     class WindowResizeEvent : public Event
     {
   public:
       WindowResizeEvent(uint32_t width, uint32_t height)
-          : mWidth(width)
-          , mHeight(height)
+          : m_width(width)
+          , m_height(height)
       { }
 
-      uint32_t GetWidth() const { return mWidth; }
-      uint32_t GetHeight() const { return mHeight; }
+      uint32_t get_width() const { return m_width; }
+      uint32_t get_height() const { return m_height; }
 
-      String ToString() const override
+      String to_string() const override
       {
         std::stringstream ss;
-        ss << "WindowResizeEvent: " << mWidth << ", " << mHeight;
+        ss << "WindowResizeEvent: " << m_width << ", " << m_height;
         return ss.str();
       }
 
       EVENT_CLASS_TYPE(WindowResize)
       EVENT_CLASS_CATEGORY(EventCategoryApplication)
   private:
-      uint32_t mWidth, mHeight;
+      uint32_t m_width, m_height;
     };
 
     class WindowCloseEvent : public Event
@@ -162,62 +162,62 @@ namespace AppCore
     {
   public:
       MouseMovedEvent(float x, float y)
-          : mMouseX(x)
-          , mMouseY(y)
+          : m_mouse_x(x)
+          , m_mouse_y(y)
       { }
 
-      float GetX() const { return mMouseX; }
-      float GetY() const { return mMouseY; }
+      float get_x() const { return m_mouse_x; }
+      float get_y() const { return m_mouse_y; }
 
-      String ToString() const override
+      String to_string() const override
       {
         std::stringstream ss;
-        ss << "MouseMovedEvent: " << mMouseX << ", " << mMouseY;
+        ss << "MouseMovedEvent: " << m_mouse_x << ", " << m_mouse_y;
         return ss.str();
       }
 
       EVENT_CLASS_TYPE(MouseMoved)
       EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
   private:
-      float mMouseX, mMouseY;
+      float m_mouse_x, m_mouse_y;
     };
 
     class MouseScrolledEvent : public Event
     {
   public:
       MouseScrolledEvent(float xOffset, float yOffset)
-          : mXOffset(xOffset)
-          , mYOffset(yOffset)
+          : m_x_offset(xOffset)
+          , m_y_offset(yOffset)
       { }
 
-      float GetXOffset() const { return mXOffset; }
-      float GetYOffset() const { return mYOffset; }
+      float get_x_offset() const { return m_x_offset; }
+      float get_y_offset() const { return m_y_offset; }
 
-      String ToString() const override
+      String to_string() const override
       {
         std::stringstream ss;
-        ss << "MouseScrolledEvent: " << GetXOffset() << ", " << GetYOffset();
+        ss << "MouseScrolledEvent: " << get_x_offset() << ", " << get_y_offset();
         return ss.str();
       }
 
       EVENT_CLASS_TYPE(MouseScrolled)
       EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
   private:
-      float mXOffset, mYOffset;
+      float m_x_offset, m_y_offset;
     };
 
     class MouseButtonEvent : public Event
     {
   public:
-      inline Input::MouseButton::Enum GetMouseButton() const { return mButton; }
+      inline Input::MouseButton::Enum get_mouse_button() const { return m_button; }
 
       EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryMouseButton | EventCategoryInput)
   protected:
       MouseButtonEvent(Input::MouseButton::Enum button)
-          : mButton(button)
+          : m_button(button)
       { }
 
-      Input::MouseButton::Enum mButton;
+      Input::MouseButton::Enum m_button;
     };
 
     class MouseButtonPressedEvent : public MouseButtonEvent
@@ -227,10 +227,10 @@ namespace AppCore
           : MouseButtonEvent(button)
       { }
 
-      String ToString() const override
+      String to_string() const override
       {
         std::stringstream ss;
-        ss << "MouseButtonPressedEvent: " << mButton;
+        ss << "MouseButtonPressedEvent: " << m_button;
         return ss.str();
       }
 
@@ -244,10 +244,10 @@ namespace AppCore
           : MouseButtonEvent(button)
       { }
 
-      String ToString() const override
+      String to_string() const override
       {
         std::stringstream ss;
-        ss << "MouseButtonReleasedEvent: " << mButton;
+        ss << "MouseButtonReleasedEvent: " << m_button;
         return ss.str();
       }
 
@@ -257,18 +257,18 @@ namespace AppCore
     class KeyEvent : public Event
     {
   public:
-      Input::Key::Enum GetKeyCode() const { return mKeyCode; }
-      uint8_t GetKeyModifiers() const { return mModifiers; }
+      Input::Key::Enum get_key_code() const { return m_key_code; }
+      uint8_t get_key_modifiers() const { return m_modifiers; }
 
       EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
   protected:
       KeyEvent(Input::Key::Enum keycode, uint8_t modifiers)
-          : mKeyCode(keycode)
-          , mModifiers(modifiers)
+          : m_key_code(keycode)
+          , m_modifiers(modifiers)
       { }
 
-      Input::Key::Enum mKeyCode;
-      uint8_t mModifiers;
+      Input::Key::Enum m_key_code;
+      uint8_t m_modifiers;
     };
 
     class KeyPressedEvent : public KeyEvent
@@ -276,21 +276,21 @@ namespace AppCore
   public:
       KeyPressedEvent(Input::Key::Enum keycode, uint8_t modifiers, int repeat)
           : KeyEvent(keycode, modifiers)
-          , mRepeat(repeat)
+          , m_repeat(repeat)
       { }
 
-      int GetRepeatCount() const { return mRepeat; }
+      int get_repeat_count() const { return m_repeat; }
 
-      String ToString() const override
+      String to_string() const override
       {
         std::stringstream ss;
-        ss << "KeyPressedEvent: " << mKeyCode << " ( repeat:" << mRepeat << ")";
+        ss << "KeyPressedEvent: " << m_key_code << " ( repeat:" << m_repeat << ")";
         return ss.str();
       }
 
       EVENT_CLASS_TYPE(KeyPressed)
   private:
-      bool mRepeat;
+      bool m_repeat;
     };
 
     class KeyReleasedEvent : public KeyEvent
@@ -300,10 +300,10 @@ namespace AppCore
           : KeyEvent(keycode, modifiers)
       { }
 
-      String ToString() const override
+      String to_string() const override
       {
         std::stringstream ss;
-        ss << "KeyReleasedEvent: " << mKeyCode;
+        ss << "KeyReleasedEvent: " << m_key_code;
         return ss.str();
       }
 
@@ -317,10 +317,10 @@ namespace AppCore
           : KeyEvent(keycode, modifiers)
       { }
 
-      String ToString() const override
+      String to_string() const override
       {
         std::stringstream ss;
-        ss << "KeyTypedEvent: " << mKeyCode;
+        ss << "KeyTypedEvent: " << m_key_code;
         return ss.str();
       }
 

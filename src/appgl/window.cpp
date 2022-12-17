@@ -24,7 +24,7 @@
 namespace AppGL
 {
 
-  bool Window::CreateWindow()
+  bool Window::create_window()
   {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -33,114 +33,114 @@ namespace AppGL
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    if(mState.CurrentConfig.Samples > 1)
+    if(m_state.current_config.samples > 1)
     {
       SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-      SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, mState.CurrentConfig.Samples);
+      SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, m_state.current_config.samples);
     }
 
     auto flags = SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI;
 
-    mState.Fullscreen = mState.CurrentConfig.Fullscreen;
-    if(mState.CurrentConfig.Fullscreen)
+    m_state.fullscreen = m_state.current_config.fullscreen;
+    if(m_state.current_config.fullscreen)
     {
       flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
     }
     else
     {
-      if(mState.CurrentConfig.Resizable)
+      if(m_state.current_config.resizable)
       {
         flags |= SDL_WINDOW_RESIZABLE;
       }
     }
 
     APPCORE_INFO("BaseWindow: Creating window {0},{1} with OpenGL support",
-                 mState.CurrentConfig.Width,
-                 mState.CurrentConfig.Height);
-    mState.NativeWindow = SDL_CreateWindow(mState.CurrentConfig.Title.c_str(),
-                                           SDL_WINDOWPOS_CENTERED,
-                                           SDL_WINDOWPOS_CENTERED,
-                                           mState.CurrentConfig.Width,
-                                           mState.CurrentConfig.Height,
-                                           flags);
+                 m_state.current_config.width,
+                 m_state.current_config.height);
+    m_state.native_window = SDL_CreateWindow(m_state.current_config.title.c_str(),
+                                             SDL_WINDOWPOS_CENTERED,
+                                             SDL_WINDOWPOS_CENTERED,
+                                             m_state.current_config.width,
+                                             m_state.current_config.height,
+                                             flags);
 
-    if(!mState.NativeWindow)
+    if(!m_state.native_window)
     {
       auto error = SDL_GetError();
       APPCORE_TRACE("BaseWindow: Error creating window, '{0}'.", error);
       return false;
     }
 
-    mContext = SDL_GL_CreateContext(mState.NativeWindow);
-    if(!mContext)
+    m_context = SDL_GL_CreateContext(m_state.native_window);
+    if(!m_context)
     {
       auto error = SDL_GetError();
       APPCORE_TRACE("BaseWindow: Error creating OpenGL context, '{0}'.", error);
-      SDL_DestroyWindow(mState.NativeWindow);
-      mState.NativeWindow = nullptr;
+      SDL_DestroyWindow(m_state.native_window);
+      m_state.native_window = nullptr;
       return false;
     }
 
-    SDL_GL_SetSwapInterval(mState.CurrentConfig.VSync ? 1 : 0);
+    SDL_GL_SetSwapInterval(m_state.current_config.VSync ? 1 : 0);
 
-    mSharedContext = Context::create_context(ContextMode::Share, 330);
+    m_shared_context = Context::create_context(ContextMode::Share, 330);
 
-    if(!mSharedContext)
+    if(!m_shared_context)
     {
       APPCORE_TRACE("Window: Error initializing GL shared context.");
-      SDL_GL_DeleteContext(mContext);
-      SDL_DestroyWindow(mState.NativeWindow);
-      mSharedContext = nullptr;
-      mContext = nullptr;
-      mState.NativeWindow = nullptr;
+      SDL_GL_DeleteContext(m_context);
+      SDL_DestroyWindow(m_state.native_window);
+      m_shared_context = nullptr;
+      m_context = nullptr;
+      m_state.native_window = nullptr;
       return false;
     }
 
     // if(!gladLoadGL())
     // {
     //   APPCORE_TRACE("BaseWindow: Error initializing GL extensions.");
-    //   SDL_GL_DeleteContext(mContext);
-    //   SDL_DestroyWindow(mState.NativeWindow);
-    //   mContext = nullptr;
-    //   mState.NativeWindow = nullptr;
+    //   SDL_GL_DeleteContext(m_context);
+    //   SDL_DestroyWindow(m_state.native_window);
+    //   m_context = nullptr;
+    //   m_state.native_window = nullptr;
     //   return false;
     // }
 
     SDL_SysWMinfo wmi;
     SDL_VERSION(&wmi.version);
 
-    if(!SDL_GetWindowWMInfo(mState.NativeWindow, &wmi))
+    if(!SDL_GetWindowWMInfo(m_state.native_window, &wmi))
     {
       auto error = SDL_GetError();
       APPCORE_TRACE("BaseWindow: Error retrieving window information: {0}.", error);
-      mSharedContext->release();
-      SDL_GL_DeleteContext(mContext);
-      SDL_DestroyWindow(mState.NativeWindow);
-      mSharedContext = nullptr;
-      mContext = nullptr;
-      mState.NativeWindow = nullptr;
+      m_shared_context->release();
+      SDL_GL_DeleteContext(m_context);
+      SDL_DestroyWindow(m_state.native_window);
+      m_shared_context = nullptr;
+      m_context = nullptr;
+      m_state.native_window = nullptr;
       return false;
     }
 
     return true;
   }
 
-  void Window::DestroyWindow()
+  void Window::destroy_window()
   {
-    mSharedContext->release();
-    SDL_GL_DeleteContext(mContext);
-    SDL_DestroyWindow(mState.NativeWindow);
-    mSharedContext = nullptr;
-    mContext = nullptr;
-    mState.NativeWindow = nullptr;
+    m_shared_context->release();
+    SDL_GL_DeleteContext(m_context);
+    SDL_DestroyWindow(m_state.native_window);
+    m_shared_context = nullptr;
+    m_context = nullptr;
+    m_state.native_window = nullptr;
   }
 
-  void Window::SwapBuffers()
+  void Window::swap_buffers()
   {
-    SDL_GL_SwapWindow(mState.NativeWindow);
+    SDL_GL_SwapWindow(m_state.native_window);
   }
 
-  bool Window::OnWindowResize(AppCore::Events::WindowResizeEvent& event)
+  bool Window::on_window_resize(AppCore::Events::WindowResizeEvent& event)
   {
     return true;
   }

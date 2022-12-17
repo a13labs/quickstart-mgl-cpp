@@ -24,53 +24,55 @@ namespace AppCore
 {
   namespace Application
   {
-    BaseWindow* BaseWindow::sInstance = nullptr;
+    BaseWindow* BaseWindow::s_instance = nullptr;
 
     BaseWindow::BaseWindow(const WindowConfig& config)
     {
-      APPCORE_ASSERT(!sInstance, "BaseWindow already running!");
-      Log::Init();
+      APPCORE_ASSERT(!s_instance, "BaseWindow already running!");
+      Log::init();
 
-      mState.CurrentConfig = config;
-      mState.NativeWindow = nullptr;
-      sInstance = this;
-      mRunning = false;
+      m_state.current_config = config;
+      m_state.native_window = nullptr;
+      s_instance = this;
+      m_running = false;
     }
 
-    void BaseWindow::OnEvent(Events::Event& event)
+    void BaseWindow::on_event(Events::Event& event)
     {
       Events::EventDispatcher dispatcher(event);
 
       // Dispatch Windows Events
-      dispatcher.Dispatch<Events::WindowCloseEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnWindowClose));
-      dispatcher.Dispatch<Events::WindowResizeEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnWindowResize));
+      dispatcher.dispatch<Events::WindowCloseEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::on_window_close));
+      dispatcher.dispatch<Events::WindowResizeEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::on_window_resize));
 
       // Dispatch key events to be handled by the application
-      dispatcher.Dispatch<Events::KeyPressedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::OnKeyPressed));
-      dispatcher.Dispatch<Events::KeyReleasedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnKeyReleased));
+      dispatcher.dispatch<Events::KeyPressedEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::on_key_pressed));
+      dispatcher.dispatch<Events::KeyReleasedEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::on_key_released));
 
       // Dispatch mouse events to be handled by the application
-      dispatcher.Dispatch<Events::MouseMovedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseMoved));
-      dispatcher.Dispatch<Events::MouseScrolledEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseScrolled));
-      dispatcher.Dispatch<Events::MouseButtonPressedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseButtonPressed));
-      dispatcher.Dispatch<Events::MouseButtonReleasedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::OnMouseButtonReleased));
+      dispatcher.dispatch<Events::MouseMovedEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_moved));
+      dispatcher.dispatch<Events::MouseScrolledEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_scrolled));
+      dispatcher.dispatch<Events::MouseButtonPressedEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_button_pressed));
+      dispatcher.dispatch<Events::MouseButtonReleasedEvent>(
+          APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_button_released));
     }
 
-    bool BaseWindow::OnWindowClose(Events::WindowCloseEvent& event)
+    bool BaseWindow::on_window_close(Events::WindowCloseEvent& event)
     {
-      mRunning = false;
+      m_running = false;
       return true;
     }
 
-    void BaseWindow::Run()
+    void BaseWindow::run()
     {
-      if(mRunning)
+      if(m_running)
         return;
 
       if(SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -79,19 +81,19 @@ namespace AppCore
         return;
       }
 
-      if(!CreateWindow())
+      if(!create_window())
       {
         APPCORE_TRACE("BaseWindow: Error creating Window");
         SDL_Quit();
         return;
       }
 
-      Input::Init();
-      mState.Handler = APPCORE_BIND_EVENT_FN(BaseWindow::OnEvent);
+      Input::init();
+      m_state.handler = APPCORE_BIND_EVENT_FN(BaseWindow::on_event);
 
       SDL_AddEventWatch(
           [](void* userdata, SDL_Event* currentEvent) -> int {
-            WindowState& mState = *(WindowState*)userdata;
+            WindowState& m_state = *(WindowState*)userdata;
             switch(currentEvent->type)
             {
               case SDL_WINDOWEVENT:
@@ -101,12 +103,12 @@ namespace AppCore
                     auto w = currentEvent->window.data1;
                     auto h = currentEvent->window.data2;
                     Events::WindowResizeEvent event(w, h);
-                    mState.Handler(event);
+                    m_state.handler(event);
                   }
                   break;
                   case SDL_WINDOWEVENT_CLOSE: {
                     Events::WindowCloseEvent event;
-                    mState.Handler(event);
+                    m_state.handler(event);
                   }
                   break;
                   default: break;
@@ -118,16 +120,16 @@ namespace AppCore
               case SDL_MOUSEWHEEL:
               case SDL_KEYDOWN:
               case SDL_KEYUP: {
-                Input::UpdateState(currentEvent, mState.Handler);
+                Input::update_state(currentEvent, m_state.handler);
 
-                if(Input::IsKeyPressed(mState.CurrentConfig.ExitKey))
+                if(Input::is_key_pressed(m_state.current_config.exit_key))
                 {
-                  BaseWindow::Current().Quit();
+                  BaseWindow::current().quit();
                 }
 
-                if(Input::IsKeyPressed(mState.CurrentConfig.FullScreenKey))
+                if(Input::is_key_pressed(m_state.current_config.fullscreen_key))
                 {
-                  BaseWindow::Current().ToggleFullScreen();
+                  BaseWindow::current().toggle_full_screen();
                 }
               }
               break;
@@ -136,51 +138,51 @@ namespace AppCore
 
             return 0;
           },
-          &mState);
+          &m_state);
 
-      mRunning = true;
+      m_running = true;
 
       APPCORE_PROFILE_BEGIN_SESSION();
 
-      while(mRunning)
+      while(m_running)
       {
         SDL_Event e;
         SDL_PollEvent(&e);
-        Draw();
-        SwapBuffers();
+        draw();
+        swap_buffers();
 #if APPCORE_PROFILE
         // Since we are profiling we just render one frame
-        mRunning = false;
+        m_running = false;
 #endif
       }
 
       APPCORE_PROFILE_END_SESSION();
-      DestroyWindow();
+      destroy_window();
       SDL_Quit();
     }
 
-    void BaseWindow::Quit()
+    void BaseWindow::quit()
     {
-      mRunning = false;
+      m_running = false;
     }
 
-    void BaseWindow::ToggleFullScreen()
+    void BaseWindow::toggle_full_screen()
     {
-      mState.Fullscreen = !mState.Fullscreen;
-      if(mState.Fullscreen)
+      m_state.fullscreen = !m_state.fullscreen;
+      if(m_state.fullscreen)
       {
-        SDL_SetWindowFullscreen(mState.NativeWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+        SDL_SetWindowFullscreen(m_state.native_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
         return;
       }
 
-      SDL_RestoreWindow(mState.NativeWindow);
+      SDL_RestoreWindow(m_state.native_window);
       SDL_SetWindowSize(
-          mState.NativeWindow, mState.CurrentConfig.Width, mState.CurrentConfig.Height);
-      SDL_SetWindowPosition(mState.NativeWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-      SDL_SetWindowFullscreen(mState.NativeWindow, 0);
+          m_state.native_window, m_state.current_config.width, m_state.current_config.height);
+      SDL_SetWindowPosition(m_state.native_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+      SDL_SetWindowFullscreen(m_state.native_window, 0);
     }
 
-    WindowConfig LoadWindowConfiguration(const String& filename)
+    WindowConfig load_window_configuration(const String& filename)
     {
       // TODO: Implement load from JSON
       return WindowConfig();

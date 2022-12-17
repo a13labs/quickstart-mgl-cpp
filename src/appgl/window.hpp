@@ -31,14 +31,14 @@ public:
     virtual ~Window() = default;
 
 public:
-    virtual bool CreateWindow() override;
-    virtual void DestroyWindow() override;
-    virtual void SwapBuffers() override;
+    virtual bool create_window() override;
+    virtual void destroy_window() override;
+    virtual void swap_buffers() override;
 
-    virtual bool OnWindowResize(AppCore::Events::WindowResizeEvent& event) override;
+    virtual bool on_window_resize(AppCore::Events::WindowResizeEvent& event) override;
 
 private:
-    SDL_GLContext mContext;
-    AppCore::Ref<Context> mSharedContext;
+    SDL_GLContext m_context;
+    AppCore::Ref<Context> m_shared_context;
   };
 } // namespace AppGL

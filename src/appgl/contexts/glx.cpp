@@ -22,7 +22,7 @@
 
 namespace AppGL
 {
-  ContextGLX::ContextGLX(ContextMode::Enum mode, int glversion)
+  ContextGLX::ContextGLX(ContextMode::Enum mode, int required)
   {
     m_mode = mode;
     m_context = nullptr;

@@ -105,7 +105,7 @@ struct EGLContextData
 
 namespace AppGL
 {
-  ContextEGL::ContextEGL(ContextMode::Enum mode, int glversion)
+  ContextEGL::ContextEGL(ContextMode::Enum mode, int required)
   {
     m_mode = mode;
     m_released = true;
@@ -328,9 +328,9 @@ namespace AppGL
 
         int ctxattribs[] = {
             EGL_CONTEXT_MAJOR_VERSION,
-            glversion / 100 % 10,
+            required / 100 % 10,
             EGL_CONTEXT_MINOR_VERSION,
-            glversion / 10 % 10,
+            required / 10 % 10,
             EGL_CONTEXT_OPENGL_PROFILE_MASK,
             EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
             // EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE, 1,
@@ -406,9 +406,9 @@ namespace AppGL
 
         int ctxattribs[] = {
             EGL_CONTEXT_MAJOR_VERSION,
-            glversion / 100 % 10,
+            required / 100 % 10,
             EGL_CONTEXT_MINOR_VERSION,
-            glversion / 10 % 10,
+            required / 10 % 10,
             EGL_CONTEXT_OPENGL_PROFILE_MASK,
             EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
             // EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE, 1,

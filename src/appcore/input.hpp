@@ -175,24 +175,24 @@ namespace AppCore
 
     typedef struct
     {
-      uint8_t KeyForwardMap[256];
-      uint8_t KeyReverseMap[256];
-      bool PressedKeys[Key::Count];
-      bool PressedMouseButtons[MouseButton::Count];
+      uint8_t key_forward_map[256];
+      uint8_t key_reverse_map[256];
+      bool pressed_keys[Key::Count];
+      bool pressed_mouse_buttons[MouseButton::Count];
     } InputState;
 
-    extern InputState State;
+    extern InputState input_state;
 
-    void Init();
-    void UpdateState(SDL_Event* event, const EventHandler& handler);
-    inline bool IsKeyPressed(Key::Enum key)
+    void init();
+    void update_state(SDL_Event* event, const EventHandler& handler);
+    inline bool is_key_pressed(Key::Enum key)
     {
-      return State.PressedKeys[key & 0xff];
+      return input_state.pressed_keys[key & 0xff];
     }
 
     inline bool IsMouseButtonPressed(MouseButton::Enum button)
     {
-      return State.PressedMouseButtons[button & 0xff];
+      return input_state.pressed_mouse_buttons[button & 0xff];
     }
 
   } // namespace Input
