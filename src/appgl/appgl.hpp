@@ -68,7 +68,6 @@ namespace AppGL
 
   using GLFunction = void*;
   using GLContext = void*;
-  using DataPtr = void*;
 
   struct DataType;
   class Context;
@@ -87,5 +86,6 @@ namespace AppGL
   class ConditionalRender;
   class ComputeShader;
   class Window;
+  class Uniform;
 
 } // namespace AppGL

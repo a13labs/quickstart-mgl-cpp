@@ -17,10 +17,12 @@
 #include "context.hpp"
 #include "appcore/log.hpp"
 #include "buffer.hpp"
+#include "computeshader.hpp"
 #include "datatype.hpp"
 #include "framebuffer.hpp"
 #include "renderbuffer.hpp"
 #include "texture.hpp"
+#include "uniform.hpp"
 
 namespace AppGL
 {
@@ -99,7 +101,6 @@ namespace AppGL
 
     const GLMethods& gl = ctx->m_gl;
 
-    ctx->m_released = false;
     ctx->m_wireframe = false;
 
     ctx->load_functions();
@@ -165,8 +166,7 @@ namespace AppGL
       int framebuffer = 0;
       gl.GenFrameBuffers(1, (GLuint*)&framebuffer);
       gl.BindFrameBuffer(GL_FRAMEBUFFER, framebuffer);
-      gl.FrameBufferRenderbuffer(
-          GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
+      gl.FrameBufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
       bound_framebuffer = framebuffer;
     }
 #endif
@@ -242,22 +242,22 @@ namespace AppGL
     return AppCore::Ref<Context>(ctx);
   }
 
-  AppCore::Ref<Buffer> Context::buffer(const uint8_t* data, size_t length, bool dynamic)
+  AppCore::Ref<Buffer> Context::buffer(void* data, size_t size, bool dynamic)
   {
-
-    if(!length)
+    if(released())
     {
-      APPCORE_ERROR("Missing data length");
       return nullptr;
     }
+
+    APPCORE_ASSERT(size > 0, "invalid buffer size: {0}", size);
+
+    const GLMethods& gl = m_gl;
 
     Buffer* buffer = new Buffer();
     buffer->m_released = false;
 
-    buffer->m_size = length;
+    buffer->m_size = size;
     buffer->m_dynamic = dynamic;
-
-    const GLMethods& gl = m_gl;
 
     buffer->m_buffer_obj = 0;
     gl.GenBuffers(1, (GLuint*)&buffer->m_buffer_obj);
@@ -265,20 +265,154 @@ namespace AppGL
     if(!buffer->m_buffer_obj)
     {
       APPCORE_ERROR("Cannot create buffer");
-      delete(buffer);
+      delete buffer;
       return nullptr;
     }
 
     gl.BindBuffer(GL_ARRAY_BUFFER, buffer->m_buffer_obj);
-    gl.BufferData(GL_ARRAY_BUFFER, length, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    gl.BufferData(GL_ARRAY_BUFFER, size, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 
     buffer->m_context = this;
 
     return AppCore::Ref<Buffer>(buffer);
   }
 
-  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Texture> color_attachments,
-                                                 const Texture& depth_attachment)
+  AppCore::Ref<ComputeShader> Context::compute_shader(const AppCore::String& source)
+  {
+
+    ComputeShader* compute_shader = new ComputeShader();
+    compute_shader->m_released = false;
+
+    compute_shader->m_context = this;
+
+    const GLMethods& gl = m_gl;
+
+    int program_obj = gl.CreateProgram();
+
+    if(!program_obj)
+    {
+      delete compute_shader;
+      APPCORE_ERROR("cannot create program");
+      return nullptr;
+    }
+
+    int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
+
+    if(!shader_obj)
+    {
+      delete compute_shader;
+      APPCORE_ERROR("cannot create the shader object");
+      return nullptr;
+    }
+
+    const GLchar* source_str = source.c_str();
+    gl.ShaderSource(shader_obj, 1, &source_str, 0);
+    gl.CompileShader(shader_obj);
+
+    int compiled = GL_FALSE;
+    gl.GetShaderiv(shader_obj, GL_COMPILE_STATUS, &compiled);
+
+    if(!compiled)
+    {
+      const char* message = "GLSL Compiler failed";
+      const char* title = "ComputeShader";
+      const char* underline = "=============";
+
+      int log_len = 0;
+      gl.GetShaderiv(shader_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+      char* log = new char[log_len];
+      gl.GetShaderInfoLog(shader_obj, log_len, &log_len, log);
+
+      gl.DeleteShader(shader_obj);
+
+      APPCORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
+
+      delete[] log;
+      delete compute_shader;
+      return nullptr;
+    }
+
+    gl.AttachShader(program_obj, shader_obj);
+    gl.LinkProgram(program_obj);
+
+    int linked = GL_FALSE;
+    gl.GetProgramiv(program_obj, GL_LINK_STATUS, &linked);
+
+    if(!linked)
+    {
+      const char* message = "GLSL Linker failed";
+      const char* title = "ComputeShader";
+      const char* underline = "=============";
+
+      int log_len = 0;
+      gl.GetProgramiv(program_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+      char* log = new char[log_len];
+      gl.GetProgramInfoLog(program_obj, log_len, &log_len, log);
+
+      gl.DeleteProgram(program_obj);
+
+      APPCORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
+
+      delete[] log;
+      delete compute_shader;
+      return nullptr;
+    }
+
+    compute_shader->m_shader_obj = shader_obj;
+    compute_shader->m_program_obj = program_obj;
+
+    int num_uniforms = 0;
+
+    gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
+
+    for(int i = 0; i < num_uniforms; ++i)
+    {
+      int type = 0;
+      int size = 0;
+      int name_len = 0;
+      char name[256];
+
+      gl.GetActiveUniform(program_obj, i, 256, &name_len, &size, (GLenum*)&type, name);
+      int location = gl.GetUniformLocation(program_obj, name);
+
+      clean_glsl_name(name, name_len);
+
+      if(location < 0)
+      {
+        continue;
+      }
+
+      Uniform* uniform = new Uniform(name, type, program_obj, location, size, this);
+      compute_shader->m_uniform_dict.insert({name, AppCore::Ref<Uniform>(uniform)});
+    }
+
+    // int num_uniform_blocks = 0;
+    // gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+
+    // for(int i = 0; i < num_uniform_blocks; ++i)
+    // {
+    //   int size = 0;
+    //   int name_len = 0;
+    //   char name[256];
+
+    //   gl.GetActiveUniformBlockName(program_obj, i, 256, &name_len, name);
+    //   int index = gl.GetUniformBlockIndex(program_obj, name);
+    //   gl.GetActiveUniformBlockiv(program_obj, index, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
+
+    //   clean_glsl_name(name, name_len);
+
+    //   PyObject* item = PyObject_CallMethod(helper, "make_uniform_block", "(siiiO)", name, program_obj, index, size, self);
+
+    //   PyDict_SetItemString(members_dict, name, item);
+    //   Py_DECREF(item);
+    // }
+
+    return AppCore::Ref<ComputeShader>(compute_shader);
+  }
+
+  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Texture> color_attachments, const Texture& depth_attachment)
   {
     return nullptr;
   }
@@ -289,27 +423,25 @@ namespace AppGL
     return nullptr;
   }
 
-  AppCore::Ref<Framebuffer>
-  Context::framebuffer(const AppCore::List<Renderbuffer> color_attachments,
-                       const Texture& depth_attachment)
+  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Renderbuffer> color_attachments,
+                                                 const Texture& depth_attachment)
   {
     return nullptr;
   }
 
-  AppCore::Ref<Framebuffer>
-  Context::framebuffer(const AppCore::List<Renderbuffer> color_attachments,
-                       const Renderbuffer& depth_attachment)
+  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Renderbuffer> color_attachments,
+                                                 const Renderbuffer& depth_attachment)
   {
     return nullptr;
   }
 
-  AppCore::Ref<Renderbuffer> Context::renderbuffer(uint32_t w,
-                                                   uint32_t h,
-                                                   uint8_t components,
-                                                   uint8_t samples,
-                                                   const char* dtype,
-                                                   size_t dtype_size)
+  AppCore::Ref<Renderbuffer>
+  Context::renderbuffer(uint32_t w, uint32_t h, uint8_t components, uint8_t samples, const char* dtype, size_t dtype_size)
   {
+    if(released())
+    {
+      return nullptr;
+    }
 
     if(components < 1 || components > 4)
     {

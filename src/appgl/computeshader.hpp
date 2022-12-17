@@ -23,15 +23,24 @@ namespace AppGL
 public:
     ~ComputeShader() { release(); }
 
+    const Context* context() const;
     void release();
+    void run(int x, int y, int z);
 
 private:
     friend class Context;
-    ComputeShader();
+    ComputeShader() = default;
 
     Context* m_context;
     int m_program_obj;
     int m_shader_obj;
+    AppCore::Dict<AppCore::String, AppCore::Ref<Uniform>> m_uniform_dict;
     bool m_released;
   };
+
+  inline const Context* ComputeShader::context() const
+  {
+    return m_context;
+  }
+
 } // namespace AppGL

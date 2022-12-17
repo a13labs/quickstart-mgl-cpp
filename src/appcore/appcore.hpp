@@ -61,7 +61,7 @@ namespace AppCore
   using Scope = std::unique_ptr<T>;
 
   template <typename T, typename... Args>
-  constexpr Scope<T> CreateScope(Args&&... args)
+  constexpr Scope<T> create_scope(Args&&... args)
   {
     return std::make_unique<T>(std::forward<Args>(args)...);
   }
@@ -76,7 +76,7 @@ namespace AppCore
   using QueueRef = std::queue<Ref<T>>;
 
   template <typename T, typename... Args>
-  constexpr Ref<T> CreateRef(Args&&... args)
+  constexpr Ref<T> create_ref(Args&&... args)
   {
     return std::make_shared<T>(std::forward<Args>(args)...);
   }
@@ -84,7 +84,7 @@ namespace AppCore
   template <typename T>
   using RefFromThis = std::enable_shared_from_this<T>;
 
-#define MakeThisRef shared_from_this
+#define MAKE_THIS_REF shared_from_this
 
   template <typename T>
   using List = std::list<T>;

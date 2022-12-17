@@ -24,27 +24,35 @@ public:
     ~Buffer() { release(); }
 
 public:
-    void release();
-    void write(DataPtr data, size_t size, size_t offset);
-    void read(size_t size, size_t offset);
-    void read_info(DataPtr data, size_t size, size_t offset);
-    void write_chunks(DataPtr data, size_t start, size_t step, size_t count);
-    void read_chunks(size_t size, size_t start, size_t step, size_t count);
-    void read_chunks_info(
-        DataPtr data, size_t size, size_t start, size_t step, size_t count, size_t w_offset);
+    void write(const float* src, size_t size, size_t offset);
+    void write(const uint32_t* src, size_t size, size_t offset);
+    void write(const uint16_t* src, size_t size, size_t offset);
+    void write(const uint8_t* src, size_t size, size_t offset);
+    void write(const int* src, size_t size, size_t offset);
+    void read(const float* dst, size_t size, size_t offset);
+    void read(const uint32_t* dst, size_t size, size_t offset);
+    void read(const uint16_t* dst, size_t size, size_t offset);
+    void read(const uint8_t* dst, size_t size, size_t offset);
+    void read(const int* dst, size_t size, size_t offset);
 
-    void clear(size_t size, size_t offset);
+    size_t size();
+    bool dynamic();
+    bool released();
+    const Context* context() const;
+
+    void clear();
+    void bind_to_uniform_block(int binding, size_t size, size_t offset);
+    void bind_to_storage_buffer(int binding, size_t size, size_t offset);
     void orphan(size_t size);
-    void bind_to_uniform_block(int binding, size_t offset, size_t size);
-    void bind_to_storage_buffer(int binding, size_t offset, size_t size);
-
-    inline size_t size() { return m_size; }
-    inline bool dynamic() { return m_dynamic; }
-    inline bool released() { return m_released; }
+    void release();
 
 private:
     friend class Context;
-    Buffer(){};
+
+    Buffer() = default;
+
+    void write(void* src, size_t size, size_t offset);
+    void read(void* dst, size_t size, size_t offset);
 
     Context* m_context;
     int m_buffer_obj;
@@ -52,4 +60,75 @@ private:
     bool m_dynamic;
     bool m_released;
   };
+
+  inline void Buffer::write(const float* src, size_t size, size_t offset)
+  {
+    write((void*)src, size * sizeof(float), offset);
+  }
+
+  inline void Buffer::write(const uint32_t* src, size_t size, size_t offset)
+  {
+    write((void*)src, size * sizeof(uint32_t), offset);
+  }
+
+  inline void Buffer::write(const uint16_t* src, size_t size, size_t offset)
+  {
+    write((void*)src, size * sizeof(uint16_t), offset);
+  }
+
+  inline void Buffer::write(const uint8_t* src, size_t size, size_t offset)
+  {
+    write((void*)src, size * sizeof(uint8_t), offset);
+  }
+
+  inline void Buffer::write(const int* src, size_t size, size_t offset)
+  {
+    write((void*)src, size * sizeof(int), offset);
+  }
+
+  inline void Buffer::read(const float* dst, size_t size, size_t offset)
+  {
+    read((void*)dst, size * sizeof(float), offset);
+  }
+
+  inline void Buffer::read(const uint32_t* dst, size_t size, size_t offset)
+  {
+    read((void*)dst, size * sizeof(uint32_t), offset);
+  }
+
+  inline void Buffer::read(const uint16_t* dst, size_t size, size_t offset)
+  {
+    read((void*)dst, size * sizeof(uint16_t), offset);
+  }
+
+  inline void Buffer::read(const uint8_t* dst, size_t size, size_t offset)
+  {
+    read((void*)dst, size * sizeof(uint8_t), offset);
+  }
+
+  inline void Buffer::read(const int* dst, size_t size, size_t offset)
+  {
+    read((void*)dst, size * sizeof(int), offset);
+  }
+
+  inline size_t Buffer::size()
+  {
+    return m_size;
+  }
+
+  inline bool Buffer::dynamic()
+  {
+    return m_dynamic;
+  }
+
+  inline bool Buffer::released()
+  {
+    return m_released;
+  }
+
+  inline const Context* Buffer::context() const
+  {
+    return m_context;
+  }
+
 } // namespace AppGL

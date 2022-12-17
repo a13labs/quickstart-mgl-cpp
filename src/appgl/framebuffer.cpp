@@ -137,29 +137,17 @@ namespace AppGL
 
     gl.DepthMask(m_depth_mask);
 
-    m_context->m_bound_framebuffer = MakeThisRef();
+    m_context->m_bound_framebuffer = MAKE_THIS_REF();
   }
 
-  AppCore::Ref<uint8_t> Framebuffer::read(const Rect& v,
-                                          int c,
-                                          int att,
-                                          int align,
-                                          int clmp,
-                                          const char* dtype,
-                                          size_t dsize,
-                                          int w_offset)
-  {
-    return nullptr;
-  }
-
-  void Framebuffer::read_into(AppCore::Ref<uint8_t> buffer,
-                              const Rect& v,
-                              int c,
-                              int att,
-                              int align,
-                              int clmp,
-                              const char* dtype,
-                              size_t dsize,
-                              int w_offset)
+  void Framebuffer::read(void* dst,
+                         const Rect& v,
+                         int c,
+                         int att,
+                         int align,
+                         int clmp,
+                         const char* dtype,
+                         size_t dsize,
+                         int w_offset)
   { }
 } // namespace AppGL
