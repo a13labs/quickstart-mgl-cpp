@@ -26,6 +26,34 @@
 
 namespace AppGL
 {
+  inline void framebuffer_error_message(int status)
+  {
+    const char* message = "the framebuffer is not complete";
+
+    switch(status)
+    {
+      case GL_FRAMEBUFFER_UNDEFINED: message = "the framebuffer is not complete (UNDEFINED)"; break;
+
+      case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: message = "the framebuffer is not complete (INCOMPLETE_ATTACHMENT)"; break;
+
+      case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+        message = "the framebuffer is not complete (INCOMPLETE_MISSING_ATTACHMENT)";
+        break;
+
+      case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER: message = "the framebuffer is not complete (INCOMPLETE_DRAW_BUFFER)"; break;
+
+      case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER: message = "the framebuffer is not complete (INCOMPLETE_READ_BUFFER)"; break;
+
+      case GL_FRAMEBUFFER_UNSUPPORTED: message = "the framebuffer is not complete (UNSUPPORTED)"; break;
+
+      case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: message = "the framebuffer is not complete (INCOMPLETE_MULTISAMPLE)"; break;
+
+      case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS: message = "the framebuffer is not complete (INCOMPLETE_LAYER_TARGETS)"; break;
+    }
+
+    APPCORE_ERROR(message);
+  }
+
   void Context::load_functions()
   {
     // Map OpenGL functions
@@ -123,7 +151,7 @@ namespace AppGL
     {
       const char* ext = (const char*)gl.GetStringi(GL_EXTENSIONS, i);
       APPCORE_INFO("Found GL extension: {0}", ext);
-      ctx->m_extensions.push_front(ext);
+      ctx->m_extensions.push_back(ext);
     }
 
     gl.BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -196,7 +224,7 @@ namespace AppGL
       gl.GetIntegerv(GL_DRAW_BUFFER, (int*)&fb->m_draw_buffers[0]);
       gl.BindFramebuffer(GL_FRAMEBUFFER, bound_framebuffer);
 
-      fb->m_color_mask = new bool[4];
+      fb->m_color_mask = ColorMask(4);
       fb->m_color_mask[0] = true;
       fb->m_color_mask[1] = true;
       fb->m_color_mask[2] = true;
@@ -244,11 +272,7 @@ namespace AppGL
 
   AppCore::Ref<Buffer> Context::buffer(void* data, size_t size, bool dynamic)
   {
-    if(released())
-    {
-      return nullptr;
-    }
-
+    APPCORE_ASSERT(!released(), "Context already released");
     APPCORE_ASSERT(size > 0, "invalid buffer size: {0}", size);
 
     const GLMethods& gl = m_gl;
@@ -279,13 +303,13 @@ namespace AppGL
 
   AppCore::Ref<ComputeShader> Context::compute_shader(const AppCore::String& source)
   {
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
 
     ComputeShader* compute_shader = new ComputeShader();
+
     compute_shader->m_released = false;
-
     compute_shader->m_context = this;
-
-    const GLMethods& gl = m_gl;
 
     int program_obj = gl.CreateProgram();
 
@@ -384,64 +408,498 @@ namespace AppGL
         continue;
       }
 
-      Uniform* uniform = new Uniform(name, type, program_obj, location, size, this);
-      compute_shader->m_uniform_dict.insert({name, AppCore::Ref<Uniform>(uniform)});
+      compute_shader->m_uniforms_map.insert(
+          {name, AppCore::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this))});
     }
 
-    // int num_uniform_blocks = 0;
-    // gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+    int num_uniform_blocks = 0;
+    gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
 
-    // for(int i = 0; i < num_uniform_blocks; ++i)
-    // {
-    //   int size = 0;
-    //   int name_len = 0;
-    //   char name[256];
+    for(int i = 0; i < num_uniform_blocks; ++i)
+    {
+      int size = 0;
+      int name_len = 0;
+      char name[256];
 
-    //   gl.GetActiveUniformBlockName(program_obj, i, 256, &name_len, name);
-    //   int index = gl.GetUniformBlockIndex(program_obj, name);
-    //   gl.GetActiveUniformBlockiv(program_obj, index, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
+      gl.GetActiveUniformBlockName(program_obj, i, 256, &name_len, name);
+      int index = gl.GetUniformBlockIndex(program_obj, name);
+      gl.GetActiveUniformBlockiv(program_obj, index, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
 
-    //   clean_glsl_name(name, name_len);
+      clean_glsl_name(name, name_len);
 
-    //   PyObject* item = PyObject_CallMethod(helper, "make_uniform_block", "(siiiO)", name, program_obj, index, size, self);
-
-    //   PyDict_SetItemString(members_dict, name, item);
-    //   Py_DECREF(item);
-    // }
+      compute_shader->m_uniform_blocks_map.insert(
+          {name, AppCore::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this))});
+    }
 
     return AppCore::Ref<ComputeShader>(compute_shader);
   }
 
-  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Texture> color_attachments, const Texture& depth_attachment)
+  AppCore::Ref<Framebuffer> Context::framebuffer(const TexturesRef& color_attachments, AppCore::Ref<Texture> depth_attachment)
   {
-    return nullptr;
+    APPCORE_ASSERT(!released(), "Context already released");
+    APPCORE_ASSERT(color_attachments.size(), "missing color attachments");
+    const GLMethods& gl = m_gl;
+
+    int width = 0;
+    int height = 0;
+    int samples = 0;
+
+    if(color_attachments.size() > 0)
+    {
+      width = color_attachments[0]->m_width;
+      height = color_attachments[0]->m_height;
+      samples = color_attachments[0]->m_samples;
+
+      for(auto t : color_attachments)
+      {
+        APPCORE_ASSERT(t->m_context == this, "color_attachment belongs to a different context");
+        APPCORE_ASSERT(!t->m_depth, "color_attachment is a depth attachment");
+        APPCORE_ASSERT(t->m_width == width && t->m_height == height, "color_attachment have different sizes");
+        APPCORE_ASSERT(t->m_samples == samples, "color_attachment have different samples");
+      }
+
+      if(depth_attachment != nullptr)
+      {
+        APPCORE_ASSERT(depth_attachment->m_context == this, "color_attachment belongs to a different context");
+        APPCORE_ASSERT(depth_attachment->m_depth, "color_attachment is a depth attachment");
+        APPCORE_ASSERT(depth_attachment->m_width == width && depth_attachment->m_height == height,
+                       "color_attachment have different sizes");
+        APPCORE_ASSERT(depth_attachment->m_samples == samples, "color_attachment have different samples");
+      }
+    }
+    else if(depth_attachment != nullptr)
+    {
+      width = depth_attachment->m_width;
+      height = depth_attachment->m_height;
+      samples = depth_attachment->m_samples;
+    }
+    else
+    {
+      APPCORE_ASSERT(false, "the framebuffer is empty");
+      return nullptr;
+    }
+
+    Framebuffer* framebuffer = new Framebuffer();
+    framebuffer->m_released = false;
+    framebuffer->m_draw_buffers_len = color_attachments.size();
+    framebuffer->m_draw_buffers = new unsigned[color_attachments.size()];
+    framebuffer->m_color_mask = ColorMask(color_attachments.size() * 4 + 1);
+    framebuffer->m_depth_mask = (depth_attachment != nullptr);
+    framebuffer->m_viewport = {0, 0, width, height};
+    framebuffer->m_dynamic = false;
+    framebuffer->m_scissor_enabled = false;
+    framebuffer->m_scissor = {0, 0, width, height};
+    framebuffer->m_width = width;
+    framebuffer->m_height = height;
+    framebuffer->m_samples = samples;
+    framebuffer->m_context = this;
+
+    framebuffer->m_framebuffer_obj = 0;
+    gl.GenFramebuffers(1, (GLuint*)&framebuffer->m_framebuffer_obj);
+
+    if(!framebuffer->m_framebuffer_obj)
+    {
+      APPCORE_ERROR("cannot create framebuffer");
+      delete framebuffer;
+      return nullptr;
+    }
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->m_framebuffer_obj);
+
+    if(!color_attachments.size())
+    {
+      gl.DrawBuffer(GL_NONE); // No color buffer is drawn to.
+    }
+    else
+    {
+      for(size_t i = 0; i < color_attachments.size(); ++i)
+      {
+        auto texture = color_attachments[i];
+
+        gl.FramebufferTexture2D(GL_FRAMEBUFFER,
+                                GL_COLOR_ATTACHMENT0 + i,
+                                texture->m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
+                                texture->m_texture_obj,
+                                0);
+
+        framebuffer->m_draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
+        framebuffer->m_color_mask[i * 4 + 0] = texture->m_components >= 1;
+        framebuffer->m_color_mask[i * 4 + 1] = texture->m_components >= 2;
+        framebuffer->m_color_mask[i * 4 + 2] = texture->m_components >= 3;
+        framebuffer->m_color_mask[i * 4 + 3] = texture->m_components >= 4;
+      }
+    }
+
+    if(depth_attachment != nullptr)
+    {
+      gl.FramebufferTexture2D(GL_FRAMEBUFFER,
+                              GL_DEPTH_ATTACHMENT,
+                              depth_attachment->m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
+                              depth_attachment->m_texture_obj,
+                              0);
+    }
+
+    int status = gl.CheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_bound_framebuffer->m_framebuffer_obj);
+
+    if(status != GL_FRAMEBUFFER_COMPLETE)
+    {
+      framebuffer_error_message(status);
+      delete framebuffer;
+      return nullptr;
+    }
+
+    return AppCore::Ref<Framebuffer>(framebuffer);
   }
 
-  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Texture> color_attachments,
-                                                 const Renderbuffer& depth_attachment)
+  AppCore::Ref<Framebuffer> Context::framebuffer(const TexturesRef& color_attachments,
+                                                 AppCore::Ref<Renderbuffer> depth_attachment)
   {
-    return nullptr;
+    APPCORE_ASSERT(!released(), "Context already released");
+    APPCORE_ASSERT(color_attachments.size(), "missing color attachments");
+    const GLMethods& gl = m_gl;
+
+    int width = 0;
+    int height = 0;
+    int samples = 0;
+
+    if(color_attachments.size() > 0)
+    {
+      width = color_attachments[0]->m_width;
+      height = color_attachments[0]->m_height;
+      samples = color_attachments[0]->m_samples;
+
+      for(auto t : color_attachments)
+      {
+        APPCORE_ASSERT(t->m_context == this, "color_attachment belongs to a different context");
+        APPCORE_ASSERT(!t->m_depth, "color_attachment is a depth attachment");
+        APPCORE_ASSERT(t->m_width == width && t->m_height == height, "color_attachment have different sizes");
+        APPCORE_ASSERT(t->m_samples == samples, "color_attachment have different samples");
+      }
+
+      if(depth_attachment != nullptr)
+      {
+        APPCORE_ASSERT(depth_attachment->m_context == this, "color_attachment belongs to a different context");
+        APPCORE_ASSERT(depth_attachment->m_depth, "color_attachment is a depth attachment");
+        APPCORE_ASSERT(depth_attachment->m_width == width && depth_attachment->m_height == height,
+                       "color_attachment have different sizes");
+        APPCORE_ASSERT(depth_attachment->m_samples == samples, "color_attachment have different samples");
+      }
+    }
+    else if(depth_attachment != nullptr)
+    {
+      width = depth_attachment->m_width;
+      height = depth_attachment->m_height;
+      samples = depth_attachment->m_samples;
+    }
+    else
+    {
+      APPCORE_ASSERT(false, "the framebuffer is empty");
+      return nullptr;
+    }
+
+    Framebuffer* framebuffer = new Framebuffer();
+    framebuffer->m_released = false;
+    framebuffer->m_draw_buffers_len = color_attachments.size();
+    framebuffer->m_draw_buffers = new unsigned[color_attachments.size()];
+    framebuffer->m_color_mask = ColorMask(color_attachments.size() * 4 + 1);
+    framebuffer->m_depth_mask = (depth_attachment != nullptr);
+    framebuffer->m_viewport = {0, 0, width, height};
+    framebuffer->m_dynamic = false;
+    framebuffer->m_scissor_enabled = false;
+    framebuffer->m_scissor = {0, 0, width, height};
+    framebuffer->m_width = width;
+    framebuffer->m_height = height;
+    framebuffer->m_samples = samples;
+    framebuffer->m_context = this;
+
+    framebuffer->m_framebuffer_obj = 0;
+    gl.GenFramebuffers(1, (GLuint*)&framebuffer->m_framebuffer_obj);
+
+    if(!framebuffer->m_framebuffer_obj)
+    {
+      APPCORE_ERROR("cannot create framebuffer");
+      delete framebuffer;
+      return nullptr;
+    }
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->m_framebuffer_obj);
+
+    if(!color_attachments.size())
+    {
+      gl.DrawBuffer(GL_NONE); // No color buffer is drawn to.
+    }
+    else
+    {
+      for(size_t i = 0; i < color_attachments.size(); ++i)
+      {
+        auto texture = color_attachments[i];
+
+        gl.FramebufferTexture2D(GL_FRAMEBUFFER,
+                                GL_COLOR_ATTACHMENT0 + i,
+                                texture->m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
+                                texture->m_texture_obj,
+                                0);
+
+        framebuffer->m_draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
+        framebuffer->m_color_mask[i * 4 + 0] = texture->m_components >= 1;
+        framebuffer->m_color_mask[i * 4 + 1] = texture->m_components >= 2;
+        framebuffer->m_color_mask[i * 4 + 2] = texture->m_components >= 3;
+        framebuffer->m_color_mask[i * 4 + 3] = texture->m_components >= 4;
+      }
+    }
+
+    if(depth_attachment != nullptr)
+    {
+      gl.FramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_attachment->m_renderbuffer_obj);
+    }
+
+    int status = gl.CheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_bound_framebuffer->m_framebuffer_obj);
+
+    if(status != GL_FRAMEBUFFER_COMPLETE)
+    {
+      framebuffer_error_message(status);
+      delete framebuffer;
+      return nullptr;
+    }
+
+    return AppCore::Ref<Framebuffer>(framebuffer);
   }
 
-  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Renderbuffer> color_attachments,
-                                                 const Texture& depth_attachment)
+  AppCore::Ref<Framebuffer> Context::framebuffer(const RenderbuffersRef& color_attachments,
+                                                 AppCore::Ref<Texture> depth_attachment)
   {
-    return nullptr;
+    APPCORE_ASSERT(!released(), "Context already released");
+    APPCORE_ASSERT(color_attachments.size(), "missing color attachments");
+    const GLMethods& gl = m_gl;
+
+    int width = 0;
+    int height = 0;
+    int samples = 0;
+
+    if(color_attachments.size() > 0)
+    {
+      width = color_attachments[0]->m_width;
+      height = color_attachments[0]->m_height;
+      samples = color_attachments[0]->m_samples;
+
+      for(auto t : color_attachments)
+      {
+        APPCORE_ASSERT(t->m_context == this, "color_attachment belongs to a different context");
+        APPCORE_ASSERT(!t->m_depth, "color_attachment is a depth attachment");
+        APPCORE_ASSERT(t->m_width == width && t->m_height == height, "color_attachment have different sizes");
+        APPCORE_ASSERT(t->m_samples == samples, "color_attachment have different samples");
+      }
+
+      if(depth_attachment != nullptr)
+      {
+        APPCORE_ASSERT(depth_attachment->m_context == this, "color_attachment belongs to a different context");
+        APPCORE_ASSERT(depth_attachment->m_depth, "color_attachment is a depth attachment");
+        APPCORE_ASSERT(depth_attachment->m_width == width && depth_attachment->m_height == height,
+                       "color_attachment have different sizes");
+        APPCORE_ASSERT(depth_attachment->m_samples == samples, "color_attachment have different samples");
+      }
+    }
+    else if(depth_attachment != nullptr)
+    {
+      width = depth_attachment->m_width;
+      height = depth_attachment->m_height;
+      samples = depth_attachment->m_samples;
+    }
+    else
+    {
+      APPCORE_ASSERT(false, "the framebuffer is empty");
+      return nullptr;
+    }
+
+    Framebuffer* framebuffer = new Framebuffer();
+    framebuffer->m_released = false;
+    framebuffer->m_draw_buffers_len = color_attachments.size();
+    framebuffer->m_draw_buffers = new unsigned[color_attachments.size()];
+    framebuffer->m_color_mask = ColorMask(color_attachments.size() * 4 + 1);
+    framebuffer->m_depth_mask = (depth_attachment != nullptr);
+    framebuffer->m_viewport = {0, 0, width, height};
+    framebuffer->m_dynamic = false;
+    framebuffer->m_scissor_enabled = false;
+    framebuffer->m_scissor = {0, 0, width, height};
+    framebuffer->m_width = width;
+    framebuffer->m_height = height;
+    framebuffer->m_samples = samples;
+    framebuffer->m_context = this;
+
+    framebuffer->m_framebuffer_obj = 0;
+    gl.GenFramebuffers(1, (GLuint*)&framebuffer->m_framebuffer_obj);
+
+    if(!framebuffer->m_framebuffer_obj)
+    {
+      APPCORE_ERROR("cannot create framebuffer");
+      delete framebuffer;
+      return nullptr;
+    }
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->m_framebuffer_obj);
+
+    if(!color_attachments.size())
+    {
+      gl.DrawBuffer(GL_NONE); // No color buffer is drawn to.
+    }
+    else
+    {
+      for(size_t i = 0; i < color_attachments.size(); ++i)
+      {
+        auto renderbuffer = color_attachments[i];
+        gl.FramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_RENDERBUFFER, renderbuffer->m_renderbuffer_obj);
+
+        framebuffer->m_draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
+        framebuffer->m_color_mask[i * 4 + 0] = renderbuffer->m_components >= 1;
+        framebuffer->m_color_mask[i * 4 + 1] = renderbuffer->m_components >= 2;
+        framebuffer->m_color_mask[i * 4 + 2] = renderbuffer->m_components >= 3;
+        framebuffer->m_color_mask[i * 4 + 3] = renderbuffer->m_components >= 4;
+      }
+    }
+
+    if(depth_attachment != nullptr)
+    {
+      gl.FramebufferTexture2D(GL_FRAMEBUFFER,
+                              GL_DEPTH_ATTACHMENT,
+                              depth_attachment->m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
+                              depth_attachment->m_texture_obj,
+                              0);
+    }
+
+    int status = gl.CheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_bound_framebuffer->m_framebuffer_obj);
+
+    if(status != GL_FRAMEBUFFER_COMPLETE)
+    {
+      framebuffer_error_message(status);
+      delete framebuffer;
+      return nullptr;
+    }
+
+    return AppCore::Ref<Framebuffer>(framebuffer);
   }
 
-  AppCore::Ref<Framebuffer> Context::framebuffer(const AppCore::List<Renderbuffer> color_attachments,
-                                                 const Renderbuffer& depth_attachment)
+  AppCore::Ref<Framebuffer> Context::framebuffer(const RenderbuffersRef& color_attachments,
+                                                 AppCore::Ref<Renderbuffer> depth_attachment)
   {
-    return nullptr;
+    APPCORE_ASSERT(!released(), "Context already released");
+    APPCORE_ASSERT(color_attachments.size(), "missing color attachments");
+    const GLMethods& gl = m_gl;
+
+    int width = 0;
+    int height = 0;
+    int samples = 0;
+
+    if(color_attachments.size() > 0)
+    {
+      width = color_attachments[0]->m_width;
+      height = color_attachments[0]->m_height;
+      samples = color_attachments[0]->m_samples;
+
+      for(auto t : color_attachments)
+      {
+        APPCORE_ASSERT(t->m_context == this, "color_attachment belongs to a different context");
+        APPCORE_ASSERT(!t->m_depth, "color_attachment is a depth attachment");
+        APPCORE_ASSERT(t->m_width == width && t->m_height == height, "color_attachment have different sizes");
+        APPCORE_ASSERT(t->m_samples == samples, "color_attachment have different samples");
+      }
+
+      if(depth_attachment != nullptr)
+      {
+        APPCORE_ASSERT(depth_attachment->m_context == this, "color_attachment belongs to a different context");
+        APPCORE_ASSERT(depth_attachment->m_depth, "color_attachment is a depth attachment");
+        APPCORE_ASSERT(depth_attachment->m_width == width && depth_attachment->m_height == height,
+                       "color_attachment have different sizes");
+        APPCORE_ASSERT(depth_attachment->m_samples == samples, "color_attachment have different samples");
+      }
+    }
+    else if(depth_attachment != nullptr)
+    {
+      width = depth_attachment->m_width;
+      height = depth_attachment->m_height;
+      samples = depth_attachment->m_samples;
+    }
+    else
+    {
+      APPCORE_ASSERT(false, "the framebuffer is empty");
+      return nullptr;
+    }
+
+    Framebuffer* framebuffer = new Framebuffer();
+    framebuffer->m_released = false;
+    framebuffer->m_draw_buffers_len = color_attachments.size();
+    framebuffer->m_draw_buffers = new unsigned[color_attachments.size()];
+    framebuffer->m_color_mask = ColorMask(color_attachments.size() * 4 + 1);
+    framebuffer->m_depth_mask = (depth_attachment != nullptr);
+    framebuffer->m_viewport = {0, 0, width, height};
+    framebuffer->m_dynamic = false;
+    framebuffer->m_scissor_enabled = false;
+    framebuffer->m_scissor = {0, 0, width, height};
+    framebuffer->m_width = width;
+    framebuffer->m_height = height;
+    framebuffer->m_samples = samples;
+    framebuffer->m_context = this;
+
+    framebuffer->m_framebuffer_obj = 0;
+    gl.GenFramebuffers(1, (GLuint*)&framebuffer->m_framebuffer_obj);
+
+    if(!framebuffer->m_framebuffer_obj)
+    {
+      APPCORE_ERROR("cannot create framebuffer");
+      delete framebuffer;
+      return nullptr;
+    }
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->m_framebuffer_obj);
+
+    if(!color_attachments.size())
+    {
+      gl.DrawBuffer(GL_NONE); // No color buffer is drawn to.
+    }
+    else
+    {
+      for(size_t i = 0; i < color_attachments.size(); ++i)
+      {
+        auto renderbuffer = color_attachments[i];
+        gl.FramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_RENDERBUFFER, renderbuffer->m_renderbuffer_obj);
+
+        framebuffer->m_draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
+        framebuffer->m_color_mask[i * 4 + 0] = renderbuffer->m_components >= 1;
+        framebuffer->m_color_mask[i * 4 + 1] = renderbuffer->m_components >= 2;
+        framebuffer->m_color_mask[i * 4 + 2] = renderbuffer->m_components >= 3;
+        framebuffer->m_color_mask[i * 4 + 3] = renderbuffer->m_components >= 4;
+      }
+    }
+
+    if(depth_attachment != nullptr)
+    {
+      gl.FramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_attachment->m_renderbuffer_obj);
+    }
+
+    int status = gl.CheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_bound_framebuffer->m_framebuffer_obj);
+
+    if(status != GL_FRAMEBUFFER_COMPLETE)
+    {
+      framebuffer_error_message(status);
+      delete framebuffer;
+      return nullptr;
+    }
+
+    return AppCore::Ref<Framebuffer>(framebuffer);
   }
 
   AppCore::Ref<Renderbuffer>
   Context::renderbuffer(uint32_t w, uint32_t h, uint8_t components, uint8_t samples, const char* dtype, size_t dtype_size)
   {
-    if(released())
-    {
-      return nullptr;
-    }
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
 
     if(components < 1 || components > 4)
     {
@@ -464,8 +922,6 @@ namespace AppGL
     }
 
     int format = dataType->internal_format[components];
-
-    const GLMethods& gl = m_gl;
 
     Renderbuffer* renderbuffer = new Renderbuffer();
     renderbuffer->m_released = false;

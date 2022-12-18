@@ -48,6 +48,7 @@ public:
 
 private:
     friend class Context;
+    friend class Framebuffer;
 
     Buffer() = default;
 

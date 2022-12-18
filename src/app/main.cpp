@@ -1,3 +1,4 @@
+#include "appgl/datatype.hpp"
 #include "appgl/window.hpp"
 
 int main(int argc, char* argv[])

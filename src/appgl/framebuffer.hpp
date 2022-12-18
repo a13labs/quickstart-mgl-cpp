@@ -25,12 +25,26 @@ public:
     ~Framebuffer() { release(); }
 
     const Context* context() const;
+
     const Rect& viewport();
     void set_viewport(const Rect& r);
+
     const Rect& scissor();
     void set_scissor(const Rect& r);
+
     void enable_scissor();
     void disable_scissor();
+
+    const ColorMask& color_mask() const;
+    void set_color_mask(const ColorMask& mask);
+
+    bool depth_mask();
+    void set_depth_mask(bool value);
+
+    int width();
+    int height();
+
+    void bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits);
 
     void clear(float r, float g, float b, float a, float depth);
     void clear(float r, float g, float b, float a, float depth, int w, int h);
@@ -38,8 +52,21 @@ public:
     void clear(const glm::vec4& color, float depth, int w, int h);
     void clear(const glm::vec4& color, float depth, const Rect& rect);
     void clear(float r, float g, float b, float a, float depth, const Rect& rect);
-    void read(void* dst, int c, int att, int align, int clmp, const char* dtype, size_t dsize, int w_offset);
-    void read(void* dst, const Rect& v, int c, int att, int align, int clmp, const char* dtype, size_t dsize, int w_offset);
+
+    void read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
+    void read(void* dst);
+    void
+    read(void* dst, const Rect& viewport, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
+
+    void read(AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
+    void read(AppCore::Ref<Buffer> dst);
+    void read(AppCore::Ref<Buffer> dst,
+              const Rect& viewport,
+              int components,
+              int attachment,
+              int alignment,
+              const char* dtype,
+              size_t write_offset);
 
     void release();
     void use();
@@ -54,7 +81,7 @@ private:
     Rect m_viewport;
     bool m_scissor_enabled;
     Rect m_scissor;
-    bool* m_color_mask;
+    ColorMask m_color_mask;
 
     int m_draw_buffers_len;
     unsigned* m_draw_buffers;
@@ -126,9 +153,45 @@ private:
     clear(color.r, color.g, color.b, color.a, depth, rect);
   }
 
-  inline void Framebuffer::read(void* dst, int c, int att, int align, int clmp, const char* dtype, size_t dsize, int w_offset)
+  inline void Framebuffer::read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
   {
-    read(dst, {0, 0, m_width, m_height}, c, att, align, clmp, dtype, dsize, w_offset);
+    read(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
+  }
+
+  inline void Framebuffer::read(
+      AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
+  {
+    read(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
+  }
+
+  inline void Framebuffer::read(void* dst)
+  {
+    read(dst, 3, 0, 1, "f1", 0);
+  }
+
+  inline void Framebuffer::read(AppCore::Ref<Buffer> dst)
+  {
+    read(dst, 3, 0, 1, "f1", 0);
+  }
+
+  inline const ColorMask& Framebuffer::color_mask() const
+  {
+    return m_color_mask;
+  }
+
+  inline bool Framebuffer::depth_mask()
+  {
+    return m_depth_mask;
+  }
+
+  inline int Framebuffer::width()
+  {
+    return m_width;
+  }
+
+  inline int Framebuffer::height()
+  {
+    return m_height;
   }
 
 } // namespace AppGL

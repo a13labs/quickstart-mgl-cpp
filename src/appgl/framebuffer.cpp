@@ -16,7 +16,9 @@
 */
 #include "framebuffer.hpp"
 #include "appcore/log.hpp"
+#include "buffer.hpp"
 #include "context.hpp"
+#include "datatype.hpp"
 
 namespace AppGL
 {
@@ -35,15 +37,12 @@ namespace AppGL
     {
       gl.DeleteFramebuffers(1, (GLuint*)&m_framebuffer_obj);
       delete[] m_draw_buffers;
-      delete[] m_color_mask;
     }
   }
 
   void Framebuffer::clear(float r, float g, float b, float a, float depth, const Rect& rect)
   {
-    if(m_released)
-      return;
-
+    APPCORE_ASSERT(!m_released, "Framebuffer already released");
     const GLMethods& gl = m_context->gl();
 
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
@@ -58,11 +57,7 @@ namespace AppGL
 
     for(int i = 0; i < m_draw_buffers_len; ++i)
     {
-      gl.ColorMaski(i,
-                    m_color_mask[i * 4 + 0],
-                    m_color_mask[i * 4 + 1],
-                    m_color_mask[i * 4 + 2],
-                    m_color_mask[i * 4 + 3]);
+      gl.ColorMaski(i, m_color_mask[i * 4 + 0], m_color_mask[i * 4 + 1], m_color_mask[i * 4 + 2], m_color_mask[i * 4 + 3]);
     }
 
     gl.DepthMask(m_depth_mask);
@@ -94,6 +89,7 @@ namespace AppGL
         gl.Enable(GL_SCISSOR_TEST);
         gl.Scissor(m_scissor.X, m_scissor.Y, m_scissor.W, m_scissor.H);
       }
+
       gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     }
 
@@ -102,9 +98,7 @@ namespace AppGL
 
   void Framebuffer::use()
   {
-    if(m_released)
-      return;
-
+    APPCORE_ASSERT(!m_released, "Framebuffer already released");
     const GLMethods& gl = m_context->gl();
 
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
@@ -128,11 +122,7 @@ namespace AppGL
 
     for(int i = 0; i < m_draw_buffers_len; ++i)
     {
-      gl.ColorMaski(i,
-                    m_color_mask[i * 4 + 0],
-                    m_color_mask[i * 4 + 1],
-                    m_color_mask[i * 4 + 2],
-                    m_color_mask[i * 4 + 3]);
+      gl.ColorMaski(i, m_color_mask[i * 4 + 0], m_color_mask[i * 4 + 1], m_color_mask[i * 4 + 2], m_color_mask[i * 4 + 3]);
     }
 
     gl.DepthMask(m_depth_mask);
@@ -140,14 +130,128 @@ namespace AppGL
     m_context->m_bound_framebuffer = MAKE_THIS_REF();
   }
 
-  void Framebuffer::read(void* dst,
-                         const Rect& v,
-                         int c,
-                         int att,
-                         int align,
-                         int clmp,
+  void Framebuffer::read(
+      void* dst, const Rect& viewport, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
+  {
+    APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    const GLMethods& gl = m_context->gl();
+
+    APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
+
+    DataType* data_type = from_dtype(dtype, strlen(dtype));
+    APPCORE_ASSERT(data_type != nullptr, "invalid dtype");
+
+    bool read_depth = false;
+
+    if(attachment == -1)
+    {
+      components = 1;
+      read_depth = true;
+    }
+
+    int expected_size = viewport.W * components * data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * viewport.H;
+
+    int pixel_type = data_type->gl_type;
+    int base_format = read_depth ? GL_DEPTH_COMPONENT : data_type->base_format[components];
+
+    char* ptr = (char*)dst + write_offset;
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
+    gl.ReadBuffer(read_depth ? GL_NONE : (GL_COLOR_ATTACHMENT0 + attachment));
+    gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+    gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+    gl.ReadPixels(viewport.X, viewport.Y, viewport.W, viewport.H, base_format, pixel_type, ptr);
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
+  }
+
+  void Framebuffer::read(AppCore::Ref<Buffer> dst,
+                         const Rect& viewport,
+                         int components,
+                         int attachment,
+                         int alignment,
                          const char* dtype,
-                         size_t dsize,
-                         int w_offset)
-  { }
+                         size_t write_offset)
+  {
+    APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    const GLMethods& gl = m_context->gl();
+
+    APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
+
+    DataType* data_type = from_dtype(dtype, strlen(dtype));
+    APPCORE_ASSERT(data_type != nullptr, "invalid dtype");
+
+    bool read_depth = false;
+
+    if(attachment == -1)
+    {
+      components = 1;
+      read_depth = true;
+    }
+
+    int expected_size = viewport.W * components * data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * viewport.H;
+
+    int pixel_type = data_type->gl_type;
+    int base_format = read_depth ? GL_DEPTH_COMPONENT : data_type->base_format[components];
+
+    gl.BindBuffer(GL_PIXEL_PACK_BUFFER, dst->m_buffer_obj);
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
+    gl.ReadBuffer(read_depth ? GL_NONE : (GL_COLOR_ATTACHMENT0 + attachment));
+    gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+    gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+    gl.ReadPixels(viewport.X, viewport.Y, viewport.W, viewport.H, base_format, pixel_type, (void*)write_offset);
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
+    gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+  }
+
+  void Framebuffer::set_color_mask(const ColorMask& mask)
+  {
+    APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    APPCORE_ASSERT(mask.size() % 4 == 0, "color_mask must be a multiple of 4");
+    APPCORE_ASSERT(mask.size() / m_draw_buffers_len == 4, "color_mask must be a multiple of 4");
+    const GLMethods& gl = m_context->gl();
+
+    m_color_mask = mask;
+
+    if(m_framebuffer_obj == m_context->m_bound_framebuffer->m_framebuffer_obj)
+    {
+      for(int i = 0; i < m_draw_buffers_len; ++i)
+      {
+        gl.ColorMaski(i, m_color_mask[i * 4 + 0], m_color_mask[i * 4 + 1], m_color_mask[i * 4 + 2], m_color_mask[i * 4 + 3]);
+      }
+    }
+  }
+
+  void Framebuffer::set_depth_mask(bool value)
+  {
+    APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    const GLMethods& gl = m_context->gl();
+
+    m_depth_mask = value;
+
+    if(m_framebuffer_obj == m_context->m_bound_framebuffer->m_framebuffer_obj)
+    {
+      gl.DepthMask(m_depth_mask);
+    }
+  }
+
+  void Framebuffer::bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits)
+  {
+    APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    APPCORE_ASSERT(!m_framebuffer_obj, "Only the default_framebuffer have bits");
+    const GLMethods& gl = m_context->gl();
+
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
+    gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_BACK_LEFT, GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE, &red_bits);
+    gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_BACK_LEFT, GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE, &green_bits);
+    gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_BACK_LEFT, GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE, &blue_bits);
+    gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_BACK_LEFT, GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE, &alpha_bits);
+    gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH, GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &depth_bits);
+    gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencil_bits);
+    gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
+  }
+
 } // namespace AppGL

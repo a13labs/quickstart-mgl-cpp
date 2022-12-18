@@ -34,13 +34,13 @@
 #endif
 
 #ifdef APPCORE_ENABLE_ASSERTS
-#  define APPCORE_ASSERT(x, ...)                                                                   \
-    {                                                                                              \
-      if(!(x))                                                                                     \
-      {                                                                                            \
-        APPCORE_TRACE("Assertion Failed: {0}", __VA_ARGS__);                                       \
-        APP_DEBUGBREAK();                                                                          \
-      }                                                                                            \
+#  define APPCORE_ASSERT(x, ...)                                                                                                 \
+    {                                                                                                                            \
+      if(!(x))                                                                                                                   \
+      {                                                                                                                          \
+        APPCORE_TRACE("Assertion Failed: {0}", __VA_ARGS__);                                                                     \
+        APP_DEBUGBREAK();                                                                                                        \
+      }                                                                                                                          \
     }
 #else
 #  define APPCORE_ASSERT(x, y, ...)
@@ -87,7 +87,7 @@ namespace AppCore
 #define MAKE_THIS_REF shared_from_this
 
   template <typename T>
-  using List = std::list<T>;
+  using List = std::vector<T>;
 
   template <typename k, typename v>
   using Dict = std::map<k, v>;

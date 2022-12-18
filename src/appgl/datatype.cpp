@@ -21,8 +21,7 @@
 namespace AppGL
 {
   static int float_base_format[5] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-  static int int_base_format[5] = {
-      0, GL_RED_INTEGER, GL_RG_INTEGER, GL_RGB_INTEGER, GL_RGBA_INTEGER};
+  static int int_base_format[5] = {0, GL_RED_INTEGER, GL_RG_INTEGER, GL_RGB_INTEGER, GL_RGBA_INTEGER};
 
   static int f1_internal_format[5] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
   static int f2_internal_format[5] = {0, GL_R16F, GL_RG16F, GL_RGB16F, GL_RGBA16F};
@@ -55,7 +54,7 @@ namespace AppGL
   DataType* from_dtype(const char* dtype, size_t size)
   {
     if(size < 2 || size > 3)
-      return 0;
+      return nullptr;
 
     if(size == 2)
     {
@@ -79,7 +78,7 @@ namespace AppGL
 
         case('i' * 256 + '4'): return &i4;
 
-        default: return 0;
+        default: return nullptr;
       }
     }
     else if(size == 3)
@@ -94,10 +93,10 @@ namespace AppGL
 
         case('n' * 65536 + 'u' * 256 + '2'): return &nu2;
 
-        default: return 0;
+        default: return nullptr;
       }
     }
-    return 0;
+    return nullptr;
   }
 
 } // namespace AppGL

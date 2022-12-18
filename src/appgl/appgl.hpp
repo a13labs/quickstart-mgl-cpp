@@ -87,5 +87,13 @@ namespace AppGL
   class ComputeShader;
   class Window;
   class Uniform;
+  class UniformBlock;
 
+  using UniformsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Uniform>>;
+  using UniformBlocksMap = AppCore::Dict<AppCore::String, AppCore::Ref<UniformBlock>>;
+
+  using TexturesRef = AppCore::VectorRef<Texture>;
+  using RenderbuffersRef = AppCore::VectorRef<Renderbuffer>;
+
+  using ColorMask = AppCore::List<bool>;
 } // namespace AppGL

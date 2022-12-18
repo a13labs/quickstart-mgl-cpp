@@ -32,10 +32,10 @@ private:
     Context* m_context;
     DataType* m_data_type;
     int m_renderbuffer_obj;
-    uint32_t m_width;
-    uint32_t m_height;
-    uint8_t m_components;
-    uint8_t m_samples;
+    int m_width;
+    int m_height;
+    int m_components;
+    int m_samples;
     bool m_depth;
     bool m_released;
   };

@@ -99,6 +99,25 @@ private:
     uint8_t* m_data;
   };
 
+  class UniformBlock
+  {
+public:
+    ~UniformBlock() = default;
+
+    int binding();
+    void set_binding(int value);
+
+private:
+    friend class Context;
+    UniformBlock(const AppCore::String& name, int program_obj, int index, size_t size, Context* ctx);
+
+    Context* m_context;
+    AppCore::String m_name;
+    int m_program_obj;
+    int m_index;
+    int m_size;
+  };
+
   inline void Uniform::read(uint8_t& value)
   {
     read((void*)&value, sizeof(uint8_t));
