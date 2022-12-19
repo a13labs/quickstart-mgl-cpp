@@ -70,7 +70,9 @@ namespace AppGL
   using GLContext = void*;
 
   struct DataType;
+  struct ShadersSources;
 
+  class Attribute;
   class Attachment;
   class Buffer;
   class Context;
@@ -82,23 +84,29 @@ namespace AppGL
   class Renderbuffer;
   class Sampler;
   class Scope;
+  class Subroutine;
   class Texture;
   class TextureArray;
   class Texture3D;
   class TextureCube;
   class Uniform;
   class UniformBlock;
+  class Varying;
   class VertexArray;
   class Window;
 
+  using AttributesMap = AppCore::Dict<AppCore::String, AppCore::Ref<Attribute>>;
+  using SubroutinesMap = AppCore::Dict<AppCore::String, AppCore::Ref<Subroutine>>;
   using UniformsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Uniform>>;
   using UniformBlocksMap = AppCore::Dict<AppCore::String, AppCore::Ref<UniformBlock>>;
+  using VaryingsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Varying>>;
 
   using AttachmentsRef = AppCore::VectorRef<Attachment>;
 
   using ColorMask = AppCore::List<bool>;
 
-  using ShadersSources = AppCore::StringList;
   using ShadersOutputs = AppCore::StringList;
   using FragmentOutputs = AppCore::Dict<AppCore::String, int>;
+
+  extern const std::string NoShader;
 } // namespace AppGL

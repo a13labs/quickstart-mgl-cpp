@@ -702,29 +702,4 @@ namespace AppGL
       }
     }
   }
-
-  UniformBlock::UniformBlock(const AppCore::String& name, int program_obj, int index, size_t size, Context* ctx)
-  {
-    m_context = ctx;
-    m_name = name;
-    m_program_obj = program_obj;
-    m_index = index;
-    m_size = size;
-  }
-
-  int UniformBlock::binding()
-  {
-    const GLMethods& gl = m_context->gl();
-
-    int binding = 0;
-    gl.GetActiveUniformBlockiv(m_program_obj, m_index, GL_UNIFORM_BLOCK_BINDING, &binding);
-    return binding;
-  }
-
-  void UniformBlock::set_binding(int value)
-  {
-    const GLMethods& gl = m_context->gl();
-    gl.UniformBlockBinding(m_program_obj, m_index, value);
-  }
-
 } // namespace AppGL

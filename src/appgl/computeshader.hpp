@@ -25,8 +25,17 @@ public:
 
     void release();
     void run(int x, int y, int z);
+
     const AppCore::Ref<Uniform> uniform(const AppCore::String& name) const;
     const AppCore::Ref<UniformBlock> uniform_block(const AppCore::String& name) const;
+
+    const AppCore::StringList uniforms();
+    const AppCore::StringList uniform_blocks();
+
+    size_t num_uniforms();
+    size_t num_uniform_blocks();
+
+    const AppCore::Ref<Uniform> operator[](const AppCore::String& name) const;
 
 private:
     friend class Context;
@@ -48,6 +57,21 @@ private:
   inline const AppCore::Ref<UniformBlock> ComputeShader::uniform_block(const AppCore::String& name) const
   {
     return m_uniform_blocks_map.at(name);
+  }
+
+  inline size_t ComputeShader::num_uniforms()
+  {
+    return m_uniforms_map.size();
+  }
+
+  inline size_t ComputeShader::num_uniform_blocks()
+  {
+    return m_uniform_blocks_map.size();
+  }
+
+  inline const AppCore::Ref<Uniform> ComputeShader::operator[](const AppCore::String& name) const
+  {
+    return uniform(name);
   }
 
 } // namespace AppGL

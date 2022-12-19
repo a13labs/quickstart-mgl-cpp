@@ -42,4 +42,28 @@ namespace AppGL
     gl.DispatchCompute(x, y, z);
   }
 
+  const AppCore::StringList ComputeShader::uniforms()
+  {
+    auto result = AppCore::StringList();
+
+    for(auto&& a : m_uniforms_map)
+    {
+      result.push_back(a.first);
+    }
+
+    return result;
+  }
+
+  const AppCore::StringList ComputeShader::uniform_blocks()
+  {
+    auto result = AppCore::StringList();
+
+    for(auto&& a : m_uniform_blocks_map)
+    {
+      result.push_back(a.first);
+    }
+
+    return result;
+  }
+
 } // namespace AppGL

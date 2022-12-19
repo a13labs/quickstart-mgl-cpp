@@ -15,9 +15,81 @@
    limitations under the License.
 */
 #include "program.hpp"
-#include "appcore/log.hpp"
+#include "context.hpp"
 
 namespace AppGL
 {
-  void Program::release() { }
+  const std::string NoShader = "";
+
+  void Program::release()
+  {
+    if(m_released)
+      return;
+
+    m_released = true;
+
+    const GLMethods& gl = m_context->gl();
+    gl.DeleteProgram(m_program_obj);
+  }
+
+  const AppCore::StringList Program::attributes()
+  {
+    auto result = AppCore::StringList();
+
+    for(auto&& a : m_attributes_map)
+    {
+      result.push_back(a.first);
+    }
+
+    return result;
+  }
+
+  const AppCore::StringList Program::uniforms()
+  {
+    auto result = AppCore::StringList();
+
+    for(auto&& a : m_uniforms_map)
+    {
+      result.push_back(a.first);
+    }
+
+    return result;
+  }
+
+  const AppCore::StringList Program::uniform_blocks()
+  {
+    auto result = AppCore::StringList();
+
+    for(auto&& a : m_uniform_blocks_map)
+    {
+      result.push_back(a.first);
+    }
+
+    return result;
+  }
+
+  const AppCore::StringList Program::varyings()
+  {
+    auto result = AppCore::StringList();
+
+    for(auto&& a : m_varyings_map)
+    {
+      result.push_back(a.first);
+    }
+
+    return result;
+  }
+
+  const AppCore::StringList Program::subroutines()
+  {
+    auto result = AppCore::StringList();
+
+    for(auto&& a : m_subroutines_map)
+    {
+      result.push_back(a.first);
+    }
+
+    return result;
+  }
+
 } // namespace AppGL

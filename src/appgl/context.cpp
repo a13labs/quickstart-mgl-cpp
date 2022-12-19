@@ -16,16 +16,31 @@
 */
 #include "context.hpp"
 #include "appcore/log.hpp"
+#include "attribute.hpp"
 #include "buffer.hpp"
 #include "computeshader.hpp"
 #include "datatype.hpp"
 #include "framebuffer.hpp"
+#include "program.hpp"
 #include "renderbuffer.hpp"
+#include "shaderssources.hpp"
+#include "subroutine.hpp"
 #include "texture.hpp"
 #include "uniform.hpp"
+#include "uniformblock.hpp"
+#include "varying.hpp"
 
 namespace AppGL
 {
+
+  static const int SHADER_TYPE[5] = {
+      GL_VERTEX_SHADER,
+      GL_FRAGMENT_SHADER,
+      GL_GEOMETRY_SHADER,
+      GL_TESS_CONTROL_SHADER,
+      GL_TESS_EVALUATION_SHADER,
+  };
+
   inline void framebuffer_error_message(int status)
   {
     const char* message = "the framebuffer is not complete";
@@ -452,7 +467,7 @@ namespace AppGL
       samples = color_attachments[0]->samples();
       auto attachment_type = color_attachments[0]->attachment_type();
 
-      for(auto t : color_attachments)
+      for(auto&& t : color_attachments)
       {
         APPCORE_ASSERT(t->context() == this, "color_attachment belongs to a different context");
         APPCORE_ASSERT(t->attachment_type() == attachment_type, "color_attachment are of different type");
@@ -610,7 +625,319 @@ namespace AppGL
                                          const FragmentOutputs& fragment_outputs,
                                          bool interleaved)
   {
-    return nullptr;
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    Program* program = new Program();
+    program->m_released = false;
+    program->m_context = this;
+    program->m_transform = shaders.sources[ShadersSources::FragmentShader].empty();
+
+    int program_obj = gl.CreateProgram();
+
+    if(!program_obj)
+    {
+      APPCORE_ERROR("cannot create program");
+      delete program;
+      return nullptr;
+    }
+
+    int shader_objs[] = {0, 0, 0, 0, 0};
+
+    for(int i = 0; i < ShadersSources::ShadersCount; ++i)
+    {
+      if(shaders.sources[i] == "")
+      {
+        continue;
+      }
+
+      const char* source_str = shaders.sources[i].c_str();
+
+      int shader_obj = gl.CreateShader(SHADER_TYPE[i]);
+
+      if(!shader_obj)
+      {
+        APPCORE_ERROR("cannot create shader");
+        delete program;
+        return nullptr;
+      }
+
+      gl.ShaderSource(shader_obj, 1, &source_str, 0);
+      gl.CompileShader(shader_obj);
+
+      int compiled = GL_FALSE;
+      gl.GetShaderiv(shader_obj, GL_COMPILE_STATUS, &compiled);
+
+      if(!compiled)
+      {
+        const char* SHADER_NAME[] = {
+            "vertex_shader",
+            "fragment_shader",
+            "geometry_shader",
+            "tess_control_shader",
+            "tess_evaluation_shader",
+        };
+
+        const char* SHADER_NAME_UNDERLINE[] = {
+            "=============",
+            "===============",
+            "===============",
+            "===================",
+            "======================",
+        };
+
+        const char* message = "GLSL Compiler failed";
+        const char* title = SHADER_NAME[i];
+        const char* underline = SHADER_NAME_UNDERLINE[i];
+
+        int log_len = 0;
+        gl.GetShaderiv(shader_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+        char* log = new char[log_len];
+        gl.GetShaderInfoLog(shader_obj, log_len, &log_len, log);
+
+        gl.DeleteShader(shader_obj);
+
+        APPCORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
+
+        delete[] log;
+        delete program;
+        return nullptr;
+      }
+
+      shader_objs[i] = shader_obj;
+      gl.AttachShader(program_obj, shader_obj);
+    }
+
+    if(outputs.size())
+    {
+      const char** varyings_array = new const char*[outputs.size()];
+
+      for(int i = 0; i < (int)outputs.size(); ++i)
+      {
+        varyings_array[i] = outputs[i].c_str();
+      }
+
+      int capture_mode = interleaved ? GL_INTERLEAVED_ATTRIBS : GL_SEPARATE_ATTRIBS;
+
+      gl.TransformFeedbackVaryings(program_obj, outputs.size(), varyings_array, capture_mode);
+
+      delete[] varyings_array;
+    }
+
+    for(auto&& fo : fragment_outputs)
+    {
+      gl.BindFragDataLocation(program_obj, fo.second, fo.first.c_str());
+    }
+
+    gl.LinkProgram(program_obj);
+
+    for(int i = 0; i < ShadersSources::ShadersCount; ++i)
+    {
+      if(shader_objs[i])
+      {
+        gl.DeleteShader(shader_objs[i]);
+      }
+    }
+
+    int linked = GL_FALSE;
+    gl.GetProgramiv(program_obj, GL_LINK_STATUS, &linked);
+
+    if(!linked)
+    {
+      const char* message = "GLSL Linker failed";
+      const char* title = "Program";
+      const char* underline = "=======";
+
+      int log_len = 0;
+      gl.GetProgramiv(program_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+      char* log = new char[log_len];
+      gl.GetProgramInfoLog(program_obj, log_len, &log_len, log);
+
+      gl.DeleteProgram(program_obj);
+
+      APPCORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
+
+      delete[] log;
+      delete program;
+      return nullptr;
+    }
+
+    program->m_program_obj = program_obj;
+
+    if(!shaders.sources[ShadersSources::Type::GeometryShader].empty())
+    {
+
+      int geometry_in = 0;
+      int geometry_out = 0;
+      program->m_geometry_vertices = 0;
+
+      gl.GetProgramiv(program_obj, GL_GEOMETRY_INPUT_TYPE, &geometry_in);
+      gl.GetProgramiv(program_obj, GL_GEOMETRY_OUTPUT_TYPE, &geometry_out);
+      gl.GetProgramiv(program_obj, GL_GEOMETRY_VERTICES_OUT, &program->m_geometry_vertices);
+
+      switch(geometry_in)
+      {
+        case GL_TRIANGLES: program->m_geometry_input = GL_TRIANGLES; break;
+
+        case GL_TRIANGLE_STRIP: program->m_geometry_input = GL_TRIANGLE_STRIP; break;
+
+        case GL_TRIANGLE_FAN: program->m_geometry_input = GL_TRIANGLE_FAN; break;
+
+        case GL_LINES: program->m_geometry_input = GL_LINES; break;
+
+        case GL_LINE_STRIP: program->m_geometry_input = GL_LINE_STRIP; break;
+
+        case GL_LINE_LOOP: program->m_geometry_input = GL_LINE_LOOP; break;
+
+        case GL_POINTS: program->m_geometry_input = GL_POINTS; break;
+
+        case GL_LINE_STRIP_ADJACENCY: program->m_geometry_input = GL_LINE_STRIP_ADJACENCY; break;
+
+        case GL_LINES_ADJACENCY: program->m_geometry_input = GL_LINES_ADJACENCY; break;
+
+        case GL_TRIANGLE_STRIP_ADJACENCY: program->m_geometry_input = GL_TRIANGLE_STRIP_ADJACENCY; break;
+
+        case GL_TRIANGLES_ADJACENCY: program->m_geometry_input = GL_TRIANGLES_ADJACENCY; break;
+
+        default: program->m_geometry_input = -1; break;
+      }
+
+      switch(geometry_out)
+      {
+        case GL_TRIANGLES: program->m_geometry_output = GL_TRIANGLES; break;
+
+        case GL_TRIANGLE_STRIP: program->m_geometry_output = GL_TRIANGLES; break;
+
+        case GL_TRIANGLE_FAN: program->m_geometry_output = GL_TRIANGLES; break;
+
+        case GL_LINES: program->m_geometry_output = GL_LINES; break;
+
+        case GL_LINE_STRIP: program->m_geometry_output = GL_LINES; break;
+
+        case GL_LINE_LOOP: program->m_geometry_output = GL_LINES; break;
+
+        case GL_POINTS: program->m_geometry_output = GL_POINTS; break;
+
+        case GL_LINE_STRIP_ADJACENCY: program->m_geometry_output = GL_LINES; break;
+
+        case GL_LINES_ADJACENCY: program->m_geometry_output = GL_LINES; break;
+
+        case GL_TRIANGLE_STRIP_ADJACENCY: program->m_geometry_output = GL_TRIANGLES; break;
+
+        case GL_TRIANGLES_ADJACENCY: program->m_geometry_output = GL_TRIANGLES; break;
+
+        default: program->m_geometry_output = -1; break;
+      }
+    }
+    else
+    {
+      program->m_geometry_input = -1;
+      program->m_geometry_output = -1;
+      program->m_geometry_vertices = 0;
+    }
+
+    int num_attributes = 0;
+    int num_varyings = 0;
+    int num_uniforms = 0;
+    int num_uniform_blocks = 0;
+
+    gl.GetProgramiv(program->m_program_obj, GL_ACTIVE_ATTRIBUTES, &num_attributes);
+    gl.GetProgramiv(program->m_program_obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
+    gl.GetProgramiv(program->m_program_obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
+    gl.GetProgramiv(program->m_program_obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+
+    for(int i = 0; i < num_attributes; ++i)
+    {
+      int type = 0;
+      int array_length = 0;
+      int name_len = 0;
+      char name[256];
+
+      gl.GetActiveAttrib(program->m_program_obj, i, 256, &name_len, &array_length, (GLenum*)&type, name);
+      int location = gl.GetAttribLocation(program->m_program_obj, name);
+
+      clean_glsl_name(name, name_len);
+
+      program->m_attributes_map.insert(
+          {name, AppCore::Ref<Attribute>(new Attribute(name, type, program->m_program_obj, location, array_length))});
+    }
+
+    for(int i = 0; i < num_varyings; ++i)
+    {
+      int type = 0;
+      int array_length = 0;
+      int dimension = 0;
+      int name_len = 0;
+      char name[256];
+
+      gl.GetTransformFeedbackVarying(program->m_program_obj, i, 256, &name_len, &array_length, (GLenum*)&type, name);
+
+      program->m_varyings_map.insert({name, AppCore::Ref<Varying>(new Varying(name, i, array_length, dimension))});
+    }
+
+    for(int i = 0; i < num_uniforms; ++i)
+    {
+      int type = 0;
+      int size = 0;
+      int name_len = 0;
+      char name[256];
+
+      gl.GetActiveUniform(program->m_program_obj, i, 256, &name_len, &size, (GLenum*)&type, name);
+      int location = gl.GetUniformLocation(program->m_program_obj, name);
+
+      clean_glsl_name(name, name_len);
+
+      if(location < 0)
+      {
+        continue;
+      }
+
+      program->m_uniforms_map.insert({name, AppCore::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this))});
+    }
+
+    for(int i = 0; i < num_uniform_blocks; ++i)
+    {
+      int size = 0;
+      int name_len = 0;
+      char name[256];
+
+      gl.GetActiveUniformBlockName(program->m_program_obj, i, 256, &name_len, name);
+      int index = gl.GetUniformBlockIndex(program->m_program_obj, name);
+      gl.GetActiveUniformBlockiv(program->m_program_obj, index, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
+
+      clean_glsl_name(name, name_len);
+
+      program->m_uniform_blocks_map.insert(
+          {name, AppCore::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this))});
+    }
+
+    if(program->m_context->version_code() >= 400)
+    {
+
+      for(int st = 0; st < 5; ++st)
+      {
+        int num_subroutines = 0;
+        gl.GetProgramStageiv(program_obj, SHADER_TYPE[st], GL_ACTIVE_SUBROUTINES, &num_subroutines);
+
+        int num_subroutine_uniforms = 0;
+        gl.GetProgramStageiv(program_obj, SHADER_TYPE[st], GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_subroutine_uniforms);
+
+        for(int i = 0; i < num_subroutines; ++i)
+        {
+          int name_len = 0;
+          char name[256];
+
+          gl.GetActiveSubroutineName(program_obj, SHADER_TYPE[st], i, 256, &name_len, name);
+          int index = gl.GetSubroutineIndex(program_obj, SHADER_TYPE[st], name);
+
+          program->m_subroutines_map.insert({name, AppCore::Ref<Subroutine>(new Subroutine(name, index))});
+        }
+      }
+    }
+
+    return AppCore::Ref<Program>(program);
   }
 
 } // namespace AppGL

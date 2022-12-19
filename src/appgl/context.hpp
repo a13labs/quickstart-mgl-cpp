@@ -74,6 +74,12 @@ public:
     AppCore::Ref<Framebuffer> framebuffer(AppCore::Ref<Attachment> depth_attachment);
 
     // Program
+    AppCore::Ref<Program> program(const ShadersSources& shaders,
+                                  const ShadersOutputs& outputs,
+                                  const FragmentOutputs& fragment_outputs,
+                                  bool interleaved = true);
+    AppCore::Ref<Program> program(const ShadersSources& shaders, const ShadersOutputs& outputs, bool interleaved = true);
+    AppCore::Ref<Program> program(const ShadersSources& shaders, bool interleaved = true);
 
     AppCore::Ref<Renderbuffer>
     renderbuffer(uint32_t w, uint32_t h, uint8_t components, uint8_t samples, const char* dtype, size_t dtype_size);
@@ -89,10 +95,6 @@ public:
 private:
     void load_functions();
     AppCore::Ref<Buffer> buffer(void* data, size_t size, bool dynamic);
-    AppCore::Ref<Program> program(const ShadersSources& shaders,
-                                  const ShadersOutputs& outputs,
-                                  const FragmentOutputs& fragment_outputs,
-                                  bool interleaved);
 
 private:
     friend class Framebuffer;
@@ -307,6 +309,16 @@ private:
   inline AppCore::Ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments)
   {
     return framebuffer(color_attachments, AppCore::Ref<Attachment>(nullptr));
+  }
+
+  inline AppCore::Ref<Program> Context::program(const ShadersSources& shaders, const ShadersOutputs& outputs, bool interleaved)
+  {
+    return program(shaders, outputs, FragmentOutputs(), interleaved);
+  }
+
+  inline AppCore::Ref<Program> Context::program(const ShadersSources& shaders, bool interleaved)
+  {
+    return program(shaders, ShadersOutputs(), FragmentOutputs(), interleaved);
   }
 
 } // namespace AppGL

@@ -25,21 +25,122 @@ public:
 
     void release();
 
+    const AppCore::Ref<Attribute> attribute(const AppCore::String& name) const;
+    const AppCore::Ref<Uniform> uniform(const AppCore::String& name) const;
+    const AppCore::Ref<UniformBlock> uniform_block(const AppCore::String& name) const;
+    const AppCore::Ref<Varying> varying(const AppCore::String& name) const;
+    const AppCore::Ref<Subroutine> subroutine(const AppCore::String& name) const;
+
+    const AppCore::StringList attributes();
+    const AppCore::StringList uniforms();
+    const AppCore::StringList uniform_blocks();
+    const AppCore::StringList varyings();
+    const AppCore::StringList subroutines();
+
+    size_t num_attributes();
+    size_t num_uniforms();
+    size_t num_uniform_blocks();
+    size_t num_varyings();
+    size_t num_subroutines();
+
+    const AppCore::Ref<Uniform> operator[](const AppCore::String& name) const;
+
+    int geometry_input();
+    int geometry_output();
+    int geometry_vertices();
+    bool is_transform();
+
 private:
     friend class Context;
-    Program();
+    Program() = default;
 
     Context* m_context;
+    int m_program_obj;
     int m_geometry_input;
     int m_geometry_output;
-    int m_program_obj;
-    int m_num_vertex_shader_subroutines;
-    int m_num_fragment_shader_subroutines;
-    int m_num_geometry_shader_subroutines;
-    int m_num_tess_evaluation_shader_subroutines;
-    int m_num_tess_control_shader_subroutines;
     int m_geometry_vertices;
-    int m_num_varyings;
+    bool m_transform;
     bool m_released;
+    UniformsMap m_uniforms_map;
+    UniformBlocksMap m_uniform_blocks_map;
+    AttributesMap m_attributes_map;
+    VaryingsMap m_varyings_map;
+    SubroutinesMap m_subroutines_map;
   };
+
+  inline const AppCore::Ref<Attribute> Program::attribute(const AppCore::String& name) const
+  {
+    return m_attributes_map.at(name);
+  }
+
+  inline const AppCore::Ref<Uniform> Program::uniform(const AppCore::String& name) const
+  {
+    return m_uniforms_map.at(name);
+  }
+
+  inline const AppCore::Ref<UniformBlock> Program::uniform_block(const AppCore::String& name) const
+  {
+    return m_uniform_blocks_map.at(name);
+  }
+
+  inline const AppCore::Ref<Varying> Program::varying(const AppCore::String& name) const
+  {
+    return m_varyings_map.at(name);
+  }
+
+  inline const AppCore::Ref<Subroutine> Program::subroutine(const AppCore::String& name) const
+  {
+    return m_subroutines_map.at(name);
+  }
+
+  inline int Program::geometry_input()
+  {
+    return m_geometry_input;
+  }
+
+  inline int Program::geometry_output()
+  {
+    return m_geometry_output;
+  }
+
+  inline int Program::geometry_vertices()
+  {
+    return m_geometry_vertices;
+  }
+
+  inline bool Program::is_transform()
+  {
+    return m_transform;
+  }
+
+  inline size_t Program::num_attributes()
+  {
+    return m_attributes_map.size();
+  }
+
+  inline size_t Program::num_uniforms()
+  {
+    return m_uniforms_map.size();
+  }
+
+  inline size_t Program::num_uniform_blocks()
+  {
+    return m_uniform_blocks_map.size();
+  }
+
+  inline size_t Program::num_varyings()
+  {
+    return m_varyings_map.size();
+  }
+
+  inline size_t Program::num_subroutines()
+  {
+    return m_subroutines_map.size();
+  }
+
+  inline const AppCore::Ref<Uniform> Program::operator[](const AppCore::String& name) const
+  {
+    return uniform(name);
+  }
+
 } // namespace AppGL
