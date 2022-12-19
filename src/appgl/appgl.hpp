@@ -70,30 +70,35 @@ namespace AppGL
   using GLContext = void*;
 
   struct DataType;
-  class Context;
+
+  class Attachment;
   class Buffer;
-  class VertexArray;
+  class Context;
+  class ConditionalRender;
+  class ComputeShader;
+  class Framebuffer;
   class Program;
+  class Query;
+  class Renderbuffer;
   class Sampler;
+  class Scope;
   class Texture;
   class TextureArray;
   class Texture3D;
   class TextureCube;
-  class Framebuffer;
-  class Renderbuffer;
-  class Scope;
-  class Query;
-  class ConditionalRender;
-  class ComputeShader;
-  class Window;
   class Uniform;
   class UniformBlock;
+  class VertexArray;
+  class Window;
 
   using UniformsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Uniform>>;
   using UniformBlocksMap = AppCore::Dict<AppCore::String, AppCore::Ref<UniformBlock>>;
 
-  using TexturesRef = AppCore::VectorRef<Texture>;
-  using RenderbuffersRef = AppCore::VectorRef<Renderbuffer>;
+  using AttachmentsRef = AppCore::VectorRef<Attachment>;
 
   using ColorMask = AppCore::List<bool>;
+
+  using ShadersSources = AppCore::StringList;
+  using ShadersOutputs = AppCore::StringList;
+  using FragmentOutputs = AppCore::Dict<AppCore::String, int>;
 } // namespace AppGL

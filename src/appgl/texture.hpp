@@ -15,19 +15,29 @@
 */
 #pragma once
 #include "appgl.hpp"
+#include "attachment.hpp"
 
 namespace AppGL
 {
-  class Texture
+  class Texture : public Attachment
   {
 public:
     ~Texture() { release(); }
 
     void release();
+    virtual Attachment::Type attachment_type() override;
+    virtual int width() override;
+    virtual int height() override;
+    virtual int samples() override;
+    virtual bool depth() override;
 
 private:
     friend class Context;
     Texture();
+
+    virtual void color_attachment(Framebuffer* fb, int index) override;
+    virtual void depth_attachment() override;
+    virtual const Context* context() const override;
 
     Context* m_context;
     DataType* m_data_type;

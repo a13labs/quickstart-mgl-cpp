@@ -56,7 +56,7 @@ public:
     float polygon_offset_factor();
     float polygon_offset_units();
 
-    // Buffer object
+    // Buffer
     AppCore::Ref<Buffer> buffer(const float* dst, size_t size, bool dynamic);
     AppCore::Ref<Buffer> buffer(const uint32_t* dst, size_t size, bool dynamic);
     AppCore::Ref<Buffer> buffer(const uint16_t* dst, size_t size, bool dynamic);
@@ -69,16 +69,11 @@ public:
     static AppCore::Ref<Context> create_context(ContextMode::Enum mode, int required);
 
     // Framebuffer
-    AppCore::Ref<Framebuffer> framebuffer(const TexturesRef& color_attachments, AppCore::Ref<Texture> depth_attachment);
-    AppCore::Ref<Framebuffer> framebuffer(const TexturesRef& color_attachments, AppCore::Ref<Renderbuffer> depth_attachment);
+    AppCore::Ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments, AppCore::Ref<Attachment> depth_attachment);
+    AppCore::Ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments);
+    AppCore::Ref<Framebuffer> framebuffer(AppCore::Ref<Attachment> depth_attachment);
 
-    AppCore::Ref<Framebuffer> framebuffer(const RenderbuffersRef& color_attachments, AppCore::Ref<Renderbuffer> depth_attachment);
-    AppCore::Ref<Framebuffer> framebuffer(const RenderbuffersRef& color_attachments, AppCore::Ref<Texture> depth_attachment);
-
-    AppCore::Ref<Framebuffer> framebuffer(AppCore::Ref<Texture> depth_attachment);
-    AppCore::Ref<Framebuffer> framebuffer(AppCore::Ref<Renderbuffer> depth_attachment);
-    AppCore::Ref<Framebuffer> framebuffer(const TexturesRef& color_attachments);
-    AppCore::Ref<Framebuffer> framebuffer(const RenderbuffersRef& color_attachments);
+    // Program
 
     AppCore::Ref<Renderbuffer>
     renderbuffer(uint32_t w, uint32_t h, uint8_t components, uint8_t samples, const char* dtype, size_t dtype_size);
@@ -94,6 +89,10 @@ public:
 private:
     void load_functions();
     AppCore::Ref<Buffer> buffer(void* data, size_t size, bool dynamic);
+    AppCore::Ref<Program> program(const ShadersSources& shaders,
+                                  const ShadersOutputs& outputs,
+                                  const FragmentOutputs& fragment_outputs,
+                                  bool interleaved);
 
 private:
     friend class Framebuffer;
@@ -300,24 +299,14 @@ private:
     return buffer((void*)data, sizeof(uint8_t) * size, dynamic);
   }
 
-  inline AppCore::Ref<Framebuffer> Context::framebuffer(AppCore::Ref<Texture> depth_attachment)
+  inline AppCore::Ref<Framebuffer> Context::framebuffer(AppCore::Ref<Attachment> depth_attachment)
   {
-    return framebuffer(TexturesRef(), depth_attachment);
+    return framebuffer(AttachmentsRef(), depth_attachment);
   }
 
-  inline AppCore::Ref<Framebuffer> Context::framebuffer(AppCore::Ref<Renderbuffer> depth_attachment)
+  inline AppCore::Ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments)
   {
-    return framebuffer(TexturesRef(), depth_attachment);
-  }
-
-  inline AppCore::Ref<Framebuffer> Context::framebuffer(const TexturesRef& color_attachments)
-  {
-    return framebuffer(color_attachments, AppCore::Ref<Texture>(nullptr));
-  }
-
-  inline AppCore::Ref<Framebuffer> Context::framebuffer(const RenderbuffersRef& color_attachments)
-  {
-    return framebuffer(color_attachments, AppCore::Ref<Texture>(nullptr));
+    return framebuffer(color_attachments, AppCore::Ref<Attachment>(nullptr));
   }
 
 } // namespace AppGL

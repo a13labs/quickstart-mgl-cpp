@@ -23,7 +23,6 @@ namespace AppGL
 public:
     ~ComputeShader() { release(); }
 
-    const Context* context() const;
     void release();
     void run(int x, int y, int z);
     const AppCore::Ref<Uniform> uniform(const AppCore::String& name) const;
@@ -40,11 +39,6 @@ private:
     UniformBlocksMap m_uniform_blocks_map;
     bool m_released;
   };
-
-  inline const Context* ComputeShader::context() const
-  {
-    return m_context;
-  }
 
   inline const AppCore::Ref<Uniform> ComputeShader::uniform(const AppCore::String& name) const
   {

@@ -15,38 +15,29 @@
 */
 #pragma once
 #include "appgl.hpp"
-#include "attachment.hpp"
 
 namespace AppGL
 {
-  class Renderbuffer : public Attachment
+  class Attachment
   {
 public:
-    ~Renderbuffer() { release(); }
+    enum Type
+    {
+      Texture,
+      Renderbuffer
+    };
 
-    void release();
-    virtual Attachment::Type attachment_type() override;
-    virtual int width() override;
-    virtual int height() override;
-    virtual int samples() override;
-    virtual bool depth() override;
+    virtual ~Attachment() = default;
+    virtual Attachment::Type attachment_type() = 0;
+    virtual int width() = 0;
+    virtual int height() = 0;
+    virtual int samples() = 0;
+    virtual bool depth() = 0;
 
 private:
     friend class Context;
-    Renderbuffer(){};
-
-    virtual void color_attachment(Framebuffer* fb, int index) override;
-    virtual void depth_attachment() override;
-    virtual const Context* context() const override;
-
-    Context* m_context;
-    DataType* m_data_type;
-    int m_renderbuffer_obj;
-    int m_width;
-    int m_height;
-    int m_components;
-    int m_samples;
-    bool m_depth;
-    bool m_released;
+    virtual void color_attachment(Framebuffer* fb, int index) = 0;
+    virtual void depth_attachment() = 0;
+    virtual const Context* context() const = 0;
   };
 } // namespace AppGL

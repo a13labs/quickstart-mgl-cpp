@@ -73,6 +73,9 @@ public:
 
 private:
     friend class Context;
+    friend class Renderbuffer;
+    friend class Texture;
+
     Framebuffer(){};
 
     Context* m_context;
