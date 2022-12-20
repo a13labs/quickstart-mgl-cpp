@@ -1,5 +1,5 @@
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -21,16 +21,33 @@ namespace AppGL
   class Query
   {
 public:
-    ~Query() { release(); }
+    enum Keys
+    {
+      SamplesPassed,
+      AnySamplesPassed,
+      TimeElapsed,
+      PrimitivesGenerated,
 
-    void release();
+      Count,
+    };
+
+    ~Query() = default;
+
+    void begin();
+    void end();
+    void begin_render();
+    void end_render();
+
+    int samples();
+    int primitives();
+    int elapsed();
 
 private:
     friend class Context;
-    Query();
+    Query() = default;
 
     Context* m_context;
-    int m_query_obj[4];
+    int m_query_obj[Query::Keys::Count];
     bool m_released;
   };
 } // namespace AppGL

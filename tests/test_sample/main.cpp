@@ -1,5 +1,5 @@
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
 */
 #include "gtest/gtest.h"
 
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+int main(int argc, char** argv)
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }

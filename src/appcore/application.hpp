@@ -1,5 +1,5 @@
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -81,10 +81,7 @@ namespace AppCore
       virtual bool on_mouse_moved(Events::MouseMovedEvent& event) { return true; }
       virtual bool on_mouse_scrolled(Events::MouseScrolledEvent& event) { return true; }
       virtual bool on_mouse_button_pressed(Events::MouseButtonPressedEvent& event) { return true; }
-      virtual bool on_mouse_button_released(Events::MouseButtonReleasedEvent& event)
-      {
-        return true;
-      }
+      virtual bool on_mouse_button_released(Events::MouseButtonReleasedEvent& event) { return true; }
       virtual void draw(){};
 
   protected:

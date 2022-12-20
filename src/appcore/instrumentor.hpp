@@ -1,5 +1,5 @@
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -72,9 +72,7 @@ public:
         // profiling output.
         if(Log::logger) // Edge case: begin_session() might be before Log::Init()
         {
-          APPCORE_ERROR("Instrumentor::begin_session('{0}') when session '{1}' already open.",
-                        name,
-                        m_current_session->name);
+          APPCORE_ERROR("Instrumentor::begin_session('{0}') when session '{1}' already open.", name, m_current_session->name);
         }
         internal_end_session();
       }
@@ -159,17 +157,11 @@ public:
     {
       auto end_timepoint = std::chrono::steady_clock::now();
       auto high_res_start = FloatingPointMicroseconds{m_start_timepoint.time_since_epoch()};
-      auto elapsed_time = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint)
-                              .time_since_epoch() -
-                          std::chrono::time_point_cast<std::chrono::microseconds>(m_start_timepoint)
-                              .time_since_epoch();
+      auto elapsed_time = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint).time_since_epoch() -
+                          std::chrono::time_point_cast<std::chrono::microseconds>(m_start_timepoint).time_since_epoch();
 
-      Instrumentor::get().write_profile({m_name,
-                                         high_res_start,
-                                         elapsed_time,
-                                         std::this_thread::get_id(),
-                                         GET_PROCESS_ID(),
-                                         m_category});
+      Instrumentor::get().write_profile(
+          {m_name, high_res_start, elapsed_time, std::this_thread::get_id(), GET_PROCESS_ID(), m_category});
 
       m_stopped = true;
     }
@@ -199,8 +191,7 @@ private:
       while(src_index < N)
       {
         size_t matchIndex = 0;
-        while(matchIndex < K - 1 && src_index + matchIndex < N - 1 &&
-              expr[src_index + matchIndex] == remove[matchIndex])
+        while(matchIndex < K - 1 && src_index + matchIndex < N - 1 && expr[src_index + matchIndex] == remove[matchIndex])
           matchIndex++;
         if(matchIndex == K - 1)
           src_index += matchIndex;
@@ -219,15 +210,14 @@ private:
 // Resolve which function signature macro will be used. Note that this only
 // is resolved when the (pre)compiler starts, so the syntax highlighting
 // could mark the wrong one in your editor!
-#  if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) ||                      \
-      (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
+#  if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) ||              \
+      defined(__ghs__)
 #    define APPCORE_FUNC_SIG __PRETTY_FUNCTION__
 #  elif defined(__DMC__) && (__DMC__ >= 0x810)
 #    define APPCORE_FUNC_SIG __PRETTY_FUNCTION__
 #  elif(defined(__FUNCSIG__) || (_MSC_VER))
 #    define APPCORE_FUNC_SIG __FUNCSIG__
-#  elif(defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) ||                                 \
-      (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
+#  elif(defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
 #    define APPCORE_FUNC_SIG __FUNCTION__
 #  elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
 #    define APPCORE_FUNC_SIG __FUNC__
@@ -241,9 +231,8 @@ private:
 
 #  define APPCORE_PROFILE_BEGIN_SESSION() ::AppCore::Instrumentor::get().begin_session("AppCore")
 #  define APPCORE_PROFILE_END_SESSION() ::AppCore::Instrumentor::get().end_session()
-#  define APPCORE_PROFILE_SCOPE(name, category)                                                    \
-    constexpr auto fixedName =                                                                     \
-        ::AppCore::InstrumentorUtils::cleanup_output_string(name, "__cdecl ");                     \
+#  define APPCORE_PROFILE_SCOPE(name, category)                                                                                  \
+    constexpr auto fixedName = ::AppCore::InstrumentorUtils::cleanup_output_string(name, "__cdecl ");                            \
     ::AppCore::InstrumentationTimer timer##__LINE__(fixedName.Data, category)
 #  define APPCORE_PROFILE_FUNCTION(category) APPCORE_PROFILE_SCOPE(APPCORE_FUNC_SIG, category)
 #else

@@ -1,5 +1,5 @@
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -81,8 +81,13 @@ public:
     AppCore::Ref<Program> program(const ShadersSources& shaders, const ShadersOutputs& outputs, bool interleaved = true);
     AppCore::Ref<Program> program(const ShadersSources& shaders, bool interleaved = true);
 
-    AppCore::Ref<Renderbuffer>
-    renderbuffer(uint32_t w, uint32_t h, uint8_t components, uint8_t samples, const char* dtype, size_t dtype_size);
+    // Query
+    AppCore::Ref<Query> query(bool samples, bool any_samples, bool time_elapsed, bool primitives_generated);
+
+    // Renderbuffer
+    AppCore::Ref<Renderbuffer> renderbuffer(int width, int height, int components, int samples, const char* dtype);
+
+    AppCore::Ref<Renderbuffer> depth_renderbuffer(int width, int height, int samples);
 
     virtual GLFunction load(const AppCore::String& method) = 0;
     virtual void enter() = 0;

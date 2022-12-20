@@ -1,6 +1,6 @@
 
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -54,9 +54,8 @@ namespace AppGL
       }
     }
 
-    APPCORE_INFO("BaseWindow: Creating window {0},{1} with OpenGL support",
-                 m_state.current_config.width,
-                 m_state.current_config.height);
+    APPCORE_INFO(
+        "BaseWindow: Creating window {0},{1} with OpenGL support", m_state.current_config.width, m_state.current_config.height);
     m_state.native_window = SDL_CreateWindow(m_state.current_config.title.c_str(),
                                              SDL_WINDOWPOS_CENTERED,
                                              SDL_WINDOWPOS_CENTERED,

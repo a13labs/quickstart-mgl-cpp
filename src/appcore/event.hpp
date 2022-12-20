@@ -1,5 +1,5 @@
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -59,24 +59,24 @@ namespace AppCore
       EventCategoryGamepadButton = BIT(6)
     };
 
-#define EVENT_CLASS_TYPE(type)                                                                     \
-  static EventType get_static_type()                                                               \
-  {                                                                                                \
-    return EventType::type;                                                                        \
-  }                                                                                                \
-  virtual EventType get_event_type() const override                                                \
-  {                                                                                                \
-    return get_static_type();                                                                      \
-  }                                                                                                \
-  virtual const char* get_name() const override                                                    \
-  {                                                                                                \
-    return #type;                                                                                  \
+#define EVENT_CLASS_TYPE(type)                                                                                                   \
+  static EventType get_static_type()                                                                                             \
+  {                                                                                                                              \
+    return EventType::type;                                                                                                      \
+  }                                                                                                                              \
+  virtual EventType get_event_type() const override                                                                              \
+  {                                                                                                                              \
+    return get_static_type();                                                                                                    \
+  }                                                                                                                              \
+  virtual const char* get_name() const override                                                                                  \
+  {                                                                                                                              \
+    return #type;                                                                                                                \
   }
 
-#define EVENT_CLASS_CATEGORY(category)                                                             \
-  virtual int get_category_flags() const override                                                  \
-  {                                                                                                \
-    return category;                                                                               \
+#define EVENT_CLASS_CATEGORY(category)                                                                                           \
+  virtual int get_category_flags() const override                                                                                \
+  {                                                                                                                              \
+    return category;                                                                                                             \
   }
 
     class Event

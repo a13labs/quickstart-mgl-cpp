@@ -1,6 +1,6 @@
 
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
    limitations under the License.
 */
 #include "program.hpp"
+#include "appcore/log.hpp"
 #include "context.hpp"
 
 namespace AppGL
@@ -23,12 +24,13 @@ namespace AppGL
 
   void Program::release()
   {
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
     if(m_released)
       return;
 
     m_released = true;
 
-    const GLMethods& gl = m_context->gl();
     gl.DeleteProgram(m_program_obj);
   }
 

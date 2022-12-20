@@ -1,6 +1,6 @@
 
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ namespace AppGL
 {
   void Framebuffer::release()
   {
+    APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
     if(m_released)
@@ -43,6 +44,7 @@ namespace AppGL
   void Framebuffer::clear(float r, float g, float b, float a, float depth, const Rect& rect)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
@@ -99,6 +101,7 @@ namespace AppGL
   void Framebuffer::use()
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
@@ -134,11 +137,12 @@ namespace AppGL
       void* dst, const Rect& viewport, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
 
-    DataType* data_type = from_dtype(dtype, strlen(dtype));
+    auto data_type = from_dtype(dtype, strlen(dtype));
     APPCORE_ASSERT(data_type != nullptr, "invalid dtype");
 
     bool read_depth = false;
@@ -175,6 +179,7 @@ namespace AppGL
                          size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
@@ -210,6 +215,7 @@ namespace AppGL
   void Framebuffer::set_color_mask(const ColorMask& mask)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    APPCORE_ASSERT(!m_context, "No context");
     APPCORE_ASSERT(mask.size() % 4 == 0, "color_mask must be a multiple of 4");
     APPCORE_ASSERT(mask.size() / m_draw_buffers_len == 4, "color_mask must be a multiple of 4");
     const GLMethods& gl = m_context->gl();
@@ -228,6 +234,7 @@ namespace AppGL
   void Framebuffer::set_depth_mask(bool value)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
     m_depth_mask = value;
@@ -241,6 +248,7 @@ namespace AppGL
   void Framebuffer::bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
+    APPCORE_ASSERT(!m_context, "No context");
     APPCORE_ASSERT(!m_framebuffer_obj, "Only the default_framebuffer have bits");
     const GLMethods& gl = m_context->gl();
 

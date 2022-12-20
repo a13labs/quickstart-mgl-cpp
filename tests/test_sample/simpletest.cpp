@@ -1,5 +1,5 @@
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -18,6 +18,6 @@
 TEST(AntomicCoreTest, LayerTests)
 {
 
-    // A test layer
-    EXPECT_EQ("sample_test", "sample_test");
+  // A test layer
+  EXPECT_EQ("sample_test", "sample_test");
 }

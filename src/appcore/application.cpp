@@ -1,6 +1,6 @@
 
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -42,26 +42,18 @@ namespace AppCore
       Events::EventDispatcher dispatcher(event);
 
       // Dispatch Windows Events
-      dispatcher.dispatch<Events::WindowCloseEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::on_window_close));
-      dispatcher.dispatch<Events::WindowResizeEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::on_window_resize));
+      dispatcher.dispatch<Events::WindowCloseEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_window_close));
+      dispatcher.dispatch<Events::WindowResizeEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_window_resize));
 
       // Dispatch key events to be handled by the application
-      dispatcher.dispatch<Events::KeyPressedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::on_key_pressed));
-      dispatcher.dispatch<Events::KeyReleasedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::on_key_released));
+      dispatcher.dispatch<Events::KeyPressedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_key_pressed));
+      dispatcher.dispatch<Events::KeyReleasedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_key_released));
 
       // Dispatch mouse events to be handled by the application
-      dispatcher.dispatch<Events::MouseMovedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_moved));
-      dispatcher.dispatch<Events::MouseScrolledEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_scrolled));
-      dispatcher.dispatch<Events::MouseButtonPressedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_button_pressed));
-      dispatcher.dispatch<Events::MouseButtonReleasedEvent>(
-          APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_button_released));
+      dispatcher.dispatch<Events::MouseMovedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_moved));
+      dispatcher.dispatch<Events::MouseScrolledEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_scrolled));
+      dispatcher.dispatch<Events::MouseButtonPressedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_button_pressed));
+      dispatcher.dispatch<Events::MouseButtonReleasedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_button_released));
     }
 
     bool BaseWindow::on_window_close(Events::WindowCloseEvent& event)
@@ -176,8 +168,7 @@ namespace AppCore
       }
 
       SDL_RestoreWindow(m_state.native_window);
-      SDL_SetWindowSize(
-          m_state.native_window, m_state.current_config.width, m_state.current_config.height);
+      SDL_SetWindowSize(m_state.native_window, m_state.current_config.width, m_state.current_config.height);
       SDL_SetWindowPosition(m_state.native_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
       SDL_SetWindowFullscreen(m_state.native_window, 0);
     }

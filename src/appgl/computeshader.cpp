@@ -1,6 +1,6 @@
 
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,27 +15,29 @@
    limitations under the License.
 */
 #include "computeshader.hpp"
+#include "appcore/log.hpp"
 #include "context.hpp"
 
 namespace AppGL
 {
   void ComputeShader::release()
   {
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+
     if(m_released)
       return;
 
     m_released = true;
 
-    const GLMethods& gl = m_context->gl();
     gl.DeleteShader(m_shader_obj);
     gl.DeleteProgram(m_program_obj);
   }
 
   void ComputeShader::run(int x, int y, int z)
   {
-    if(m_released)
-      return;
-
+    APPCORE_ASSERT(!m_released, "Compute Shader already released");
+    APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
     gl.UseProgram(m_program_obj);

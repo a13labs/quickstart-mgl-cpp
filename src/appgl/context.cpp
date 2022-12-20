@@ -1,6 +1,6 @@
 
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 #include "datatype.hpp"
 #include "framebuffer.hpp"
 #include "program.hpp"
+#include "query.hpp"
 #include "renderbuffer.hpp"
 #include "shaderssources.hpp"
 #include "subroutine.hpp"
@@ -292,7 +293,7 @@ namespace AppGL
 
     const GLMethods& gl = m_gl;
 
-    Buffer* buffer = new Buffer();
+    auto buffer = new Buffer();
     buffer->m_released = false;
 
     buffer->m_size = size;
@@ -321,7 +322,7 @@ namespace AppGL
     APPCORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
-    ComputeShader* compute_shader = new ComputeShader();
+    auto compute_shader = new ComputeShader();
 
     compute_shader->m_released = false;
     compute_shader->m_context = this;
@@ -497,7 +498,7 @@ namespace AppGL
       return nullptr;
     }
 
-    Framebuffer* framebuffer = new Framebuffer();
+    auto framebuffer = new Framebuffer();
     framebuffer->m_released = false;
     framebuffer->m_draw_buffers_len = color_attachments.size();
     framebuffer->m_draw_buffers = new unsigned[color_attachments.size()];
@@ -554,70 +555,6 @@ namespace AppGL
     }
 
     return AppCore::Ref<Framebuffer>(framebuffer);
-  }
-
-  AppCore::Ref<Renderbuffer>
-  Context::renderbuffer(uint32_t w, uint32_t h, uint8_t components, uint8_t samples, const char* dtype, size_t dtype_size)
-  {
-    APPCORE_ASSERT(!released(), "Context already released");
-    const GLMethods& gl = m_gl;
-
-    if(components < 1 || components > 4)
-    {
-      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
-      return nullptr;
-    }
-
-    if((samples & (samples - 1)) || samples > m_max_samples)
-    {
-      APPCORE_ERROR("The number of samples is invalid: {0}", samples);
-      return nullptr;
-    }
-
-    DataType* dataType = from_dtype(dtype, dtype_size);
-
-    if(!dataType)
-    {
-      APPCORE_ERROR("Invalid data type: '{0}'", dtype);
-      return nullptr;
-    }
-
-    int format = dataType->internal_format[components];
-
-    Renderbuffer* renderbuffer = new Renderbuffer();
-    renderbuffer->m_released = false;
-
-    renderbuffer->m_renderbuffer_obj = 0;
-    gl.GenRenderbuffers(1, (GLuint*)&renderbuffer->m_renderbuffer_obj);
-
-    if(!renderbuffer->m_renderbuffer_obj)
-    {
-      APPCORE_ERROR("Cannot create RenderBuffer");
-      delete(renderbuffer);
-      return nullptr;
-    }
-
-    gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->m_renderbuffer_obj);
-
-    if(samples == 0)
-    {
-      gl.RenderbufferStorage(GL_RENDERBUFFER, format, w, h);
-    }
-    else
-    {
-      gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, format, w, h);
-    }
-
-    renderbuffer->m_width = w;
-    renderbuffer->m_height = h;
-    renderbuffer->m_components = components;
-    renderbuffer->m_samples = samples;
-    renderbuffer->m_data_type = dataType;
-    renderbuffer->m_depth = false;
-
-    renderbuffer->m_context = this;
-
-    return AppCore::Ref<Renderbuffer>(renderbuffer);
   }
 
   AppCore::Ref<Program> Context::program(const ShadersSources& shaders,
@@ -938,6 +875,169 @@ namespace AppGL
     }
 
     return AppCore::Ref<Program>(program);
+  }
+
+  AppCore::Ref<Query> Context::query(bool samples, bool any_samples, bool time_elapsed, bool primitives_generated)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    if(!(samples || any_samples || time_elapsed || primitives_generated))
+    {
+      samples = true;
+      any_samples = true;
+      time_elapsed = true;
+      primitives_generated = true;
+    }
+
+    auto query = new Query();
+    query->m_released = false;
+    query->m_context = this;
+
+    if(samples)
+    {
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::SamplesPassed]);
+    }
+    else
+    {
+      query->m_query_obj[Query::Keys::SamplesPassed] = 0;
+    }
+
+    if(any_samples)
+    {
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::AnySamplesPassed]);
+    }
+    else
+    {
+      query->m_query_obj[Query::Keys::AnySamplesPassed] = 0;
+    }
+
+    if(time_elapsed)
+    {
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::TimeElapsed]);
+    }
+    else
+    {
+      query->m_query_obj[Query::Keys::TimeElapsed] = 0;
+    }
+
+    if(primitives_generated)
+    {
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::PrimitivesGenerated]);
+    }
+    else
+    {
+      query->m_query_obj[Query::Keys::PrimitivesGenerated] = 0;
+    }
+
+    return AppCore::Ref<Query>(query);
+  }
+
+  AppCore::Ref<Renderbuffer> Context::renderbuffer(int width, int height, int components, int samples, const char* dtype)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    if(components < 1 || components > 4)
+    {
+      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      return nullptr;
+    }
+
+    if((samples & (samples - 1)) || samples > m_max_samples)
+    {
+      APPCORE_ERROR("The number of samples is invalid got: {0}", samples);
+      return nullptr;
+    }
+
+    auto dataType = from_dtype(dtype, strlen(dtype));
+
+    if(!dataType)
+    {
+      APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
+      return nullptr;
+    }
+
+    int format = dataType->internal_format[components];
+
+    auto renderbuffer = new Renderbuffer();
+    renderbuffer->m_released = false;
+    renderbuffer->m_context = this;
+    renderbuffer->m_width = width;
+    renderbuffer->m_height = height;
+    renderbuffer->m_components = components;
+    renderbuffer->m_samples = samples;
+    renderbuffer->m_data_type = dataType;
+    renderbuffer->m_depth = false;
+
+    renderbuffer->m_renderbuffer_obj = 0;
+    gl.GenRenderbuffers(1, (GLuint*)&renderbuffer->m_renderbuffer_obj);
+
+    if(!renderbuffer->m_renderbuffer_obj)
+    {
+      APPCORE_ERROR("Cannot create RenderBuffer");
+      delete(renderbuffer);
+      return nullptr;
+    }
+
+    gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->m_renderbuffer_obj);
+
+    if(samples == 0)
+    {
+      gl.RenderbufferStorage(GL_RENDERBUFFER, format, width, height);
+    }
+    else
+    {
+      gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, format, width, height);
+    }
+
+    return AppCore::Ref<Renderbuffer>(renderbuffer);
+  }
+
+  AppCore::Ref<Renderbuffer> Context::depth_renderbuffer(int width, int height, int samples)
+  {
+
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    if((samples & (samples - 1)) || samples > m_max_samples)
+    {
+      APPCORE_ERROR("The number of samples is invalid got: {0}", samples);
+      return nullptr;
+    }
+
+    auto renderbuffer = new Renderbuffer();
+    renderbuffer->m_released = false;
+    renderbuffer->m_context = this;
+    renderbuffer->m_width = width;
+    renderbuffer->m_height = height;
+    renderbuffer->m_components = 1;
+    renderbuffer->m_samples = samples;
+    renderbuffer->m_data_type = from_dtype("f4", 2);
+    renderbuffer->m_depth = true;
+
+    renderbuffer->m_renderbuffer_obj = 0;
+    gl.GenRenderbuffers(1, (GLuint*)&renderbuffer->m_renderbuffer_obj);
+
+    if(!renderbuffer->m_renderbuffer_obj)
+    {
+      APPCORE_ERROR("Cannot create RenderBuffer");
+      delete(renderbuffer);
+      return nullptr;
+    }
+
+    gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->m_renderbuffer_obj);
+
+    if(samples == 0)
+    {
+      gl.RenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+    }
+    else
+    {
+      gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);
+    }
+
+    return AppCore::Ref<Renderbuffer>(renderbuffer);
   }
 
 } // namespace AppGL

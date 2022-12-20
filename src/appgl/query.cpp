@@ -1,6 +1,6 @@
 
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,8 +16,120 @@
 */
 #include "query.hpp"
 #include "appcore/log.hpp"
+#include "context.hpp"
 
 namespace AppGL
 {
-  void Query::release() { }
+  void Query::begin()
+  {
+    APPCORE_ASSERT(!m_released, "Query already released");
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+
+    if(m_query_obj[Query::Keys::SamplesPassed])
+    {
+      gl.BeginQuery(GL_SAMPLES_PASSED, m_query_obj[Query::Keys::SamplesPassed]);
+    }
+
+    if(m_query_obj[Query::Keys::AnySamplesPassed])
+    {
+      gl.BeginQuery(GL_ANY_SAMPLES_PASSED, m_query_obj[Query::Keys::AnySamplesPassed]);
+    }
+
+    if(m_query_obj[Query::Keys::TimeElapsed])
+    {
+      gl.BeginQuery(GL_TIME_ELAPSED, m_query_obj[Query::Keys::TimeElapsed]);
+    }
+
+    if(m_query_obj[Query::Keys::PrimitivesGenerated])
+    {
+      gl.BeginQuery(GL_PRIMITIVES_GENERATED, m_query_obj[Query::Keys::PrimitivesGenerated]);
+    }
+  }
+
+  void Query::end()
+  {
+    APPCORE_ASSERT(!m_released, "Query already released");
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+
+    if(m_query_obj[Query::Keys::SamplesPassed])
+    {
+      gl.EndQuery(GL_SAMPLES_PASSED);
+    }
+
+    if(m_query_obj[Query::Keys::AnySamplesPassed])
+    {
+      gl.EndQuery(GL_ANY_SAMPLES_PASSED);
+    }
+
+    if(m_query_obj[Query::Keys::TimeElapsed])
+    {
+      gl.EndQuery(GL_TIME_ELAPSED);
+    }
+
+    if(m_query_obj[Query::Keys::PrimitivesGenerated])
+    {
+      gl.EndQuery(GL_PRIMITIVES_GENERATED);
+    }
+  }
+
+  void Query::begin_render()
+  {
+    APPCORE_ASSERT(!m_released, "Query already released");
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+
+    if(m_query_obj[Query::Keys::AnySamplesPassed])
+    {
+      gl.BeginConditionalRender(m_query_obj[Query::Keys::AnySamplesPassed], GL_QUERY_NO_WAIT);
+    }
+    else if(m_query_obj[Query::Keys::SamplesPassed])
+    {
+      gl.BeginConditionalRender(m_query_obj[Query::Keys::SamplesPassed], GL_QUERY_NO_WAIT);
+    }
+    else
+    {
+      APPCORE_ERROR("no samples");
+    }
+  }
+
+  void Query::end_render()
+  {
+    APPCORE_ASSERT(!m_released, "Query already released");
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+    gl.EndConditionalRender();
+  }
+
+  int Query::samples()
+  {
+    APPCORE_ASSERT(!m_released, "Query already released");
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+    int samples = 0;
+    gl.GetQueryObjectiv(m_query_obj[Query::Keys::SamplesPassed], GL_QUERY_RESULT, &samples);
+    return samples;
+  }
+
+  int Query::primitives()
+  {
+    APPCORE_ASSERT(!m_released, "Query already released");
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+    int primitives = 0;
+    gl.GetQueryObjectiv(m_query_obj[Query::Keys::PrimitivesGenerated], GL_QUERY_RESULT, &primitives);
+    return primitives;
+  }
+
+  int Query::elapsed()
+  {
+    APPCORE_ASSERT(!m_released, "Query already released");
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+    int elapsed = 0;
+    gl.GetQueryObjectiv(m_query_obj[Query::Keys::TimeElapsed], GL_QUERY_RESULT, &elapsed);
+    return elapsed;
+  }
+
 } // namespace AppGL

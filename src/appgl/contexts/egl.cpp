@@ -1,6 +1,6 @@
 
 /*
-   Copyright 2020 Alexandre Pires (c.alexandre.pires@gmail.com)
+   Copyright 2022 Alexandre Pires (c.alexandre.pires@gmail.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -203,8 +203,7 @@ namespace AppGL
       return;
     }
 
-    res->m_eglQueryDevicesEXT =
-        (m_eglQueryDevicesEXTProc)res->m_eglGetProcAddress("eglQueryDevicesEXT");
+    res->m_eglQueryDevicesEXT = (m_eglQueryDevicesEXTProc)res->m_eglGetProcAddress("eglQueryDevicesEXT");
     if(!res->m_eglQueryDevicesEXT)
     {
       APPCORE_ERROR("eglQueryDevicesEXT not found");
@@ -212,8 +211,7 @@ namespace AppGL
       return;
     }
 
-    res->m_eglGetPlatformDisplayEXT =
-        (m_eglGetPlatformDisplayEXTProc)res->m_eglGetProcAddress("eglGetPlatformDisplayEXT");
+    res->m_eglGetPlatformDisplayEXT = (m_eglGetPlatformDisplayEXTProc)res->m_eglGetProcAddress("eglGetPlatformDisplayEXT");
     if(!res->m_eglGetPlatformDisplayEXT)
     {
       APPCORE_ERROR("eglGetPlatformDisplayEXT not found");
@@ -221,8 +219,7 @@ namespace AppGL
       return;
     }
 
-    res->m_eglGetCurrentDisplay =
-        (m_eglGetCurrentDisplayProc)res->m_eglGetProcAddress("eglGetCurrentDisplay");
+    res->m_eglGetCurrentDisplay = (m_eglGetCurrentDisplayProc)res->m_eglGetProcAddress("eglGetCurrentDisplay");
     if(!res->m_eglGetCurrentDisplay)
     {
       APPCORE_ERROR("eglGetCurrentDisplay not found");
@@ -230,8 +227,7 @@ namespace AppGL
       return;
     }
 
-    res->m_eglGetCurrentContext =
-        (m_eglGetCurrentContextProc)res->m_eglGetProcAddress("eglGetCurrentContext");
+    res->m_eglGetCurrentContext = (m_eglGetCurrentContextProc)res->m_eglGetProcAddress("eglGetCurrentContext");
     if(!res->m_eglGetCurrentContext)
     {
       APPCORE_ERROR("eglGetCurrentContext not found");
@@ -239,8 +235,7 @@ namespace AppGL
       return;
     }
 
-    res->m_eglGetCurrentSurface =
-        (m_eglGetCurrentSurfaceProc)res->m_eglGetProcAddress("eglGetCurrentSurface");
+    res->m_eglGetCurrentSurface = (m_eglGetCurrentSurfaceProc)res->m_eglGetProcAddress("eglGetCurrentSurface");
     if(!res->m_eglGetCurrentSurface)
     {
       APPCORE_ERROR("eglGetCurrentSurfaceProc not found");
@@ -264,8 +259,7 @@ namespace AppGL
 
         if(device_index >= num_devices)
         {
-          APPCORE_ERROR(
-              "requested device index %d, but found %d devices", device_index, num_devices);
+          APPCORE_ERROR("requested device index %d, but found %d devices", device_index, num_devices);
           delete res;
           return;
         }
