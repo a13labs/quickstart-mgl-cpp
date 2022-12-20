@@ -86,8 +86,10 @@ public:
 
     // Renderbuffer
     AppCore::Ref<Renderbuffer> renderbuffer(int width, int height, int components, int samples, const char* dtype);
-
     AppCore::Ref<Renderbuffer> depth_renderbuffer(int width, int height, int samples);
+
+    // Sampler
+    AppCore::Ref<Sampler> sampler();
 
     virtual GLFunction load(const AppCore::String& method) = 0;
     virtual void enter() = 0;

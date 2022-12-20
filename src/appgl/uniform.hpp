@@ -19,16 +19,16 @@
 
 namespace AppGL
 {
-  typedef struct
-  {
-    bool matrix;
-    int dimension;
-    int element_size;
-  } UniformDataType;
-
   class Uniform
   {
 public:
+    typedef struct
+    {
+      bool matrix;
+      int dimension;
+      int element_size;
+    } DataType;
+
     ~Uniform();
 
     void read(bool& value);
@@ -94,7 +94,7 @@ private:
     int m_gl_type;
     int m_location;
     int m_size;
-    UniformDataType* m_data_type;
+    DataType* m_data_type;
     uint8_t* m_data;
   };
 

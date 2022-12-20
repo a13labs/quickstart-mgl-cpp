@@ -19,19 +19,19 @@
 
 namespace AppGL
 {
-  typedef struct
-  {
-    int dimension;
-    int scalar_type;
-    int rows_length;
-    int row_length;
-    bool normalizable;
-    const char* shape;
-  } AttributeDataType;
-
   class Attribute
   {
 public:
+    typedef struct
+    {
+      int dimension;
+      int scalar_type;
+      int rows_length;
+      int row_length;
+      bool normalizable;
+      const char* shape;
+    } DataType;
+
     ~Attribute() = default;
 
 private:
@@ -41,7 +41,7 @@ private:
     AppCore::String m_name;
     int m_program_obj;
     int m_gl_type;
-    AttributeDataType* m_data_type;
+    DataType* m_data_type;
     int m_location;
     size_t m_array_length;
   };

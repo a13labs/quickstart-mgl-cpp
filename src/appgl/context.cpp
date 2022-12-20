@@ -24,6 +24,7 @@
 #include "program.hpp"
 #include "query.hpp"
 #include "renderbuffer.hpp"
+#include "sampler.hpp"
 #include "shaderssources.hpp"
 #include "subroutine.hpp"
 #include "texture.hpp"
@@ -996,7 +997,6 @@ namespace AppGL
 
   AppCore::Ref<Renderbuffer> Context::depth_renderbuffer(int width, int height, int samples)
   {
-
     APPCORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
@@ -1040,4 +1040,29 @@ namespace AppGL
     return AppCore::Ref<Renderbuffer>(renderbuffer);
   }
 
+  AppCore::Ref<Sampler> Context::sampler()
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    auto sampler = new Sampler();
+    sampler->m_released = false;
+    sampler->m_context = this;
+    sampler->m_filter = {GL_LINEAR, GL_LINEAR};
+    sampler->m_anisotropy = 0.0;
+    sampler->m_repeat_x = true;
+    sampler->m_repeat_y = true;
+    sampler->m_repeat_z = true;
+    sampler->m_compare_func = Sampler::Func::None;
+    sampler->m_border_color[0] = 0.0;
+    sampler->m_border_color[1] = 0.0;
+    sampler->m_border_color[2] = 0.0;
+    sampler->m_border_color[3] = 0.0;
+    sampler->m_min_lod = -1000.0;
+    sampler->m_max_lod = 1000.0;
+
+    gl.GenSamplers(1, (GLuint*)&sampler->m_sampler_obj);
+
+    return AppCore::Ref<Sampler>(sampler);
+  }
 } // namespace AppGL

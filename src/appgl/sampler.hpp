@@ -15,33 +15,133 @@
 */
 #pragma once
 #include "appgl.hpp"
+#include "glm/vec4.hpp"
 
 namespace AppGL
 {
   class Sampler
   {
 public:
+    enum Func
+    {
+      None = 0x0000,
+      Never = 0x0200,
+      Less = 0x0201,
+      Equal = 0x0202,
+      LessEqual = 0x0203,
+      Greater = 0x0204,
+      NotEqual = 0x0205,
+      GreaterEqual = 0x0206,
+      Always = 0x0207,
+    };
+
+    typedef struct
+    {
+      int min_filter;
+      int mag_filter;
+    } Filter;
+
     ~Sampler() { release(); }
 
 public:
     void release();
+    void use(int index);
+    void clear(int index);
+
+    bool repeat_x();
+    void set_repeat_x(bool value);
+
+    bool repeat_y();
+    void set_repeat_y(bool value);
+
+    bool repeat_z();
+    void set_repeat_z(bool value);
+
+    const Sampler::Filter& filter() const;
+    void set_filter(const Sampler::Filter& value);
+
+    Sampler::Func compare_func();
+    void set_compare_func(Sampler::Func value);
+
+    float anisotropy();
+    void set_anisotropy(float value);
+
+    const glm::vec4& border_color() const;
+    void set_border_color(const glm::vec4& value);
+    void set_border_color(float r, float g, float b, float a);
+
+    float min_lod();
+    void set_min_lod(float value);
+
+    float max_lod();
+    void set_max_lod(float value);
 
 private:
     friend class Context;
-    Sampler();
+    Sampler() = default;
 
     Context* m_context;
     int m_sampler_obj;
-    int m_min_filter;
-    int m_mag_filter;
     float m_anisotropy;
-    int m_compare_func;
+    Sampler::Func m_compare_func;
     bool m_repeat_x;
     bool m_repeat_y;
     bool m_repeat_z;
-    float m_border_color;
+    glm::vec4 m_border_color;
     float m_min_lod;
     float m_max_lod;
     bool m_released;
+    Sampler::Filter m_filter;
   };
+
+  inline bool Sampler::repeat_x()
+  {
+    return m_repeat_x;
+  }
+
+  inline bool Sampler::repeat_y()
+  {
+    return m_repeat_y;
+  }
+
+  inline bool Sampler::repeat_z()
+  {
+    return m_repeat_z;
+  }
+
+  inline float Sampler::anisotropy()
+  {
+    return m_anisotropy;
+  }
+
+  inline float Sampler::min_lod()
+  {
+    return m_min_lod;
+  }
+
+  inline float Sampler::max_lod()
+  {
+    return m_max_lod;
+  }
+
+  inline const glm::vec4& Sampler::border_color() const
+  {
+    return m_border_color;
+  }
+
+  inline const Sampler::Filter& Sampler::filter() const
+  {
+    return m_filter;
+  }
+
+  inline Sampler::Func Sampler::compare_func()
+  {
+    return m_compare_func;
+  }
+
+  inline void Sampler::set_border_color(float r, float g, float b, float a)
+  {
+    set_border_color({r, g, b, a});
+  }
+
 } // namespace AppGL
