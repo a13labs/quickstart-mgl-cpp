@@ -21,20 +21,40 @@ namespace AppGL
   class Scope
   {
 public:
+    enum ContextFlags
+    {
+      NOTHING = 0,
+      BLEND = 1,
+      DEPTH_TEST = 2,
+      CULL_FACE = 4,
+      RASTERIZER_DISCARD = 8,
+      PROGRAM_POINT_SIZE = 16,
+      INVALID = 0x40000000
+    };
+
+    struct BindingData
+    {
+      int binding;
+      int type;
+      int gl_object;
+    };
+
     ~Scope() { release(); }
 
     void release();
+    void begin();
+    void end();
 
 private:
     friend class Context;
     Scope() = default;
 
     Context* m_context;
-    Framebuffer* m_framebuffer;
-    Framebuffer* m_old_framebuffer;
-    AppCore::VectorRef<Sampler> m_samplers;
-    AppCore::VectorRef<Texture2D> m_textures;
-    AppCore::VectorRef<Buffer> m_buffers;
+    AppCore::Ref<Framebuffer> m_framebuffer;
+    AppCore::Ref<Framebuffer> m_old_framebuffer;
+    SamplerBindings m_samplers;
+    AppCore::List<Scope::BindingData> m_textures;
+    AppCore::List<Scope::BindingData> m_buffers;
     int m_enable_flags;
     int m_old_enable_flags;
     bool m_released;

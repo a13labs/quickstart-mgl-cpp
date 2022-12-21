@@ -22,16 +22,16 @@ namespace AppGL
   {
     enum Type
     {
-      VertexShader,
-      FragmentShader,
-      GeometryShader,
-      TessEvaluationShader,
-      TessControlShader,
+      VERTEX_SHADER,
+      FRAGMENT_SHADER,
+      GEOMETRY_SHADER,
+      TESS_EVALUATION_SHADER,
+      TESS_CONTROL_SHADER,
 
-      ShadersCount,
+      COUNT,
     };
 
-    AppCore::String sources[ShadersSources::ShadersCount];
+    AppCore::String sources[ShadersSources::COUNT];
 
     ShadersSources(const AppCore::String& vs_source,
                    const AppCore::String& fs_source,

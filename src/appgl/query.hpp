@@ -23,12 +23,12 @@ namespace AppGL
 public:
     enum Keys
     {
-      SamplesPassed,
-      AnySamplesPassed,
-      TimeElapsed,
-      PrimitivesGenerated,
+      SAMPLES_PASSED,
+      ANY_SAMPLES_PASSED,
+      TIME_ELAPSED,
+      PRIMITIVES_GENERATED,
 
-      Count,
+      COUNT,
     };
 
     ~Query() = default;
@@ -47,7 +47,7 @@ private:
     Query() = default;
 
     Context* m_context;
-    int m_query_obj[Query::Keys::Count];
+    int m_query_obj[Query::Keys::COUNT];
     bool m_released;
   };
 } // namespace AppGL

@@ -23,9 +23,9 @@ namespace AppGL
 public:
     enum Type
     {
-      Texture2D,
-      Texture3D,
-      TextureCube,
+      TEXTURE_2D,
+      TEXTURE_3D,
+      TEXTURE_CUBE,
     };
 
     virtual ~Texture() = default;

@@ -16,11 +16,21 @@
 #pragma once
 #include "appcore/appcore.hpp"
 
-#define MGL_MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define MGL_MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define APPGL_MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define APPGL_MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 namespace AppGL
 {
+  using GLFunction = void*;
+  using GLContext = void*;
+
+  struct ColorMask
+  {
+    bool r, g, b, a;
+  };
+
+  struct DataType;
+
   struct Rect
   {
     int X;
@@ -66,10 +76,6 @@ namespace AppGL
     { }
   };
 
-  using GLFunction = void*;
-  using GLContext = void*;
-
-  struct DataType;
   struct ShadersSources;
 
   class Attribute;
@@ -85,6 +91,7 @@ namespace AppGL
   class Sampler;
   class Scope;
   class Subroutine;
+  class Texture;
   class Texture2D;
   class TextureArray;
   class Texture3D;
@@ -95,18 +102,39 @@ namespace AppGL
   class VertexArray;
   class Window;
 
+  struct TextureBinding
+  {
+    AppCore::Ref<Texture> texture;
+    int binding;
+  };
+
+  struct BufferBinding
+  {
+    AppCore::Ref<Buffer> buffer;
+    int binding;
+  };
+
+  struct SamplerBinding
+  {
+    AppCore::Ref<Sampler> sampler;
+    int binding;
+  };
+
   using AttributesMap = AppCore::Dict<AppCore::String, AppCore::Ref<Attribute>>;
   using SubroutinesMap = AppCore::Dict<AppCore::String, AppCore::Ref<Subroutine>>;
   using UniformsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Uniform>>;
   using UniformBlocksMap = AppCore::Dict<AppCore::String, AppCore::Ref<UniformBlock>>;
   using VaryingsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Varying>>;
-
   using AttachmentsRef = AppCore::VectorRef<Attachment>;
-
-  using ColorMask = AppCore::List<bool>;
-
   using ShadersOutputs = AppCore::StringList;
   using FragmentOutputs = AppCore::Dict<AppCore::String, int>;
+  using ColorMasks = AppCore::List<ColorMask>;
+  using Textures = AppCore::VectorRef<Texture>;
+  using Buffers = AppCore::VectorRef<Buffer>;
+  using Samplers = AppCore::VectorRef<Sampler>;
+  using TextureBindings = AppCore::List<TextureBinding>;
+  using BufferBindings = AppCore::List<BufferBinding>;
+  using SamplerBindings = AppCore::List<SamplerBinding>;
 
   extern const std::string NoShader;
 } // namespace AppGL

@@ -23,8 +23,8 @@ namespace AppGL
 public:
     enum Type
     {
-      Texture,
-      Renderbuffer
+      TEXTURE,
+      RENDERBUFFER
     };
 
     virtual ~Attachment() = default;

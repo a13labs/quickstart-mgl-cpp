@@ -59,7 +59,7 @@ namespace AppGL
 
     for(int i = 0; i < m_draw_buffers_len; ++i)
     {
-      gl.ColorMaski(i, m_color_mask[i * 4 + 0], m_color_mask[i * 4 + 1], m_color_mask[i * 4 + 2], m_color_mask[i * 4 + 3]);
+      gl.ColorMaski(i, m_color_masks[i].r, m_color_masks[i].g, m_color_masks[i].b, m_color_masks[i].a);
     }
 
     gl.DepthMask(m_depth_mask);
@@ -125,7 +125,7 @@ namespace AppGL
 
     for(int i = 0; i < m_draw_buffers_len; ++i)
     {
-      gl.ColorMaski(i, m_color_mask[i * 4 + 0], m_color_mask[i * 4 + 1], m_color_mask[i * 4 + 2], m_color_mask[i * 4 + 3]);
+      gl.ColorMaski(i, m_color_masks[i].r, m_color_masks[i].g, m_color_masks[i].b, m_color_masks[i].a);
     }
 
     gl.DepthMask(m_depth_mask);
@@ -212,21 +212,20 @@ namespace AppGL
     gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
   }
 
-  void Framebuffer::set_color_mask(const ColorMask& mask)
+  void Framebuffer::set_color_mask(const ColorMasks& masks)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(!m_context, "No context");
-    APPCORE_ASSERT(mask.size() % 4 == 0, "color_mask must be a multiple of 4");
-    APPCORE_ASSERT(mask.size() / m_draw_buffers_len == 4, "color_mask must be a multiple of 4");
+    APPCORE_ASSERT(masks.size() != (size_t)m_draw_buffers_len, "color_mask must be a match buffers len");
     const GLMethods& gl = m_context->gl();
 
-    m_color_mask = mask;
+    m_color_masks = masks;
 
     if(m_framebuffer_obj == m_context->m_bound_framebuffer->m_framebuffer_obj)
     {
       for(int i = 0; i < m_draw_buffers_len; ++i)
       {
-        gl.ColorMaski(i, m_color_mask[i * 4 + 0], m_color_mask[i * 4 + 1], m_color_mask[i * 4 + 2], m_color_mask[i * 4 + 3]);
+        gl.ColorMaski(i, m_color_masks[i].r, m_color_masks[i].g, m_color_masks[i].b, m_color_masks[i].a);
       }
     }
   }

@@ -23,7 +23,7 @@ namespace AppGL
 
   Texture::Type Texture3D::texture_type()
   {
-    return Texture::Texture3D;
+    return Texture::TEXTURE_3D;
   }
 
 } // namespace AppGL

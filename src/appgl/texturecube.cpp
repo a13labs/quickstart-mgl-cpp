@@ -23,7 +23,7 @@ namespace AppGL
 
   Texture::Type TextureCube::texture_type()
   {
-    return Texture::TextureCube;
+    return Texture::TEXTURE_CUBE;
   }
 
 } // namespace AppGL

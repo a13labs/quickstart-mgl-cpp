@@ -111,7 +111,7 @@ namespace AppGL
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
     m_compare_func = value;
-    if(m_compare_func == Sampler::Func::None)
+    if(m_compare_func == Sampler::Func::NONE)
     {
       gl.SamplerParameteri(m_sampler_obj, GL_TEXTURE_COMPARE_MODE, GL_NONE);
       return;
@@ -130,7 +130,7 @@ namespace AppGL
     if(m_context->max_anisotropy() == 0)
       return;
 
-    m_anisotropy = (float)MGL_MIN(MGL_MAX(value, 1.0), m_context->max_anisotropy());
+    m_anisotropy = (float)APPGL_MIN(APPGL_MAX(value, 1.0), m_context->max_anisotropy());
     gl.SamplerParameterf(m_sampler_obj, GL_TEXTURE_MAX_ANISOTROPY, m_anisotropy);
   }
 

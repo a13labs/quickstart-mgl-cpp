@@ -82,7 +82,7 @@ namespace AppGL
 
     SDL_GL_SetSwapInterval(m_state.current_config.VSync ? 1 : 0);
 
-    m_shared_context = Context::create_context(ContextMode::Share, 330);
+    m_shared_context = Context::create_context(ContextMode::SHARE, 330);
 
     if(!m_shared_context)
     {

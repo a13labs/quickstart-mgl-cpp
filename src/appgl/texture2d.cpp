@@ -35,10 +35,7 @@ namespace AppGL
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D, m_texture_obj, 0);
 
     fb->m_draw_buffers[index] = GL_COLOR_ATTACHMENT0 + index;
-    fb->m_color_mask[index * 4 + 0] = m_components >= 1;
-    fb->m_color_mask[index * 4 + 1] = m_components >= 2;
-    fb->m_color_mask[index * 4 + 2] = m_components >= 3;
-    fb->m_color_mask[index * 4 + 3] = m_components >= 4;
+    fb->m_color_masks[index] = {m_components >= 1, m_components >= 2, m_components >= 3, m_components >= 4};
   }
 
   void Texture2D::depth_attachment()
@@ -53,12 +50,12 @@ namespace AppGL
 
   Attachment::Type Texture2D::attachment_type()
   {
-    return Attachment::Texture;
+    return Attachment::TEXTURE;
   }
 
   Texture::Type Texture2D::texture_type()
   {
-    return Texture::Texture2D;
+    return Texture::TEXTURE_2D;
   }
 
   int Texture2D::width()

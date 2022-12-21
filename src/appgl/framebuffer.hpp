@@ -35,8 +35,9 @@ public:
     void enable_scissor();
     void disable_scissor();
 
-    const ColorMask& color_mask() const;
+    const ColorMasks& color_mask() const;
     void set_color_mask(const ColorMask& mask);
+    void set_color_mask(const ColorMasks& masks);
 
     bool depth_mask();
     void set_depth_mask(bool value);
@@ -46,11 +47,11 @@ public:
 
     void bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits);
 
-    void clear(float r, float g, float b, float a, float depth);
-    void clear(float r, float g, float b, float a, float depth, int w, int h);
     void clear(const glm::vec4& color, float depth);
+    void clear(float r, float g, float b, float a, float depth);
     void clear(const glm::vec4& color, float depth, int w, int h);
     void clear(const glm::vec4& color, float depth, const Rect& rect);
+    void clear(float r, float g, float b, float a, float depth, int w, int h);
     void clear(float r, float g, float b, float a, float depth, const Rect& rect);
 
     void read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
@@ -84,7 +85,7 @@ private:
     Rect m_viewport;
     bool m_scissor_enabled;
     Rect m_scissor;
-    ColorMask m_color_mask;
+    ColorMasks m_color_masks;
 
     int m_draw_buffers_len;
     unsigned* m_draw_buffers;
@@ -177,9 +178,9 @@ private:
     read(dst, 3, 0, 1, "f1", 0);
   }
 
-  inline const ColorMask& Framebuffer::color_mask() const
+  inline const ColorMasks& Framebuffer::color_mask() const
   {
-    return m_color_mask;
+    return m_color_masks;
   }
 
   inline bool Framebuffer::depth_mask()
@@ -195,6 +196,11 @@ private:
   inline int Framebuffer::height()
   {
     return m_height;
+  }
+
+  inline void Framebuffer::set_color_mask(const ColorMask& mask)
+  {
+    set_color_mask({mask});
   }
 
 } // namespace AppGL

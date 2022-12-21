@@ -22,7 +22,7 @@ namespace AppGL
   class Attribute
   {
 public:
-    typedef struct
+    struct DataType
     {
       int dimension;
       int scalar_type;
@@ -30,7 +30,7 @@ public:
       int row_length;
       bool normalizable;
       const char* shape;
-    } DataType;
+    };
 
     ~Attribute() = default;
 

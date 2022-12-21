@@ -22,12 +22,12 @@ namespace AppGL
   class Uniform
   {
 public:
-    typedef struct
+    struct DataType
     {
       bool matrix;
       int dimension;
       int element_size;
-    } DataType;
+    };
 
     ~Uniform();
 

@@ -23,9 +23,9 @@ namespace AppGL
   {
     enum Enum
     {
-      Detect,
-      Share,
-      Standalone
+      DETECT,
+      SHARE,
+      STANDALONE
     };
   };
 
@@ -44,7 +44,10 @@ public:
     float max_anisotropy();
     const AppCore::StringList& extensions() const;
     const AppCore::Ref<Framebuffer>& framebuffer() const;
+
     int enable_flags();
+    void set_enable_flags(int flags);
+
     int front_face();
     int cull_face();
     int depth_func();
@@ -90,6 +93,14 @@ public:
 
     // Sampler
     AppCore::Ref<Sampler> sampler();
+
+    // Scope
+    AppCore::Ref<Scope> scope(AppCore::Ref<Framebuffer> framebuffer,
+                              int enable_flags,
+                              const TextureBindings& textures,
+                              const BufferBindings& uniform_buffers,
+                              const BufferBindings& storage_buffers,
+                              const SamplerBindings& samplers);
 
     virtual GLFunction load(const AppCore::String& method) = 0;
     virtual void enter() = 0;
@@ -236,6 +247,11 @@ private:
   inline int Context::enable_flags()
   {
     return m_enable_flags;
+  }
+
+  inline void Context::set_enable_flags(int flags)
+  {
+    m_enable_flags = flags;
   }
 
   inline int Context::front_face()

@@ -16,8 +16,159 @@
 */
 #include "scope.hpp"
 #include "appcore/log.hpp"
+#include "context.hpp"
+#include "framebuffer.hpp"
+#include "sampler.hpp"
 
 namespace AppGL
 {
-  void Scope::release() { }
+  void Scope::release()
+  {
+    if(m_released)
+    {
+      return;
+    }
+
+    m_released = true;
+    m_framebuffer = nullptr;
+    m_old_framebuffer = nullptr;
+    m_context = nullptr;
+    m_samplers.clear();
+    m_textures.clear();
+    m_buffers.clear();
+  }
+
+  void Scope::begin()
+  {
+    APPCORE_ASSERT(!m_released, "Scope released");
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+
+    const int& flags = m_enable_flags;
+
+    m_old_enable_flags = m_context->enable_flags();
+    m_context->set_enable_flags(m_enable_flags);
+
+    m_framebuffer->use();
+
+    for(auto&& texture : m_textures)
+    {
+      gl.ActiveTexture(texture.binding);
+      gl.BindTexture(texture.type, texture.gl_object);
+    }
+
+    for(auto&& buffer : m_buffers)
+    {
+      gl.BindBufferBase(buffer.type, buffer.binding, buffer.gl_object);
+    }
+
+    for(auto&& sampler : m_samplers)
+    {
+      APPCORE_ASSERT(sampler.sampler, "invalid sampler");
+      sampler.sampler->use(sampler.binding);
+    }
+
+    if(flags & Scope::ContextFlags::BLEND)
+    {
+      gl.Enable(GL_BLEND);
+    }
+    else
+    {
+      gl.Disable(GL_BLEND);
+    }
+
+    if(flags & Scope::ContextFlags::DEPTH_TEST)
+    {
+      gl.Enable(GL_DEPTH_TEST);
+    }
+    else
+    {
+      gl.Disable(GL_DEPTH_TEST);
+    }
+
+    if(flags & Scope::ContextFlags::CULL_FACE)
+    {
+      gl.Enable(GL_CULL_FACE);
+    }
+    else
+    {
+      gl.Disable(GL_CULL_FACE);
+    }
+
+    if(flags & Scope::ContextFlags::RASTERIZER_DISCARD)
+    {
+      gl.Enable(GL_RASTERIZER_DISCARD);
+    }
+    else
+    {
+      gl.Disable(GL_RASTERIZER_DISCARD);
+    }
+
+    if(flags & Scope::ContextFlags::PROGRAM_POINT_SIZE)
+    {
+      gl.Enable(GL_PROGRAM_POINT_SIZE);
+    }
+    else
+    {
+      gl.Disable(GL_PROGRAM_POINT_SIZE);
+    }
+  }
+
+  void Scope::end()
+  {
+    APPCORE_ASSERT(!m_released, "Scope released");
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+    const int& flags = m_old_enable_flags;
+
+    m_context->set_enable_flags(m_old_enable_flags);
+
+    m_old_framebuffer->use();
+
+    if(flags & Scope::ContextFlags::BLEND)
+    {
+      gl.Enable(GL_BLEND);
+    }
+    else
+    {
+      gl.Disable(GL_BLEND);
+    }
+
+    if(flags & Scope::ContextFlags::DEPTH_TEST)
+    {
+      gl.Enable(GL_DEPTH_TEST);
+    }
+    else
+    {
+      gl.Disable(GL_DEPTH_TEST);
+    }
+
+    if(flags & Scope::ContextFlags::CULL_FACE)
+    {
+      gl.Enable(GL_CULL_FACE);
+    }
+    else
+    {
+      gl.Disable(GL_CULL_FACE);
+    }
+
+    if(flags & Scope::ContextFlags::RASTERIZER_DISCARD)
+    {
+      gl.Enable(GL_RASTERIZER_DISCARD);
+    }
+    else
+    {
+      gl.Disable(GL_RASTERIZER_DISCARD);
+    }
+
+    if(flags & Scope::ContextFlags::PROGRAM_POINT_SIZE)
+    {
+      gl.Enable(GL_PROGRAM_POINT_SIZE);
+    }
+    else
+    {
+      gl.Disable(GL_PROGRAM_POINT_SIZE);
+    }
+  }
+
 } // namespace AppGL

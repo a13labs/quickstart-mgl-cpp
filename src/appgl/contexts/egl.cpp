@@ -245,7 +245,7 @@ namespace AppGL
 
     switch(mode)
     {
-      case ContextMode::Standalone: {
+      case ContextMode::STANDALONE: {
         res->standalone = true;
         res->wnd = EGL_NO_SURFACE;
 
@@ -342,7 +342,7 @@ namespace AppGL
         res->m_eglMakeCurrent(res->dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, res->ctx);
       }
       break;
-      case ContextMode::Share: {
+      case ContextMode::SHARE: {
         res->standalone = false;
 
         EGLContext ctx_share = res->m_eglGetCurrentContext();

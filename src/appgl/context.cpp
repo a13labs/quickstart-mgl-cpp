@@ -25,12 +25,17 @@
 #include "query.hpp"
 #include "renderbuffer.hpp"
 #include "sampler.hpp"
+#include "scope.hpp"
 #include "shaderssources.hpp"
 #include "subroutine.hpp"
 #include "texture2d.hpp"
+#include "texture3d.hpp"
+#include "texturearray.hpp"
+#include "texturecube.hpp"
 #include "uniform.hpp"
 #include "uniformblock.hpp"
 #include "varying.hpp"
+#include "vertexarray.hpp"
 
 namespace AppGL
 {
@@ -241,11 +246,7 @@ namespace AppGL
       gl.GetIntegerv(GL_DRAW_BUFFER, (int*)&fb->m_draw_buffers[0]);
       gl.BindFramebuffer(GL_FRAMEBUFFER, bound_framebuffer);
 
-      fb->m_color_mask = ColorMask(4);
-      fb->m_color_mask[0] = true;
-      fb->m_color_mask[1] = true;
-      fb->m_color_mask[2] = true;
-      fb->m_color_mask[3] = true;
+      fb->m_color_masks = {{true, true, true, true}};
 
       fb->m_depth_mask = true;
       fb->m_context = ctx;
@@ -503,7 +504,7 @@ namespace AppGL
     framebuffer->m_released = false;
     framebuffer->m_draw_buffers_len = color_attachments.size();
     framebuffer->m_draw_buffers = new unsigned[color_attachments.size()];
-    framebuffer->m_color_mask = ColorMask(color_attachments.size() * 4 + 1);
+    framebuffer->m_color_masks = ColorMasks(color_attachments.size());
     framebuffer->m_depth_mask = (depth_attachment != nullptr);
     framebuffer->m_viewport = {0, 0, width, height};
     framebuffer->m_dynamic = false;
@@ -569,7 +570,7 @@ namespace AppGL
     Program* program = new Program();
     program->m_released = false;
     program->m_context = this;
-    program->m_transform = shaders.sources[ShadersSources::FragmentShader].empty();
+    program->m_transform = shaders.sources[ShadersSources::FRAGMENT_SHADER].empty();
 
     int program_obj = gl.CreateProgram();
 
@@ -582,7 +583,7 @@ namespace AppGL
 
     int shader_objs[] = {0, 0, 0, 0, 0};
 
-    for(int i = 0; i < ShadersSources::ShadersCount; ++i)
+    for(int i = 0; i < ShadersSources::COUNT; ++i)
     {
       if(shaders.sources[i] == "")
       {
@@ -670,7 +671,7 @@ namespace AppGL
 
     gl.LinkProgram(program_obj);
 
-    for(int i = 0; i < ShadersSources::ShadersCount; ++i)
+    for(int i = 0; i < ShadersSources::COUNT; ++i)
     {
       if(shader_objs[i])
       {
@@ -704,7 +705,7 @@ namespace AppGL
 
     program->m_program_obj = program_obj;
 
-    if(!shaders.sources[ShadersSources::Type::GeometryShader].empty())
+    if(!shaders.sources[ShadersSources::Type::GEOMETRY_SHADER].empty())
     {
 
       int geometry_in = 0;
@@ -897,38 +898,38 @@ namespace AppGL
 
     if(samples)
     {
-      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::SamplesPassed]);
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::SAMPLES_PASSED]);
     }
     else
     {
-      query->m_query_obj[Query::Keys::SamplesPassed] = 0;
+      query->m_query_obj[Query::Keys::SAMPLES_PASSED] = 0;
     }
 
     if(any_samples)
     {
-      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::AnySamplesPassed]);
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::ANY_SAMPLES_PASSED]);
     }
     else
     {
-      query->m_query_obj[Query::Keys::AnySamplesPassed] = 0;
+      query->m_query_obj[Query::Keys::ANY_SAMPLES_PASSED] = 0;
     }
 
     if(time_elapsed)
     {
-      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::TimeElapsed]);
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::TIME_ELAPSED]);
     }
     else
     {
-      query->m_query_obj[Query::Keys::TimeElapsed] = 0;
+      query->m_query_obj[Query::Keys::TIME_ELAPSED] = 0;
     }
 
     if(primitives_generated)
     {
-      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::PrimitivesGenerated]);
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::PRIMITIVES_GENERATED]);
     }
     else
     {
-      query->m_query_obj[Query::Keys::PrimitivesGenerated] = 0;
+      query->m_query_obj[Query::Keys::PRIMITIVES_GENERATED] = 0;
     }
 
     return AppCore::Ref<Query>(query);
@@ -1053,7 +1054,7 @@ namespace AppGL
     sampler->m_repeat_x = true;
     sampler->m_repeat_y = true;
     sampler->m_repeat_z = true;
-    sampler->m_compare_func = Sampler::Func::None;
+    sampler->m_compare_func = Sampler::Func::NONE;
     sampler->m_border_color[0] = 0.0;
     sampler->m_border_color[1] = 0.0;
     sampler->m_border_color[2] = 0.0;
@@ -1064,5 +1065,92 @@ namespace AppGL
     gl.GenSamplers(1, (GLuint*)&sampler->m_sampler_obj);
 
     return AppCore::Ref<Sampler>(sampler);
+  }
+
+  AppCore::Ref<Scope> Context::scope(AppCore::Ref<Framebuffer> framebuffer,
+                                     int enable_flags,
+                                     const TextureBindings& textures,
+                                     const BufferBindings& uniform_buffers,
+                                     const BufferBindings& storage_buffers,
+                                     const SamplerBindings& samplers)
+  {
+
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    auto scope = new Scope();
+    scope->m_released = false;
+    scope->m_context = this;
+    scope->m_enable_flags = enable_flags;
+    scope->m_old_enable_flags = Scope::ContextFlags::INVALID;
+    scope->m_framebuffer = framebuffer;
+    scope->m_old_framebuffer = m_bound_framebuffer;
+    scope->m_textures = AppCore::List<Scope::BindingData>(textures.size());
+    scope->m_buffers = AppCore::List<Scope::BindingData>(uniform_buffers.size() + storage_buffers.size());
+    scope->m_samplers = samplers;
+
+    int i = 0;
+    for(auto&& t : textures)
+    {
+      int texture_type;
+      int texture_obj;
+
+      APPCORE_ASSERT(t.texture, "Texture is null");
+
+      switch(t.texture->texture_type())
+      {
+        case Texture::Type::TEXTURE_2D: {
+          auto texture = std::dynamic_pointer_cast<Texture2D>(t.texture);
+          APPCORE_ASSERT(texture != nullptr, "invalid texture");
+          texture_type = texture->m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+          texture_obj = texture->m_texture_obj;
+        }
+        /* code */
+        break;
+        case Texture::Type::TEXTURE_3D: {
+          auto texture = std::dynamic_pointer_cast<Texture3D>(t.texture);
+          APPCORE_ASSERT(texture != nullptr, "invalid texture");
+          texture_type = GL_TEXTURE_3D;
+          texture_obj = texture->m_texture_obj;
+        }
+        break;
+        case Texture::Type::TEXTURE_CUBE: {
+          auto texture = std::dynamic_pointer_cast<Texture3D>(t.texture);
+          APPCORE_ASSERT(texture != nullptr, "invalid texture");
+          texture_type = GL_TEXTURE_CUBE_MAP;
+          texture_obj = texture->m_texture_obj;
+        }
+        break;
+        default:
+          delete scope;
+          APPCORE_ERROR("invalid texture");
+          return nullptr;
+      }
+
+      int binding = t.binding;
+      scope->m_textures[i].binding = GL_TEXTURE0 + binding;
+      scope->m_textures[i].type = texture_type;
+      scope->m_textures[i].gl_object = texture_obj;
+      i++;
+    }
+
+    i = 0;
+    for(auto&& b : uniform_buffers)
+    {
+      scope->m_buffers[i].binding = b.binding;
+      scope->m_buffers[i].gl_object = b.buffer->m_buffer_obj;
+      scope->m_buffers[i].type = GL_UNIFORM_BUFFER;
+      i++;
+    }
+
+    for(auto&& b : storage_buffers)
+    {
+      scope->m_buffers[i].binding = b.binding;
+      scope->m_buffers[i].gl_object = b.buffer->m_buffer_obj;
+      scope->m_buffers[i].type = GL_SHADER_STORAGE_BUFFER;
+      i++;
+    }
+
+    return AppCore::Ref<Scope>(scope);
   }
 } // namespace AppGL
