@@ -32,6 +32,17 @@ namespace AppGL
   class Context : public AppCore::RefFromThis<Context>
   {
 public:
+    enum Flags
+    {
+      NOTHING = 0,
+      BLEND = 1,
+      DEPTH_TEST = 2,
+      CULL_FACE = 4,
+      RASTERIZER_DISCARD = 8,
+      PROGRAM_POINT_SIZE = 16,
+      INVALID = 0x40000000
+    };
+
     virtual ~Context() = default;
 
     const GLMethods& gl() const;
@@ -60,10 +71,10 @@ public:
     float polygon_offset_units();
 
     // Buffer
-    AppCore::Ref<Buffer> buffer(const float* dst, size_t size, bool dynamic);
-    AppCore::Ref<Buffer> buffer(const uint32_t* dst, size_t size, bool dynamic);
-    AppCore::Ref<Buffer> buffer(const uint16_t* dst, size_t size, bool dynamic);
-    AppCore::Ref<Buffer> buffer(const uint8_t* dst, size_t size, bool dynamic);
+    AppCore::Ref<Buffer> buffer(const float* dst, size_t reserve = 0, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(const uint32_t* dst, size_t reserve = 0, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(const uint16_t* dst, size_t reserve = 0, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(const uint8_t* dst, size_t reserve = 0, bool dynamic = false);
 
     // Compute Shader
     AppCore::Ref<ComputeShader> compute_shader(const AppCore::String& source);
@@ -78,29 +89,42 @@ public:
 
     // Program
     AppCore::Ref<Program> program(const ShadersSources& shaders,
-                                  const ShadersOutputs& outputs,
-                                  const FragmentOutputs& fragment_outputs,
+                                  const ShadersOutputs& outputs = {},
+                                  const FragmentOutputs& fragment_outputs = {},
                                   bool interleaved = true);
     AppCore::Ref<Program> program(const ShadersSources& shaders, const ShadersOutputs& outputs, bool interleaved = true);
     AppCore::Ref<Program> program(const ShadersSources& shaders, bool interleaved = true);
 
     // Query
-    AppCore::Ref<Query> query(bool samples, bool any_samples, bool time_elapsed, bool primitives_generated);
+    AppCore::Ref<Query>
+    query(bool samples = false, bool any_samples = false, bool time_elapsed = false, bool primitives_generated = false);
 
     // Renderbuffer
-    AppCore::Ref<Renderbuffer> renderbuffer(int width, int height, int components, int samples, const char* dtype);
-    AppCore::Ref<Renderbuffer> depth_renderbuffer(int width, int height, int samples);
+    AppCore::Ref<Renderbuffer> renderbuffer(int width, int height, int components = 4, int samples = 0, const char* dtype = "f1");
+    AppCore::Ref<Renderbuffer> depth_renderbuffer(int width, int height, int samples = 0);
 
     // Sampler
     AppCore::Ref<Sampler> sampler();
 
     // Scope
-    AppCore::Ref<Scope> scope(AppCore::Ref<Framebuffer> framebuffer,
-                              int enable_flags,
-                              const TextureBindings& textures,
-                              const BufferBindings& uniform_buffers,
-                              const BufferBindings& storage_buffers,
-                              const SamplerBindings& samplers);
+    AppCore::Ref<Scope> scope(AppCore::Ref<Framebuffer> framebuffer = nullptr,
+                              int enable_flags = 0,
+                              const TextureBindings& textures = {},
+                              const BufferBindings& uniform_buffers = {},
+                              const BufferBindings& storage_buffers = {},
+                              const SamplerBindings& samplers = {});
+
+    // Texture
+    AppCore::Ref<Texture> texture2d(int width,
+                                    int height,
+                                    int components,
+                                    const void* data = nullptr,
+                                    int samples = 0,
+                                    int alignment = 1,
+                                    const char* dtype = "f1",
+                                    int internal_format_override = 0);
+
+    AppCore::Ref<Texture> depth_texture2d(int width, int height, const void* data = nullptr, int samples = 0, int alignment = 0);
 
     virtual GLFunction load(const AppCore::String& method) = 0;
     virtual void enter() = 0;
@@ -304,24 +328,24 @@ private:
     return m_polygon_offset_units;
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const float* data, size_t size, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(const float* data, size_t reserve, bool dynamic)
   {
-    return buffer((void*)data, sizeof(float) * size, dynamic);
+    return buffer((void*)data, sizeof(float) * reserve, dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const uint32_t* data, size_t size, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(const uint32_t* data, size_t reserve, bool dynamic)
   {
-    return buffer((void*)data, sizeof(uint32_t) * size, dynamic);
+    return buffer((void*)data, sizeof(uint32_t) * reserve, dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const uint16_t* data, size_t size, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(const uint16_t* data, size_t reserve, bool dynamic)
   {
-    return buffer((void*)data, sizeof(uint16_t) * size, dynamic);
+    return buffer((void*)data, sizeof(uint16_t) * reserve, dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const uint8_t* data, size_t size, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(const uint8_t* data, size_t reserve, bool dynamic)
   {
-    return buffer((void*)data, sizeof(uint8_t) * size, dynamic);
+    return buffer((void*)data, sizeof(uint8_t) * reserve, dynamic);
   }
 
   inline AppCore::Ref<Framebuffer> Context::framebuffer(AppCore::Ref<Attachment> depth_attachment)

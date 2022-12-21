@@ -288,17 +288,17 @@ namespace AppGL
     return AppCore::Ref<Context>(ctx);
   }
 
-  AppCore::Ref<Buffer> Context::buffer(void* data, size_t size, bool dynamic)
+  AppCore::Ref<Buffer> Context::buffer(void* data, size_t reserve, bool dynamic)
   {
     APPCORE_ASSERT(!released(), "Context already released");
-    APPCORE_ASSERT(size > 0, "invalid buffer size: {0}", size);
+    APPCORE_ASSERT(reserve >= 0, "invalid buffer size: {0}", reserve);
 
     const GLMethods& gl = m_gl;
 
     auto buffer = new Buffer();
     buffer->m_released = false;
 
-    buffer->m_size = size;
+    buffer->m_size = reserve;
     buffer->m_dynamic = dynamic;
 
     buffer->m_buffer_obj = 0;
@@ -312,7 +312,7 @@ namespace AppGL
     }
 
     gl.BindBuffer(GL_ARRAY_BUFFER, buffer->m_buffer_obj);
-    gl.BufferData(GL_ARRAY_BUFFER, size, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    gl.BufferData(GL_ARRAY_BUFFER, reserve, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 
     buffer->m_context = this;
 
@@ -952,15 +952,15 @@ namespace AppGL
       return nullptr;
     }
 
-    auto dataType = from_dtype(dtype, strlen(dtype));
+    auto data_type = from_dtype(dtype, strlen(dtype));
 
-    if(!dataType)
+    if(!data_type)
     {
       APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
       return nullptr;
     }
 
-    int format = dataType->internal_format[components];
+    int format = data_type->internal_format[components];
 
     auto renderbuffer = new Renderbuffer();
     renderbuffer->m_released = false;
@@ -969,7 +969,7 @@ namespace AppGL
     renderbuffer->m_height = height;
     renderbuffer->m_components = components;
     renderbuffer->m_samples = samples;
-    renderbuffer->m_data_type = dataType;
+    renderbuffer->m_data_type = data_type;
     renderbuffer->m_depth = false;
 
     renderbuffer->m_renderbuffer_obj = 0;
@@ -1076,13 +1076,12 @@ namespace AppGL
   {
 
     APPCORE_ASSERT(!released(), "Context already released");
-    const GLMethods& gl = m_gl;
 
     auto scope = new Scope();
     scope->m_released = false;
     scope->m_context = this;
     scope->m_enable_flags = enable_flags;
-    scope->m_old_enable_flags = Scope::ContextFlags::INVALID;
+    scope->m_old_enable_flags = Context::Flags::INVALID;
     scope->m_framebuffer = framebuffer;
     scope->m_old_framebuffer = m_bound_framebuffer;
     scope->m_textures = AppCore::List<Scope::BindingData>(textures.size());
@@ -1137,6 +1136,8 @@ namespace AppGL
     i = 0;
     for(auto&& b : uniform_buffers)
     {
+      APPCORE_ASSERT(b.buffer, "buffer is null");
+
       scope->m_buffers[i].binding = b.binding;
       scope->m_buffers[i].gl_object = b.buffer->m_buffer_obj;
       scope->m_buffers[i].type = GL_UNIFORM_BUFFER;
@@ -1145,6 +1146,8 @@ namespace AppGL
 
     for(auto&& b : storage_buffers)
     {
+      APPCORE_ASSERT(b.buffer, "buffer is null");
+
       scope->m_buffers[i].binding = b.binding;
       scope->m_buffers[i].gl_object = b.buffer->m_buffer_obj;
       scope->m_buffers[i].type = GL_SHADER_STORAGE_BUFFER;
@@ -1153,4 +1156,187 @@ namespace AppGL
 
     return AppCore::Ref<Scope>(scope);
   }
+
+  AppCore::Ref<Texture> Context::texture2d(int width,
+                                           int height,
+                                           int components,
+                                           const void* data,
+                                           int samples,
+                                           int alignment,
+                                           const char* dtype,
+                                           int internal_format_override)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    if(components < 1 || components > 4)
+    {
+      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      return nullptr;
+    }
+
+    if((samples & (samples - 1)) || samples > m_max_samples)
+    {
+      APPCORE_ERROR("The number of samples is invalid got: {0}", samples);
+      return nullptr;
+    }
+
+    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
+    {
+      APPCORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
+      return nullptr;
+    }
+
+    if(data != nullptr && samples)
+    {
+      APPCORE_ERROR("Multisample textures are not writable directly", alignment);
+      return nullptr;
+    }
+
+    auto data_type = from_dtype(dtype, strlen(dtype));
+
+    if(!data_type)
+    {
+      APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
+      return nullptr;
+    }
+
+    // int expected_size = width * components * data_type->size;
+    // expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    // expected_size = expected_size * height;
+
+    int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+    int pixel_type = data_type->gl_type;
+    int base_format = data_type->base_format[components];
+    int internal_format = internal_format_override ? internal_format_override : data_type->internal_format[components];
+
+    gl.ActiveTexture(GL_TEXTURE0 + m_default_texture_unit);
+
+    auto texture = new Texture2D();
+    texture->m_released = false;
+    texture->m_context = this;
+    texture->m_width = width;
+    texture->m_height = height;
+    texture->m_components = components;
+    texture->m_samples = samples;
+    texture->m_data_type = data_type;
+    texture->m_max_level = 0;
+    texture->m_compare_func = Texture2D::Func::NONE;
+    texture->m_anisotropy = 1.0f;
+    texture->m_depth = false;
+
+    auto filter = data_type->float_type ? GL_LINEAR : GL_NEAREST;
+    texture->m_filter = {filter, filter};
+
+    texture->m_repeat_x = true;
+    texture->m_repeat_y = true;
+    texture->m_texture_obj = 0;
+
+    gl.GenTextures(1, (GLuint*)&texture->m_texture_obj);
+
+    if(!texture->m_texture_obj)
+    {
+      APPCORE_ERROR("cannot create texture");
+      delete texture;
+      return nullptr;
+    }
+
+    gl.BindTexture(texture_target, texture->m_texture_obj);
+
+    if(samples)
+    {
+      gl.TexImage2DMultisample(texture_target, samples, internal_format, width, height, true);
+    }
+    else
+    {
+      gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+      gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+      gl.TexImage2D(texture_target, 0, internal_format, width, height, 0, base_format, pixel_type, data);
+      if(data_type->float_type)
+      {
+        gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      }
+      else
+      {
+        gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      }
+    }
+
+    return AppCore::Ref<Texture2D>(texture);
+  }
+
+  AppCore::Ref<Texture> Context::depth_texture2d(int width, int height, const void* data, int samples, int alignment)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    if((samples & (samples - 1)) || samples > m_max_samples)
+    {
+      APPCORE_ERROR("The number of samples is invalid got: {0}", samples);
+      return nullptr;
+    }
+
+    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
+    {
+      APPCORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
+      return nullptr;
+    }
+
+    if(data != nullptr && samples)
+    {
+      APPCORE_ERROR("Multisample textures are not writable directly", alignment);
+      return nullptr;
+    }
+
+    int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+    int pixel_type = GL_FLOAT;
+
+    auto texture = new Texture2D();
+    texture->m_released = false;
+    texture->m_context = this;
+    texture->m_width = width;
+    texture->m_height = height;
+    texture->m_components = 1;
+    texture->m_samples = samples;
+    texture->m_data_type = from_dtype("f4", 2);
+    texture->m_max_level = 0;
+    texture->m_compare_func = Texture2D::Func::EQUAL;
+    texture->m_anisotropy = 1.0f;
+    texture->m_depth = true;
+    texture->m_filter = {GL_LINEAR, GL_LINEAR};
+    texture->m_repeat_x = false;
+    texture->m_repeat_y = false;
+    texture->m_texture_obj = 0;
+
+    gl.GenTextures(1, (GLuint*)&texture->m_texture_obj);
+
+    if(!texture->m_texture_obj)
+    {
+      APPCORE_ERROR("cannot create texture");
+      delete texture;
+      return nullptr;
+    }
+
+    gl.BindTexture(texture_target, texture->m_texture_obj);
+
+    if(samples)
+    {
+      gl.TexImage2DMultisample(texture_target, samples, GL_DEPTH_COMPONENT24, width, height, true);
+    }
+    else
+    {
+      gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+      gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+      gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, data);
+      gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+      gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+    }
+
+    return AppCore::Ref<Texture2D>(texture);
+  }
+
 } // namespace AppGL

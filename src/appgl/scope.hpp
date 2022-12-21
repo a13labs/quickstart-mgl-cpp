@@ -21,17 +21,6 @@ namespace AppGL
   class Scope
   {
 public:
-    enum ContextFlags
-    {
-      NOTHING = 0,
-      BLEND = 1,
-      DEPTH_TEST = 2,
-      CULL_FACE = 4,
-      RASTERIZER_DISCARD = 8,
-      PROGRAM_POINT_SIZE = 16,
-      INVALID = 0x40000000
-    };
-
     struct BindingData
     {
       int binding;

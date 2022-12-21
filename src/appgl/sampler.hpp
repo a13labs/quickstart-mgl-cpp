@@ -45,8 +45,8 @@ public:
 
 public:
     void release();
-    void use(int index);
-    void clear(int index);
+    void use(int index = 0);
+    void clear(int index = 0);
 
     bool repeat_x();
     void set_repeat_x(bool value);

@@ -22,17 +22,19 @@ namespace AppGL
 {
   void Buffer::release()
   {
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+
     if(m_released)
     {
       return;
     }
     m_released = true;
 
-    const GLMethods& gl = m_context->gl();
     gl.DeleteBuffers(1, (GLuint*)&m_buffer_obj);
   }
 
-  void Buffer::write(void* src, size_t size, size_t offset)
+  void Buffer::write(const void* src, size_t size, size_t offset)
   {
     APPCORE_ASSERT(src, "invalid src")
     APPCORE_ASSERT(size > 0, "invalid data size: {0}", size)
@@ -92,7 +94,7 @@ namespace AppGL
   {
     const GLMethods& gl = m_context->gl();
     gl.BindBuffer(GL_ARRAY_BUFFER, m_buffer_obj);
-    gl.BufferData(GL_ARRAY_BUFFER, m_size, 0, m_dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    gl.BufferData(GL_ARRAY_BUFFER, size, 0, m_dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
   }
 
   void Buffer::bind_to_uniform_block(int binding, size_t size, size_t offset)

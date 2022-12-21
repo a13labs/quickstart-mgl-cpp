@@ -29,11 +29,11 @@ public:
     void write(const uint16_t* src, size_t size, size_t offset);
     void write(const uint8_t* src, size_t size, size_t offset);
     void write(const int* src, size_t size, size_t offset);
-    void read(const float* dst, size_t size, size_t offset);
-    void read(const uint32_t* dst, size_t size, size_t offset);
-    void read(const uint16_t* dst, size_t size, size_t offset);
-    void read(const uint8_t* dst, size_t size, size_t offset);
-    void read(const int* dst, size_t size, size_t offset);
+    void read(float* dst, size_t size, size_t offset);
+    void read(uint32_t* dst, size_t size, size_t offset);
+    void read(uint16_t* dst, size_t size, size_t offset);
+    void read(uint8_t* dst, size_t size, size_t offset);
+    void read(int* dst, size_t size, size_t offset);
 
     size_t size();
     bool dynamic();
@@ -41,18 +41,19 @@ public:
     const Context* context() const;
 
     void clear();
-    void bind_to_uniform_block(int binding, size_t size, size_t offset);
-    void bind_to_storage_buffer(int binding, size_t size, size_t offset);
-    void orphan(size_t size);
+    void bind_to_uniform_block(int binding = 0, size_t size = 0, size_t offset = -1);
+    void bind_to_storage_buffer(int binding = 0, size_t size = 0, size_t offset = -1);
+    void orphan(size_t size = -1);
     void release();
 
 private:
     friend class Context;
     friend class Framebuffer;
+    friend class Texture2D;
 
     Buffer() = default;
 
-    void write(void* src, size_t size, size_t offset);
+    void write(const void* src, size_t size, size_t offset);
     void read(void* dst, size_t size, size_t offset);
 
     Context* m_context;
@@ -87,27 +88,27 @@ private:
     write((void*)src, size * sizeof(int), offset);
   }
 
-  inline void Buffer::read(const float* dst, size_t size, size_t offset)
+  inline void Buffer::read(float* dst, size_t size, size_t offset)
   {
     read((void*)dst, size * sizeof(float), offset);
   }
 
-  inline void Buffer::read(const uint32_t* dst, size_t size, size_t offset)
+  inline void Buffer::read(uint32_t* dst, size_t size, size_t offset)
   {
     read((void*)dst, size * sizeof(uint32_t), offset);
   }
 
-  inline void Buffer::read(const uint16_t* dst, size_t size, size_t offset)
+  inline void Buffer::read(uint16_t* dst, size_t size, size_t offset)
   {
     read((void*)dst, size * sizeof(uint16_t), offset);
   }
 
-  inline void Buffer::read(const uint8_t* dst, size_t size, size_t offset)
+  inline void Buffer::read(uint8_t* dst, size_t size, size_t offset)
   {
     read((void*)dst, size * sizeof(uint8_t), offset);
   }
 
-  inline void Buffer::read(const int* dst, size_t size, size_t offset)
+  inline void Buffer::read(int* dst, size_t size, size_t offset)
   {
     read((void*)dst, size * sizeof(int), offset);
   }

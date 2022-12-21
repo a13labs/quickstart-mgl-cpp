@@ -68,7 +68,7 @@ namespace AppGL
       sampler.sampler->use(sampler.binding);
     }
 
-    if(flags & Scope::ContextFlags::BLEND)
+    if(flags & Context::Flags::BLEND)
     {
       gl.Enable(GL_BLEND);
     }
@@ -77,7 +77,7 @@ namespace AppGL
       gl.Disable(GL_BLEND);
     }
 
-    if(flags & Scope::ContextFlags::DEPTH_TEST)
+    if(flags & Context::Flags::DEPTH_TEST)
     {
       gl.Enable(GL_DEPTH_TEST);
     }
@@ -86,7 +86,7 @@ namespace AppGL
       gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & Scope::ContextFlags::CULL_FACE)
+    if(flags & Context::Flags::CULL_FACE)
     {
       gl.Enable(GL_CULL_FACE);
     }
@@ -95,7 +95,7 @@ namespace AppGL
       gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & Scope::ContextFlags::RASTERIZER_DISCARD)
+    if(flags & Context::Flags::RASTERIZER_DISCARD)
     {
       gl.Enable(GL_RASTERIZER_DISCARD);
     }
@@ -104,7 +104,7 @@ namespace AppGL
       gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Scope::ContextFlags::PROGRAM_POINT_SIZE)
+    if(flags & Context::Flags::PROGRAM_POINT_SIZE)
     {
       gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -125,7 +125,7 @@ namespace AppGL
 
     m_old_framebuffer->use();
 
-    if(flags & Scope::ContextFlags::BLEND)
+    if(flags & Context::Flags::BLEND)
     {
       gl.Enable(GL_BLEND);
     }
@@ -134,7 +134,7 @@ namespace AppGL
       gl.Disable(GL_BLEND);
     }
 
-    if(flags & Scope::ContextFlags::DEPTH_TEST)
+    if(flags & Context::Flags::DEPTH_TEST)
     {
       gl.Enable(GL_DEPTH_TEST);
     }
@@ -143,7 +143,7 @@ namespace AppGL
       gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & Scope::ContextFlags::CULL_FACE)
+    if(flags & Context::Flags::CULL_FACE)
     {
       gl.Enable(GL_CULL_FACE);
     }
@@ -152,7 +152,7 @@ namespace AppGL
       gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & Scope::ContextFlags::RASTERIZER_DISCARD)
+    if(flags & Context::Flags::RASTERIZER_DISCARD)
     {
       gl.Enable(GL_RASTERIZER_DISCARD);
     }
@@ -161,7 +161,7 @@ namespace AppGL
       gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Scope::ContextFlags::PROGRAM_POINT_SIZE)
+    if(flags & Context::Flags::PROGRAM_POINT_SIZE)
     {
       gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
