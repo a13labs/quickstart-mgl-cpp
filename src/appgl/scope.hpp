@@ -27,16 +27,14 @@ public:
 
 private:
     friend class Context;
-    Scope();
+    Scope() = default;
 
     Context* m_context;
     Framebuffer* m_framebuffer;
     Framebuffer* m_old_framebuffer;
-    AppCore::List<AppCore::Ref<Sampler>> m_samplers;
-    int* m_textures;
-    int* m_buffers;
-    int m_num_textures;
-    int m_num_buffers;
+    AppCore::VectorRef<Sampler> m_samplers;
+    AppCore::VectorRef<Texture2D> m_textures;
+    AppCore::VectorRef<Buffer> m_buffers;
     int m_enable_flags;
     int m_old_enable_flags;
     bool m_released;

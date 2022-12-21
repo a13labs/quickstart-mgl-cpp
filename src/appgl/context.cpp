@@ -27,7 +27,7 @@
 #include "sampler.hpp"
 #include "shaderssources.hpp"
 #include "subroutine.hpp"
-#include "texture.hpp"
+#include "texture2d.hpp"
 #include "uniform.hpp"
 #include "uniformblock.hpp"
 #include "varying.hpp"

@@ -14,16 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "texture.hpp"
+#include "texture2d.hpp"
 #include "appcore/log.hpp"
 #include "context.hpp"
 #include "framebuffer.hpp"
 
 namespace AppGL
 {
-  void Texture::release() { }
+  void Texture2D::release() { }
 
-  void Texture::color_attachment(Framebuffer* fb, int index)
+  void Texture2D::color_attachment(Framebuffer* fb, int index)
   {
     APPCORE_ASSERT(!m_released, "Texture already released");
     APPCORE_ASSERT(fb != nullptr, "missing color attachments");
@@ -41,7 +41,7 @@ namespace AppGL
     fb->m_color_mask[index * 4 + 3] = m_components >= 4;
   }
 
-  void Texture::depth_attachment()
+  void Texture2D::depth_attachment()
   {
     APPCORE_ASSERT(!m_released, "Texture already released");
     APPCORE_ASSERT(!m_context, "No context");
@@ -51,32 +51,37 @@ namespace AppGL
         GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D, m_texture_obj, 0);
   }
 
-  Attachment::Type Texture::attachment_type()
+  Attachment::Type Texture2D::attachment_type()
   {
     return Attachment::Texture;
   }
 
-  int Texture::width()
+  Texture::Type Texture2D::texture_type()
+  {
+    return Texture::Texture2D;
+  }
+
+  int Texture2D::width()
   {
     return m_width;
   }
 
-  int Texture::height()
+  int Texture2D::height()
   {
     return m_height;
   }
 
-  int Texture::samples()
+  int Texture2D::samples()
   {
     return m_samples;
   }
 
-  bool Texture::depth()
+  bool Texture2D::depth()
   {
     return m_depth;
   }
 
-  const Context* Texture::context() const
+  const Context* Texture2D::context() const
   {
     return m_context;
   }

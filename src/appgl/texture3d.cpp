@@ -20,4 +20,10 @@
 namespace AppGL
 {
   void Texture3D::release() { }
+
+  Texture::Type Texture3D::texture_type()
+  {
+    return Texture::Texture3D;
+  }
+
 } // namespace AppGL

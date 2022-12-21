@@ -85,7 +85,7 @@ namespace AppGL
   class Sampler;
   class Scope;
   class Subroutine;
-  class Texture;
+  class Texture2D;
   class TextureArray;
   class Texture3D;
   class TextureCube;

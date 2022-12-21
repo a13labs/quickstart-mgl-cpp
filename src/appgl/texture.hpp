@@ -15,46 +15,20 @@
 */
 #pragma once
 #include "appgl.hpp"
-#include "attachment.hpp"
 
 namespace AppGL
 {
-  class Texture : public Attachment
+  class Texture
   {
 public:
-    ~Texture() { release(); }
+    enum Type
+    {
+      Texture2D,
+      Texture3D,
+      TextureCube,
+    };
 
-    void release();
-    virtual Attachment::Type attachment_type() override;
-    virtual int width() override;
-    virtual int height() override;
-    virtual int samples() override;
-    virtual bool depth() override;
-
-private:
-    friend class Context;
-    Texture();
-
-    virtual void color_attachment(Framebuffer* fb, int index) override;
-    virtual void depth_attachment() override;
-    virtual const Context* context() const override;
-
-    Context* m_context;
-    DataType* m_data_type;
-    int m_texture_obj;
-    int m_width;
-    int m_height;
-    int m_components;
-    int m_samples;
-    int m_min_filter;
-    int m_mag_filter;
-    int m_max_level;
-    int m_compare_func;
-    float m_anisotropy;
-    bool m_depth;
-    bool m_repeat_x;
-    bool m_repeat_y;
-    bool m_external;
-    bool m_released;
+    virtual ~Texture() = default;
+    virtual Texture::Type texture_type() = 0;
   };
 } // namespace AppGL

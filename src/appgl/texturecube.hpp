@@ -15,13 +15,15 @@
 */
 #pragma once
 #include "appgl.hpp"
+#include "texture.hpp"
 
 namespace AppGL
 {
-  class TextureCube
+  class TextureCube : public Texture
   {
 public:
     ~TextureCube() { release(); }
+    virtual Texture::Type texture_type() override;
 
     void release();
 

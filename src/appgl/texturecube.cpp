@@ -20,4 +20,10 @@
 namespace AppGL
 {
   void TextureCube::release() { }
+
+  Texture::Type TextureCube::texture_type()
+  {
+    return Texture::TextureCube;
+  }
+
 } // namespace AppGL
