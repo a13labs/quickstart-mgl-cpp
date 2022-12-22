@@ -76,6 +76,11 @@ private:
     bool m_released;
   };
 
+  inline bool Texture3D::released()
+  {
+    return m_released;
+  }
+
   inline int Texture3D::width()
   {
     return m_width;
@@ -89,11 +94,6 @@ private:
   inline int Texture3D::depth()
   {
     return m_depth;
-  }
-
-  inline bool Texture3D::released()
-  {
-    return m_released;
   }
 
   inline bool Texture3D::repeat_x()

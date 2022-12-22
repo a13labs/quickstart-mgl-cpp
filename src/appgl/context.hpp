@@ -115,25 +115,35 @@ public:
                               const SamplerBindings& samplers = {});
 
     // Texture
-    AppCore::Ref<Texture> texture2d(int width,
-                                    int height,
-                                    int components,
-                                    const void* data = nullptr,
-                                    int samples = 0,
-                                    int alignment = 1,
-                                    const char* dtype = "f1",
-                                    int internal_format_override = 0);
+    AppCore::Ref<Texture2D> texture2d(int width,
+                                      int height,
+                                      int components,
+                                      const void* data = nullptr,
+                                      int samples = 0,
+                                      int alignment = 1,
+                                      const char* dtype = "f1",
+                                      int internal_format_override = 0);
 
-    AppCore::Ref<Texture> depth_texture2d(int width, int height, const void* data = nullptr, int samples = 0, int alignment = 0);
+    AppCore::Ref<Texture2D>
+    depth_texture2d(int width, int height, const void* data = nullptr, int samples = 0, int alignment = 0);
 
     // Texture3D
-    AppCore::Ref<Texture> texture3d(int width,
-                                    int height,
-                                    int depth,
-                                    int components,
-                                    const void* data = nullptr,
-                                    int alignment = 1,
-                                    const char* dtype = "f1");
+    AppCore::Ref<Texture3D> texture3d(int width,
+                                      int height,
+                                      int depth,
+                                      int components,
+                                      const void* data = nullptr,
+                                      int alignment = 1,
+                                      const char* dtype = "f1");
+
+    // TextureArray
+    AppCore::Ref<TextureArray> texture_array(int width,
+                                             int height,
+                                             int layers,
+                                             int components,
+                                             const void* data = nullptr,
+                                             int alignment = 1,
+                                             const char* dtype = "f1");
 
     virtual GLFunction load(const AppCore::String& method) = 0;
     virtual void enter() = 0;

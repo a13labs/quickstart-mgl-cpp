@@ -54,8 +54,8 @@ public:
     bool repeat_y();
     void set_repeat_y(bool value);
 
-    const Texture2D::Filter& filter() const;
-    void set_filter(const Texture2D::Filter& value);
+    const Texture::Filter& filter() const;
+    void set_filter(const Texture::Filter& value);
 
     AppCore::String swizzle();
     void set_swizzle(const AppCore::String& value);

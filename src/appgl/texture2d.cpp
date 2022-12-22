@@ -135,6 +135,7 @@ namespace AppGL
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D, m_texture_obj);
+
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.GetTexImage(GL_TEXTURE_2D, level, base_format, pixel_type, ptr);
@@ -176,6 +177,7 @@ namespace AppGL
     gl.BindBuffer(GL_PIXEL_PACK_BUFFER, dst->m_buffer_obj);
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D, m_texture_obj);
+
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.GetTexImage(GL_TEXTURE_2D, level, base_format, pixel_type, (void*)write_offset);
@@ -216,6 +218,7 @@ namespace AppGL
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D, m_texture_obj);
+
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage2D(GL_TEXTURE_2D, level, x, y, width, height, format, pixel_type, src);
@@ -258,6 +261,7 @@ namespace AppGL
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D, m_texture_obj);
+
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage2D(GL_TEXTURE_2D, level, x, y, width, height, format, pixel_type, src);
@@ -298,6 +302,7 @@ namespace AppGL
     gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, src->m_buffer_obj);
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D, m_texture_obj);
+
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage2D(GL_TEXTURE_2D, level, x, y, width, height, format, pixel_type, 0);
@@ -342,6 +347,7 @@ namespace AppGL
     gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, src->m_buffer_obj);
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D, m_texture_obj);
+
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage2D(GL_TEXTURE_2D, level, x, y, width, height, format, pixel_type, 0);
@@ -608,6 +614,7 @@ namespace AppGL
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(texture_target, m_texture_obj);
+
     gl.TexParameterf(texture_target, GL_TEXTURE_MAX_ANISOTROPY, m_anisotropy);
   }
 

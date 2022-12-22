@@ -15,6 +15,7 @@
 */
 #pragma once
 #include "appgl.hpp"
+#include "texture.hpp"
 
 namespace AppGL
 {
@@ -24,10 +25,40 @@ public:
     ~TextureArray() { release(); }
 
     void release();
+    bool released();
+
+    int width();
+    int height();
+    int layers();
+
+    bool repeat_x();
+    void set_repeat_x(bool value);
+
+    bool repeat_y();
+    void set_repeat_y(bool value);
+
+    const Texture::Filter& filter() const;
+    void set_filter(const Texture::Filter& value);
+
+    AppCore::String swizzle();
+    void set_swizzle(const AppCore::String& value);
+
+    float anisotropy();
+    void set_anisotropy(float value);
+
+    void read(void* dst, int alignment, size_t write_offset);
+    void read(AppCore::Ref<Buffer>& dst, int alignment, size_t write_offset);
+    void write(const void* src, const Viewport3D& viewport, int alignment);
+    void write(const void* src, int alignment);
+    void write(const AppCore::Ref<Buffer>& src, const Viewport3D& viewport, int alignment);
+    void write(const AppCore::Ref<Buffer>& src, int alignment);
+    void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
+    void use(int index = 0);
+    void build_mipmaps(int base = 0, int max_level = 1000);
 
 private:
     friend class Context;
-    TextureArray();
+    TextureArray() = default;
 
     Context* m_context;
     DataType* m_data_type;
@@ -36,12 +67,52 @@ private:
     int m_height;
     int m_layers;
     int m_components;
-    int m_min_filter;
-    int m_mag_filter;
+    Texture::Filter m_filter;
     int m_max_level;
     bool m_repeat_x;
     bool m_repeat_y;
     float m_anisotropy;
     bool m_released;
   };
+
+  inline bool TextureArray::released()
+  {
+    return m_released;
+  }
+
+  inline int TextureArray::width()
+  {
+    return m_width;
+  }
+
+  inline int TextureArray::height()
+  {
+    return m_height;
+  }
+
+  inline int TextureArray::layers()
+  {
+    return m_layers;
+  }
+
+  inline bool TextureArray::repeat_x()
+  {
+    return m_repeat_x;
+  }
+
+  inline bool TextureArray::repeat_y()
+  {
+    return m_repeat_y;
+  }
+
+  inline const Texture::Filter& TextureArray::filter() const
+  {
+    return m_filter;
+  }
+
+  inline float TextureArray::anisotropy()
+  {
+    return m_anisotropy;
+  }
+
 } // namespace AppGL

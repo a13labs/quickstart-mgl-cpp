@@ -22,7 +22,20 @@
 
 namespace AppGL
 {
-  void Texture3D::release() { }
+  void Texture3D::release()
+  {
+    APPCORE_ASSERT(!m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+
+    if(m_released)
+    {
+      return;
+    }
+
+    m_released = true;
+
+    gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
+  }
 
   Texture::Type Texture3D::texture_type()
   {
@@ -47,6 +60,7 @@ namespace AppGL
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
+
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.GetTexImage(GL_TEXTURE_3D, 0, base_format, pixel_type, ptr);
@@ -69,6 +83,7 @@ namespace AppGL
     gl.BindBuffer(GL_PIXEL_PACK_BUFFER, dst->m_buffer_obj);
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
+
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.GetTexImage(GL_TEXTURE_3D, 0, base_format, pixel_type, (void*)write_offset);
@@ -157,7 +172,6 @@ namespace AppGL
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
 
-    gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage3D(GL_TEXTURE_3D, 0, x, y, z, width, height, depth, base_format, pixel_type, 0);
@@ -188,7 +202,6 @@ namespace AppGL
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
 
-    gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage3D(GL_TEXTURE_3D, 0, x, y, z, width, height, depth, base_format, pixel_type, 0);
@@ -314,7 +327,7 @@ namespace AppGL
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
   }
 
-  void Texture3D::set_filter(const Texture3D::Filter& value)
+  void Texture3D::set_filter(const Texture::Filter& value)
   {
     APPCORE_ASSERT(!m_released, "Texture3D already released");
     APPCORE_ASSERT(!m_context, "No context");
@@ -324,6 +337,7 @@ namespace AppGL
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
+
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, m_filter.min_filter);
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }

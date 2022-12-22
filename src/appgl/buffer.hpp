@@ -51,6 +51,7 @@ private:
     friend class Framebuffer;
     friend class Texture2D;
     friend class Texture3D;
+    friend class TextureArray;
 
     Buffer() = default;
 
