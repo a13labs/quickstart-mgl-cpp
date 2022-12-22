@@ -21,50 +21,6 @@
 #include "datatype.hpp"
 #include "framebuffer.hpp"
 
-inline int swizzle_from_char(char c)
-{
-  switch(c)
-  {
-    case 'R':
-    case 'r': return GL_RED;
-
-    case 'G':
-    case 'g': return GL_GREEN;
-
-    case 'B':
-    case 'b': return GL_BLUE;
-
-    case 'A':
-    case 'a': return GL_ALPHA;
-
-    case '0': return GL_ZERO;
-
-    case '1': return GL_ONE;
-  }
-
-  return 0;
-}
-
-inline char char_from_swizzle(int c)
-{
-  switch(c)
-  {
-    case GL_RED: return 'R';
-
-    case GL_GREEN: return 'G';
-
-    case GL_BLUE: return 'B';
-
-    case GL_ALPHA: return 'A';
-
-    case GL_ZERO: return '0';
-
-    case GL_ONE: return '1';
-  }
-
-  return '?';
-}
-
 namespace AppGL
 {
   void Texture2D::release()
@@ -84,7 +40,7 @@ namespace AppGL
 
   void Texture2D::color_attachment(Framebuffer* fb, int index)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(fb != nullptr, "missing color attachments");
     APPCORE_ASSERT(index < fb->m_draw_buffers_len, "missing color attachments");
     APPCORE_ASSERT(fb->m_context == m_context, "Attachment and framebuffer belong to different contexts");
@@ -99,7 +55,7 @@ namespace AppGL
 
   void Texture2D::depth_attachment()
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -144,7 +100,7 @@ namespace AppGL
 
   void Texture2D::read(void* dst, int level, int alignment, size_t write_offset)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -171,10 +127,6 @@ namespace AppGL
 
     width = width > 1 ? width : 1;
     height = height > 1 ? height : 1;
-
-    int expected_size = width * m_components * m_data_type->size;
-    expected_size = (expected_size + alignment - 1) / alignment * alignment;
-    expected_size = expected_size * height;
 
     int pixel_type = m_data_type->gl_type;
     int base_format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];
@@ -190,7 +142,7 @@ namespace AppGL
 
   void Texture2D::read(AppCore::Ref<Buffer>& dst, int level, int alignment, size_t write_offset)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -218,10 +170,6 @@ namespace AppGL
     width = width > 1 ? width : 1;
     height = height > 1 ? height : 1;
 
-    int expected_size = width * m_components * m_data_type->size;
-    expected_size = (expected_size + alignment - 1) / alignment * alignment;
-    expected_size = expected_size * height;
-
     int pixel_type = m_data_type->gl_type;
     int base_format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];
 
@@ -236,7 +184,7 @@ namespace AppGL
 
   void Texture2D::write(const void* src, const Rect& viewport, int level, int alignment)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -275,7 +223,7 @@ namespace AppGL
 
   void Texture2D::write(const void* src, int level, int alignment)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -317,7 +265,7 @@ namespace AppGL
 
   void Texture2D::write(const AppCore::Ref<Buffer>& src, const Rect& viewport, int level, int alignment)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -358,7 +306,7 @@ namespace AppGL
 
   void Texture2D::write(const AppCore::Ref<Buffer>& src, int level, int alignment)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -402,7 +350,7 @@ namespace AppGL
 
   void Texture2D::bind_to_image(int unit, bool read, bool write, int level, int format)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -424,7 +372,7 @@ namespace AppGL
 
   void Texture2D::use(int index)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -436,7 +384,7 @@ namespace AppGL
 
   void Texture2D::build_mipmaps(int base, int max_level)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -465,7 +413,7 @@ namespace AppGL
 
   void Texture2D::set_repeat_x(bool value)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -487,7 +435,7 @@ namespace AppGL
 
   void Texture2D::set_repeat_y(bool value)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -509,7 +457,7 @@ namespace AppGL
 
   void Texture2D::set_filter(const Texture2D::Filter& value)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -525,7 +473,7 @@ namespace AppGL
 
   AppCore::String Texture2D::swizzle()
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -563,7 +511,7 @@ namespace AppGL
 
   void Texture2D::set_swizzle(const AppCore::String& value)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
     const char* swizzle = value.c_str();
@@ -621,7 +569,7 @@ namespace AppGL
 
   void Texture2D::set_compare_func(Texture2D::Func value)
   {
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 
@@ -651,7 +599,7 @@ namespace AppGL
   void Texture2D::set_anisotropy(float value)
   {
 
-    APPCORE_ASSERT(!m_released, "Texture already released");
+    APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
     const GLMethods& gl = m_context->gl();
 

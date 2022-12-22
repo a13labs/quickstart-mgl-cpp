@@ -50,6 +50,7 @@ private:
     friend class Context;
     friend class Framebuffer;
     friend class Texture2D;
+    friend class Texture3D;
 
     Buffer() = default;
 

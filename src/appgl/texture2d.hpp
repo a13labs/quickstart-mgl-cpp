@@ -36,23 +36,17 @@ public:
       ALWAYS = 0x0207,
     };
 
-    struct Filter
-    {
-      int min_filter;
-      int mag_filter;
-    };
-
     ~Texture2D() { release(); }
 
     void release();
+    bool released();
+
     virtual Attachment::Type attachment_type() override;
     virtual Texture::Type texture_type() override;
     virtual int width() override;
     virtual int height() override;
     virtual int samples() override;
     virtual bool depth() override;
-
-    bool released();
 
     bool repeat_x();
     void set_repeat_x(bool value);
@@ -98,7 +92,7 @@ private:
     bool m_depth;
     int m_samples;
     int m_components;
-    Texture2D::Filter m_filter;
+    Texture::Filter m_filter;
     int m_max_level;
     Texture2D::Func m_compare_func;
     float m_anisotropy;
@@ -106,6 +100,11 @@ private:
     bool m_repeat_y;
     bool m_released;
   };
+
+  inline bool Texture2D::released()
+  {
+    return m_released;
+  }
 
   inline bool Texture2D::repeat_x()
   {
@@ -117,7 +116,7 @@ private:
     return m_repeat_y;
   }
 
-  inline const Texture2D::Filter& Texture2D::filter() const
+  inline const Texture::Filter& Texture2D::filter() const
   {
     return m_filter;
   }
@@ -130,11 +129,6 @@ private:
   inline float Texture2D::anisotropy()
   {
     return m_anisotropy;
-  }
-
-  inline bool Texture2D::released()
-  {
-    return m_released;
   }
 
 } // namespace AppGL

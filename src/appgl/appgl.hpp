@@ -60,6 +60,43 @@ namespace AppGL
     { }
   };
 
+  struct Viewport3D
+  {
+    int x;
+    int y;
+    int z;
+    int width;
+    int height;
+    int depth;
+
+    Viewport3D(int x, int y, int z, int w, int h, int d)
+        : x(x)
+        , y(y)
+        , z(z)
+        , width(w)
+        , height(h)
+        , depth(d)
+    { }
+
+    Viewport3D(int w, int h, int d)
+        : x(0)
+        , y(0)
+        , z(0)
+        , width(w)
+        , height(h)
+        , depth(d)
+    { }
+
+    Viewport3D()
+        : x(0)
+        , y(0)
+        , z(0)
+        , width(0)
+        , height(0)
+        , depth(0)
+    { }
+  };
+
   struct Size
   {
     int W;

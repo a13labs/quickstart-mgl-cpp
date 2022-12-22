@@ -126,6 +126,15 @@ public:
 
     AppCore::Ref<Texture> depth_texture2d(int width, int height, const void* data = nullptr, int samples = 0, int alignment = 0);
 
+    // Texture3D
+    AppCore::Ref<Texture> texture3d(int width,
+                                    int height,
+                                    int depth,
+                                    int components,
+                                    const void* data = nullptr,
+                                    int alignment = 1,
+                                    const char* dtype = "f1");
+
     virtual GLFunction load(const AppCore::String& method) = 0;
     virtual void enter() = 0;
     virtual void exit() = 0;

@@ -1201,10 +1201,6 @@ namespace AppGL
       return nullptr;
     }
 
-    // int expected_size = width * components * data_type->size;
-    // expected_size = (expected_size + alignment - 1) / alignment * alignment;
-    // expected_size = expected_size * height;
-
     int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
     int pixel_type = data_type->gl_type;
     int base_format = data_type->base_format[components];
@@ -1337,6 +1333,87 @@ namespace AppGL
     }
 
     return AppCore::Ref<Texture2D>(texture);
+  }
+
+  AppCore::Ref<Texture>
+  Context::texture3d(int width, int height, int depth, int components, const void* data, int alignment, const char* dtype)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    if(components < 1 || components > 4)
+    {
+      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      return nullptr;
+    }
+
+    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
+    {
+      APPCORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
+      return nullptr;
+    }
+
+    auto data_type = from_dtype(dtype, strlen(dtype));
+
+    if(!data_type)
+    {
+      APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
+      return nullptr;
+    }
+
+    int pixel_type = data_type->gl_type;
+    int base_format = data_type->base_format[components];
+    int internal_format = data_type->internal_format[components];
+
+    gl.ActiveTexture(GL_TEXTURE0 + m_default_texture_unit);
+
+    auto texture = new Texture3D();
+    texture->m_released = false;
+    texture->m_context = this;
+    texture->m_width = width;
+    texture->m_height = height;
+    texture->m_depth = depth;
+    texture->m_components = components;
+    texture->m_data_type = data_type;
+    texture->m_max_level = 0;
+    texture->m_depth = false;
+
+    auto filter = data_type->float_type ? GL_LINEAR : GL_NEAREST;
+    texture->m_filter = {filter, filter};
+
+    texture->m_repeat_x = true;
+    texture->m_repeat_y = true;
+    texture->m_repeat_z = true;
+    texture->m_texture_obj = 0;
+
+    gl.GenTextures(1, (GLuint*)&texture->m_texture_obj);
+
+    if(!texture->m_texture_obj)
+    {
+      APPCORE_ERROR("cannot create texture");
+      delete texture;
+      return nullptr;
+    }
+
+    gl.ActiveTexture(GL_TEXTURE0 + m_default_texture_unit);
+    gl.BindTexture(GL_TEXTURE_3D, texture->m_texture_obj);
+
+    gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+    gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+    gl.TexImage3D(GL_TEXTURE_3D, 0, internal_format, width, height, depth, 0, base_format, pixel_type, data);
+
+    if(data_type->float_type)
+    {
+      gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+    else
+    {
+      gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
+
+    return AppCore::Ref<Texture3D>(texture);
   }
 
 } // namespace AppGL

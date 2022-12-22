@@ -15,6 +15,7 @@
 */
 #pragma once
 #include "appgl.hpp"
+#include "opengl.hpp"
 
 namespace AppGL
 {
@@ -28,7 +29,48 @@ public:
       TEXTURE_CUBE,
     };
 
+    struct Filter
+    {
+      int min_filter;
+      int mag_filter;
+    };
+
     virtual ~Texture() = default;
     virtual Texture::Type texture_type() = 0;
   };
+
+  inline int swizzle_from_char(char c)
+  {
+    switch(c)
+    {
+      case 'R':
+      case 'r': return 0x1903;
+      case 'G':
+      case 'g': return 0x1904;
+      case 'B':
+      case 'b': return 0x1905;
+      case 'A':
+      case 'a': return 0x1906;
+      case '0': return 0;
+      case '1': return 1;
+    }
+
+    return 0;
+  }
+
+  inline char char_from_swizzle(int c)
+  {
+    switch(c)
+    {
+      case 0x1903: return 'R';
+      case 0x1904: return 'G';
+      case 0x1905: return 'B';
+      case 0x1906: return 'A';
+      case 0: return '0';
+      case 1: return '1';
+    }
+
+    return '?';
+  }
+
 } // namespace AppGL
