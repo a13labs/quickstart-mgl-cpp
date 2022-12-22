@@ -182,7 +182,7 @@ namespace AppGL
     gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
   }
 
-  void Texture2D::write(const void* src, const Rect& viewport, int level, int alignment)
+  void Texture2D::write(const void* src, const Viewport2D& viewport, int level, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
@@ -206,10 +206,10 @@ namespace AppGL
       return;
     }
 
-    int x = viewport.X;
-    int y = viewport.Y;
-    int width = viewport.W;
-    int height = viewport.H;
+    int x = viewport.x;
+    int y = viewport.y;
+    int width = viewport.width;
+    int height = viewport.height;
 
     int pixel_type = m_data_type->gl_type;
     int format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];
@@ -263,7 +263,7 @@ namespace AppGL
     gl.TexSubImage2D(GL_TEXTURE_2D, level, x, y, width, height, format, pixel_type, src);
   }
 
-  void Texture2D::write(const AppCore::Ref<Buffer>& src, const Rect& viewport, int level, int alignment)
+  void Texture2D::write(const AppCore::Ref<Buffer>& src, const Viewport2D& viewport, int level, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
@@ -287,10 +287,10 @@ namespace AppGL
       return;
     }
 
-    int x = viewport.X;
-    int y = viewport.Y;
-    int width = viewport.W;
-    int height = viewport.H;
+    int x = viewport.x;
+    int y = viewport.y;
+    int width = viewport.width;
+    int height = viewport.height;
 
     int pixel_type = m_data_type->gl_type;
     int format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];

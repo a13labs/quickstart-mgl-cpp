@@ -26,11 +26,11 @@ public:
 
     const Context* context() const;
 
-    const Rect& viewport();
-    void set_viewport(const Rect& r);
+    const Viewport2D& viewport();
+    void set_viewport(const Viewport2D& r);
 
-    const Rect& scissor();
-    void set_scissor(const Rect& r);
+    const Viewport2D& scissor();
+    void set_scissor(const Viewport2D& r);
 
     void enable_scissor();
     void disable_scissor();
@@ -50,19 +50,24 @@ public:
     void clear(const glm::vec4& color, float depth);
     void clear(float r, float g, float b, float a, float depth);
     void clear(const glm::vec4& color, float depth, int w, int h);
-    void clear(const glm::vec4& color, float depth, const Rect& rect);
+    void clear(const glm::vec4& color, float depth, const Viewport2D& rect);
     void clear(float r, float g, float b, float a, float depth, int w, int h);
-    void clear(float r, float g, float b, float a, float depth, const Rect& rect);
+    void clear(float r, float g, float b, float a, float depth, const Viewport2D& rect);
 
     void read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
     void read(void* dst);
-    void
-    read(void* dst, const Rect& viewport, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
+    void read(void* dst,
+              const Viewport2D& viewport,
+              int components,
+              int attachment,
+              int alignment,
+              const char* dtype,
+              size_t write_offset);
 
     void read(AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
     void read(AppCore::Ref<Buffer> dst);
     void read(AppCore::Ref<Buffer> dst,
-              const Rect& viewport,
+              const Viewport2D& viewport,
               int components,
               int attachment,
               int alignment,
@@ -82,9 +87,9 @@ private:
     Context* m_context;
     int m_framebuffer_obj;
 
-    Rect m_viewport;
+    Viewport2D m_viewport;
     bool m_scissor_enabled;
-    Rect m_scissor;
+    Viewport2D m_scissor;
     ColorMasks m_color_masks;
 
     int m_draw_buffers_len;
@@ -105,20 +110,20 @@ private:
     return m_context;
   }
 
-  inline const Rect& Framebuffer::viewport()
+  inline const Viewport2D& Framebuffer::viewport()
   {
     return m_viewport;
   }
-  inline void Framebuffer::set_viewport(const Rect& r)
+  inline void Framebuffer::set_viewport(const Viewport2D& r)
   {
     m_viewport = r;
   }
 
-  inline const Rect& Framebuffer::scissor()
+  inline const Viewport2D& Framebuffer::scissor()
   {
     return m_scissor;
   }
-  inline void Framebuffer::set_scissor(const Rect& r)
+  inline void Framebuffer::set_scissor(const Viewport2D& r)
   {
     m_scissor = r;
   }
@@ -152,7 +157,7 @@ private:
     clear(color.r, color.g, color.b, color.a, depth, {0, 0, w, h});
   }
 
-  inline void Framebuffer::clear(const glm::vec4& color, float depth, const Rect& rect)
+  inline void Framebuffer::clear(const glm::vec4& color, float depth, const Viewport2D& rect)
   {
     clear(color.r, color.g, color.b, color.a, depth, rect);
   }

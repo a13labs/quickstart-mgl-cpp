@@ -31,32 +31,32 @@ namespace AppGL
 
   struct DataType;
 
-  struct Rect
+  struct Viewport2D
   {
-    int X;
-    int Y;
-    int W;
-    int H;
+    int x;
+    int y;
+    int width;
+    int height;
 
-    Rect(int x, int y, int w, int h)
-        : X(x)
-        , Y(y)
-        , W(w)
-        , H(h)
+    Viewport2D(int x, int y, int w, int h)
+        : x(x)
+        , y(y)
+        , width(w)
+        , height(h)
     { }
 
-    Rect(int w, int h)
-        : X(0)
-        , Y(0)
-        , W(w)
-        , H(h)
+    Viewport2D(int w, int h)
+        : x(0)
+        , y(0)
+        , width(w)
+        , height(h)
     { }
 
-    Rect()
-        : X(0)
-        , Y(0)
-        , W(0)
-        , H(0)
+    Viewport2D()
+        : x(0)
+        , y(0)
+        , width(0)
+        , height(0)
     { }
   };
 
@@ -99,17 +99,17 @@ namespace AppGL
 
   struct Size
   {
-    int W;
-    int H;
+    int width;
+    int height;
 
     Size(int w, int h)
-        : W(w)
-        , H(h)
+        : width(w)
+        , height(h)
     { }
 
     Size()
-        : W(0)
-        , H(0)
+        : width(0)
+        , height(0)
     { }
   };
 

@@ -254,13 +254,13 @@ namespace AppGL
       int scissor_box[4] = {};
       gl.GetIntegerv(GL_SCISSOR_BOX, scissor_box);
 
-      Rect r = {scissor_box[0], scissor_box[1], scissor_box[2], scissor_box[3]};
+      Viewport2D r = {scissor_box[0], scissor_box[1], scissor_box[2], scissor_box[3]};
       fb->m_scissor_enabled = false;
       fb->m_viewport = r;
       fb->m_scissor = r;
 
-      fb->m_width = r.W;
-      fb->m_height = r.H;
+      fb->m_width = r.width;
+      fb->m_height = r.height;
       fb->m_dynamic = true;
 
       ctx->m_default_framebuffer = AppCore::Ref<Framebuffer>(fb);

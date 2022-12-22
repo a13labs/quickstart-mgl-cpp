@@ -68,9 +68,9 @@ public:
 
     void read(void* dst, int level, int alignment, size_t write_offset);
     void read(AppCore::Ref<Buffer>& dst, int level, int alignment, size_t write_offset);
-    void write(const void* src, const Rect& viewport, int level, int alignment);
+    void write(const void* src, const Viewport2D& viewport, int level, int alignment);
     void write(const void* src, int level, int alignment);
-    void write(const AppCore::Ref<Buffer>& src, const Rect& viewport, int level, int alignment);
+    void write(const AppCore::Ref<Buffer>& src, const Viewport2D& viewport, int level, int alignment);
     void write(const AppCore::Ref<Buffer>& src, int level, int alignment);
     void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
     void use(int index = 0);
