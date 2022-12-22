@@ -24,7 +24,7 @@ public:
     ~ComputeShader() { release(); }
 
     void release();
-    void run(int x, int y, int z);
+    bool released();
 
     const AppCore::Ref<Uniform> uniform(const AppCore::String& name) const;
     const AppCore::Ref<UniformBlock> uniform_block(const AppCore::String& name) const;
@@ -34,6 +34,8 @@ public:
 
     size_t num_uniforms();
     size_t num_uniform_blocks();
+
+    void run(int x, int y, int z);
 
     const AppCore::Ref<Uniform> operator[](const AppCore::String& name) const;
 
@@ -72,6 +74,11 @@ private:
   inline const AppCore::Ref<Uniform> ComputeShader::operator[](const AppCore::String& name) const
   {
     return uniform(name);
+  }
+
+  inline bool ComputeShader::released()
+  {
+    return m_released;
   }
 
 } // namespace AppGL

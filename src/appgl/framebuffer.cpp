@@ -25,6 +25,7 @@ namespace AppGL
   void Framebuffer::release()
   {
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_released)
@@ -45,6 +46,7 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
@@ -102,6 +104,7 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
@@ -133,7 +136,7 @@ namespace AppGL
     m_context->m_bound_framebuffer = MAKE_THIS_REF();
   }
 
-  void Framebuffer::read(void* dst,
+  bool Framebuffer::read(void* dst,
                          const Viewport2D& viewport,
                          int components,
                          int attachment,
@@ -143,11 +146,11 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
-
-    auto data_type = from_dtype(dtype, strlen(dtype));
+    DataType* data_type = from_dtype(dtype, strlen(dtype));
     APPCORE_ASSERT(data_type != nullptr, "invalid dtype");
 
     bool read_depth = false;
@@ -157,10 +160,6 @@ namespace AppGL
       components = 1;
       read_depth = true;
     }
-
-    int expected_size = viewport.width * components * data_type->size;
-    expected_size = (expected_size + alignment - 1) / alignment * alignment;
-    expected_size = expected_size * viewport.height;
 
     int pixel_type = data_type->gl_type;
     int base_format = read_depth ? GL_DEPTH_COMPONENT : data_type->base_format[components];
@@ -173,9 +172,11 @@ namespace AppGL
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.ReadPixels(viewport.x, viewport.y, viewport.width, viewport.height, base_format, pixel_type, ptr);
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
+
+    return true;
   }
 
-  void Framebuffer::read(AppCore::Ref<Buffer> dst,
+  bool Framebuffer::read(AppCore::Ref<Buffer> dst,
                          const Viewport2D& viewport,
                          int components,
                          int attachment,
@@ -185,10 +186,10 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
-
     DataType* data_type = from_dtype(dtype, strlen(dtype));
     APPCORE_ASSERT(data_type != nullptr, "invalid dtype");
 
@@ -199,10 +200,6 @@ namespace AppGL
       components = 1;
       read_depth = true;
     }
-
-    int expected_size = viewport.width * components * data_type->size;
-    expected_size = (expected_size + alignment - 1) / alignment * alignment;
-    expected_size = expected_size * viewport.height;
 
     int pixel_type = data_type->gl_type;
     int base_format = read_depth ? GL_DEPTH_COMPONENT : data_type->base_format[components];
@@ -215,12 +212,15 @@ namespace AppGL
     gl.ReadPixels(viewport.x, viewport.y, viewport.width, viewport.height, base_format, pixel_type, (void*)write_offset);
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
     gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
+    return true;
   }
 
   void Framebuffer::set_color_mask(const ColorMasks& masks)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(masks.size() != (size_t)m_draw_buffers_len, "color_mask must be a match buffers len");
     const GLMethods& gl = m_context->gl();
 
@@ -239,6 +239,7 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     m_depth_mask = value;
@@ -249,10 +250,11 @@ namespace AppGL
     }
   }
 
-  void Framebuffer::bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits)
+  bool Framebuffer::bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(!m_framebuffer_obj, "Only the default_framebuffer have bits");
     const GLMethods& gl = m_context->gl();
 
@@ -264,6 +266,8 @@ namespace AppGL
     gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH, GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &depth_bits);
     gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencil_bits);
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
+
+    return true;
   }
 
 } // namespace AppGL

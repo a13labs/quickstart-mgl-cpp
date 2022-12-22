@@ -31,6 +31,8 @@ public:
     ~Scope() { release(); }
 
     void release();
+    bool released();
+
     void begin();
     void end();
 
@@ -48,4 +50,9 @@ private:
     int m_old_enable_flags;
     bool m_released;
   };
+
+  inline bool Scope::released()
+  {
+    return m_released;
+  }
 } // namespace AppGL

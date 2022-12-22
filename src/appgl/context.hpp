@@ -145,13 +145,24 @@ public:
                                              int alignment = 1,
                                              const char* dtype = "f1");
 
+    // TextureCube
+    AppCore::Ref<TextureCube> texture_cube(int width,
+                                           int height,
+                                           int components,
+                                           const void* data = nullptr,
+                                           int alignment = 1,
+                                           const char* dtype = "f1",
+                                           int internal_format_override = 0);
+
     virtual GLFunction load(const AppCore::String& method) = 0;
     virtual void enter() = 0;
     virtual void exit() = 0;
+
     virtual void release() = 0;
+    virtual bool released() = 0;
+
     virtual bool is_valid() = 0;
     virtual ContextMode::Enum mode() = 0;
-    virtual bool released() = 0;
 
 private:
     void load_functions();

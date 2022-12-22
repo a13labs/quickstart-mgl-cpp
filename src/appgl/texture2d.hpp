@@ -47,6 +47,7 @@ public:
     int height();
     int samples();
     bool depth();
+    int components();
 
     bool repeat_x();
     void set_repeat_x(bool value);
@@ -66,12 +67,14 @@ public:
     float anisotropy();
     void set_anisotropy(float value);
 
-    void read(void* dst, int level, int alignment, size_t write_offset);
-    void read(AppCore::Ref<Buffer>& dst, int level, int alignment, size_t write_offset);
-    void write(const void* src, const Viewport2D& viewport, int level, int alignment);
-    void write(const void* src, int level, int alignment);
-    void write(const AppCore::Ref<Buffer>& src, const Viewport2D& viewport, int level, int alignment);
-    void write(const AppCore::Ref<Buffer>& src, int level, int alignment);
+    bool read(void* dst, int level = 0, int alignment = 1, size_t write_offset = 0);
+    bool read(AppCore::Ref<Buffer>& dst, int level = 0, int alignment = 1, size_t write_offset = 0);
+
+    bool write(const void* src, const Viewport2D& viewport, int level = 0, int alignment = 1);
+    bool write(const void* src, int level = 0, int alignment = 1);
+    bool write(const AppCore::Ref<Buffer>& src, const Viewport2D& viewport, int level = 0, int alignment = 1);
+    bool write(const AppCore::Ref<Buffer>& src, int level = 0, int alignment = 1);
+
     void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
     void use(int index = 0);
     void build_mipmaps(int base = 0, int max_level = 1000);
@@ -100,6 +103,11 @@ private:
   inline bool Texture2D::released()
   {
     return m_released;
+  }
+
+  inline int Texture2D::components()
+  {
+    return m_components;
   }
 
   inline int Texture2D::width()

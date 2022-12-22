@@ -31,6 +31,7 @@ public:
     int width();
     int height();
     int depth();
+    int components();
 
     bool repeat_x();
     void set_repeat_x(bool value);
@@ -47,12 +48,13 @@ public:
     AppCore::String swizzle();
     void set_swizzle(const AppCore::String& value);
 
-    void read(void* dst, int alignment, size_t write_offset);
-    void read(AppCore::Ref<Buffer>& dst, int alignment, size_t write_offset);
-    void write(const void* src, const Viewport3D& viewport, int alignment);
-    void write(const void* src, int alignment);
-    void write(const AppCore::Ref<Buffer>& src, const Viewport3D& viewport, int alignment);
-    void write(const AppCore::Ref<Buffer>& src, int alignment);
+    bool read(void* dst, int alignment = 1, size_t write_offset = 0);
+    bool read(AppCore::Ref<Buffer>& dst, int alignment = 1, size_t write_offset = 0);
+    bool write(const void* src, const Viewport3D& viewport, int alignment = 1);
+    bool write(const void* src, int alignment = 1);
+    bool write(const AppCore::Ref<Buffer>& src, const Viewport3D& viewport, int alignment = 1);
+    bool write(const AppCore::Ref<Buffer>& src, int alignment = 1);
+
     void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
     void use(int index = 0);
     void build_mipmaps(int base = 0, int max_level = 1000);
@@ -79,6 +81,11 @@ private:
   inline bool Texture3D::released()
   {
     return m_released;
+  }
+
+  inline int Texture3D::components()
+  {
+    return m_components;
   }
 
   inline int Texture3D::width()

@@ -25,11 +25,14 @@ public:
     ~Renderbuffer() { release(); }
 
     void release();
+    bool released();
+
     virtual Attachment::Type attachment_type() override;
     int width();
     int height();
     int samples();
     bool depth();
+    int components();
 
 private:
     friend class Context;
@@ -45,6 +48,16 @@ private:
     bool m_depth;
     bool m_released;
   };
+
+  inline bool Renderbuffer::released()
+  {
+    return m_released;
+  }
+
+  inline int Renderbuffer::components()
+  {
+    return m_components;
+  }
 
   inline int Renderbuffer::width()
   {

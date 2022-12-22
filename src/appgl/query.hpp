@@ -48,6 +48,5 @@ private:
 
     Context* m_context;
     int m_query_obj[Query::Keys::COUNT];
-    bool m_released;
   };
 } // namespace AppGL

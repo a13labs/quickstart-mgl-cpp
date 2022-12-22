@@ -1046,7 +1046,6 @@ namespace AppGL
     }
 
     auto query = new Query();
-    query->m_released = false;
     query->m_context = this;
 
     if(samples)
@@ -1642,6 +1641,99 @@ namespace AppGL
     }
 
     return AppCore::Ref<TextureArray>(texture);
+  }
+
+  AppCore::Ref<TextureCube> Context::texture_cube(
+      int width, int height, int components, const void* data, int alignment, const char* dtype, int internal_format_override)
+  {
+
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    if(components < 1 || components > 4)
+    {
+      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      return nullptr;
+    }
+
+    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
+    {
+      APPCORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
+      return nullptr;
+    }
+
+    auto data_type = from_dtype(dtype, strlen(dtype));
+
+    if(!data_type)
+    {
+      APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
+      return nullptr;
+    }
+
+    auto texture = new TextureCube();
+    texture->m_released = false;
+    texture->m_context = this;
+    texture->m_width = width;
+    texture->m_height = height;
+    texture->m_components = components;
+    texture->m_data_type = data_type;
+    texture->m_max_level = 0;
+
+    auto filter = data_type->float_type ? GL_LINEAR : GL_NEAREST;
+    texture->m_filter = {filter, filter};
+
+    texture->m_texture_obj = 0;
+
+    gl.ActiveTexture(GL_TEXTURE0 + m_default_texture_unit);
+    gl.GenTextures(1, (GLuint*)&texture->m_texture_obj);
+
+    if(!texture->m_texture_obj)
+    {
+      APPCORE_ERROR("cannot create texture");
+      delete texture;
+      return nullptr;
+    }
+
+    int pixel_type = data_type->gl_type;
+    int base_format = data_type->base_format[components];
+    int internal_format = internal_format_override ? internal_format_override : data_type->internal_format[components];
+
+    int expected_size = width * components * data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * height * 6;
+
+    const char* ptr[6] = {
+        (const char*)data + expected_size * 0 / 6,
+        (const char*)data + expected_size * 1 / 6,
+        (const char*)data + expected_size * 2 / 6,
+        (const char*)data + expected_size * 3 / 6,
+        (const char*)data + expected_size * 4 / 6,
+        (const char*)data + expected_size * 5 / 6,
+    };
+
+    gl.BindTexture(GL_TEXTURE_CUBE_MAP, texture->m_texture_obj);
+
+    gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+    gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+    gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[0]);
+    gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[1]);
+    gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[2]);
+    gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[3]);
+    gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[4]);
+    gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[5]);
+
+    if(data_type->float_type)
+    {
+      gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+    else
+    {
+      gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
+
+    return AppCore::Ref<TextureCube>(texture);
   }
 
 } // namespace AppGL

@@ -25,6 +25,7 @@ namespace AppGL
   void TextureArray::release()
   {
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_released)
@@ -33,21 +34,17 @@ namespace AppGL
     }
 
     m_released = true;
-
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  void TextureArray::read(void* dst, int alignment, size_t write_offset)
+  bool TextureArray::read(void* dst, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
 
-    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
-    {
-      APPCORE_ERROR("the alignment must be 1, 2, 4 or 8");
-      return;
-    }
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
@@ -59,19 +56,18 @@ namespace AppGL
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.GetTexImage(GL_TEXTURE_2D_ARRAY, 0, base_format, pixel_type, ptr);
+
+    return gl.GetError() == GL_NO_ERROR;
   }
 
-  void TextureArray::read(AppCore::Ref<Buffer>& dst, int alignment, size_t write_offset)
+  bool TextureArray::read(AppCore::Ref<Buffer>& dst, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
 
-    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
-    {
-      APPCORE_ERROR("the alignment must be 1, 2, 4 or 8");
-      return;
-    }
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
@@ -83,19 +79,17 @@ namespace AppGL
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.GetTexImage(GL_TEXTURE_2D_ARRAY, 0, base_format, pixel_type, (void*)write_offset);
     gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
+    return gl.GetError() == GL_NO_ERROR;
   }
 
-  void TextureArray::write(const void* src, const Viewport3D& viewport, int alignment)
+  bool TextureArray::write(const void* src, const Viewport3D& viewport, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
-
-    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
-    {
-      APPCORE_ERROR("the alignment must be 1, 2, 4 or 8");
-      return;
-    }
 
     int x = viewport.x;
     int y = viewport.y;
@@ -112,19 +106,17 @@ namespace AppGL
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, x, y, z, width, height, layers, base_format, pixel_type, src);
+
+    return gl.GetError() == GL_NO_ERROR;
   }
 
-  void TextureArray::write(const void* src, int alignment)
+  bool TextureArray::write(const void* src, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
-
-    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
-    {
-      APPCORE_ERROR("the alignment must be 1, 2, 4 or 8");
-      return;
-    }
 
     int x = 0;
     int y = 0;
@@ -141,19 +133,17 @@ namespace AppGL
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, x, y, z, width, height, layers, base_format, pixel_type, src);
+
+    return gl.GetError() == GL_NO_ERROR;
   }
 
-  void TextureArray::write(const AppCore::Ref<Buffer>& src, const Viewport3D& viewport, int alignment)
+  bool TextureArray::write(const AppCore::Ref<Buffer>& src, const Viewport3D& viewport, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
-
-    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
-    {
-      APPCORE_ERROR("the alignment must be 1, 2, 4 or 8");
-      return;
-    }
 
     int x = viewport.x;
     int y = viewport.y;
@@ -164,6 +154,7 @@ namespace AppGL
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
+    gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, src->m_buffer_obj);
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D_ARRAY, m_texture_obj);
 
@@ -171,19 +162,17 @@ namespace AppGL
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, x, y, z, width, height, layers, base_format, pixel_type, 0);
     gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+
+    return gl.GetError() == GL_NO_ERROR;
   }
 
-  void TextureArray::write(const AppCore::Ref<Buffer>& src, int alignment)
+  bool TextureArray::write(const AppCore::Ref<Buffer>& src, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
-
-    if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
-    {
-      APPCORE_ERROR("the alignment must be 1, 2, 4 or 8");
-      return;
-    }
 
     int x = 0;
     int y = 0;
@@ -194,6 +183,7 @@ namespace AppGL
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
+    gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, src->m_buffer_obj);
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D_ARRAY, m_texture_obj);
 
@@ -201,12 +191,16 @@ namespace AppGL
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     gl.TexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, x, y, z, width, height, layers, base_format, pixel_type, 0);
     gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+
+    return gl.GetError() == GL_NO_ERROR;
   }
 
   void TextureArray::bind_to_image(int unit, bool read, bool write, int level, int format)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    APPCORE_ASSERT(read || write, "Illegal access mode. Read or write needs to be enabled.");
     const GLMethods& gl = m_context->gl();
 
     int access = GL_READ_WRITE;
@@ -214,11 +208,6 @@ namespace AppGL
       access = GL_READ_ONLY;
     else if(!read && write)
       access = GL_WRITE_ONLY;
-    else if(!read && !write)
-    {
-      APPCORE_ERROR("Illegal access mode. Read or write needs to be enabled.");
-      return;
-    }
 
     int frmt = format ? format : m_data_type->internal_format[m_components];
 
@@ -229,6 +218,7 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     gl.ActiveTexture(GL_TEXTURE0 + index);
@@ -239,13 +229,9 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    APPCORE_ASSERT(base <= max_level, "invalid base");
     const GLMethods& gl = m_context->gl();
-
-    if(base > m_max_level)
-    {
-      APPCORE_ERROR("invalid base");
-      return;
-    }
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D_ARRAY, m_texture_obj);
@@ -266,6 +252,7 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
@@ -286,6 +273,7 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
@@ -306,6 +294,7 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     m_filter = value;
@@ -321,13 +310,8 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
-
-    if(m_layers)
-    {
-      APPCORE_ERROR("cannot get swizzle of layers textures");
-      return "";
-    }
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D_ARRAY, m_texture_obj);
@@ -357,38 +341,19 @@ namespace AppGL
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
+
     const char* swizzle = value.c_str();
-
-    if(m_layers)
-    {
-      APPCORE_ERROR("cannot set swizzle for layers textures");
-      return;
-    }
-
-    if(!swizzle[0])
-    {
-      APPCORE_ERROR("the swizzle is empty");
-      return;
-    }
+    APPCORE_ASSERT(swizzle[0], "the swizzle is empty");
 
     int tex_swizzle[4] = {-1, -1, -1, -1};
 
     for(int i = 0; swizzle[i]; ++i)
     {
-      if(i > 3)
-      {
-        APPCORE_ERROR("the swizzle is too long");
-        return;
-      }
-
+      APPCORE_ASSERT(i < 4, "the swizzle is too long");
       tex_swizzle[i] = swizzle_from_char(swizzle[i]);
-
-      if(tex_swizzle[i] == -1)
-      {
-        APPCORE_ERROR("'%c' is not a valid swizzle parameter", swizzle[i]);
-        return;
-      }
+      APPCORE_ASSERT(tex_swizzle[i] != -1, "'{0}' is not a valid swizzle parameter", swizzle[i]);
     }
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
@@ -411,9 +376,9 @@ namespace AppGL
 
   void TextureArray::set_anisotropy(float value)
   {
-
     APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     m_anisotropy = (float)APPGL_MIN(APPGL_MAX(value, 1.0), m_context->max_anisotropy());
@@ -423,5 +388,4 @@ namespace AppGL
 
     gl.TexParameterf(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_ANISOTROPY, m_anisotropy);
   }
-
 } // namespace AppGL

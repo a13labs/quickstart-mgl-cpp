@@ -24,7 +24,8 @@ namespace AppGL
 public:
     ~Framebuffer() { release(); }
 
-    const Context* context() const;
+    void release();
+    bool released();
 
     const Viewport2D& viewport();
     void set_viewport(const Viewport2D& r);
@@ -45,7 +46,7 @@ public:
     int width();
     int height();
 
-    void bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits);
+    bool bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits);
 
     void clear(const glm::vec4& color, float depth);
     void clear(float r, float g, float b, float a, float depth);
@@ -54,9 +55,9 @@ public:
     void clear(float r, float g, float b, float a, float depth, int w, int h);
     void clear(float r, float g, float b, float a, float depth, const Viewport2D& rect);
 
-    void read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
-    void read(void* dst);
-    void read(void* dst,
+    bool read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
+    bool read(void* dst);
+    bool read(void* dst,
               const Viewport2D& viewport,
               int components,
               int attachment,
@@ -64,9 +65,9 @@ public:
               const char* dtype,
               size_t write_offset);
 
-    void read(AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
-    void read(AppCore::Ref<Buffer> dst);
-    void read(AppCore::Ref<Buffer> dst,
+    bool read(AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
+    bool read(AppCore::Ref<Buffer> dst);
+    bool read(AppCore::Ref<Buffer> dst,
               const Viewport2D& viewport,
               int components,
               int attachment,
@@ -74,7 +75,6 @@ public:
               const char* dtype,
               size_t write_offset);
 
-    void release();
     void use();
 
 private:
@@ -105,9 +105,9 @@ private:
     bool m_released;
   };
 
-  inline const Context* Framebuffer::context() const
+  inline bool Framebuffer::released()
   {
-    return m_context;
+    return m_released;
   }
 
   inline const Viewport2D& Framebuffer::viewport()
@@ -162,25 +162,25 @@ private:
     clear(color.r, color.g, color.b, color.a, depth, rect);
   }
 
-  inline void Framebuffer::read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
+  inline bool Framebuffer::read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
   {
-    read(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
+    return read(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
   }
 
-  inline void Framebuffer::read(
+  inline bool Framebuffer::read(
       AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
   {
-    read(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
+    return read(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
   }
 
-  inline void Framebuffer::read(void* dst)
+  inline bool Framebuffer::read(void* dst)
   {
-    read(dst, 3, 0, 1, "f1", 0);
+    return read(dst, 3, 0, 1, "f1", 0);
   }
 
-  inline void Framebuffer::read(AppCore::Ref<Buffer> dst)
+  inline bool Framebuffer::read(AppCore::Ref<Buffer> dst)
   {
-    read(dst, 3, 0, 1, "f1", 0);
+    return read(dst, 3, 0, 1, "f1", 0);
   }
 
   inline const ColorMasks& Framebuffer::color_mask() const

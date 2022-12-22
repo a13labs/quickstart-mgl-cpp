@@ -26,22 +26,75 @@ public:
     virtual Texture::Type texture_type() override;
 
     void release();
+    bool released();
+
+    int width();
+    int height();
+    int components();
+
+    const Texture::Filter& filter() const;
+    void set_filter(const Texture::Filter& value);
+
+    AppCore::String swizzle();
+    void set_swizzle(const AppCore::String& value);
+
+    float anisotropy();
+    void set_anisotropy(float value);
+
+    bool read(void* dst, int face, int alignment = 1, size_t write_offset = 0);
+    bool read(AppCore::Ref<Buffer>& dst, int face, int alignment = 1, size_t write_offset = 0);
+
+    bool write(const void* src, int face, const Viewport2D& viewport, int alignment = 1);
+    bool write(const void* src, int face, int alignment = 1);
+    bool write(const AppCore::Ref<Buffer>& src, int face, const Viewport2D& viewport, int alignment = 1);
+    bool write(const AppCore::Ref<Buffer>& src, int face, int alignment = 1);
+
+    void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
+    void use(int index = 0);
 
 private:
     friend class Context;
-    TextureCube();
+    TextureCube() = default;
 
     Context* m_context;
     DataType* m_data_type;
     int m_texture_obj;
     int m_width;
     int m_height;
-    int m_depth;
     int m_components;
-    int m_min_filter;
-    int m_mag_filter;
+    Texture::Filter m_filter;
     int m_max_level;
     float m_anisotropy;
     bool m_released;
   };
+
+  inline bool TextureCube::released()
+  {
+    return m_released;
+  }
+
+  inline int TextureCube::components()
+  {
+    return m_components;
+  }
+
+  inline int TextureCube::width()
+  {
+    return m_width;
+  }
+
+  inline int TextureCube::height()
+  {
+    return m_height;
+  }
+
+  inline const Texture::Filter& TextureCube::filter() const
+  {
+    return m_filter;
+  }
+
+  inline float TextureCube::anisotropy()
+  {
+    return m_anisotropy;
+  }
 } // namespace AppGL

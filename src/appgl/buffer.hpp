@@ -24,27 +24,28 @@ public:
     ~Buffer() { release(); }
 
 public:
-    void write(const float* src, size_t size, size_t offset);
-    void write(const uint32_t* src, size_t size, size_t offset);
-    void write(const uint16_t* src, size_t size, size_t offset);
-    void write(const uint8_t* src, size_t size, size_t offset);
-    void write(const int* src, size_t size, size_t offset);
+    void release();
+    bool released();
+
+    size_t size();
+    bool dynamic();
+
     void read(float* dst, size_t size, size_t offset);
     void read(uint32_t* dst, size_t size, size_t offset);
     void read(uint16_t* dst, size_t size, size_t offset);
     void read(uint8_t* dst, size_t size, size_t offset);
     void read(int* dst, size_t size, size_t offset);
 
-    size_t size();
-    bool dynamic();
-    bool released();
-    const Context* context() const;
+    void write(const float* src, size_t size, size_t offset);
+    void write(const uint32_t* src, size_t size, size_t offset);
+    void write(const uint16_t* src, size_t size, size_t offset);
+    void write(const uint8_t* src, size_t size, size_t offset);
+    void write(const int* src, size_t size, size_t offset);
 
     void clear();
     void bind_to_uniform_block(int binding = 0, size_t size = 0, size_t offset = -1);
     void bind_to_storage_buffer(int binding = 0, size_t size = 0, size_t offset = -1);
     void orphan(size_t size = -1);
-    void release();
 
 private:
     friend class Context;
@@ -52,6 +53,7 @@ private:
     friend class Texture2D;
     friend class Texture3D;
     friend class TextureArray;
+    friend class TextureCube;
 
     Buffer() = default;
 
@@ -129,10 +131,4 @@ private:
   {
     return m_released;
   }
-
-  inline const Context* Buffer::context() const
-  {
-    return m_context;
-  }
-
 } // namespace AppGL

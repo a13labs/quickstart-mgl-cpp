@@ -24,6 +24,7 @@ public:
     ~Program() { release(); }
 
     void release();
+    bool released();
 
     const AppCore::Ref<Attribute> attribute(const AppCore::String& name) const;
     const AppCore::Ref<Uniform> uniform(const AppCore::String& name) const;
@@ -67,6 +68,11 @@ private:
     VaryingsMap m_varyings_map;
     SubroutinesMap m_subroutines_map;
   };
+
+  inline bool Program::released()
+  {
+    return m_released;
+  }
 
   inline const AppCore::Ref<Attribute> Program::attribute(const AppCore::String& name) const
   {

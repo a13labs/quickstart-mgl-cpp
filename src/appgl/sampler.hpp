@@ -44,9 +44,11 @@ public:
     ~Sampler() { release(); }
 
 public:
-    void release();
     void use(int index = 0);
     void clear(int index = 0);
+
+    void release();
+    bool released();
 
     bool repeat_x();
     void set_repeat_x(bool value);
@@ -93,6 +95,11 @@ private:
     bool m_released;
     Sampler::Filter m_filter;
   };
+
+  inline bool Sampler::released()
+  {
+    return m_released;
+  }
 
   inline bool Sampler::repeat_x()
   {
