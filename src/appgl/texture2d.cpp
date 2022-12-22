@@ -34,33 +34,7 @@ namespace AppGL
     }
 
     m_released = true;
-
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
-  }
-
-  void Texture2D::color_attachment(Framebuffer* fb, int index)
-  {
-    APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(fb != nullptr, "missing color attachments");
-    APPCORE_ASSERT(index < fb->m_draw_buffers_len, "missing color attachments");
-    APPCORE_ASSERT(fb->m_context == m_context, "Attachment and framebuffer belong to different contexts");
-    const GLMethods& gl = m_context->gl();
-
-    gl.FramebufferTexture2D(
-        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D, m_texture_obj, 0);
-
-    fb->m_draw_buffers[index] = GL_COLOR_ATTACHMENT0 + index;
-    fb->m_color_masks[index] = {m_components >= 1, m_components >= 2, m_components >= 3, m_components >= 4};
-  }
-
-  void Texture2D::depth_attachment()
-  {
-    APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
-    const GLMethods& gl = m_context->gl();
-
-    gl.FramebufferTexture2D(
-        GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D, m_texture_obj, 0);
   }
 
   Attachment::Type Texture2D::attachment_type()
@@ -71,31 +45,6 @@ namespace AppGL
   Texture::Type Texture2D::texture_type()
   {
     return Texture::TEXTURE_2D;
-  }
-
-  int Texture2D::width()
-  {
-    return m_width;
-  }
-
-  int Texture2D::height()
-  {
-    return m_height;
-  }
-
-  int Texture2D::samples()
-  {
-    return m_samples;
-  }
-
-  bool Texture2D::depth()
-  {
-    return m_depth;
-  }
-
-  const Context* Texture2D::context() const
-  {
-    return m_context;
   }
 
   void Texture2D::read(void* dst, int level, int alignment, size_t write_offset)

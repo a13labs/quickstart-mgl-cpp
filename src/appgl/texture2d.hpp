@@ -43,10 +43,10 @@ public:
 
     virtual Attachment::Type attachment_type() override;
     virtual Texture::Type texture_type() override;
-    virtual int width() override;
-    virtual int height() override;
-    virtual int samples() override;
-    virtual bool depth() override;
+    int width();
+    int height();
+    int samples();
+    bool depth();
 
     bool repeat_x();
     void set_repeat_x(bool value);
@@ -80,10 +80,6 @@ private:
     friend class Context;
     Texture2D() = default;
 
-    virtual void color_attachment(Framebuffer* fb, int index) override;
-    virtual void depth_attachment() override;
-    virtual const Context* context() const override;
-
     Context* m_context;
     DataType* m_data_type;
     int m_texture_obj;
@@ -104,6 +100,26 @@ private:
   inline bool Texture2D::released()
   {
     return m_released;
+  }
+
+  inline int Texture2D::width()
+  {
+    return m_width;
+  }
+
+  inline int Texture2D::height()
+  {
+    return m_height;
+  }
+
+  inline int Texture2D::samples()
+  {
+    return m_samples;
+  }
+
+  inline bool Texture2D::depth()
+  {
+    return m_depth;
   }
 
   inline bool Texture2D::repeat_x()

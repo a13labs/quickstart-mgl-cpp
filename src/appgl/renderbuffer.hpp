@@ -26,18 +26,14 @@ public:
 
     void release();
     virtual Attachment::Type attachment_type() override;
-    virtual int width() override;
-    virtual int height() override;
-    virtual int samples() override;
-    virtual bool depth() override;
+    int width();
+    int height();
+    int samples();
+    bool depth();
 
 private:
     friend class Context;
     Renderbuffer(){};
-
-    virtual void color_attachment(Framebuffer* fb, int index) override;
-    virtual void depth_attachment() override;
-    virtual const Context* context() const override;
 
     Context* m_context;
     DataType* m_data_type;
@@ -49,4 +45,25 @@ private:
     bool m_depth;
     bool m_released;
   };
+
+  inline int Renderbuffer::width()
+  {
+    return m_width;
+  }
+
+  inline int Renderbuffer::height()
+  {
+    return m_height;
+  }
+
+  inline int Renderbuffer::samples()
+  {
+    return m_samples;
+  }
+
+  inline bool Renderbuffer::depth()
+  {
+    return m_depth;
+  }
+
 } // namespace AppGL

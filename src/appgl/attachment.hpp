@@ -29,15 +29,5 @@ public:
 
     virtual ~Attachment() = default;
     virtual Attachment::Type attachment_type() = 0;
-    virtual int width() = 0;
-    virtual int height() = 0;
-    virtual int samples() = 0;
-    virtual bool depth() = 0;
-
-private:
-    friend class Context;
-    virtual void color_attachment(Framebuffer* fb, int index) = 0;
-    virtual void depth_attachment() = 0;
-    virtual const Context* context() const = 0;
   };
 } // namespace AppGL
