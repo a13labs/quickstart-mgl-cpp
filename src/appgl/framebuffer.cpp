@@ -24,7 +24,7 @@ namespace AppGL
 {
   void Framebuffer::release()
   {
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -45,7 +45,7 @@ namespace AppGL
   void Framebuffer::clear(float r, float g, float b, float a, float depth, const Viewport2D& rect)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -103,7 +103,7 @@ namespace AppGL
   void Framebuffer::use()
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -133,7 +133,7 @@ namespace AppGL
 
     gl.DepthMask(m_depth_mask);
 
-    m_context->m_bound_framebuffer = MAKE_THIS_REF();
+    m_context->m_bound_framebuffer = shared_from_this();
   }
 
   bool Framebuffer::read(void* dst,
@@ -145,7 +145,7 @@ namespace AppGL
                          size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -185,7 +185,7 @@ namespace AppGL
                          size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -219,7 +219,7 @@ namespace AppGL
   void Framebuffer::set_color_mask(const ColorMasks& masks)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(masks.size() != (size_t)m_draw_buffers_len, "color_mask must be a match buffers len");
     const GLMethods& gl = m_context->gl();
@@ -238,7 +238,7 @@ namespace AppGL
   void Framebuffer::set_depth_mask(bool value)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -253,7 +253,7 @@ namespace AppGL
   bool Framebuffer::bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(!m_framebuffer_obj, "Only the default_framebuffer have bits");
     const GLMethods& gl = m_context->gl();

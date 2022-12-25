@@ -29,7 +29,7 @@ namespace AppGL
 
   void TextureCube::release()
   {
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -45,7 +45,7 @@ namespace AppGL
   bool TextureCube::read(void* dst, int face, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(face >= 0 && face <= 5, "the face must be 0, 1, 2, 3, 4 or 5");
@@ -69,7 +69,7 @@ namespace AppGL
   bool TextureCube::read(AppCore::Ref<Buffer>& dst, int face, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(face >= 0 && face <= 5, "the face must be 0, 1, 2, 3, 4 or 5");
@@ -93,7 +93,7 @@ namespace AppGL
   bool TextureCube::write(const void* src, int face, const Viewport2D& viewport, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(face >= 0 && face <= 5, "the face must be 0, 1, 2, 3, 4 or 5");
@@ -120,7 +120,7 @@ namespace AppGL
   bool TextureCube::write(const void* src, int face, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(face >= 0 && face <= 5, "the face must be 0, 1, 2, 3, 4 or 5");
@@ -146,7 +146,7 @@ namespace AppGL
   bool TextureCube::write(const AppCore::Ref<Buffer>& src, int face, const Viewport2D& viewport, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(face >= 0 && face <= 5, "the face must be 0, 1, 2, 3, 4 or 5");
@@ -174,7 +174,7 @@ namespace AppGL
   bool TextureCube::write(const AppCore::Ref<Buffer>& src, int face, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(face >= 0 && face <= 5, "the face must be 0, 1, 2, 3, 4 or 5");
@@ -202,7 +202,7 @@ namespace AppGL
   void TextureCube::bind_to_image(int unit, bool read, bool write, int level, int format)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(read || write, "Illegal access mode. Read or write needs to be enabled.");
     const GLMethods& gl = m_context->gl();
@@ -221,7 +221,7 @@ namespace AppGL
   void TextureCube::use(int index)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -232,7 +232,7 @@ namespace AppGL
   void TextureCube::set_filter(const Texture::Filter& value)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -248,7 +248,7 @@ namespace AppGL
   AppCore::String TextureCube::swizzle()
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -279,7 +279,7 @@ namespace AppGL
   void TextureCube::set_swizzle(const AppCore::String& value)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -316,7 +316,7 @@ namespace AppGL
   void TextureCube::set_anisotropy(float value)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 

@@ -30,17 +30,15 @@ public:
     size_t size();
     bool dynamic();
 
-    void read(float* dst, size_t size, size_t offset);
-    void read(uint32_t* dst, size_t size, size_t offset);
-    void read(uint16_t* dst, size_t size, size_t offset);
-    void read(uint8_t* dst, size_t size, size_t offset);
-    void read(int* dst, size_t size, size_t offset);
+    void read_into(AppCore::MemoryBuffer<float>&, size_t size, size_t offset, size_t write_offset);
+    void read_into(AppCore::MemoryBuffer<uint32_t>&, size_t size, size_t offset, size_t write_offset);
+    void read_into(AppCore::MemoryBuffer<uint8_t>& dst, size_t size, size_t offset, size_t write_offset);
+    void read_into(AppCore::MemoryBuffer<int>& dst, size_t size, size_t offset, size_t write_offset);
 
-    void write(const float* src, size_t size, size_t offset);
-    void write(const uint32_t* src, size_t size, size_t offset);
-    void write(const uint16_t* src, size_t size, size_t offset);
-    void write(const uint8_t* src, size_t size, size_t offset);
-    void write(const int* src, size_t size, size_t offset);
+    void write(const AppCore::MemoryBuffer<float>& dst, size_t offset);
+    void write(const AppCore::MemoryBuffer<uint32_t>& dst, size_t offset);
+    void write(const AppCore::MemoryBuffer<uint8_t>& dst, size_t offset);
+    void write(const AppCore::MemoryBuffer<int>& dst, size_t offset);
 
     void clear();
     void bind_to_uniform_block(int binding = 0, size_t size = 0, size_t offset = -1);
@@ -57,8 +55,8 @@ private:
 
     Buffer() = default;
 
+    void read_into(void* dst, size_t dst_size, size_t read_size, size_t read_offset, size_t write_offset);
     void write(const void* src, size_t size, size_t offset);
-    void read(void* dst, size_t size, size_t offset);
 
     Context* m_context;
     int m_buffer_obj;
@@ -67,54 +65,44 @@ private:
     bool m_released;
   };
 
-  inline void Buffer::write(const float* src, size_t size, size_t offset)
+  inline void Buffer::write(const AppCore::MemoryBuffer<float>& src, size_t offset)
   {
-    write((void*)src, size * sizeof(float), offset);
+    write(src.data(), src.size_bytes(), offset);
   }
 
-  inline void Buffer::write(const uint32_t* src, size_t size, size_t offset)
+  inline void Buffer::write(const AppCore::MemoryBuffer<uint32_t>& src, size_t offset)
   {
-    write((void*)src, size * sizeof(uint32_t), offset);
+    write(src.data(), src.size_bytes(), offset);
   }
 
-  inline void Buffer::write(const uint16_t* src, size_t size, size_t offset)
+  inline void Buffer::write(const AppCore::MemoryBuffer<uint8_t>& src, size_t offset)
   {
-    write((void*)src, size * sizeof(uint16_t), offset);
+    write(src.data(), src.size_bytes(), offset);
   }
 
-  inline void Buffer::write(const uint8_t* src, size_t size, size_t offset)
+  inline void Buffer::write(const AppCore::MemoryBuffer<int>& src, size_t offset)
   {
-    write((void*)src, size * sizeof(uint8_t), offset);
+    write(src.data(), src.size_bytes(), offset);
   }
 
-  inline void Buffer::write(const int* src, size_t size, size_t offset)
+  inline void Buffer::read_into(AppCore::MemoryBuffer<float>& dst, size_t size, size_t offset, size_t write_offset)
   {
-    write((void*)src, size * sizeof(int), offset);
+    read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline void Buffer::read(float* dst, size_t size, size_t offset)
+  inline void Buffer::read_into(AppCore::MemoryBuffer<uint32_t>& dst, size_t size, size_t offset, size_t write_offset)
   {
-    read((void*)dst, size * sizeof(float), offset);
+    read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline void Buffer::read(uint32_t* dst, size_t size, size_t offset)
+  inline void Buffer::read_into(AppCore::MemoryBuffer<uint8_t>& dst, size_t size, size_t offset, size_t write_offset)
   {
-    read((void*)dst, size * sizeof(uint32_t), offset);
+    read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline void Buffer::read(uint16_t* dst, size_t size, size_t offset)
+  inline void Buffer::read_into(AppCore::MemoryBuffer<int>& dst, size_t size, size_t offset, size_t write_offset)
   {
-    read((void*)dst, size * sizeof(uint16_t), offset);
-  }
-
-  inline void Buffer::read(uint8_t* dst, size_t size, size_t offset)
-  {
-    read((void*)dst, size * sizeof(uint8_t), offset);
-  }
-
-  inline void Buffer::read(int* dst, size_t size, size_t offset)
-  {
-    read((void*)dst, size * sizeof(int), offset);
+    read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
   inline size_t Buffer::size()
@@ -131,4 +119,5 @@ private:
   {
     return m_released;
   }
+
 } // namespace AppGL

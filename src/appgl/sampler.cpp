@@ -22,7 +22,7 @@ namespace AppGL
 {
   void Sampler::release()
   {
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -36,7 +36,7 @@ namespace AppGL
   void Sampler::use(int index)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     gl.BindSampler(index, m_sampler_obj);
@@ -45,7 +45,7 @@ namespace AppGL
   void Sampler::clear(int index)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     gl.BindSampler(index, 0);
@@ -54,7 +54,7 @@ namespace AppGL
   void Sampler::set_repeat_x(bool value)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     m_repeat_x = value;
@@ -71,7 +71,7 @@ namespace AppGL
   void Sampler::set_repeat_y(bool value)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     m_repeat_y = value;
@@ -88,7 +88,7 @@ namespace AppGL
   void Sampler::set_repeat_z(bool value)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     m_repeat_z = value;
@@ -105,7 +105,7 @@ namespace AppGL
   void Sampler::set_filter(const Sampler::Filter& value)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     m_filter = value;
@@ -116,7 +116,7 @@ namespace AppGL
   void Sampler::set_compare_func(Sampler::Func value)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     m_compare_func = value;
@@ -133,7 +133,7 @@ namespace AppGL
   void Sampler::set_anisotropy(float value)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -147,7 +147,7 @@ namespace AppGL
   void Sampler::set_border_color(const glm::vec4& value)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     m_border_color = value;
@@ -160,7 +160,7 @@ namespace AppGL
   void Sampler::set_min_lod(float value)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     m_min_lod = value;
@@ -170,7 +170,7 @@ namespace AppGL
   void Sampler::set_max_lod(float value)
   {
     APPCORE_ASSERT(!m_released, "Sampler already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     m_max_lod = value;

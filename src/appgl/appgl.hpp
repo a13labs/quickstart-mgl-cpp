@@ -15,6 +15,7 @@
 */
 #pragma once
 #include "appcore/appcore.hpp"
+#include "opengl.hpp"
 
 #define APPGL_MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define APPGL_MIN(a, b) (((a) < (b)) ? (a) : (b))

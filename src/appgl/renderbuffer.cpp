@@ -23,7 +23,7 @@ namespace AppGL
 {
   void Renderbuffer::release()
   {
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 

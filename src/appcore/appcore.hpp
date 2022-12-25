@@ -84,7 +84,8 @@ namespace AppCore
   template <typename T>
   using RefFromThis = std::enable_shared_from_this<T>;
 
-#define MAKE_THIS_REF shared_from_this
+  template <typename T>
+  using MemoryBuffer = tcb::span<T>;
 
   template <typename T>
   using List = std::vector<T>;

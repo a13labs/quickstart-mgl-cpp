@@ -16,7 +16,6 @@
 */
 #include "datatype.hpp"
 #include "appcore/log.hpp"
-#include "opengl.hpp"
 
 namespace AppGL
 {

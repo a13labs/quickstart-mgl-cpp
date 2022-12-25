@@ -15,6 +15,7 @@
 */
 #pragma once
 
+#include "span.hpp"
 #include <algorithm>
 #include <any>
 #include <array>

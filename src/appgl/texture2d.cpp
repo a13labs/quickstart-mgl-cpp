@@ -25,7 +25,7 @@ namespace AppGL
 {
   void Texture2D::release()
   {
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -51,7 +51,7 @@ namespace AppGL
   bool Texture2D::read(void* dst, int level, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(level < m_max_level, "invalid level");
@@ -82,7 +82,7 @@ namespace AppGL
   bool Texture2D::read(AppCore::Ref<Buffer>& dst, int level, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(level < m_max_level, "invalid level");
@@ -113,7 +113,7 @@ namespace AppGL
   bool Texture2D::write(const void* src, const Viewport2D& viewport, int level, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(level < m_max_level, "invalid level");
@@ -141,7 +141,7 @@ namespace AppGL
   bool Texture2D::write(const void* src, int level, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(level < m_max_level, "invalid level");
@@ -172,7 +172,7 @@ namespace AppGL
   bool Texture2D::write(const AppCore::Ref<Buffer>& src, const Viewport2D& viewport, int level, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(level < m_max_level, "invalid level");
@@ -202,7 +202,7 @@ namespace AppGL
   bool Texture2D::write(const AppCore::Ref<Buffer>& src, int level, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     APPCORE_ASSERT(level < m_max_level, "invalid level");
@@ -235,7 +235,7 @@ namespace AppGL
   void Texture2D::bind_to_image(int unit, bool read, bool write, int level, int format)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(read || write, "Illegal access mode. Read or write needs to be enabled.");
     const GLMethods& gl = m_context->gl();
@@ -254,7 +254,7 @@ namespace AppGL
   void Texture2D::use(int index)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -267,7 +267,7 @@ namespace AppGL
   void Texture2D::build_mipmaps(int base, int max_level)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(base <= max_level, "invalid base");
     const GLMethods& gl = m_context->gl();
@@ -292,7 +292,7 @@ namespace AppGL
   void Texture2D::set_repeat_x(bool value)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -315,7 +315,7 @@ namespace AppGL
   void Texture2D::set_repeat_y(bool value)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -338,7 +338,7 @@ namespace AppGL
   void Texture2D::set_filter(const Texture2D::Filter& value)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -355,7 +355,7 @@ namespace AppGL
   AppCore::String Texture2D::swizzle()
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(!m_depth, "cannot get swizzle of depth textures");
     const GLMethods& gl = m_context->gl();
@@ -389,7 +389,7 @@ namespace AppGL
   void Texture2D::set_swizzle(const AppCore::String& value)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(!m_depth, "cannot set swizzle for depth textures");
     const GLMethods& gl = m_context->gl();
@@ -429,7 +429,7 @@ namespace AppGL
   void Texture2D::set_compare_func(Texture2D::Func value)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(m_depth, "only depth textures have compare_func");
     const GLMethods& gl = m_context->gl();
@@ -454,7 +454,7 @@ namespace AppGL
   void Texture2D::set_anisotropy(float value)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 

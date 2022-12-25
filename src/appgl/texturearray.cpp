@@ -24,7 +24,7 @@ namespace AppGL
 {
   void TextureArray::release()
   {
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -40,7 +40,7 @@ namespace AppGL
   bool TextureArray::read(void* dst, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
@@ -63,7 +63,7 @@ namespace AppGL
   bool TextureArray::read(AppCore::Ref<Buffer>& dst, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
@@ -86,7 +86,7 @@ namespace AppGL
   bool TextureArray::write(const void* src, const Viewport3D& viewport, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
@@ -113,7 +113,7 @@ namespace AppGL
   bool TextureArray::write(const void* src, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
@@ -140,7 +140,7 @@ namespace AppGL
   bool TextureArray::write(const AppCore::Ref<Buffer>& src, const Viewport3D& viewport, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
@@ -169,7 +169,7 @@ namespace AppGL
   bool TextureArray::write(const AppCore::Ref<Buffer>& src, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
@@ -198,7 +198,7 @@ namespace AppGL
   void TextureArray::bind_to_image(int unit, bool read, bool write, int level, int format)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(read || write, "Illegal access mode. Read or write needs to be enabled.");
     const GLMethods& gl = m_context->gl();
@@ -217,7 +217,7 @@ namespace AppGL
   void TextureArray::use(int index)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -228,7 +228,7 @@ namespace AppGL
   void TextureArray::build_mipmaps(int base, int max_level)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     APPCORE_ASSERT(base <= max_level, "invalid base");
     const GLMethods& gl = m_context->gl();
@@ -251,7 +251,7 @@ namespace AppGL
   void TextureArray::set_repeat_x(bool value)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -272,7 +272,7 @@ namespace AppGL
   void TextureArray::set_repeat_y(bool value)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -293,7 +293,7 @@ namespace AppGL
   void TextureArray::set_filter(const Texture::Filter& value)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -309,7 +309,7 @@ namespace AppGL
   AppCore::String TextureArray::swizzle()
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -340,7 +340,7 @@ namespace AppGL
   void TextureArray::set_swizzle(const AppCore::String& value)
   {
     APPCORE_ASSERT(!m_released, "TextureArray already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -377,7 +377,7 @@ namespace AppGL
   void TextureArray::set_anisotropy(float value)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 

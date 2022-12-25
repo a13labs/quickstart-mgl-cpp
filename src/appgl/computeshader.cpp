@@ -22,7 +22,7 @@ namespace AppGL
 {
   void ComputeShader::release()
   {
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
@@ -38,7 +38,7 @@ namespace AppGL
   void ComputeShader::run(int x, int y, int z)
   {
     APPCORE_ASSERT(!m_released, "Compute Shader already released");
-    APPCORE_ASSERT(!m_context, "No context");
+    APPCORE_ASSERT(m_context, "No context");
     APPCORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
