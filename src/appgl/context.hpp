@@ -154,6 +154,21 @@ public:
                                            const char* dtype = "f1",
                                            int internal_format_override = 0);
 
+    // VertexArray
+    AppCore::Ref<VertexArray> vertex_array(AppCore::Ref<Program> program,
+                                           AppGL::VertexDataArray vertex_data,
+                                           AppCore::Ref<Buffer> index_buffer = nullptr,
+                                           int index_element_size = 4,
+                                           bool skip_errors = false,
+                                           AppGL::RenderMode mode = AppGL::RenderMode::POINTS);
+
+    // AppCore::Ref<VertexArray> simple_vertex_array(AppCore::Ref<Program> program,
+    //                                               AppCore::Ref<Buffer> vertex_data,
+    //                                               AppCore::Ref<Buffer> index_buffer = nullptr,
+    //                                               int index_element_size = 4,
+    //                                               bool skip_errors = false,
+    //                                               AppGL::RenderMode mode = AppGL::RenderMode::POINTS);
+
     virtual GLFunction load(const AppCore::String& method) = 0;
     virtual void enter() = 0;
     virtual void exit() = 0;

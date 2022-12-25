@@ -76,26 +76,46 @@ private:
 
   inline const AppCore::Ref<Attribute> Program::attribute(const AppCore::String& name) const
   {
+    if(m_attributes_map.find(name) == m_attributes_map.end())
+    {
+      return nullptr;
+    }
     return m_attributes_map.at(name);
   }
 
   inline const AppCore::Ref<Uniform> Program::uniform(const AppCore::String& name) const
   {
+    if(m_uniforms_map.find(name) == m_uniforms_map.end())
+    {
+      return nullptr;
+    }
     return m_uniforms_map.at(name);
   }
 
   inline const AppCore::Ref<UniformBlock> Program::uniform_block(const AppCore::String& name) const
   {
+    if(m_uniform_blocks_map.find(name) == m_uniform_blocks_map.end())
+    {
+      return nullptr;
+    }
     return m_uniform_blocks_map.at(name);
   }
 
   inline const AppCore::Ref<Varying> Program::varying(const AppCore::String& name) const
   {
+    if(m_varyings_map.find(name) == m_varyings_map.end())
+    {
+      return nullptr;
+    }
     return m_varyings_map.at(name);
   }
 
   inline const AppCore::Ref<Subroutine> Program::subroutine(const AppCore::String& name) const
   {
+    if(m_subroutines_map.find(name) == m_subroutines_map.end())
+    {
+      return nullptr;
+    }
     return m_subroutines_map.at(name);
   }
 

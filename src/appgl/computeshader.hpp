@@ -53,11 +53,19 @@ private:
 
   inline const AppCore::Ref<Uniform> ComputeShader::uniform(const AppCore::String& name) const
   {
+    if(m_uniforms_map.find(name) == m_uniforms_map.end())
+    {
+      return nullptr;
+    }
     return m_uniforms_map.at(name);
   }
 
   inline const AppCore::Ref<UniformBlock> ComputeShader::uniform_block(const AppCore::String& name) const
   {
+    if(m_uniform_blocks_map.find(name) == m_uniform_blocks_map.end())
+    {
+      return nullptr;
+    }
     return m_uniform_blocks_map.at(name);
   }
 

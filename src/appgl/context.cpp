@@ -20,6 +20,7 @@
 #include "buffer.hpp"
 #include "computeshader.hpp"
 #include "datatype.hpp"
+#include "format.hpp"
 #include "framebuffer.hpp"
 #include "program.hpp"
 #include "query.hpp"
@@ -1734,6 +1735,172 @@ namespace AppGL
     }
 
     return AppCore::Ref<TextureCube>(texture);
+  }
+
+  AppCore::Ref<VertexArray> Context::vertex_array(AppCore::Ref<Program> program,
+                                                  AppGL::VertexDataArray vertex_data,
+                                                  AppCore::Ref<Buffer> index_buffer,
+                                                  int index_element_size,
+                                                  bool skip_errors,
+                                                  AppGL::RenderMode mode)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    const GLMethods& gl = m_gl;
+
+    if(program->m_context != this)
+    {
+      APPCORE_ERROR("the program belongs to a different context");
+      return nullptr;
+    }
+
+    if(index_buffer != nullptr && index_buffer->m_context != this)
+    {
+      APPCORE_ERROR("the index_buffer belongs to a different context");
+      return nullptr;
+    }
+
+    int i = 0;
+    for(auto&& v_data : vertex_data)
+    {
+      if(v_data.buffer == nullptr)
+      {
+        APPCORE_ERROR("vertex_data[{0}]: verempty vertex buffer", i);
+        return nullptr;
+      }
+
+      if(v_data.buffer->m_context != this)
+      {
+        APPCORE_ERROR("vertex_data[{0}]: vertex buffer belongs to a different context", i);
+        return nullptr;
+      }
+
+      FormatIterator it = FormatIterator(v_data.format);
+      FormatInfo format_info = it.info();
+
+      if(!format_info.valid)
+      {
+        APPCORE_ERROR("vertex_data[{0}]: invalid invalid format", i);
+        return nullptr;
+      }
+
+      if(!v_data.attributes.size())
+      {
+        APPCORE_ERROR("vertex_data[{0}]: attributes must not be empty", i);
+        return nullptr;
+      }
+
+      if((int)v_data.attributes.size() != format_info.nodes)
+      {
+        APPCORE_ERROR(
+            "vertex_data[{0}]: format and attributes size mismatch {1} != {2}", i, format_info.nodes, v_data.attributes.size());
+        return nullptr;
+      }
+
+      i++;
+    }
+
+    if(index_element_size != 1 && index_element_size != 2 && index_element_size != 4)
+    {
+      APPCORE_ERROR("index_element_size must be 1, 2, or 4, not %d", index_element_size);
+      return nullptr;
+    }
+
+    auto array = new VertexArray();
+    array->m_released = false;
+    array->m_context = this;
+    array->m_num_vertices = 0;
+    array->m_num_instances = 1;
+    array->m_program = program;
+    array->m_index_buffer = index_buffer;
+    array->m_index_element_size = index_element_size;
+    const int element_types[5] = {0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_UNSIGNED_INT};
+    array->m_index_element_type = element_types[index_element_size];
+    array->m_num_vertices = -1;
+
+    array->m_vertex_array_obj = 0;
+    gl.GenVertexArrays(1, (GLuint*)&array->m_vertex_array_obj);
+
+    if(!array->m_vertex_array_obj)
+    {
+      APPCORE_ERROR("cannot create vertex array");
+      delete array;
+      return nullptr;
+    }
+
+    gl.BindVertexArray(array->m_vertex_array_obj);
+
+    if(array->m_index_buffer != nullptr)
+    {
+      array->m_num_vertices = (int)(array->m_index_buffer->size() / index_element_size);
+      gl.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, array->m_index_buffer->m_buffer_obj);
+    }
+
+    i = 0;
+    for(auto&& v_data : vertex_data)
+    {
+      auto buffer = v_data.buffer;
+      const char* format = v_data.format;
+
+      FormatIterator it = FormatIterator(format);
+      FormatInfo format_info = it.info();
+
+      int buf_vertices = (int)(buffer->size() / format_info.size);
+
+      if(!format_info.divisor && array->m_index_buffer == nullptr && (!i || array->m_num_vertices > buf_vertices))
+      {
+        array->m_num_vertices = buf_vertices;
+      }
+
+      gl.BindBuffer(GL_ARRAY_BUFFER, buffer->m_buffer_obj);
+
+      char* ptr = 0;
+
+      for(size_t j = 0; j < v_data.attributes.size(); ++j)
+      {
+        FormatNode* node = it.next();
+
+        while(!node->type)
+        {
+          ptr += node->size;
+          node = it.next();
+        }
+
+        auto attribute = array->m_program->attribute(v_data.attributes[j]);
+
+        if(!attribute)
+        {
+          ptr += node->size;
+          continue;
+        }
+
+        int attribute_location = attribute->m_location;
+        int attribute_rows_length = attribute->m_data_type->rows_length;
+        int attribute_scalar_type = attribute->m_data_type->scalar_type;
+
+        for(int r = 0; r < attribute_rows_length; ++r)
+        {
+          int location = attribute_location + r;
+          int count = node->count / attribute_rows_length;
+
+          switch(attribute_scalar_type)
+          {
+            case GL_FLOAT: gl.VertexAttribPointer(location, count, node->type, node->normalize, format_info.size, ptr); break;
+            case GL_DOUBLE: gl.VertexAttribLPointer(location, count, node->type, format_info.size, ptr); break;
+            case GL_INT: gl.VertexAttribIPointer(location, count, node->type, format_info.size, ptr); break;
+            case GL_UNSIGNED_INT: gl.VertexAttribIPointer(location, count, node->type, format_info.size, ptr); break;
+          }
+
+          gl.VertexAttribDivisor(location, format_info.divisor);
+
+          gl.EnableVertexAttribArray(location);
+
+          ptr += node->size / attribute_rows_length;
+        }
+      }
+      i++;
+    }
+
+    return AppCore::Ref<VertexArray>(array);
   }
 
 } // namespace AppGL
