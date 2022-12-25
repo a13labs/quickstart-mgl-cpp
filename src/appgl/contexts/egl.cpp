@@ -486,6 +486,5 @@ namespace AppGL
   {
     return m_context != nullptr && !m_released;
   }
-
 } // namespace AppGL
 #endif

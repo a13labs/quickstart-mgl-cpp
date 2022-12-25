@@ -21,7 +21,7 @@ namespace AppGL
   class Buffer
   {
 public:
-    ~Buffer() { release(); }
+    ~Buffer() = default;
 
 public:
     void release();

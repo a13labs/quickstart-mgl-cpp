@@ -95,16 +95,6 @@ namespace AppGL
       return false;
     }
 
-    // if(!gladLoadGL())
-    // {
-    //   APPCORE_TRACE("BaseWindow: Error initializing GL extensions.");
-    //   SDL_GL_DeleteContext(m_context);
-    //   SDL_DestroyWindow(m_state.native_window);
-    //   m_context = nullptr;
-    //   m_state.native_window = nullptr;
-    //   return false;
-    // }
-
     SDL_SysWMinfo wmi;
     SDL_VERSION(&wmi.version);
 

@@ -28,7 +28,7 @@ public:
       int gl_object;
     };
 
-    ~Scope() { release(); }
+    ~Scope() = default;
 
     void release();
     bool released();

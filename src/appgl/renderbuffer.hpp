@@ -22,7 +22,7 @@ namespace AppGL
   class Renderbuffer : public Attachment
   {
 public:
-    ~Renderbuffer() { release(); }
+    ~Renderbuffer() = default;
 
     void release();
     bool released();

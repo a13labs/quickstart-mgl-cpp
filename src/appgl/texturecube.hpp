@@ -22,7 +22,7 @@ namespace AppGL
   class TextureCube : public Texture
   {
 public:
-    ~TextureCube() { release(); }
+    ~TextureCube() = default;
     virtual Texture::Type texture_type() override;
 
     void release();

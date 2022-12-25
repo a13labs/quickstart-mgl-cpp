@@ -174,14 +174,18 @@ public:
     virtual void exit() = 0;
 
     virtual void release() = 0;
-    virtual bool released() = 0;
-
     virtual bool is_valid() = 0;
-    virtual ContextMode::Enum mode() = 0;
+
+    bool released();
+    ContextMode::Enum mode();
 
 private:
     void load_functions();
     AppCore::Ref<Buffer> buffer(void* data, size_t size, bool dynamic);
+
+protected:
+    bool m_released;
+    ContextMode::Enum m_mode;
 
 private:
     friend class Framebuffer;
@@ -218,19 +222,16 @@ public:
     ContextEGL(ContextMode::Enum mode, int required);
     virtual ~ContextEGL() override;
 
-public:
     virtual GLFunction load(const AppCore::String& method) override;
     virtual void enter() override;
     virtual void exit() override;
+
     virtual void release() override;
+
     virtual bool is_valid() override;
-    virtual ContextMode::Enum mode() override { return m_mode; }
-    virtual bool released() override { return m_released; }
 
 private:
-    ContextMode::Enum m_mode;
     GLContext m_context;
-    bool m_released;
   };
 #endif
 
@@ -245,17 +246,17 @@ public:
 
 public:
     virtual GLFunction load(const AppCore::String& method) override;
+
     virtual void enter() override;
     virtual void exit() override;
+
     virtual void release() override;
+
     virtual bool is_valid() override;
-    virtual ContextMode::Enum mode() override { return m_mode; }
-    virtual bool released() override { return m_released; }
 
 private:
     ContextMode::Enum m_mode;
     GLContext m_context;
-    bool m_released;
   };
 #endif
 
@@ -266,6 +267,16 @@ private:
   inline const GLMethods& Context::gl() const
   {
     return m_gl;
+  }
+
+  inline ContextMode::Enum Context::mode()
+  {
+    return m_mode;
+  }
+
+  inline bool Context::released()
+  {
+    return m_released;
   }
 
   inline int Context::version_code()

@@ -22,7 +22,7 @@ namespace AppGL
   class Framebuffer : public AppCore::RefFromThis<Framebuffer>
   {
 public:
-    ~Framebuffer() { release(); }
+    ~Framebuffer() = default;
 
     void release();
     bool released();

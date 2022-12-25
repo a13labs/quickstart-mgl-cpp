@@ -21,7 +21,7 @@ namespace AppGL
   class Program
   {
 public:
-    ~Program() { release(); }
+    ~Program() = default;
 
     void release();
     bool released();

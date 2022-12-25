@@ -21,7 +21,7 @@ namespace AppGL
   class ConditionalRender
   {
 public:
-    ~ConditionalRender() { release(); }
+    ~ConditionalRender() = default;
 
     void release();
 

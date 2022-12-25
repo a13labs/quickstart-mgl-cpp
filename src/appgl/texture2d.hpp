@@ -36,7 +36,7 @@ public:
       ALWAYS = 0x0207,
     };
 
-    ~Texture2D() { release(); }
+    ~Texture2D() = default;
 
     void release();
     bool released();

@@ -45,6 +45,5 @@ namespace AppGL
   {
     return false;
   }
-
 } // namespace AppGL
 #endif

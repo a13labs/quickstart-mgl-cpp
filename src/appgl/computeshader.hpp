@@ -21,7 +21,7 @@ namespace AppGL
   class ComputeShader
   {
 public:
-    ~ComputeShader() { release(); }
+    ~ComputeShader() = default;
 
     void release();
     bool released();

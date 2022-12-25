@@ -21,7 +21,7 @@ namespace AppGL
   class VertexArray
   {
 public:
-    ~VertexArray() { release(); }
+    ~VertexArray() = default;
 
 public:
     void release();

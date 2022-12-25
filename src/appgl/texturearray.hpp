@@ -22,7 +22,7 @@ namespace AppGL
   class TextureArray
   {
 public:
-    ~TextureArray() { release(); }
+    ~TextureArray() = default;
 
     void release();
     bool released();

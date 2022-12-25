@@ -41,7 +41,7 @@ public:
       int mag_filter;
     };
 
-    ~Sampler() { release(); }
+    ~Sampler() = default;
 
 public:
     void use(int index = 0);

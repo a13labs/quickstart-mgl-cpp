@@ -22,7 +22,7 @@ namespace AppGL
   class Texture3D : public Texture
   {
 public:
-    ~Texture3D() { release(); }
+    ~Texture3D() = default;
 
     void release();
     bool released();
