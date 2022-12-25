@@ -48,7 +48,7 @@ namespace AppGL
     return Texture::TEXTURE_2D;
   }
 
-  bool Texture2D::read(void* dst, int level, int alignment, size_t write_offset)
+  bool Texture2D::read_into(AppCore::MemoryBuffer<uint8_t>& dst, int level, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -64,10 +64,16 @@ namespace AppGL
     width = width > 1 ? width : 1;
     height = height > 1 ? height : 1;
 
+    size_t expected_size = width * m_components * m_data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * height;
+
+    APPCORE_ASSERT(dst.size_bytes() >= write_offset + expected_size, "out of bounds");
+
     int pixel_type = m_data_type->gl_type;
     int base_format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];
 
-    char* ptr = (char*)dst + write_offset;
+    char* ptr = (char*)dst.data() + write_offset;
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_2D, m_texture_obj);
@@ -79,7 +85,7 @@ namespace AppGL
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::read(AppCore::Ref<Buffer>& dst, int level, int alignment, size_t write_offset)
+  bool Texture2D::read_into(AppCore::Ref<Buffer>& dst, int level, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -110,7 +116,7 @@ namespace AppGL
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::write(const void* src, const Viewport2D& viewport, int level, int alignment)
+  bool Texture2D::write(const AppCore::MemoryBuffer<uint8_t>& src, const Viewport2D& viewport, int level, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -125,6 +131,12 @@ namespace AppGL
     int width = viewport.width;
     int height = viewport.height;
 
+    size_t expected_size = width * m_components * m_data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * height;
+
+    APPCORE_ASSERT(src.size_bytes() >= expected_size, "out of bounds");
+
     int pixel_type = m_data_type->gl_type;
     int format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];
 
@@ -133,12 +145,12 @@ namespace AppGL
 
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-    gl.TexSubImage2D(GL_TEXTURE_2D, level, x, y, width, height, format, pixel_type, src);
+    gl.TexSubImage2D(GL_TEXTURE_2D, level, x, y, width, height, format, pixel_type, src.data());
 
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::write(const void* src, int level, int alignment)
+  bool Texture2D::write(const AppCore::MemoryBuffer<uint8_t>& src, int level, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture2D already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -156,6 +168,12 @@ namespace AppGL
     width = width > 1 ? width : 1;
     height = height > 1 ? height : 1;
 
+    size_t expected_size = width * m_components * m_data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * height;
+
+    APPCORE_ASSERT(src.size_bytes() >= expected_size, "out of bounds");
+
     int pixel_type = m_data_type->gl_type;
     int format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];
 
@@ -164,7 +182,7 @@ namespace AppGL
 
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-    gl.TexSubImage2D(GL_TEXTURE_2D, level, x, y, width, height, format, pixel_type, src);
+    gl.TexSubImage2D(GL_TEXTURE_2D, level, x, y, width, height, format, pixel_type, src.data());
 
     return gl.GetError() == GL_NO_ERROR;
   }

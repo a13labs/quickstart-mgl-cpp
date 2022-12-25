@@ -42,7 +42,7 @@ namespace AppGL
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  bool TextureCube::read(void* dst, int face, int alignment, size_t write_offset)
+  bool TextureCube::read_into(AppCore::MemoryBuffer<uint8_t>& dst, int face, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -51,10 +51,15 @@ namespace AppGL
     APPCORE_ASSERT(face >= 0 && face <= 5, "the face must be 0, 1, 2, 3, 4 or 5");
     const GLMethods& gl = m_context->gl();
 
+    size_t expected_size = m_width * m_components * m_data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * m_height;
+    APPCORE_ASSERT(dst.size_bytes() >= write_offset + expected_size, "out of bounds");
+
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
-    char* ptr = (char*)dst + write_offset;
+    char* ptr = (char*)dst.data() + write_offset;
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_CUBE_MAP, m_texture_obj);
@@ -66,7 +71,7 @@ namespace AppGL
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::read(AppCore::Ref<Buffer>& dst, int face, int alignment, size_t write_offset)
+  bool TextureCube::read_into(AppCore::Ref<Buffer>& dst, int face, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -90,7 +95,7 @@ namespace AppGL
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const void* src, int face, const Viewport2D& viewport, int alignment)
+  bool TextureCube::write(const AppCore::MemoryBuffer<uint8_t>& src, int face, const Viewport2D& viewport, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -104,6 +109,11 @@ namespace AppGL
     int width = viewport.width;
     int height = viewport.height;
 
+    size_t expected_size = width * m_components * m_data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * height;
+    APPCORE_ASSERT(src.size_bytes() >= expected_size, "out of bounds");
+
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
@@ -112,12 +122,12 @@ namespace AppGL
 
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-    gl.TexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, x, y, width, height, base_format, pixel_type, src);
+    gl.TexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, x, y, width, height, base_format, pixel_type, src.data());
 
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const void* src, int face, int alignment)
+  bool TextureCube::write(const AppCore::MemoryBuffer<uint8_t>& src, int face, int alignment)
   {
     APPCORE_ASSERT(!m_released, "TextureCube already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -130,6 +140,12 @@ namespace AppGL
     int y = 0;
     int width = m_width;
     int height = m_height;
+
+    size_t expected_size = width * m_components * m_data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * height;
+    APPCORE_ASSERT(src.size_bytes() >= expected_size, "out of bounds");
+
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
@@ -138,7 +154,7 @@ namespace AppGL
 
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-    gl.TexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, x, y, width, height, base_format, pixel_type, src);
+    gl.TexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, x, y, width, height, base_format, pixel_type, src.data());
 
     return gl.GetError() == GL_NO_ERROR;
   }

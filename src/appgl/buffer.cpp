@@ -30,12 +30,13 @@ namespace AppGL
     {
       return;
     }
+
     m_released = true;
 
     gl.DeleteBuffers(1, (GLuint*)&m_buffer_obj);
   }
 
-  void Buffer::write(const void* src, size_t size, size_t offset)
+  bool Buffer::write(const void* src, size_t size, size_t offset)
   {
     APPCORE_ASSERT(!m_released, "Buffer already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -47,9 +48,11 @@ namespace AppGL
 
     gl.BindBuffer(GL_ARRAY_BUFFER, m_buffer_obj);
     gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, src);
+
+    return gl.GetError() == GL_NO_ERROR;
   }
 
-  void Buffer::read_into(void* dst, size_t dst_size, size_t read_size, size_t read_offset, size_t write_offset)
+  bool Buffer::read_into(void* dst, size_t dst_size, size_t read_size, size_t read_offset, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Buffer already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -69,6 +72,7 @@ namespace AppGL
     memcpy(ptr, map, read_size);
 
     gl.UnmapBuffer(GL_ARRAY_BUFFER);
+    return gl.GetError() == GL_NO_ERROR;
   }
 
   void Buffer::clear()

@@ -55,25 +55,31 @@ public:
     void clear(float r, float g, float b, float a, float depth, int w, int h);
     void clear(float r, float g, float b, float a, float depth, const Viewport2D& rect);
 
-    bool read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
-    bool read(void* dst);
-    bool read(void* dst,
-              const Viewport2D& viewport,
-              int components,
-              int attachment,
-              int alignment,
-              const char* dtype,
-              size_t write_offset);
+    bool read_into(AppCore::MemoryBuffer<u_int8_t>& dst,
+                   int components,
+                   int attachment,
+                   int alignment,
+                   const char* dtype,
+                   size_t write_offset);
+    bool read_into(AppCore::MemoryBuffer<u_int8_t>& dst);
+    bool read_into(AppCore::MemoryBuffer<u_int8_t>& dst,
+                   const Viewport2D& viewport,
+                   int components,
+                   int attachment,
+                   int alignment,
+                   const char* dtype,
+                   size_t write_offset);
 
-    bool read(AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
-    bool read(AppCore::Ref<Buffer> dst);
-    bool read(AppCore::Ref<Buffer> dst,
-              const Viewport2D& viewport,
-              int components,
-              int attachment,
-              int alignment,
-              const char* dtype,
-              size_t write_offset);
+    bool
+    read_into(AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
+    bool read_into(AppCore::Ref<Buffer> dst);
+    bool read_into(AppCore::Ref<Buffer> dst,
+                   const Viewport2D& viewport,
+                   int components,
+                   int attachment,
+                   int alignment,
+                   const char* dtype,
+                   size_t write_offset);
 
     void use();
 
@@ -82,7 +88,7 @@ private:
     friend class Renderbuffer;
     friend class Texture2D;
 
-    Framebuffer(){};
+    Framebuffer() = default;
 
     Context* m_context;
     int m_framebuffer_obj;
@@ -162,25 +168,26 @@ private:
     clear(color.r, color.g, color.b, color.a, depth, rect);
   }
 
-  inline bool Framebuffer::read(void* dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
+  inline bool Framebuffer::read_into(
+      AppCore::MemoryBuffer<u_int8_t>& dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
   {
-    return read(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
+    return read_into(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
   }
 
-  inline bool Framebuffer::read(
+  inline bool Framebuffer::read_into(
       AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
   {
-    return read(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
+    return read_into(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
   }
 
-  inline bool Framebuffer::read(void* dst)
+  inline bool Framebuffer::read_into(AppCore::MemoryBuffer<u_int8_t>& dst)
   {
-    return read(dst, 3, 0, 1, "f1", 0);
+    return read_into(dst, 3, 0, 1, "f1", 0);
   }
 
-  inline bool Framebuffer::read(AppCore::Ref<Buffer> dst)
+  inline bool Framebuffer::read_into(AppCore::Ref<Buffer> dst)
   {
-    return read(dst, 3, 0, 1, "f1", 0);
+    return read_into(dst, 3, 0, 1, "f1", 0);
   }
 
   inline const ColorMasks& Framebuffer::color_mask() const

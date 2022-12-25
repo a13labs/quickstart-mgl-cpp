@@ -41,11 +41,11 @@ public:
     float anisotropy();
     void set_anisotropy(float value);
 
-    bool read(void* dst, int face, int alignment = 1, size_t write_offset = 0);
-    bool read(AppCore::Ref<Buffer>& dst, int face, int alignment = 1, size_t write_offset = 0);
+    bool read_into(AppCore::MemoryBuffer<uint8_t>& dst, int face, int alignment = 1, size_t write_offset = 0);
+    bool read_into(AppCore::Ref<Buffer>& dst, int face, int alignment = 1, size_t write_offset = 0);
 
-    bool write(const void* src, int face, const Viewport2D& viewport, int alignment = 1);
-    bool write(const void* src, int face, int alignment = 1);
+    bool write(const AppCore::MemoryBuffer<uint8_t>& src, int face, const Viewport2D& viewport, int alignment = 1);
+    bool write(const AppCore::MemoryBuffer<uint8_t>& src, int face, int alignment = 1);
     bool write(const AppCore::Ref<Buffer>& src, int face, const Viewport2D& viewport, int alignment = 1);
     bool write(const AppCore::Ref<Buffer>& src, int face, int alignment = 1);
 

@@ -71,10 +71,10 @@ public:
     float polygon_offset_units();
 
     // Buffer
-    AppCore::Ref<Buffer> buffer(const float* dst, size_t reserve = 0, bool dynamic = false);
-    AppCore::Ref<Buffer> buffer(const uint32_t* dst, size_t reserve = 0, bool dynamic = false);
-    AppCore::Ref<Buffer> buffer(const uint16_t* dst, size_t reserve = 0, bool dynamic = false);
-    AppCore::Ref<Buffer> buffer(const uint8_t* dst, size_t reserve = 0, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(AppCore::MemoryBuffer<float>& dst, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(AppCore::MemoryBuffer<uint32_t>& dst, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(AppCore::MemoryBuffer<uint16_t>& dst, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(AppCore::MemoryBuffer<uint8_t>& dst, bool dynamic = false);
 
     // Compute Shader
     AppCore::Ref<ComputeShader> compute_shader(const AppCore::String& source);
@@ -358,24 +358,24 @@ private:
     return m_polygon_offset_units;
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const float* data, size_t reserve, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(AppCore::MemoryBuffer<float>& dst, bool dynamic)
   {
-    return buffer((void*)data, sizeof(float) * reserve, dynamic);
+    return buffer(dst.data(), dst.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const uint32_t* data, size_t reserve, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(AppCore::MemoryBuffer<uint32_t>& dst, bool dynamic)
   {
-    return buffer((void*)data, sizeof(uint32_t) * reserve, dynamic);
+    return buffer(dst.data(), dst.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const uint16_t* data, size_t reserve, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(AppCore::MemoryBuffer<uint16_t>& dst, bool dynamic)
   {
-    return buffer((void*)data, sizeof(uint16_t) * reserve, dynamic);
+    return buffer(dst.data(), dst.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const uint8_t* data, size_t reserve, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(AppCore::MemoryBuffer<uint8_t>& dst, bool dynamic)
   {
-    return buffer((void*)data, sizeof(uint8_t) * reserve, dynamic);
+    return buffer(dst.data(), dst.size_bytes(), dynamic);
   }
 
   inline AppCore::Ref<Framebuffer> Context::framebuffer(AppCore::Ref<Attachment> depth_attachment)

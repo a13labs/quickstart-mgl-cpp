@@ -42,7 +42,7 @@ namespace AppGL
     return Texture::TEXTURE_3D;
   }
 
-  bool Texture3D::read(void* dst, int alignment, size_t write_offset)
+  bool Texture3D::read_into(AppCore::MemoryBuffer<uint8_t>& dst, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Texture3D already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -50,10 +50,15 @@ namespace AppGL
     APPCORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
     const GLMethods& gl = m_context->gl();
 
+    size_t expected_size = m_width * m_components * m_data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * m_height * m_depth;
+    APPCORE_ASSERT(dst.size_bytes() >= write_offset + expected_size, "out of bounds");
+
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
-    char* ptr = (char*)dst + write_offset;
+    char* ptr = (char*)dst.data() + write_offset;
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
@@ -65,7 +70,7 @@ namespace AppGL
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::read(AppCore::Ref<Buffer>& dst, int alignment, size_t write_offset)
+  bool Texture3D::read_into(AppCore::Ref<Buffer>& dst, int alignment, size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Texture3D already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -88,7 +93,7 @@ namespace AppGL
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const void* src, const Viewport3D& viewport, int alignment)
+  bool Texture3D::write(const AppCore::MemoryBuffer<uint8_t>& src, const Viewport3D& viewport, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture3D already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -102,20 +107,26 @@ namespace AppGL
     int width = viewport.width;
     int height = viewport.height;
     int depth = viewport.depth;
-    int pixel_type = m_data_type->gl_type;
+
+    size_t expected_size = width * m_components * m_data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * height * depth;
+    APPCORE_ASSERT(src.size_bytes() >= expected_size, "out of bounds");
+
     int base_format = m_data_type->base_format[m_components];
+    int pixel_type = m_data_type->gl_type;
 
     gl.ActiveTexture(GL_TEXTURE0 + m_context->default_texture_unit());
     gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
 
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-    gl.TexSubImage3D(GL_TEXTURE_3D, 0, x, y, z, width, height, depth, base_format, pixel_type, src);
+    gl.TexSubImage3D(GL_TEXTURE_3D, 0, x, y, z, width, height, depth, base_format, pixel_type, src.data());
 
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const void* src, int alignment)
+  bool Texture3D::write(const AppCore::MemoryBuffer<uint8_t>& src, int alignment)
   {
     APPCORE_ASSERT(!m_released, "Texture3D already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -129,6 +140,12 @@ namespace AppGL
     int width = m_width;
     int height = m_height;
     int depth = m_depth;
+
+    size_t expected_size = width * m_components * m_data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * height * depth;
+    APPCORE_ASSERT(src.size_bytes() >= expected_size, "out of bounds");
+
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
@@ -137,7 +154,7 @@ namespace AppGL
 
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-    gl.TexSubImage3D(GL_TEXTURE_3D, 0, x, y, z, width, height, depth, base_format, pixel_type, src);
+    gl.TexSubImage3D(GL_TEXTURE_3D, 0, x, y, z, width, height, depth, base_format, pixel_type, src.data());
 
     return gl.GetError() == GL_NO_ERROR;
   }
@@ -156,6 +173,7 @@ namespace AppGL
     int width = viewport.width;
     int height = viewport.height;
     int depth = viewport.depth;
+
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 
@@ -185,6 +203,7 @@ namespace AppGL
     int width = m_width;
     int height = m_height;
     int depth = m_depth;
+
     int pixel_type = m_data_type->gl_type;
     int base_format = m_data_type->base_format[m_components];
 

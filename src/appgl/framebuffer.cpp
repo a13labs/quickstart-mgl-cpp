@@ -136,13 +136,13 @@ namespace AppGL
     m_context->m_bound_framebuffer = shared_from_this();
   }
 
-  bool Framebuffer::read(void* dst,
-                         const Viewport2D& viewport,
-                         int components,
-                         int attachment,
-                         int alignment,
-                         const char* dtype,
-                         size_t write_offset)
+  bool Framebuffer::read_into(AppCore::MemoryBuffer<uint8_t>& dst,
+                              const Viewport2D& viewport,
+                              int components,
+                              int attachment,
+                              int alignment,
+                              const char* dtype,
+                              size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -161,10 +161,16 @@ namespace AppGL
       read_depth = true;
     }
 
+    size_t expected_size = viewport.width * components * data_type->size;
+    expected_size = (expected_size + alignment - 1) / alignment * alignment;
+    expected_size = expected_size * viewport.height;
+
+    APPCORE_ASSERT(dst.size_bytes() >= write_offset + expected_size, "out of bounds");
+
     int pixel_type = data_type->gl_type;
     int base_format = read_depth ? GL_DEPTH_COMPONENT : data_type->base_format[components];
 
-    char* ptr = (char*)dst + write_offset;
+    char* ptr = (char*)dst.data() + write_offset;
 
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_framebuffer_obj);
     gl.ReadBuffer(read_depth ? GL_NONE : (GL_COLOR_ATTACHMENT0 + attachment));
@@ -173,16 +179,16 @@ namespace AppGL
     gl.ReadPixels(viewport.x, viewport.y, viewport.width, viewport.height, base_format, pixel_type, ptr);
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
 
-    return true;
+    return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Framebuffer::read(AppCore::Ref<Buffer> dst,
-                         const Viewport2D& viewport,
-                         int components,
-                         int attachment,
-                         int alignment,
-                         const char* dtype,
-                         size_t write_offset)
+  bool Framebuffer::read_into(AppCore::Ref<Buffer> dst,
+                              const Viewport2D& viewport,
+                              int components,
+                              int attachment,
+                              int alignment,
+                              const char* dtype,
+                              size_t write_offset)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -213,7 +219,7 @@ namespace AppGL
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
     gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
-    return true;
+    return gl.GetError() == GL_NO_ERROR;
   }
 
   void Framebuffer::set_color_mask(const ColorMasks& masks)
@@ -267,7 +273,7 @@ namespace AppGL
     gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencil_bits);
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
 
-    return true;
+    return gl.GetError() == GL_NO_ERROR;
   }
 
 } // namespace AppGL
