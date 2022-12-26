@@ -2112,4 +2112,38 @@ namespace AppGL
     m_gl.Finish();
   }
 
+  void Context::clear_samplers(int start, int end)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+
+    start = APPGL_MAX(start, 0);
+    if(end == -1)
+    {
+      end = m_max_texture_units;
+    }
+    else
+    {
+      end = APPGL_MIN(end, m_max_texture_units);
+    }
+
+    for(int i = start; i < end; i++)
+    {
+      m_gl.BindSampler(i, 0);
+    }
+  }
+
+  void Context::clear(const glm::vec4& color, float depth, const Viewport2D& viewport)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    APPCORE_ASSERT(m_bound_framebuffer, "Context already released");
+    m_bound_framebuffer->clear(color, depth, viewport);
+  }
+
+  void Context::clear(float r, float g, float b, float a, float depth, const Viewport2D& viewport)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    APPCORE_ASSERT(m_bound_framebuffer, "Context already released");
+    m_bound_framebuffer->clear(r, g, b, a, depth, viewport);
+  }
+
 } // namespace AppGL

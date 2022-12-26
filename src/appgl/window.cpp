@@ -111,6 +111,10 @@ namespace AppGL
       return false;
     }
 
+    m_state.width = m_state.current_config.width;
+    m_state.height = m_state.current_config.height;
+    m_state.aspect_ratio = m_state.width / m_state.height;
+
     return true;
   }
 
@@ -131,7 +135,7 @@ namespace AppGL
 
   bool Window::on_window_resize(AppCore::Events::WindowResizeEvent& event)
   {
-    return true;
+    return BaseWindow::on_window_resize(event);
   }
 
 } // namespace AppGL

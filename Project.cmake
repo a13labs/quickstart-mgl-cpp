@@ -21,4 +21,7 @@ set(
 
 set(APP_LIBRARIES "appcore" "appgl")
 set(APP_EXECUTABLES "app")
-set(APP_EXAMPLES "basic_simple_color_triangle")
+set(APP_EXAMPLES 
+    "basic_simple_color_triangle"
+    "basic_alpha_blending"
+   )

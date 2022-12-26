@@ -17,6 +17,7 @@
 #include "appcore.hpp"
 #include "event.hpp"
 #include "input.hpp"
+#include "timer.hpp"
 
 #include "SDL2/SDL.h"
 
@@ -45,6 +46,9 @@ namespace AppCore
       WindowConfig current_config = WindowConfig();
       SDL_Window* native_window = nullptr;
       bool fullscreen = false;
+      int width;
+      int height;
+      float aspect_ratio;
     } WindowState;
 
     class BaseWindow
@@ -63,6 +67,8 @@ namespace AppCore
       void quit();
       void toggle_full_screen();
 
+      float aspect_ratio();
+
   public:
       inline static BaseWindow& current() { return *s_instance; }
 
@@ -71,7 +77,7 @@ namespace AppCore
 
       // Windows Events
       virtual bool on_window_close(Events::WindowCloseEvent& event);
-      virtual bool on_window_resize(Events::WindowResizeEvent& event) { return true; }
+      virtual bool on_window_resize(Events::WindowResizeEvent& event);
 
       // Keys Events
       virtual bool on_key_pressed(Events::KeyPressedEvent& event) { return true; }
@@ -83,7 +89,7 @@ namespace AppCore
       virtual bool on_mouse_button_pressed(Events::MouseButtonPressedEvent& event) { return true; }
       virtual bool on_mouse_button_released(Events::MouseButtonReleasedEvent& event) { return true; }
 
-      virtual void on_draw(){};
+      virtual void on_draw(float time, float frame_time){};
       virtual void on_load(){};
       virtual void on_unload(){};
 
@@ -93,9 +99,16 @@ namespace AppCore
   private:
       static BaseWindow* s_instance;
       bool m_running;
+      Timer m_timer;
     };
 
     WindowConfig load_window_configuration(const String& filename);
+
+    inline float BaseWindow::aspect_ratio()
+    {
+      return m_state.aspect_ratio;
+    }
+
   } // namespace Application
 
 } // namespace AppCore

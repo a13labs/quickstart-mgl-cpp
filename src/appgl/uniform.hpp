@@ -31,62 +31,62 @@ public:
 
     ~Uniform();
 
-    void read(bool& value);
-    void read(uint8_t& value);
-    void read(uint16_t& value);
-    void read(uint32_t& value);
-    void read(int& value);
-    void read(float& value);
-    void read(const glm::vec1& value);
-    void read(const glm::vec2& value);
-    void read(const glm::vec3& value);
-    void read(const glm::vec4& value);
-    void read(const glm::mat2& value);
-    void read(const glm::mat2x3& value);
-    void read(const glm::mat2x4& value);
-    void read(const glm::mat3& value);
-    void read(const glm::mat3x2& value);
-    void read(const glm::mat3x4& value);
-    void read(const glm::mat4& value);
-    void read(const glm::mat4x2& value);
-    void read(const glm::mat4x3& value);
-    void read(uint8_t* value, size_t size);
-    void read(uint16_t* value, size_t size);
-    void read(uint32_t* value, size_t size);
-    void read(int* value, size_t size);
-    void read(float* value, size_t size);
+    void get_value(bool& value);
+    void get_value(uint8_t& value);
+    void get_value(uint16_t& value);
+    void get_value(uint32_t& value);
+    void get_value(int& value);
+    void get_value(float& value);
+    void get_value(const glm::vec1& value);
+    void get_value(const glm::vec2& value);
+    void get_value(const glm::vec3& value);
+    void get_value(const glm::vec4& value);
+    void get_value(const glm::mat2& value);
+    void get_value(const glm::mat2x3& value);
+    void get_value(const glm::mat2x4& value);
+    void get_value(const glm::mat3& value);
+    void get_value(const glm::mat3x2& value);
+    void get_value(const glm::mat3x4& value);
+    void get_value(const glm::mat4& value);
+    void get_value(const glm::mat4x2& value);
+    void get_value(const glm::mat4x3& value);
+    void get_value(uint8_t* value, size_t size);
+    void get_value(uint16_t* value, size_t size);
+    void get_value(uint32_t* value, size_t size);
+    void get_value(int* value, size_t size);
+    void get_value(float* value, size_t size);
 
-    void write(bool value);
-    void write(uint8_t value);
-    void write(uint16_t value);
-    void write(uint32_t value);
-    void write(int value);
-    void write(float value);
-    void write(const glm::vec1 value);
-    void write(const glm::vec2 value);
-    void write(const glm::vec3 value);
-    void write(const glm::vec4 value);
-    void write(const glm::mat2 value);
-    void write(const glm::mat2x3 value);
-    void write(const glm::mat2x4 value);
-    void write(const glm::mat3 value);
-    void write(const glm::mat3x2 value);
-    void write(const glm::mat3x4 value);
-    void write(const glm::mat4 value);
-    void write(const glm::mat4x2 value);
-    void write(const glm::mat4x3 value);
-    void write(uint8_t* value, size_t size);
-    void write(uint16_t* value, size_t size);
-    void write(uint32_t* value, size_t size);
-    void write(int* value, size_t size);
-    void write(float* value, size_t size);
+    void set_value(bool value);
+    void set_value(uint8_t value);
+    void set_value(uint16_t value);
+    void set_value(uint32_t value);
+    void set_value(int value);
+    void set_value(float value);
+    void set_value(const glm::vec1 value);
+    void set_value(const glm::vec2 value);
+    void set_value(const glm::vec3 value);
+    void set_value(const glm::vec4 value);
+    void set_value(const glm::mat2 value);
+    void set_value(const glm::mat2x3 value);
+    void set_value(const glm::mat2x4 value);
+    void set_value(const glm::mat3 value);
+    void set_value(const glm::mat3x2 value);
+    void set_value(const glm::mat3x4 value);
+    void set_value(const glm::mat4 value);
+    void set_value(const glm::mat4x2 value);
+    void set_value(const glm::mat4x3 value);
+    void set_value(uint8_t* value, size_t size);
+    void set_value(uint16_t* value, size_t size);
+    void set_value(uint32_t* value, size_t size);
+    void set_value(int* value, size_t size);
+    void set_value(float* value, size_t size);
 
 private:
     friend class Context;
     Uniform(const AppCore::String& name, int gl_type, int program_obj, int location, size_t size, Context* ctx);
 
-    void write(void* data, size_t size);
-    void read(void* data, size_t size);
+    void set_value(void* data, size_t size);
+    void get_value(void* data, size_t size);
 
     Context* m_context;
     AppCore::String m_name;
@@ -98,258 +98,258 @@ private:
     uint8_t* m_data;
   };
 
-  inline void Uniform::read(uint8_t& value)
+  inline void Uniform::get_value(uint8_t& value)
   {
-    read((void*)&value, sizeof(uint8_t));
+    get_value((void*)&value, sizeof(uint8_t));
   }
 
-  inline void Uniform::read(uint16_t& value)
+  inline void Uniform::get_value(uint16_t& value)
   {
-    read((void*)&value, sizeof(uint16_t));
+    get_value((void*)&value, sizeof(uint16_t));
   }
 
-  inline void Uniform::read(uint32_t& value)
+  inline void Uniform::get_value(uint32_t& value)
   {
-    read((void*)&value, sizeof(uint32_t));
+    get_value((void*)&value, sizeof(uint32_t));
   }
 
-  inline void Uniform::read(int& value)
+  inline void Uniform::get_value(int& value)
   {
-    read((void*)&value, sizeof(int));
+    get_value((void*)&value, sizeof(int));
   }
 
-  inline void Uniform::read(float& value)
+  inline void Uniform::get_value(float& value)
   {
-    read((void*)&value, sizeof(float));
+    get_value((void*)&value, sizeof(float));
   }
 
-  inline void Uniform::read(const glm::vec1& value)
+  inline void Uniform::get_value(const glm::vec1& value)
   {
-    read((void*)&value, sizeof(glm::vec1));
+    get_value((void*)&value, sizeof(glm::vec1));
   }
 
-  inline void Uniform::read(const glm::vec2& value)
+  inline void Uniform::get_value(const glm::vec2& value)
   {
-    read((void*)&value, sizeof(glm::vec2));
+    get_value((void*)&value, sizeof(glm::vec2));
   }
 
-  inline void Uniform::read(const glm::vec3& value)
+  inline void Uniform::get_value(const glm::vec3& value)
   {
-    read((void*)&value, sizeof(glm::vec3));
+    get_value((void*)&value, sizeof(glm::vec3));
   }
 
-  inline void Uniform::read(const glm::vec4& value)
+  inline void Uniform::get_value(const glm::vec4& value)
   {
-    read((void*)&value, sizeof(glm::vec4));
+    get_value((void*)&value, sizeof(glm::vec4));
   }
 
-  inline void Uniform::read(const glm::mat2& value)
+  inline void Uniform::get_value(const glm::mat2& value)
   {
-    read((void*)&value, sizeof(glm::mat2));
+    get_value((void*)&value, sizeof(glm::mat2));
   }
 
-  inline void Uniform::read(const glm::mat2x3& value)
+  inline void Uniform::get_value(const glm::mat2x3& value)
   {
-    read((void*)&value, sizeof(glm::mat2x3));
+    get_value((void*)&value, sizeof(glm::mat2x3));
   }
 
-  inline void Uniform::read(const glm::mat2x4& value)
+  inline void Uniform::get_value(const glm::mat2x4& value)
   {
-    read((void*)&value, sizeof(glm::mat2x4));
+    get_value((void*)&value, sizeof(glm::mat2x4));
   }
 
-  inline void Uniform::read(const glm::mat3& value)
+  inline void Uniform::get_value(const glm::mat3& value)
   {
-    read((void*)&value, sizeof(glm::mat3));
+    get_value((void*)&value, sizeof(glm::mat3));
   }
 
-  inline void Uniform::read(const glm::mat3x2& value)
+  inline void Uniform::get_value(const glm::mat3x2& value)
   {
-    read((void*)&value, sizeof(glm::mat3x2));
+    get_value((void*)&value, sizeof(glm::mat3x2));
   }
 
-  inline void Uniform::read(const glm::mat3x4& value)
+  inline void Uniform::get_value(const glm::mat3x4& value)
   {
-    read((void*)&value, sizeof(glm::mat3x4));
+    get_value((void*)&value, sizeof(glm::mat3x4));
   }
 
-  inline void Uniform::read(const glm::mat4& value)
+  inline void Uniform::get_value(const glm::mat4& value)
   {
-    read((void*)&value, sizeof(glm::mat4));
+    get_value((void*)&value, sizeof(glm::mat4));
   }
 
-  inline void Uniform::read(const glm::mat4x2& value)
+  inline void Uniform::get_value(const glm::mat4x2& value)
   {
-    read((void*)&value, sizeof(glm::mat4x2));
+    get_value((void*)&value, sizeof(glm::mat4x2));
   }
 
-  inline void Uniform::read(const glm::mat4x3& value)
+  inline void Uniform::get_value(const glm::mat4x3& value)
   {
-    read((void*)&value, sizeof(glm::mat4x3));
+    get_value((void*)&value, sizeof(glm::mat4x3));
   }
 
-  inline void Uniform::read(uint8_t* value, size_t size)
+  inline void Uniform::get_value(uint8_t* value, size_t size)
   {
-    read((void*)value, size * sizeof(uint8_t));
+    get_value((void*)value, size * sizeof(uint8_t));
   }
 
-  inline void Uniform::read(uint16_t* value, size_t size)
+  inline void Uniform::get_value(uint16_t* value, size_t size)
   {
-    read((void*)value, size * sizeof(uint16_t));
+    get_value((void*)value, size * sizeof(uint16_t));
   }
 
-  inline void Uniform::read(uint32_t* value, size_t size)
+  inline void Uniform::get_value(uint32_t* value, size_t size)
   {
-    read((void*)value, size * sizeof(uint32_t));
+    get_value((void*)value, size * sizeof(uint32_t));
   }
 
-  inline void Uniform::read(int* value, size_t size)
+  inline void Uniform::get_value(int* value, size_t size)
   {
-    read((void*)value, size * sizeof(int));
+    get_value((void*)value, size * sizeof(int));
   }
 
-  inline void Uniform::read(float* value, size_t size)
+  inline void Uniform::get_value(float* value, size_t size)
   {
-    read((void*)value, size * sizeof(float));
+    get_value((void*)value, size * sizeof(float));
   }
 
-  inline void Uniform::write(bool value)
+  inline void Uniform::set_value(bool value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(bool));
+    set_value((void*)&tmp, sizeof(bool));
   }
 
-  inline void Uniform::write(uint8_t value)
+  inline void Uniform::set_value(uint8_t value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(uint8_t));
+    set_value((void*)&tmp, sizeof(uint8_t));
   }
 
-  inline void Uniform::write(uint16_t value)
+  inline void Uniform::set_value(uint16_t value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(uint16_t));
+    set_value((void*)&tmp, sizeof(uint16_t));
   }
 
-  inline void Uniform::write(uint32_t value)
+  inline void Uniform::set_value(uint32_t value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(uint32_t));
+    set_value((void*)&tmp, sizeof(uint32_t));
   }
 
-  inline void Uniform::write(int value)
+  inline void Uniform::set_value(int value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(int));
+    set_value((void*)&tmp, sizeof(int));
   }
 
-  inline void Uniform::write(float value)
+  inline void Uniform::set_value(float value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(float));
+    set_value((void*)&tmp, sizeof(float));
   }
 
-  inline void Uniform::write(const glm::vec1 value)
+  inline void Uniform::set_value(const glm::vec1 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::vec1));
+    set_value((void*)&tmp, sizeof(glm::vec1));
   }
 
-  inline void Uniform::write(const glm::vec2 value)
+  inline void Uniform::set_value(const glm::vec2 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::vec2));
+    set_value((void*)&tmp, sizeof(glm::vec2));
   }
 
-  inline void Uniform::write(const glm::vec3 value)
+  inline void Uniform::set_value(const glm::vec3 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::vec3));
+    set_value((void*)&tmp, sizeof(glm::vec3));
   }
 
-  inline void Uniform::write(const glm::vec4 value)
+  inline void Uniform::set_value(const glm::vec4 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::vec4));
+    set_value((void*)&tmp, sizeof(glm::vec4));
   }
 
-  inline void Uniform::write(const glm::mat2 value)
+  inline void Uniform::set_value(const glm::mat2 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::mat2));
+    set_value((void*)&tmp, sizeof(glm::mat2));
   }
 
-  inline void Uniform::write(const glm::mat2x3 value)
+  inline void Uniform::set_value(const glm::mat2x3 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::mat2x3));
+    set_value((void*)&tmp, sizeof(glm::mat2x3));
   }
 
-  inline void Uniform::write(const glm::mat2x4 value)
+  inline void Uniform::set_value(const glm::mat2x4 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::mat2x4));
+    set_value((void*)&tmp, sizeof(glm::mat2x4));
   }
 
-  inline void Uniform::write(const glm::mat3 value)
+  inline void Uniform::set_value(const glm::mat3 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::mat3));
+    set_value((void*)&tmp, sizeof(glm::mat3));
   }
 
-  inline void Uniform::write(const glm::mat3x2 value)
+  inline void Uniform::set_value(const glm::mat3x2 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::mat3x2));
+    set_value((void*)&tmp, sizeof(glm::mat3x2));
   }
 
-  inline void Uniform::write(const glm::mat3x4 value)
+  inline void Uniform::set_value(const glm::mat3x4 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::mat3x4));
+    set_value((void*)&tmp, sizeof(glm::mat3x4));
   }
 
-  inline void Uniform::write(const glm::mat4 value)
+  inline void Uniform::set_value(const glm::mat4 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::mat4));
+    set_value((void*)&tmp, sizeof(glm::mat4));
   }
 
-  inline void Uniform::write(const glm::mat4x2 value)
+  inline void Uniform::set_value(const glm::mat4x2 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::mat4x2));
+    set_value((void*)&tmp, sizeof(glm::mat4x2));
   }
 
-  inline void Uniform::write(const glm::mat4x3 value)
+  inline void Uniform::set_value(const glm::mat4x3 value)
   {
     auto tmp = value;
-    write((void*)&tmp, sizeof(glm::mat4x3));
+    set_value((void*)&tmp, sizeof(glm::mat4x3));
   }
 
-  inline void Uniform::write(uint8_t* value, size_t size)
+  inline void Uniform::set_value(uint8_t* value, size_t size)
   {
-    write((void*)&value, size * sizeof(uint8_t));
+    set_value((void*)&value, size * sizeof(uint8_t));
   }
 
-  inline void Uniform::write(uint16_t* value, size_t size)
+  inline void Uniform::set_value(uint16_t* value, size_t size)
   {
-    write((void*)&value, size * sizeof(uint16_t));
+    set_value((void*)&value, size * sizeof(uint16_t));
   }
 
-  inline void Uniform::write(uint32_t* value, size_t size)
+  inline void Uniform::set_value(uint32_t* value, size_t size)
   {
-    write((void*)&value, size * sizeof(uint32_t));
+    set_value((void*)&value, size * sizeof(uint32_t));
   }
 
-  inline void Uniform::write(int* value, size_t size)
+  inline void Uniform::set_value(int* value, size_t size)
   {
-    write((void*)&value, size * sizeof(int));
+    set_value((void*)&value, size * sizeof(int));
   }
 
-  inline void Uniform::write(float* value, size_t size)
+  inline void Uniform::set_value(float* value, size_t size)
   {
-    write((void*)&value, size * sizeof(float));
+    set_value((void*)&value, size * sizeof(float));
   }
 
 } // namespace AppGL

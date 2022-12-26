@@ -20,8 +20,6 @@
 
 namespace AppGL
 {
-  const std::string NoShader = "";
-
   void Program::release()
   {
     APPCORE_ASSERT(m_context, "No context");

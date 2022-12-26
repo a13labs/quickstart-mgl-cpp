@@ -102,5 +102,5 @@ namespace AppCore
   } // namespace Events
 
   using EventHandler = std::function<void(Events::Event&)>;
-
+  using Timepoint = std::chrono::time_point<std::chrono::system_clock>;
 } // namespace AppCore

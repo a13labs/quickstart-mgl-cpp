@@ -28,6 +28,7 @@ public:
     bool released();
 
     void render(AppGL::RenderMode mode = AppGL::RenderMode::TRIANGLES, int vertices = -1, int first = 0, int instances = -1);
+    void render(int instances);
     void render_indirect(const AppCore::Ref<Buffer>& buffer, AppGL::RenderMode mode, int count = -1, int first = -1);
     void
     transform(const AppCore::Ref<Buffer>& buffer, AppGL::RenderMode mode, int vertices = -1, int first = 0, int instances = -1);
@@ -74,6 +75,11 @@ private:
   VertexArray::transform(const AppCore::Ref<Buffer>& buffer, AppGL::RenderMode mode, int vertices, int first, int instances)
   {
     transform({ buffer }, mode, vertices, first, instances);
+  }
+
+  inline void VertexArray::render(int instances)
+  {
+    render(AppGL::TRIANGLES, -1, 0, instances);
   }
 
   inline int VertexArray::vertices()

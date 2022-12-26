@@ -48,38 +48,24 @@ public:
 
     bool bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits);
 
-    void clear(const glm::vec4& color, float depth);
-    void clear(float r, float g, float b, float a, float depth);
-    void clear(const glm::vec4& color, float depth, int w, int h);
-    void clear(const glm::vec4& color, float depth, const Viewport2D& rect);
-    void clear(float r, float g, float b, float a, float depth, int w, int h);
-    void clear(float r, float g, float b, float a, float depth, const Viewport2D& rect);
+    void clear(const glm::vec4& color, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
+    void clear(float r, float g, float b, float a = 0.0, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
 
     bool read_into(AppCore::MemoryBuffer<u_int8_t>& dst,
-                   int components,
-                   int attachment,
-                   int alignment,
-                   const char* dtype,
-                   size_t write_offset);
-    bool read_into(AppCore::MemoryBuffer<u_int8_t>& dst);
-    bool read_into(AppCore::MemoryBuffer<u_int8_t>& dst,
-                   const Viewport2D& viewport,
-                   int components,
-                   int attachment,
-                   int alignment,
-                   const char* dtype,
-                   size_t write_offset);
+                   const Viewport2D& viewport = NullViewport2D,
+                   int components = 3,
+                   int attachment = 0,
+                   int alignment = 1,
+                   const char* dtype = "f1",
+                   size_t write_offset = 0);
 
-    bool
-    read_into(AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset);
-    bool read_into(AppCore::Ref<Buffer> dst);
     bool read_into(AppCore::Ref<Buffer> dst,
-                   const Viewport2D& viewport,
-                   int components,
-                   int attachment,
-                   int alignment,
-                   const char* dtype,
-                   size_t write_offset);
+                   const Viewport2D& viewport = NullViewport2D,
+                   int components = 3,
+                   int attachment = 0,
+                   int alignment = 1,
+                   const char* dtype = "f1",
+                   size_t write_offset = 0);
 
     void use();
 
@@ -143,51 +129,9 @@ private:
     m_scissor_enabled = false;
   }
 
-  inline void Framebuffer::clear(float r, float g, float b, float a, float depth)
+  inline void Framebuffer::clear(const glm::vec4& color, float depth, const Viewport2D& viewport)
   {
-    clear(r, g, b, a, depth, {0, 0, m_width, m_height});
-  }
-
-  inline void Framebuffer::clear(float r, float g, float b, float a, float depth, int w, int h)
-  {
-    clear(r, g, b, a, depth, {0, 0, w, h});
-  }
-
-  inline void Framebuffer::clear(const glm::vec4& color, float depth)
-  {
-    clear(color.r, color.g, color.b, color.a, depth, {0, 0, m_width, m_height});
-  }
-
-  inline void Framebuffer::clear(const glm::vec4& color, float depth, int w, int h)
-  {
-    clear(color.r, color.g, color.b, color.a, depth, {0, 0, w, h});
-  }
-
-  inline void Framebuffer::clear(const glm::vec4& color, float depth, const Viewport2D& rect)
-  {
-    clear(color.r, color.g, color.b, color.a, depth, rect);
-  }
-
-  inline bool Framebuffer::read_into(
-      AppCore::MemoryBuffer<u_int8_t>& dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
-  {
-    return read_into(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
-  }
-
-  inline bool Framebuffer::read_into(
-      AppCore::Ref<Buffer> dst, int components, int attachment, int alignment, const char* dtype, size_t write_offset)
-  {
-    return read_into(dst, {0, 0, m_width, m_height}, components, attachment, alignment, dtype, write_offset);
-  }
-
-  inline bool Framebuffer::read_into(AppCore::MemoryBuffer<u_int8_t>& dst)
-  {
-    return read_into(dst, 3, 0, 1, "f1", 0);
-  }
-
-  inline bool Framebuffer::read_into(AppCore::Ref<Buffer> dst)
-  {
-    return read_into(dst, 3, 0, 1, "f1", 0);
+    clear(color.r, color.g, color.b, color.a, depth, viewport);
   }
 
   inline const ColorMasks& Framebuffer::color_mask() const
@@ -212,7 +156,7 @@ private:
 
   inline void Framebuffer::set_color_mask(const ColorMask& mask)
   {
-    set_color_mask({mask});
+    set_color_mask({ mask });
   }
 
 } // namespace AppGL

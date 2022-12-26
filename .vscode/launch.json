@@ -7,8 +7,24 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug",
+            "name": "app",
             "program": "${workspaceFolder}/output/bin/app",
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "basic_alpha_blending",
+            "program": "${workspaceFolder}/output/bin/basic_alpha_blending",
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "basic_simple_color_triangle",
+            "program": "${workspaceFolder}/output/bin/basic_simple_color_triangle",
             "args": [],
             "cwd": "${workspaceFolder}"
         }

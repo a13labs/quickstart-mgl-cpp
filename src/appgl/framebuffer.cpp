@@ -42,7 +42,7 @@ namespace AppGL
     }
   }
 
-  void Framebuffer::clear(float r, float g, float b, float a, float depth, const Viewport2D& rect)
+  void Framebuffer::clear(float r, float g, float b, float a, float depth, const Viewport2D& viewport)
   {
     APPCORE_ASSERT(!m_released, "Framebuffer already released");
     APPCORE_ASSERT(m_context, "No context");
@@ -66,13 +66,11 @@ namespace AppGL
 
     gl.DepthMask(m_depth_mask);
 
-    bool viewport = !(rect.x == 0 && rect.y == 0 && rect.width == m_width && rect.height == m_height);
-
     // Respect the passed in viewport even with scissor enabled
-    if(viewport)
+    if(viewport != NullViewport2D)
     {
       gl.Enable(GL_SCISSOR_TEST);
-      gl.Scissor(rect.x, rect.y, rect.width, rect.height);
+      gl.Scissor(viewport.x, viewport.y, viewport.width, viewport.height);
       gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
       // restore scissor if enabled
@@ -161,9 +159,21 @@ namespace AppGL
       read_depth = true;
     }
 
-    size_t expected_size = viewport.width * components * data_type->size;
+    int x = 0;
+    int y = 0;
+    int width = m_width;
+    int height = m_height;
+    if(viewport != NullViewport2D)
+    {
+      x = viewport.x;
+      y = viewport.y;
+      width = viewport.width;
+      height = viewport.height;
+    }
+
+    size_t expected_size = width * components * data_type->size;
     expected_size = (expected_size + alignment - 1) / alignment * alignment;
-    expected_size = expected_size * viewport.height;
+    expected_size = expected_size * height;
 
     APPCORE_ASSERT(dst.size_bytes() >= write_offset + expected_size, "out of bounds");
 
@@ -176,7 +186,7 @@ namespace AppGL
     gl.ReadBuffer(read_depth ? GL_NONE : (GL_COLOR_ATTACHMENT0 + attachment));
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-    gl.ReadPixels(viewport.x, viewport.y, viewport.width, viewport.height, base_format, pixel_type, ptr);
+    gl.ReadPixels(x, y, width, height, base_format, pixel_type, ptr);
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
 
     return gl.GetError() == GL_NO_ERROR;
@@ -207,6 +217,18 @@ namespace AppGL
       read_depth = true;
     }
 
+    int x = 0;
+    int y = 0;
+    int width = m_width;
+    int height = m_height;
+    if(viewport != NullViewport2D)
+    {
+      x = viewport.x;
+      y = viewport.y;
+      width = viewport.width;
+      height = viewport.height;
+    }
+
     int pixel_type = data_type->gl_type;
     int base_format = read_depth ? GL_DEPTH_COMPONENT : data_type->base_format[components];
 
@@ -215,7 +237,7 @@ namespace AppGL
     gl.ReadBuffer(read_depth ? GL_NONE : (GL_COLOR_ATTACHMENT0 + attachment));
     gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
     gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-    gl.ReadPixels(viewport.x, viewport.y, viewport.width, viewport.height, base_format, pixel_type, (void*)write_offset);
+    gl.ReadPixels(x, y, width, height, base_format, pixel_type, (void*)write_offset);
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
     gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 

@@ -22,6 +22,9 @@
 
 namespace AppGL
 {
+  using GLFunction = void*;
+  using GLContext = void*;
+
   enum RenderMode
   {
     POINTS = 0x0000,
@@ -37,9 +40,6 @@ namespace AppGL
     TRIANGLE_STRIP_ADJACENCY = 0x0000D,
     PATCHES = 0x000E,
   };
-
-  using GLFunction = void*;
-  using GLContext = void*;
 
   struct ColorMask
   {
@@ -191,6 +191,9 @@ namespace AppGL
   using SamplerBindings = AppCore::List<SamplerBinding>;
 
   extern const std::string NoShader;
+  extern const Viewport2D NullViewport2D;
+  extern const Viewport3D NullViewport3D;
+  extern const Size NullSize;
 
   struct VertexData
   {
@@ -200,5 +203,36 @@ namespace AppGL
   };
 
   using VertexDataArray = AppCore::List<VertexData>;
+
+  inline bool operator==(const Viewport2D& lhs, const Viewport2D& rhs)
+  {
+    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.width == rhs.width && lhs.height == rhs.height;
+  }
+
+  inline bool operator==(const Viewport3D& lhs, const Viewport3D& rhs)
+  {
+    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.width == rhs.width && lhs.height == rhs.height &&
+           lhs.depth == rhs.depth;
+  }
+
+  inline bool operator==(const Size& lhs, const Size& rhs)
+  {
+    return lhs.width == rhs.width && lhs.height == rhs.height;
+  }
+
+  inline bool operator!=(const Viewport2D& lhs, const Viewport2D& rhs)
+  {
+    return !(lhs == rhs);
+  }
+
+  inline bool operator!=(const Viewport3D& lhs, const Viewport3D& rhs)
+  {
+    return !(lhs == rhs);
+  }
+
+  inline bool operator!=(const Size& lhs, const Size& rhs)
+  {
+    return !(lhs == rhs);
+  }
 
 } // namespace AppGL

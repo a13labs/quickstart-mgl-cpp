@@ -137,12 +137,14 @@ namespace AppCore
       APPCORE_PROFILE_BEGIN_SESSION();
 
       on_load();
+      m_timer.start();
 
       while(m_running)
       {
         SDL_Event e;
         SDL_PollEvent(&e);
-        on_draw();
+        auto frame_time = m_timer.next_frame();
+        on_draw(frame_time.current, frame_time.delta);
         swap_buffers();
 #if APPCORE_PROFILE
         // Since we are profiling we just render one frame
@@ -175,6 +177,14 @@ namespace AppCore
       SDL_SetWindowSize(m_state.native_window, m_state.current_config.width, m_state.current_config.height);
       SDL_SetWindowPosition(m_state.native_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
       SDL_SetWindowFullscreen(m_state.native_window, 0);
+    }
+
+    bool BaseWindow::on_window_resize(AppCore::Events::WindowResizeEvent& event)
+    {
+      m_state.width = event.get_width();
+      m_state.height = event.get_height();
+      m_state.aspect_ratio = m_state.width / m_state.height;
+      return true;
     }
 
     WindowConfig load_window_configuration(const String& filename)

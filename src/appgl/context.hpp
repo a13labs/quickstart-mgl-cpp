@@ -66,6 +66,8 @@ public:
     void disable_direct(int value);
     void finish();
 
+    void clear_samplers(int start = 0, int end = -1);
+
     int front_face();
     int cull_face();
     int depth_func();
@@ -169,13 +171,6 @@ public:
                                            bool skip_errors = false,
                                            AppGL::RenderMode mode = AppGL::RenderMode::POINTS);
 
-    // AppCore::Ref<VertexArray> simple_vertex_array(AppCore::Ref<Program> program,
-    //                                               AppCore::Ref<Buffer> vertex_data,
-    //                                               AppCore::Ref<Buffer> index_buffer = nullptr,
-    //                                               int index_element_size = 4,
-    //                                               bool skip_errors = false,
-    //                                               AppGL::RenderMode mode = AppGL::RenderMode::POINTS);
-
     virtual GLFunction load(const AppCore::String& method) = 0;
     virtual void enter() = 0;
     virtual void exit() = 0;
@@ -185,12 +180,8 @@ public:
 
     bool released();
     ContextMode::Enum mode();
-    void clear(const glm::vec4& color, float depth = 0.0);
-    void clear(float r, float g, float b, float a = 0.0, float depth = 0.0);
-    void clear(const glm::vec4& color, float depth, int w, int h);
-    void clear(const glm::vec4& color, float depth, const Viewport2D& rect);
-    void clear(float r, float g, float b, float a, float depth, int w, int h);
-    void clear(float r, float g, float b, float a, float depth, const Viewport2D& rect);
+    void clear(const glm::vec4& color, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
+    void clear(float r, float g, float b, float a = 0.0, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
 
 private:
     void load_functions();
@@ -421,35 +412,4 @@ private:
   {
     return framebuffer(color_attachments, AppCore::Ref<Attachment>(nullptr));
   }
-
-  inline void Context::clear(const glm::vec4& color, float depth)
-  {
-    m_bound_framebuffer->clear(color, depth);
-  }
-
-  inline void Context::clear(float r, float g, float b, float a, float depth)
-  {
-    m_bound_framebuffer->clear(r, g, b, a, depth);
-  }
-
-  inline void Context::clear(const glm::vec4& color, float depth, int w, int h)
-  {
-    m_bound_framebuffer->clear(color, depth, w, h);
-  }
-
-  inline void Context::clear(const glm::vec4& color, float depth, const Viewport2D& rect)
-  {
-    m_bound_framebuffer->clear(color, depth, rect);
-  }
-
-  inline void Context::clear(float r, float g, float b, float a, float depth, int w, int h)
-  {
-    m_bound_framebuffer->clear(r, g, b, a, depth, w, h);
-  }
-
-  inline void Context::clear(float r, float g, float b, float a, float depth, const Viewport2D& rect)
-  {
-    m_bound_framebuffer->clear(r, g, b, a, depth, rect);
-  }
-
 } // namespace AppGL
