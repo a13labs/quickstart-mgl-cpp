@@ -82,7 +82,10 @@ namespace AppCore
       virtual bool on_mouse_scrolled(Events::MouseScrolledEvent& event) { return true; }
       virtual bool on_mouse_button_pressed(Events::MouseButtonPressedEvent& event) { return true; }
       virtual bool on_mouse_button_released(Events::MouseButtonReleasedEvent& event) { return true; }
-      virtual void draw(){};
+
+      virtual void on_draw(){};
+      virtual void on_load(){};
+      virtual void on_unload(){};
 
   protected:
       WindowState m_state;

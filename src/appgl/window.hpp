@@ -36,9 +36,15 @@ public:
     virtual void swap_buffers() override;
 
     virtual bool on_window_resize(AppCore::Events::WindowResizeEvent& event) override;
+    AppCore::Ref<Context> context();
 
 private:
     SDL_GLContext m_context;
     AppCore::Ref<Context> m_shared_context;
   };
+
+  inline AppCore::Ref<Context> Window::context()
+  {
+    return m_shared_context;
+  }
 } // namespace AppGL

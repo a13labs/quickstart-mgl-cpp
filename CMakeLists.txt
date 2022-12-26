@@ -85,6 +85,11 @@ foreach(APP_EXECUTABLE ${APP_EXECUTABLES})
   AddExecutable(${APP_EXECUTABLE})
 endforeach()
 
+foreach(APP_EXAMPLE ${APP_EXAMPLES})
+  message(STATUS "Adding examples: '${APP_EXAMPLE}")
+  AddExample(${APP_EXAMPLE})
+endforeach()
+
 # Unit Testing
 # https://github.com/google/googletest.git
 

@@ -21,14 +21,24 @@ namespace AppGL
 {
   class Subroutine
   {
+    enum Type
+    {
+      VERTEX_SHADER = GL_VERTEX_SHADER,
+      FRAGMENT_SHADER = GL_FRAGMENT_SHADER,
+      GEOMETRY_SHADER = GL_GEOMETRY_SHADER,
+      TESS_EVALUATION_SHADER = GL_TESS_EVALUATION_SHADER,
+      TESS_CONTROL_SHADER = GL_TESS_CONTROL_SHADER,
+    };
+
 public:
     ~Subroutine() = default;
 
 private:
     friend class Context;
-    Subroutine(const AppCore::String& name, int index);
+    Subroutine(const AppCore::String& name, int index, Subroutine::Type type);
 
     AppCore::String m_name;
     int m_index;
+    Subroutine::Type m_type;
   };
 } // namespace AppGL

@@ -15,6 +15,8 @@
 */
 #pragma once
 #include "appgl.hpp"
+#include "framebuffer.hpp"
+#include "glm/glm.hpp"
 #include "glmethods.hpp"
 
 namespace AppGL
@@ -32,7 +34,7 @@ namespace AppGL
   class Context : public AppCore::RefFromThis<Context>
   {
 public:
-    enum Flags
+    enum EnableFlag
     {
       NOTHING = 0,
       BLEND = 1,
@@ -58,6 +60,11 @@ public:
 
     int enable_flags();
     void set_enable_flags(int flags);
+    void enable(int flags);
+    void disable(int flags);
+    void enable_direct(int value);
+    void disable_direct(int value);
+    void finish();
 
     int front_face();
     int cull_face();
@@ -69,12 +76,14 @@ public:
     int provoking_vertex();
     float polygon_offset_factor();
     float polygon_offset_units();
+    void copy_buffer(
+        const AppCore::Ref<Buffer>& src, const AppCore::Ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset);
 
     // Buffer
-    AppCore::Ref<Buffer> buffer(AppCore::MemoryBuffer<float>& dst, bool dynamic = false);
-    AppCore::Ref<Buffer> buffer(AppCore::MemoryBuffer<uint32_t>& dst, bool dynamic = false);
-    AppCore::Ref<Buffer> buffer(AppCore::MemoryBuffer<uint16_t>& dst, bool dynamic = false);
-    AppCore::Ref<Buffer> buffer(AppCore::MemoryBuffer<uint8_t>& dst, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(const AppCore::MemoryBuffer<float>& data, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(const AppCore::MemoryBuffer<uint32_t>& data, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(const AppCore::MemoryBuffer<uint16_t>& data, bool dynamic = false);
+    AppCore::Ref<Buffer> buffer(const AppCore::MemoryBuffer<uint8_t>& data, bool dynamic = false);
 
     // Compute Shader
     AppCore::Ref<ComputeShader> compute_shader(const AppCore::String& source);
@@ -92,8 +101,6 @@ public:
                                   const ShadersOutputs& outputs = {},
                                   const FragmentOutputs& fragment_outputs = {},
                                   bool interleaved = true);
-    AppCore::Ref<Program> program(const ShadersSources& shaders, const ShadersOutputs& outputs, bool interleaved = true);
-    AppCore::Ref<Program> program(const ShadersSources& shaders, bool interleaved = true);
 
     // Query
     AppCore::Ref<Query>
@@ -178,6 +185,12 @@ public:
 
     bool released();
     ContextMode::Enum mode();
+    void clear(const glm::vec4& color, float depth = 0.0);
+    void clear(float r, float g, float b, float a = 0.0, float depth = 0.0);
+    void clear(const glm::vec4& color, float depth, int w, int h);
+    void clear(const glm::vec4& color, float depth, const Viewport2D& rect);
+    void clear(float r, float g, float b, float a, float depth, int w, int h);
+    void clear(float r, float g, float b, float a, float depth, const Viewport2D& rect);
 
 private:
     void load_functions();
@@ -329,11 +342,6 @@ private:
     return m_enable_flags;
   }
 
-  inline void Context::set_enable_flags(int flags)
-  {
-    m_enable_flags = flags;
-  }
-
   inline int Context::front_face()
   {
     return m_front_face;
@@ -384,24 +392,24 @@ private:
     return m_polygon_offset_units;
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(AppCore::MemoryBuffer<float>& dst, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(const AppCore::MemoryBuffer<float>& data, bool dynamic)
   {
-    return buffer(dst.data(), dst.size_bytes(), dynamic);
+    return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(AppCore::MemoryBuffer<uint32_t>& dst, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(const AppCore::MemoryBuffer<uint32_t>& data, bool dynamic)
   {
-    return buffer(dst.data(), dst.size_bytes(), dynamic);
+    return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(AppCore::MemoryBuffer<uint16_t>& dst, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(const AppCore::MemoryBuffer<uint16_t>& data, bool dynamic)
   {
-    return buffer(dst.data(), dst.size_bytes(), dynamic);
+    return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(AppCore::MemoryBuffer<uint8_t>& dst, bool dynamic)
+  inline AppCore::Ref<Buffer> Context::buffer(const AppCore::MemoryBuffer<uint8_t>& data, bool dynamic)
   {
-    return buffer(dst.data(), dst.size_bytes(), dynamic);
+    return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
   inline AppCore::Ref<Framebuffer> Context::framebuffer(AppCore::Ref<Attachment> depth_attachment)
@@ -414,14 +422,34 @@ private:
     return framebuffer(color_attachments, AppCore::Ref<Attachment>(nullptr));
   }
 
-  inline AppCore::Ref<Program> Context::program(const ShadersSources& shaders, const ShadersOutputs& outputs, bool interleaved)
+  inline void Context::clear(const glm::vec4& color, float depth)
   {
-    return program(shaders, outputs, FragmentOutputs(), interleaved);
+    m_bound_framebuffer->clear(color, depth);
   }
 
-  inline AppCore::Ref<Program> Context::program(const ShadersSources& shaders, bool interleaved)
+  inline void Context::clear(float r, float g, float b, float a, float depth)
   {
-    return program(shaders, ShadersOutputs(), FragmentOutputs(), interleaved);
+    m_bound_framebuffer->clear(r, g, b, a, depth);
+  }
+
+  inline void Context::clear(const glm::vec4& color, float depth, int w, int h)
+  {
+    m_bound_framebuffer->clear(color, depth, w, h);
+  }
+
+  inline void Context::clear(const glm::vec4& color, float depth, const Viewport2D& rect)
+  {
+    m_bound_framebuffer->clear(color, depth, rect);
+  }
+
+  inline void Context::clear(float r, float g, float b, float a, float depth, int w, int h)
+  {
+    m_bound_framebuffer->clear(r, g, b, a, depth, w, h);
+  }
+
+  inline void Context::clear(float r, float g, float b, float a, float depth, const Viewport2D& rect)
+  {
+    m_bound_framebuffer->clear(r, g, b, a, depth, rect);
   }
 
 } // namespace AppGL

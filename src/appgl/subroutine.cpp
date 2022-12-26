@@ -20,10 +20,11 @@
 
 namespace AppGL
 {
-  Subroutine::Subroutine(const AppCore::String& name, int index)
+  Subroutine::Subroutine(const AppCore::String& name, int index, Subroutine::Type type)
   {
     m_name = name;
     m_index = index;
+    m_type = type;
   }
 
 } // namespace AppGL

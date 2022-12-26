@@ -52,6 +52,7 @@ private:
     friend class Texture3D;
     friend class TextureArray;
     friend class TextureCube;
+    friend class VertexArray;
 
     Buffer() = default;
 

@@ -53,6 +53,7 @@ public:
 
 private:
     friend class Context;
+    friend class VertexArray;
     Program() = default;
 
     Context* m_context;
@@ -62,6 +63,12 @@ private:
     int m_geometry_vertices;
     bool m_transform;
     bool m_released;
+    int m_num_vertex_shader_subroutines;
+    int m_num_fragment_shader_subroutines;
+    int m_num_geometry_shader_subroutines;
+    int m_num_tess_evaluation_shader_subroutines;
+    int m_num_tess_control_shader_subroutines;
+
     UniformsMap m_uniforms_map;
     UniformBlocksMap m_uniform_blocks_map;
     AttributesMap m_attributes_map;

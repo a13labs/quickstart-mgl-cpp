@@ -42,11 +42,7 @@ namespace AppGL
 {
 
   static const int SHADER_TYPE[5] = {
-      GL_VERTEX_SHADER,
-      GL_FRAGMENT_SHADER,
-      GL_GEOMETRY_SHADER,
-      GL_TESS_CONTROL_SHADER,
-      GL_TESS_EVALUATION_SHADER,
+    GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, GL_GEOMETRY_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER,
   };
 
   inline void framebuffer_error_message(int status)
@@ -246,16 +242,16 @@ namespace AppGL
       gl.GetIntegerv(GL_DRAW_BUFFER, (int*)&framebuffer->m_draw_buffers[0]);
       gl.BindFramebuffer(GL_FRAMEBUFFER, bound_framebuffer);
 
-      framebuffer->m_color_masks = {{true, true, true, true}};
+      framebuffer->m_color_masks = { { true, true, true, true } };
       framebuffer->m_depth_mask = true;
 
       int scissor_box[4] = {};
       gl.GetIntegerv(GL_SCISSOR_BOX, scissor_box);
 
-      framebuffer->m_viewport = {scissor_box[0], scissor_box[1], scissor_box[2], scissor_box[3]};
+      framebuffer->m_viewport = { scissor_box[0], scissor_box[1], scissor_box[2], scissor_box[3] };
 
       framebuffer->m_scissor_enabled = false;
-      framebuffer->m_scissor = {scissor_box[0], scissor_box[1], scissor_box[2], scissor_box[3]};
+      framebuffer->m_scissor = { scissor_box[0], scissor_box[1], scissor_box[2], scissor_box[3] };
 
       framebuffer->m_width = scissor_box[2];
       framebuffer->m_height = scissor_box[3];
@@ -425,7 +421,7 @@ namespace AppGL
       }
 
       compute_shader->m_uniforms_map.insert(
-          {name, AppCore::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this))});
+          { name, AppCore::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
     }
 
     int num_uniform_blocks = 0;
@@ -444,7 +440,7 @@ namespace AppGL
       clean_glsl_name(name, name_len);
 
       compute_shader->m_uniform_blocks_map.insert(
-          {name, AppCore::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this))});
+          { name, AppCore::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
     }
 
     return AppCore::Ref<ComputeShader>(compute_shader);
@@ -615,24 +611,25 @@ namespace AppGL
         auto texture = std::dynamic_pointer_cast<Texture2D>(attachment);
         APPCORE_ASSERT(texture, "Not a texture2D");
         framebuffer->m_color_masks[i] = {
-            texture->m_components >= 1, texture->m_components >= 2, texture->m_components >= 3, texture->m_components >= 4};
+          texture->m_components >= 1, texture->m_components >= 2, texture->m_components >= 3, texture->m_components >= 4
+        };
       }
       else if(attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(attachment);
         APPCORE_ASSERT(renderbuffer, "Not a Renderbuffer");
-        framebuffer->m_color_masks[i] = {renderbuffer->m_components >= 1,
-                                         renderbuffer->m_components >= 2,
-                                         renderbuffer->m_components >= 3,
-                                         renderbuffer->m_components >= 4};
+        framebuffer->m_color_masks[i] = { renderbuffer->m_components >= 1,
+                                          renderbuffer->m_components >= 2,
+                                          renderbuffer->m_components >= 3,
+                                          renderbuffer->m_components >= 4 };
       }
     }
 
     framebuffer->m_depth_mask = (depth_attachment != nullptr);
-    framebuffer->m_viewport = {0, 0, width, height};
+    framebuffer->m_viewport = { 0, 0, width, height };
     framebuffer->m_dynamic = false;
     framebuffer->m_scissor_enabled = false;
-    framebuffer->m_scissor = {0, 0, width, height};
+    framebuffer->m_scissor = { 0, 0, width, height };
     framebuffer->m_width = width;
     framebuffer->m_height = height;
     framebuffer->m_samples = samples;
@@ -735,7 +732,7 @@ namespace AppGL
       return nullptr;
     }
 
-    int shader_objs[] = {0, 0, 0, 0, 0};
+    int shader_objs[] = { 0, 0, 0, 0, 0 };
 
     for(int i = 0; i < ShadersSources::COUNT; ++i)
     {
@@ -764,19 +761,11 @@ namespace AppGL
       if(!compiled)
       {
         const char* SHADER_NAME[] = {
-            "vertex_shader",
-            "fragment_shader",
-            "geometry_shader",
-            "tess_control_shader",
-            "tess_evaluation_shader",
+          "vertex_shader", "fragment_shader", "geometry_shader", "tess_control_shader", "tess_evaluation_shader",
         };
 
         const char* SHADER_NAME_UNDERLINE[] = {
-            "=============",
-            "===============",
-            "===============",
-            "===================",
-            "======================",
+          "=============", "===============", "===============", "===================", "======================",
         };
 
         const char* message = "GLSL Compiler failed";
@@ -858,6 +847,65 @@ namespace AppGL
     }
 
     program->m_program_obj = program_obj;
+
+    int num_vertex_shader_subroutines = 0;
+    int num_fragment_shader_subroutines = 0;
+    int num_geometry_shader_subroutines = 0;
+    int num_tess_evaluation_shader_subroutines = 0;
+    int num_tess_control_shader_subroutines = 0;
+
+    int num_vertex_shader_subroutine_uniforms = 0;
+    int num_fragment_shader_subroutine_uniforms = 0;
+    int num_geometry_shader_subroutine_uniforms = 0;
+    int num_tess_evaluation_shader_subroutine_uniforms = 0;
+    int num_tess_control_shader_subroutine_uniforms = 0;
+
+    if(program->m_context->version_code() >= 400)
+    {
+      if(!shaders.sources[ShadersSources::Type::VERTEX_SHADER].empty())
+      {
+        gl.GetProgramStageiv(program_obj, GL_VERTEX_SHADER, GL_ACTIVE_SUBROUTINES, &num_vertex_shader_subroutines);
+        gl.GetProgramStageiv(
+            program_obj, GL_VERTEX_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_vertex_shader_subroutine_uniforms);
+      }
+
+      if(!shaders.sources[ShadersSources::Type::FRAGMENT_SHADER].empty())
+      {
+        gl.GetProgramStageiv(program_obj, GL_FRAGMENT_SHADER, GL_ACTIVE_SUBROUTINES, &num_fragment_shader_subroutines);
+        gl.GetProgramStageiv(
+            program_obj, GL_FRAGMENT_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_fragment_shader_subroutine_uniforms);
+      }
+
+      if(!shaders.sources[ShadersSources::Type::GEOMETRY_SHADER].empty())
+      {
+        gl.GetProgramStageiv(program_obj, GL_GEOMETRY_SHADER, GL_ACTIVE_SUBROUTINES, &num_geometry_shader_subroutines);
+        gl.GetProgramStageiv(
+            program_obj, GL_GEOMETRY_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_geometry_shader_subroutine_uniforms);
+      }
+
+      if(!shaders.sources[ShadersSources::Type::TESS_EVALUATION_SHADER].empty())
+      {
+        gl.GetProgramStageiv(
+            program_obj, GL_TESS_EVALUATION_SHADER, GL_ACTIVE_SUBROUTINES, &num_tess_evaluation_shader_subroutines);
+        gl.GetProgramStageiv(program_obj,
+                             GL_TESS_EVALUATION_SHADER,
+                             GL_ACTIVE_SUBROUTINE_UNIFORMS,
+                             &num_tess_evaluation_shader_subroutine_uniforms);
+      }
+
+      if(!shaders.sources[ShadersSources::Type::TESS_CONTROL_SHADER].empty())
+      {
+        gl.GetProgramStageiv(program_obj, GL_TESS_CONTROL_SHADER, GL_ACTIVE_SUBROUTINES, &num_tess_control_shader_subroutines);
+        gl.GetProgramStageiv(
+            program_obj, GL_TESS_CONTROL_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_tess_control_shader_subroutine_uniforms);
+      }
+    }
+
+    program->m_num_vertex_shader_subroutines = num_vertex_shader_subroutine_uniforms;
+    program->m_num_fragment_shader_subroutines = num_fragment_shader_subroutine_uniforms;
+    program->m_num_geometry_shader_subroutines = num_geometry_shader_subroutine_uniforms;
+    program->m_num_tess_evaluation_shader_subroutines = num_tess_evaluation_shader_subroutine_uniforms;
+    program->m_num_tess_control_shader_subroutines = num_tess_control_shader_subroutine_uniforms;
 
     if(!shaders.sources[ShadersSources::Type::GEOMETRY_SHADER].empty())
     {
@@ -954,7 +1002,7 @@ namespace AppGL
       clean_glsl_name(name, name_len);
 
       program->m_attributes_map.insert(
-          {name, AppCore::Ref<Attribute>(new Attribute(name, type, program->m_program_obj, location, array_length))});
+          { name, AppCore::Ref<Attribute>(new Attribute(name, type, program->m_program_obj, location, array_length)) });
     }
 
     for(int i = 0; i < num_varyings; ++i)
@@ -967,7 +1015,7 @@ namespace AppGL
 
       gl.GetTransformFeedbackVarying(program->m_program_obj, i, 256, &name_len, &array_length, (GLenum*)&type, name);
 
-      program->m_varyings_map.insert({name, AppCore::Ref<Varying>(new Varying(name, i, array_length, dimension))});
+      program->m_varyings_map.insert({ name, AppCore::Ref<Varying>(new Varying(name, i, array_length, dimension)) });
     }
 
     for(int i = 0; i < num_uniforms; ++i)
@@ -987,7 +1035,7 @@ namespace AppGL
         continue;
       }
 
-      program->m_uniforms_map.insert({name, AppCore::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this))});
+      program->m_uniforms_map.insert({ name, AppCore::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
     }
 
     for(int i = 0; i < num_uniform_blocks; ++i)
@@ -1003,29 +1051,30 @@ namespace AppGL
       clean_glsl_name(name, name_len);
 
       program->m_uniform_blocks_map.insert(
-          {name, AppCore::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this))});
+          { name, AppCore::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
     }
 
     if(program->m_context->version_code() >= 400)
     {
-
       for(int st = 0; st < 5; ++st)
       {
         int num_subroutines = 0;
-        gl.GetProgramStageiv(program_obj, SHADER_TYPE[st], GL_ACTIVE_SUBROUTINES, &num_subroutines);
+        auto type = AppGL::Subroutine::Type(SHADER_TYPE[st]);
+
+        gl.GetProgramStageiv(program_obj, type, GL_ACTIVE_SUBROUTINES, &num_subroutines);
 
         int num_subroutine_uniforms = 0;
-        gl.GetProgramStageiv(program_obj, SHADER_TYPE[st], GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_subroutine_uniforms);
+        gl.GetProgramStageiv(program_obj, type, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_subroutine_uniforms);
 
         for(int i = 0; i < num_subroutines; ++i)
         {
           int name_len = 0;
           char name[256];
 
-          gl.GetActiveSubroutineName(program_obj, SHADER_TYPE[st], i, 256, &name_len, name);
-          int index = gl.GetSubroutineIndex(program_obj, SHADER_TYPE[st], name);
+          gl.GetActiveSubroutineName(program_obj, type, i, 256, &name_len, name);
+          int index = gl.GetSubroutineIndex(program_obj, type, name);
 
-          program->m_subroutines_map.insert({name, AppCore::Ref<Subroutine>(new Subroutine(name, index))});
+          program->m_subroutines_map.insert({ name, AppCore::Ref<Subroutine>(new Subroutine(name, index, type)) });
         }
       }
     }
@@ -1202,7 +1251,7 @@ namespace AppGL
     auto sampler = new Sampler();
     sampler->m_released = false;
     sampler->m_context = this;
-    sampler->m_filter = {GL_LINEAR, GL_LINEAR};
+    sampler->m_filter = { GL_LINEAR, GL_LINEAR };
     sampler->m_anisotropy = 0.0;
     sampler->m_repeat_x = true;
     sampler->m_repeat_y = true;
@@ -1234,7 +1283,7 @@ namespace AppGL
     scope->m_released = false;
     scope->m_context = this;
     scope->m_enable_flags = enable_flags;
-    scope->m_old_enable_flags = Context::Flags::INVALID;
+    scope->m_old_enable_flags = Context::EnableFlag::INVALID;
     scope->m_framebuffer = framebuffer;
     scope->m_old_framebuffer = m_bound_framebuffer;
     scope->m_textures = AppCore::List<Scope::BindingData>(textures.size());
@@ -1375,7 +1424,7 @@ namespace AppGL
     texture->m_depth = false;
 
     auto filter = data_type->float_type ? GL_LINEAR : GL_NEAREST;
-    texture->m_filter = {filter, filter};
+    texture->m_filter = { filter, filter };
 
     texture->m_repeat_x = true;
     texture->m_repeat_y = true;
@@ -1451,7 +1500,7 @@ namespace AppGL
     texture->m_compare_func = Texture2D::Func::EQUAL;
     texture->m_anisotropy = 1.0f;
     texture->m_depth = true;
-    texture->m_filter = {GL_LINEAR, GL_LINEAR};
+    texture->m_filter = { GL_LINEAR, GL_LINEAR };
     texture->m_repeat_x = false;
     texture->m_repeat_y = false;
     texture->m_texture_obj = 0;
@@ -1526,7 +1575,7 @@ namespace AppGL
     texture->m_max_level = 0;
 
     auto filter = data_type->float_type ? GL_LINEAR : GL_NEAREST;
-    texture->m_filter = {filter, filter};
+    texture->m_filter = { filter, filter };
 
     texture->m_repeat_x = true;
     texture->m_repeat_y = true;
@@ -1604,7 +1653,7 @@ namespace AppGL
     texture->m_max_level = 0;
 
     auto filter = data_type->float_type ? GL_LINEAR : GL_NEAREST;
-    texture->m_filter = {filter, filter};
+    texture->m_filter = { filter, filter };
 
     texture->m_repeat_x = true;
     texture->m_repeat_y = true;
@@ -1681,7 +1730,7 @@ namespace AppGL
     texture->m_max_level = 0;
 
     auto filter = data_type->float_type ? GL_LINEAR : GL_NEAREST;
-    texture->m_filter = {filter, filter};
+    texture->m_filter = { filter, filter };
 
     texture->m_texture_obj = 0;
 
@@ -1704,12 +1753,9 @@ namespace AppGL
     expected_size = expected_size * height * 6;
 
     const char* ptr[6] = {
-        (const char*)data + expected_size * 0 / 6,
-        (const char*)data + expected_size * 1 / 6,
-        (const char*)data + expected_size * 2 / 6,
-        (const char*)data + expected_size * 3 / 6,
-        (const char*)data + expected_size * 4 / 6,
-        (const char*)data + expected_size * 5 / 6,
+      (const char*)data + expected_size * 0 / 6, (const char*)data + expected_size * 1 / 6,
+      (const char*)data + expected_size * 2 / 6, (const char*)data + expected_size * 3 / 6,
+      (const char*)data + expected_size * 4 / 6, (const char*)data + expected_size * 5 / 6,
     };
 
     gl.BindTexture(GL_TEXTURE_CUBE_MAP, texture->m_texture_obj);
@@ -1813,7 +1859,7 @@ namespace AppGL
     array->m_program = program;
     array->m_index_buffer = index_buffer;
     array->m_index_element_size = index_element_size;
-    const int element_types[5] = {0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_UNSIGNED_INT};
+    const int element_types[5] = { 0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_UNSIGNED_INT };
     array->m_index_element_type = element_types[index_element_size];
     array->m_num_vertices = -1;
 
@@ -1900,7 +1946,170 @@ namespace AppGL
       i++;
     }
 
+    array->m_num_subroutines = 0;
+    array->m_subroutines = nullptr;
+    array->m_num_subroutines += array->m_program->m_num_vertex_shader_subroutines;
+    array->m_num_subroutines += array->m_program->m_num_fragment_shader_subroutines;
+    array->m_num_subroutines += array->m_program->m_num_geometry_shader_subroutines;
+    array->m_num_subroutines += array->m_program->m_num_tess_evaluation_shader_subroutines;
+    array->m_num_subroutines += array->m_program->m_num_tess_control_shader_subroutines;
+
+    if(array->m_num_subroutines)
+    {
+      array->m_subroutines = new unsigned[array->m_num_subroutines];
+    }
+
     return AppCore::Ref<VertexArray>(array);
+  }
+
+  void Context::set_enable_flags(int flags)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    m_enable_flags = flags;
+
+    if(flags & Context::EnableFlag::BLEND)
+    {
+      m_gl.Enable(GL_BLEND);
+    }
+    else
+    {
+      m_gl.Disable(GL_BLEND);
+    }
+
+    if(flags & Context::EnableFlag::DEPTH_TEST)
+    {
+      m_gl.Enable(GL_DEPTH_TEST);
+    }
+    else
+    {
+      m_gl.Disable(GL_DEPTH_TEST);
+    }
+
+    if(flags & Context::EnableFlag::CULL_FACE)
+    {
+      m_gl.Enable(GL_CULL_FACE);
+    }
+    else
+    {
+      m_gl.Disable(GL_CULL_FACE);
+    }
+
+    if(flags & Context::EnableFlag::RASTERIZER_DISCARD)
+    {
+      m_gl.Enable(GL_RASTERIZER_DISCARD);
+    }
+    else
+    {
+      m_gl.Disable(GL_RASTERIZER_DISCARD);
+    }
+
+    if(flags & Context::EnableFlag::PROGRAM_POINT_SIZE)
+    {
+      m_gl.Enable(GL_PROGRAM_POINT_SIZE);
+    }
+    else
+    {
+      m_gl.Disable(GL_PROGRAM_POINT_SIZE);
+    }
+  }
+
+  void Context::enable(int flags)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    m_enable_flags |= flags;
+
+    if(flags & Context::EnableFlag::BLEND)
+    {
+      m_gl.Enable(GL_BLEND);
+    }
+
+    if(flags & Context::EnableFlag::DEPTH_TEST)
+    {
+      m_gl.Enable(GL_DEPTH_TEST);
+    }
+
+    if(flags & Context::EnableFlag::CULL_FACE)
+    {
+      m_gl.Enable(GL_CULL_FACE);
+    }
+
+    if(flags & Context::EnableFlag::RASTERIZER_DISCARD)
+    {
+      m_gl.Enable(GL_RASTERIZER_DISCARD);
+    }
+
+    if(flags & Context::EnableFlag::PROGRAM_POINT_SIZE)
+    {
+      m_gl.Enable(GL_PROGRAM_POINT_SIZE);
+    }
+  }
+
+  void Context::disable(int flags)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+
+    m_enable_flags &= ~flags;
+
+    if(flags & Context::EnableFlag::BLEND)
+    {
+      m_gl.Disable(GL_BLEND);
+    }
+
+    if(flags & Context::EnableFlag::DEPTH_TEST)
+    {
+      m_gl.Disable(GL_DEPTH_TEST);
+    }
+
+    if(flags & Context::EnableFlag::CULL_FACE)
+    {
+      m_gl.Disable(GL_CULL_FACE);
+    }
+
+    if(flags & Context::EnableFlag::RASTERIZER_DISCARD)
+    {
+      m_gl.Disable(GL_RASTERIZER_DISCARD);
+    }
+
+    if(flags & Context::EnableFlag::PROGRAM_POINT_SIZE)
+    {
+      m_gl.Disable(GL_PROGRAM_POINT_SIZE);
+    }
+  }
+
+  void Context::copy_buffer(
+      const AppCore::Ref<Buffer>& src, const AppCore::Ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset)
+  {
+    APPCORE_ASSERT(read_offset >= 0 && write_offset >= 0, "buffer underflow");
+    APPCORE_ASSERT(!released(), "Context already released");
+
+    if(size < 0)
+    {
+      size = src->size() - read_offset;
+    }
+
+    APPCORE_ASSERT((read_offset + size <= src->size() && write_offset + size <= dst->size()), "buffer overflow");
+
+    m_gl.BindBuffer(GL_COPY_READ_BUFFER, src->m_buffer_obj);
+    m_gl.BindBuffer(GL_COPY_WRITE_BUFFER, dst->m_buffer_obj);
+    m_gl.CopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, read_offset, write_offset, size);
+  }
+
+  void Context::enable_direct(int value)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    m_gl.Enable(value);
+  }
+
+  void Context::disable_direct(int value)
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    m_gl.Disable(value);
+  }
+
+  void Context::finish()
+  {
+    APPCORE_ASSERT(!released(), "Context already released");
+    m_gl.Finish();
   }
 
 } // namespace AppGL

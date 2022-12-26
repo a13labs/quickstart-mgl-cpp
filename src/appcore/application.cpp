@@ -136,17 +136,21 @@ namespace AppCore
 
       APPCORE_PROFILE_BEGIN_SESSION();
 
+      on_load();
+
       while(m_running)
       {
         SDL_Event e;
         SDL_PollEvent(&e);
-        draw();
+        on_draw();
         swap_buffers();
 #if APPCORE_PROFILE
         // Since we are profiling we just render one frame
         m_running = false;
 #endif
       }
+
+      on_unload();
 
       APPCORE_PROFILE_END_SESSION();
       destroy_window();
