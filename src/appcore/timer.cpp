@@ -71,4 +71,14 @@ namespace AppCore
     return { current, delta };
   }
 
+  float Timer::stop()
+  {
+    auto elapsed =
+        std::chrono::duration<float, std::chrono::seconds::period>(std::chrono::system_clock::now() - m_start_time - m_offset);
+
+    m_running = false;
+    m_paused = false;
+    return elapsed.count();
+  }
+
 } // namespace AppCore

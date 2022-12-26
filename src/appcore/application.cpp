@@ -151,7 +151,6 @@ namespace AppCore
         m_running = false;
 #endif
       }
-
       on_unload();
 
       APPCORE_PROFILE_END_SESSION();

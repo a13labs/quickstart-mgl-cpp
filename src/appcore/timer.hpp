@@ -21,7 +21,7 @@ public:
     Timer::FrameTime next_frame();
     void start();
     void pause();
-    void stop();
+    float stop();
     void toogle_pause();
 
 private:
@@ -42,12 +42,6 @@ private:
   inline bool Timer::is_running()
   {
     return m_running;
-  }
-
-  inline void Timer::stop()
-  {
-    m_running = false;
-    m_paused = false;
   }
 
   inline void Timer::toogle_pause()
