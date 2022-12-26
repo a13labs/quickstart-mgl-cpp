@@ -62,7 +62,9 @@ namespace AppCore
       virtual bool create_window() = 0;
       virtual void destroy_window() = 0;
       virtual void swap_buffers() = 0;
+      virtual void set_title(const AppCore::String& value) = 0;
 
+      virtual const AppCore::String& title() const;
       void run();
       void quit();
       void toggle_full_screen();
@@ -107,6 +109,11 @@ namespace AppCore
     inline float BaseWindow::aspect_ratio()
     {
       return m_state.aspect_ratio;
+    }
+
+    inline const AppCore::String& BaseWindow::title() const
+    {
+      return m_state.current_config.title;
     }
 
   } // namespace Application

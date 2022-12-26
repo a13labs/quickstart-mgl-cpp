@@ -114,6 +114,7 @@ namespace AppGL
     m_state.width = m_state.current_config.width;
     m_state.height = m_state.current_config.height;
     m_state.aspect_ratio = m_state.width / m_state.height;
+    m_title = m_state.current_config.title;
 
     return true;
   }
@@ -136,6 +137,17 @@ namespace AppGL
   bool Window::on_window_resize(AppCore::Events::WindowResizeEvent& event)
   {
     return BaseWindow::on_window_resize(event);
+  }
+
+  void Window::set_title(const AppCore::String& value)
+  {
+    m_title = value;
+    SDL_SetWindowTitle(m_state.native_window, m_title.c_str());
+  }
+
+  const AppCore::String& Window::title() const
+  {
+    return m_title;
   }
 
 } // namespace AppGL

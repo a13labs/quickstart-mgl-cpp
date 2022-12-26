@@ -38,9 +38,13 @@ public:
     virtual bool on_window_resize(AppCore::Events::WindowResizeEvent& event) override;
     AppCore::Ref<Context> context();
 
+    virtual void set_title(const AppCore::String& value) override;
+    virtual const AppCore::String& title() const override;
+
 private:
     SDL_GLContext m_context;
     AppCore::Ref<Context> m_shared_context;
+    AppCore::String m_title;
   };
 
   inline AppCore::Ref<Context> Window::context()

@@ -30,6 +30,8 @@ void ExampleWindow::on_draw(float time, float frame_time)
 void ExampleWindow::on_load()
 {
   APPCORE_INFO("ExampleWindow::on_load");
+  set_title("basic_simple_color_triangle");
+
   const auto ctx = context();
   m_program = ctx->program({
       R""""(
