@@ -170,8 +170,13 @@ public:
 
     bool released();
     ContextMode::Enum mode();
-    void clear(const glm::vec4& color, float depth = 0.0, const viewport_2d& viewport = null_viewport_2d);
-    void clear(float r, float g, float b, float a = 0.0, float depth = 0.0, const viewport_2d& viewport = null_viewport_2d);
+    void clear(const glm::vec4& color, float depth = 0.0, const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d);
+    void clear(float r,
+               float g,
+               float b,
+               float a = 0.0,
+               float depth = 0.0,
+               const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d);
 
 private:
     void load_functions();

@@ -437,7 +437,7 @@ namespace mgl_window
     return m_state.width / m_state.height;
   }
 
-  mgl::size WindowSDL::get_drawable_size()
+  mgl_core::size WindowSDL::get_drawable_size()
   {
     int x, y;
     SDL_GL_GetDrawableSize(m_native_window, &x, &y);

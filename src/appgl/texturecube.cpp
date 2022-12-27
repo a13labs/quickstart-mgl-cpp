@@ -95,7 +95,8 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const mgl_core::mem_buffer<uint8_t>& src, int face, const viewport_2d& viewport, int alignment)
+  bool
+  TextureCube::write(const mgl_core::mem_buffer<uint8_t>& src, int face, const mgl_core::viewport_2d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -159,7 +160,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const mgl_core::ref<Buffer>& src, int face, const viewport_2d& viewport, int alignment)
+  bool TextureCube::write(const mgl_core::ref<Buffer>& src, int face, const mgl_core::viewport_2d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");

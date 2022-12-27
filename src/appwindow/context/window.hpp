@@ -45,7 +45,7 @@ public:
     virtual void swap_buffers() = 0;
     virtual void initialize_event_handler(const event_handler& handler) = 0;
     virtual void toggle_full_screen() = 0;
-    virtual mgl::size get_drawable_size() = 0;
+    virtual mgl_core::size get_drawable_size() = 0;
 
     virtual int width() = 0;
     virtual int height() = 0;

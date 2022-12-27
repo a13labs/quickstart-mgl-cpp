@@ -50,7 +50,7 @@ public:
 
     virtual void initialize_event_handler(const event_handler& handler) override;
     virtual void toggle_full_screen() override;
-    virtual mgl::size get_drawable_size() override;
+    virtual mgl_core::size get_drawable_size() override;
 
     virtual void set_title(const mgl_core::string& value) override;
     virtual const mgl_core::string& title() const override;

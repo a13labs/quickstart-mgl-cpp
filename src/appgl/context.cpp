@@ -2133,14 +2133,14 @@ namespace mgl
     }
   }
 
-  void Context::clear(const glm::vec4& color, float depth, const viewport_2d& viewport)
+  void Context::clear(const glm::vec4& color, float depth, const mgl_core::viewport_2d& viewport)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     MGL_CORE_ASSERT(m_bound_framebuffer, "Context already released");
     m_bound_framebuffer->clear(color, depth, viewport);
   }
 
-  void Context::clear(float r, float g, float b, float a, float depth, const viewport_2d& viewport)
+  void Context::clear(float r, float g, float b, float a, float depth, const mgl_core::viewport_2d& viewport)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     MGL_CORE_ASSERT(m_bound_framebuffer, "Context already released");

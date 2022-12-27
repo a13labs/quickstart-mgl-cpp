@@ -72,88 +72,6 @@ namespace mgl
 
   struct data_type;
 
-  struct viewport_2d
-  {
-    int x;
-    int y;
-    int width;
-    int height;
-
-    viewport_2d(int x, int y, int w, int h)
-        : x(x)
-        , y(y)
-        , width(w)
-        , height(h)
-    { }
-
-    viewport_2d(int w, int h)
-        : x(0)
-        , y(0)
-        , width(w)
-        , height(h)
-    { }
-
-    viewport_2d()
-        : x(0)
-        , y(0)
-        , width(0)
-        , height(0)
-    { }
-  };
-
-  struct viewport_3d
-  {
-    int x;
-    int y;
-    int z;
-    int width;
-    int height;
-    int depth;
-
-    viewport_3d(int x, int y, int z, int w, int h, int d)
-        : x(x)
-        , y(y)
-        , z(z)
-        , width(w)
-        , height(h)
-        , depth(d)
-    { }
-
-    viewport_3d(int w, int h, int d)
-        : x(0)
-        , y(0)
-        , z(0)
-        , width(w)
-        , height(h)
-        , depth(d)
-    { }
-
-    viewport_3d()
-        : x(0)
-        , y(0)
-        , z(0)
-        , width(0)
-        , height(0)
-        , depth(0)
-    { }
-  };
-
-  struct size
-  {
-    int width;
-    int height;
-
-    size(int w, int h)
-        : width(w)
-        , height(h)
-    { }
-
-    size()
-        : width(0)
-        , height(0)
-    { }
-  };
-
   struct shaders_sources;
 
   class Attribute;
@@ -215,9 +133,6 @@ namespace mgl
   using sampler_bindings = mgl_core::list<sampler_binding>;
 
   extern const std::string no_shader;
-  extern const viewport_2d null_viewport_2d;
-  extern const viewport_3d null_viewport_3d;
-  extern const size null_size;
 
   struct vertex_data
   {
@@ -227,36 +142,4 @@ namespace mgl
   };
 
   using vertex_data_list = mgl_core::list<vertex_data>;
-
-  inline bool operator==(const viewport_2d& lhs, const viewport_2d& rhs)
-  {
-    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.width == rhs.width && lhs.height == rhs.height;
-  }
-
-  inline bool operator==(const viewport_3d& lhs, const viewport_3d& rhs)
-  {
-    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.width == rhs.width && lhs.height == rhs.height &&
-           lhs.depth == rhs.depth;
-  }
-
-  inline bool operator==(const size& lhs, const size& rhs)
-  {
-    return lhs.width == rhs.width && lhs.height == rhs.height;
-  }
-
-  inline bool operator!=(const viewport_2d& lhs, const viewport_2d& rhs)
-  {
-    return !(lhs == rhs);
-  }
-
-  inline bool operator!=(const viewport_3d& lhs, const viewport_3d& rhs)
-  {
-    return !(lhs == rhs);
-  }
-
-  inline bool operator!=(const size& lhs, const size& rhs)
-  {
-    return !(lhs == rhs);
-  }
-
 } // namespace mgl

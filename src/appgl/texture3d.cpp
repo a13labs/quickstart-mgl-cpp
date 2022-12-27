@@ -93,7 +93,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const mgl_core::mem_buffer<uint8_t>& src, const viewport_3d& viewport, int alignment)
+  bool Texture3D::write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -159,7 +159,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const mgl_core::ref<Buffer>& src, const viewport_3d& viewport, int alignment)
+  bool Texture3D::write(const mgl_core::ref<Buffer>& src, const mgl_core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
