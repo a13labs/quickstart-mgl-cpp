@@ -34,17 +34,6 @@ namespace mgl
   class Context
   {
 public:
-    enum flag
-    {
-      NOTHING = 0,
-      BLEND = BIT(1),
-      DEPTH_TEST = BIT(2),
-      CULL_FACE = BIT(3),
-      RASTERIZER_DISCARD = BIT(4),
-      PROGRAM_POINT_SIZE = BIT(5),
-      INVALID = 0x40000000
-    };
-
     virtual ~Context() = default;
 
     const GLMethods& gl() const;

@@ -41,6 +41,17 @@ namespace mgl
     PATCHES = 0x000E,
   };
 
+  enum enable_flag
+  {
+    NOTHING = 0,
+    BLEND = BIT(1),
+    DEPTH_TEST = BIT(2),
+    CULL_FACE = BIT(3),
+    RASTERIZER_DISCARD = BIT(4),
+    PROGRAM_POINT_SIZE = BIT(5),
+    INVALID = 0x40000000
+  };
+
   struct color_mask
   {
     bool r, g, b, a;

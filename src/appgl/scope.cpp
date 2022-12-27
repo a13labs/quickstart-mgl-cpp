@@ -69,7 +69,7 @@ namespace mgl
       sampler.sampler->use(sampler.binding);
     }
 
-    if(flags & Context::flag::BLEND)
+    if(flags & mgl::enable_flag::BLEND)
     {
       gl.Enable(GL_BLEND);
     }
@@ -78,7 +78,7 @@ namespace mgl
       gl.Disable(GL_BLEND);
     }
 
-    if(flags & Context::flag::DEPTH_TEST)
+    if(flags & mgl::enable_flag::DEPTH_TEST)
     {
       gl.Enable(GL_DEPTH_TEST);
     }
@@ -87,7 +87,7 @@ namespace mgl
       gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & Context::flag::CULL_FACE)
+    if(flags & mgl::enable_flag::CULL_FACE)
     {
       gl.Enable(GL_CULL_FACE);
     }
@@ -96,7 +96,7 @@ namespace mgl
       gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & Context::flag::RASTERIZER_DISCARD)
+    if(flags & mgl::enable_flag::RASTERIZER_DISCARD)
     {
       gl.Enable(GL_RASTERIZER_DISCARD);
     }
@@ -105,7 +105,7 @@ namespace mgl
       gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Context::flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::enable_flag::PROGRAM_POINT_SIZE)
     {
       gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -127,7 +127,7 @@ namespace mgl
 
     m_old_framebuffer->use();
 
-    if(flags & Context::flag::BLEND)
+    if(flags & mgl::enable_flag::BLEND)
     {
       gl.Enable(GL_BLEND);
     }
@@ -136,7 +136,7 @@ namespace mgl
       gl.Disable(GL_BLEND);
     }
 
-    if(flags & Context::flag::DEPTH_TEST)
+    if(flags & mgl::enable_flag::DEPTH_TEST)
     {
       gl.Enable(GL_DEPTH_TEST);
     }
@@ -145,7 +145,7 @@ namespace mgl
       gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & Context::flag::CULL_FACE)
+    if(flags & mgl::enable_flag::CULL_FACE)
     {
       gl.Enable(GL_CULL_FACE);
     }
@@ -154,7 +154,7 @@ namespace mgl
       gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & Context::flag::RASTERIZER_DISCARD)
+    if(flags & mgl::enable_flag::RASTERIZER_DISCARD)
     {
       gl.Enable(GL_RASTERIZER_DISCARD);
     }
@@ -163,7 +163,7 @@ namespace mgl
       gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Context::flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::enable_flag::PROGRAM_POINT_SIZE)
     {
       gl.Enable(GL_PROGRAM_POINT_SIZE);
     }

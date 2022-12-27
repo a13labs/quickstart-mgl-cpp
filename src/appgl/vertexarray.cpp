@@ -303,7 +303,7 @@ namespace mgl
     }
 
     gl.EndTransformFeedback();
-    if(~m_context->enable_flags() & Context::flag::RASTERIZER_DISCARD)
+    if(~m_context->enable_flags() & mgl::enable_flag::RASTERIZER_DISCARD)
     {
       gl.Disable(GL_RASTERIZER_DISCARD);
     }

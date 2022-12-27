@@ -1284,7 +1284,7 @@ namespace mgl
     scope->m_released = false;
     scope->m_context = this;
     scope->m_enable_flags = enable_flags;
-    scope->m_old_enable_flags = Context::flag::INVALID;
+    scope->m_old_enable_flags = mgl::enable_flag::INVALID;
     scope->m_framebuffer = framebuffer;
     scope->m_old_framebuffer = m_bound_framebuffer;
     scope->m_textures = mgl_core::list<Scope::BindingData>(textures.size());
@@ -1968,7 +1968,7 @@ namespace mgl
     MGL_CORE_ASSERT(!released(), "Context already released");
     m_enable_flags = flags;
 
-    if(flags & Context::flag::BLEND)
+    if(flags & mgl::enable_flag::BLEND)
     {
       m_gl.Enable(GL_BLEND);
     }
@@ -1977,7 +1977,7 @@ namespace mgl
       m_gl.Disable(GL_BLEND);
     }
 
-    if(flags & Context::flag::DEPTH_TEST)
+    if(flags & mgl::enable_flag::DEPTH_TEST)
     {
       m_gl.Enable(GL_DEPTH_TEST);
     }
@@ -1986,7 +1986,7 @@ namespace mgl
       m_gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & Context::flag::CULL_FACE)
+    if(flags & mgl::enable_flag::CULL_FACE)
     {
       m_gl.Enable(GL_CULL_FACE);
     }
@@ -1995,7 +1995,7 @@ namespace mgl
       m_gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & Context::flag::RASTERIZER_DISCARD)
+    if(flags & mgl::enable_flag::RASTERIZER_DISCARD)
     {
       m_gl.Enable(GL_RASTERIZER_DISCARD);
     }
@@ -2004,7 +2004,7 @@ namespace mgl
       m_gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Context::flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::enable_flag::PROGRAM_POINT_SIZE)
     {
       m_gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -2019,27 +2019,27 @@ namespace mgl
     MGL_CORE_ASSERT(!released(), "Context already released");
     m_enable_flags |= flags;
 
-    if(flags & Context::flag::BLEND)
+    if(flags & mgl::enable_flag::BLEND)
     {
       m_gl.Enable(GL_BLEND);
     }
 
-    if(flags & Context::flag::DEPTH_TEST)
+    if(flags & mgl::enable_flag::DEPTH_TEST)
     {
       m_gl.Enable(GL_DEPTH_TEST);
     }
 
-    if(flags & Context::flag::CULL_FACE)
+    if(flags & mgl::enable_flag::CULL_FACE)
     {
       m_gl.Enable(GL_CULL_FACE);
     }
 
-    if(flags & Context::flag::RASTERIZER_DISCARD)
+    if(flags & mgl::enable_flag::RASTERIZER_DISCARD)
     {
       m_gl.Enable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Context::flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::enable_flag::PROGRAM_POINT_SIZE)
     {
       m_gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -2051,27 +2051,27 @@ namespace mgl
 
     m_enable_flags &= ~flags;
 
-    if(flags & Context::flag::BLEND)
+    if(flags & mgl::enable_flag::BLEND)
     {
       m_gl.Disable(GL_BLEND);
     }
 
-    if(flags & Context::flag::DEPTH_TEST)
+    if(flags & mgl::enable_flag::DEPTH_TEST)
     {
       m_gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & Context::flag::CULL_FACE)
+    if(flags & mgl::enable_flag::CULL_FACE)
     {
       m_gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & Context::flag::RASTERIZER_DISCARD)
+    if(flags & mgl::enable_flag::RASTERIZER_DISCARD)
     {
       m_gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Context::flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::enable_flag::PROGRAM_POINT_SIZE)
     {
       m_gl.Disable(GL_PROGRAM_POINT_SIZE);
     }
