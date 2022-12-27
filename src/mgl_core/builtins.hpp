@@ -214,4 +214,14 @@ namespace mgl_core
   {
     return !(lhs == rhs);
   }
+
+  using path = std::filesystem::path;
+  using path_list = mgl_core::list<path>;
+  using input_file = std::ifstream;
+  using output_file = std::ofstream;
+  using openmode = std::ifstream::openmode;
+  extern const path null_path;
+
+  void split(string& str, const string& delimiter, string_list& list);
+
 } // namespace mgl_core

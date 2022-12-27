@@ -17,4 +17,7 @@ namespace mgl_window
   class MouseButtonReleasedEvent;
 
   using event_handler = std::function<void(Event&)>;
+
+  using shader_defines = mgl_core::dict<mgl_core::string, mgl_core::string>;
+
 } // namespace mgl_window
