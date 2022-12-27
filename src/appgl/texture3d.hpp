@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "texture.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Texture3D : public Texture
   {
@@ -45,16 +45,16 @@ public:
     const Texture::Filter& filter() const;
     void set_filter(const Texture::Filter& value);
 
-    AppCore::String swizzle();
-    void set_swizzle(const AppCore::String& value);
+    mgl_core::String swizzle();
+    void set_swizzle(const mgl_core::String& value);
 
-    bool read_into(AppCore::MemoryBuffer<uint8_t>& dst, int alignment = 1, size_t write_offset = 0);
-    bool read_into(AppCore::Ref<Buffer>& dst, int alignment = 1, size_t write_offset = 0);
+    bool read_into(mgl_core::MemoryBuffer<uint8_t>& dst, int alignment = 1, size_t write_offset = 0);
+    bool read_into(mgl_core::Ref<Buffer>& dst, int alignment = 1, size_t write_offset = 0);
 
-    bool write(const AppCore::MemoryBuffer<uint8_t>& src, const Viewport3D& viewport, int alignment = 1);
-    bool write(const AppCore::MemoryBuffer<uint8_t>& src, int alignment = 1);
-    bool write(const AppCore::Ref<Buffer>& src, const Viewport3D& viewport, int alignment = 1);
-    bool write(const AppCore::Ref<Buffer>& src, int alignment = 1);
+    bool write(const mgl_core::MemoryBuffer<uint8_t>& src, const Viewport3D& viewport, int alignment = 1);
+    bool write(const mgl_core::MemoryBuffer<uint8_t>& src, int alignment = 1);
+    bool write(const mgl_core::Ref<Buffer>& src, const Viewport3D& viewport, int alignment = 1);
+    bool write(const mgl_core::Ref<Buffer>& src, int alignment = 1);
 
     void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
     void use(int index = 0);
@@ -119,4 +119,4 @@ private:
     return m_filter;
   }
 
-} // namespace AppGL
+} // namespace mgl

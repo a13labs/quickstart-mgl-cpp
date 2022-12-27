@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
   struct ShadersSources
   {
@@ -31,33 +31,33 @@ namespace AppGL
       COUNT,
     };
 
-    AppCore::String sources[ShadersSources::COUNT];
+    mgl_core::String sources[ShadersSources::COUNT];
 
-    ShadersSources(const AppCore::String& vs_source,
-                   const AppCore::String& fs_source,
-                   const AppCore::String& gs_source,
-                   const AppCore::String& tes_source,
-                   const AppCore::String& tcs_source)
+    ShadersSources(const mgl_core::String& vs_source,
+                   const mgl_core::String& fs_source,
+                   const mgl_core::String& gs_source,
+                   const mgl_core::String& tes_source,
+                   const mgl_core::String& tcs_source)
         : sources{ vs_source, fs_source, gs_source, tes_source, tcs_source }
     { }
 
-    ShadersSources(const AppCore::String& vs_source,
-                   const AppCore::String& fs_source,
-                   const AppCore::String& gs_source,
-                   const AppCore::String& tes_source)
+    ShadersSources(const mgl_core::String& vs_source,
+                   const mgl_core::String& fs_source,
+                   const mgl_core::String& gs_source,
+                   const mgl_core::String& tes_source)
         : sources{ vs_source, fs_source, gs_source, tes_source, NoShader }
     { }
 
-    ShadersSources(const AppCore::String& vs_source, const AppCore::String& fs_source, const AppCore::String& gs_source)
+    ShadersSources(const mgl_core::String& vs_source, const mgl_core::String& fs_source, const mgl_core::String& gs_source)
         : sources{ vs_source, fs_source, gs_source, NoShader, NoShader }
     { }
 
-    ShadersSources(const AppCore::String& vs_source, const AppCore::String& fs_source)
+    ShadersSources(const mgl_core::String& vs_source, const mgl_core::String& fs_source)
         : sources{ vs_source, fs_source, NoShader, NoShader, NoShader }
     { }
 
-    ShadersSources(const AppCore::String& vs_source)
+    ShadersSources(const mgl_core::String& vs_source)
         : sources{ vs_source, NoShader, NoShader, NoShader, NoShader }
     { }
   };
-} // namespace AppGL
+} // namespace mgl

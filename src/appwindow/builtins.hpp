@@ -2,7 +2,7 @@
 #include "appcore/appcore.hpp"
 #include "appgl/appgl.hpp"
 
-namespace AppWindow
+namespace mgl_window
 {
   class Event;
   class EventListener;
@@ -17,4 +17,4 @@ namespace AppWindow
   class MouseButtonReleasedEvent;
 
   using EventHandler = std::function<void(Event&)>;
-} // namespace AppWindow
+} // namespace mgl_window

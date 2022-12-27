@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/vec4.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Sampler
   {
@@ -151,4 +151,4 @@ private:
     set_border_color({ r, g, b, a });
   }
 
-} // namespace AppGL
+} // namespace mgl

@@ -21,17 +21,17 @@
 #include "event.hpp"
 #include "input.hpp"
 
-namespace AppWindow
+namespace mgl_window
 {
 
   Window* Window::s_instance = nullptr;
 
   Window::Window(const WindowConfig& config)
   {
-    APPCORE_ASSERT(!s_instance, "BaseWindow already running!");
-    AppCore::Log::init();
+    MGL_CORE_ASSERT(!s_instance, "BaseWindow already running!");
+    mgl_core::Log::init();
 
-    m_native_window = AppCore::create_scope<WindowSDL>(config);
+    m_native_window = mgl_core::create_scope<WindowSDL>(config);
     s_instance = this;
     m_running = false;
   }
@@ -41,18 +41,18 @@ namespace AppWindow
     EventDispatcher dispatcher(event);
 
     // Dispatch Windows Events
-    dispatcher.dispatch<WindowCloseEvent>(APPCORE_BIND_EVENT_FN(Window::on_window_close));
-    dispatcher.dispatch<WindowResizeEvent>(APPCORE_BIND_EVENT_FN(Window::on_window_resize));
+    dispatcher.dispatch<WindowCloseEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_window_close));
+    dispatcher.dispatch<WindowResizeEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_window_resize));
 
     // Dispatch key events to be handled by the application
-    dispatcher.dispatch<KeyPressedEvent>(APPCORE_BIND_EVENT_FN(Window::on_key_pressed));
-    dispatcher.dispatch<KeyReleasedEvent>(APPCORE_BIND_EVENT_FN(Window::on_key_released));
+    dispatcher.dispatch<KeyPressedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_key_pressed));
+    dispatcher.dispatch<KeyReleasedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_key_released));
 
     // Dispatch mouse events to be handled by the application
-    dispatcher.dispatch<MouseMovedEvent>(APPCORE_BIND_EVENT_FN(Window::on_mouse_moved));
-    dispatcher.dispatch<MouseScrolledEvent>(APPCORE_BIND_EVENT_FN(Window::on_mouse_scrolled));
-    dispatcher.dispatch<MouseButtonPressedEvent>(APPCORE_BIND_EVENT_FN(Window::on_mouse_button_pressed));
-    dispatcher.dispatch<MouseButtonReleasedEvent>(APPCORE_BIND_EVENT_FN(Window::on_mouse_button_released));
+    dispatcher.dispatch<MouseMovedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_mouse_moved));
+    dispatcher.dispatch<MouseScrolledEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_mouse_scrolled));
+    dispatcher.dispatch<MouseButtonPressedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_mouse_button_pressed));
+    dispatcher.dispatch<MouseButtonReleasedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_mouse_button_released));
   }
 
   bool Window::on_window_close(WindowCloseEvent& event)
@@ -68,23 +68,23 @@ namespace AppWindow
 
     if(!m_native_window->create_window())
     {
-      APPCORE_TRACE("BaseWindow: Error creating Window");
+      MGL_CORE_TRACE("BaseWindow: Error creating Window");
       return;
     }
 
-    m_context = AppGL::Context::create_context(AppGL::ContextMode::SHARE, 330);
+    m_context = mgl::Context::create_context(mgl::ContextMode::SHARE, 330);
 
     if(!m_context)
     {
-      APPCORE_TRACE("BaseWindow: Error initializing GL shared context.");
+      MGL_CORE_TRACE("BaseWindow: Error initializing GL shared context.");
       m_native_window->destroy_window();
       return;
     }
 
-    m_native_window->initialize_event_handler(APPCORE_BIND_EVENT_FN(Window::on_event));
+    m_native_window->initialize_event_handler(MGL_CORE_BIND_EVENT_FN(Window::on_event));
 
     m_running = true;
-    APPCORE_PROFILE_BEGIN_SESSION();
+    MGL_CORE_PROFILE_BEGIN_SESSION();
 
     on_load();
     m_timer.start();
@@ -95,22 +95,22 @@ namespace AppWindow
       auto frame_time = m_timer.next_frame();
       on_draw(frame_time.current, frame_time.delta);
       m_native_window->swap_buffers();
-#if APPCORE_PROFILE
+#if MGL_CORE_PROFILE
       // Since we are profiling we just render one frame
       m_running = false;
 #endif
     }
     on_unload();
 
-    APPCORE_PROFILE_END_SESSION();
+    MGL_CORE_PROFILE_END_SESSION();
 
     m_context->release();
     m_native_window->destroy_window();
   }
 
-  WindowConfig load_window_configuration(const AppCore::String& filename)
+  WindowConfig load_window_configuration(const mgl_core::String& filename)
   {
     // TODO: Implement load from JSON
     return WindowConfig();
   }
-} // namespace AppWindow
+} // namespace mgl_window

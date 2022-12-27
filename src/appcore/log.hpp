@@ -18,7 +18,7 @@
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/spdlog.h>
 
-namespace AppCore
+namespace mgl_core
 {
 
   namespace Log
@@ -27,11 +27,11 @@ namespace AppCore
     extern Ref<spdlog::logger> logger;
   }; // namespace Log
 
-} // namespace AppCore
+} // namespace mgl_core
 
 // log macros
-#define APPCORE_TRACE(...) ::AppCore::Log::logger->trace(__VA_ARGS__)
-#define APPCORE_INFO(...) ::AppCore::Log::logger->info(__VA_ARGS__)
-#define APPCORE_WARN(...) ::AppCore::Log::logger->warn(__VA_ARGS__)
-#define APPCORE_ERROR(...) ::AppCore::Log::logger->error(__VA_ARGS__)
-#define APPCORE_CRITICAL(...) ::AppCore::Log::logger->critical(__VA_ARGS__)
+#define MGL_CORE_TRACE(...) ::mgl_core::Log::logger->trace(__VA_ARGS__)
+#define MGL_CORE_INFO(...) ::mgl_core::Log::logger->info(__VA_ARGS__)
+#define MGL_CORE_WARN(...) ::mgl_core::Log::logger->warn(__VA_ARGS__)
+#define MGL_CORE_ERROR(...) ::mgl_core::Log::logger->error(__VA_ARGS__)
+#define MGL_CORE_CRITICAL(...) ::mgl_core::Log::logger->critical(__VA_ARGS__)

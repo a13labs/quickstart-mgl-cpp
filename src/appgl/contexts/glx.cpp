@@ -14,13 +14,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifdef APPGL_GLX
+#ifdef MGL_GLX
 
 #  include "appcore/log.hpp"
 #  include "appgl/context.hpp"
 #  include <dlfcn.h>
 
-namespace AppGL
+namespace mgl
 {
   ContextGLX::ContextGLX(ContextMode::Enum mode, int required)
   {
@@ -30,7 +30,7 @@ namespace AppGL
 
   ContextGLX::~ContextGLX() { }
 
-  GLFunction ContextGLX::load(const AppCore::String& method)
+  GLFunction ContextGLX::load(const mgl_core::String& method)
   {
     return nullptr;
   }
@@ -45,5 +45,5 @@ namespace AppGL
   {
     return false;
   }
-} // namespace AppGL
+} // namespace mgl
 #endif

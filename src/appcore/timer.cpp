@@ -1,6 +1,6 @@
 #include "timer.hpp"
 
-namespace AppCore
+namespace mgl_core
 {
 
   Timer::Timer()
@@ -81,4 +81,4 @@ namespace AppCore
     return elapsed.count();
   }
 
-} // namespace AppCore
+} // namespace mgl_core

@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
 
   struct DataType
@@ -30,4 +30,4 @@ namespace AppGL
 
   DataType* from_dtype(const char* dtype, size_t size);
 
-} // namespace AppGL
+} // namespace mgl

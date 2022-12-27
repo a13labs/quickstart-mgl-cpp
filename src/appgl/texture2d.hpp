@@ -18,7 +18,7 @@
 #include "builtins.hpp"
 #include "texture.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Texture2D : public Attachment, public Texture
   {
@@ -58,8 +58,8 @@ public:
     const Texture::Filter& filter() const;
     void set_filter(const Texture::Filter& value);
 
-    AppCore::String swizzle();
-    void set_swizzle(const AppCore::String& value);
+    mgl_core::String swizzle();
+    void set_swizzle(const mgl_core::String& value);
 
     Texture2D::Func compare_func();
     void set_compare_func(Texture2D::Func value);
@@ -67,13 +67,13 @@ public:
     float anisotropy();
     void set_anisotropy(float value);
 
-    bool read_into(AppCore::MemoryBuffer<uint8_t>& dst, int level = 0, int alignment = 1, size_t write_offset = 0);
-    bool read_into(AppCore::Ref<Buffer>& dst, int level = 0, int alignment = 1, size_t write_offset = 0);
+    bool read_into(mgl_core::MemoryBuffer<uint8_t>& dst, int level = 0, int alignment = 1, size_t write_offset = 0);
+    bool read_into(mgl_core::Ref<Buffer>& dst, int level = 0, int alignment = 1, size_t write_offset = 0);
 
-    bool write(const AppCore::MemoryBuffer<uint8_t>& src, const Viewport2D& viewport, int level = 0, int alignment = 1);
-    bool write(const AppCore::MemoryBuffer<uint8_t>& src, int level = 0, int alignment = 1);
-    bool write(const AppCore::Ref<Buffer>& src, const Viewport2D& viewport, int level = 0, int alignment = 1);
-    bool write(const AppCore::Ref<Buffer>& src, int level = 0, int alignment = 1);
+    bool write(const mgl_core::MemoryBuffer<uint8_t>& src, const Viewport2D& viewport, int level = 0, int alignment = 1);
+    bool write(const mgl_core::MemoryBuffer<uint8_t>& src, int level = 0, int alignment = 1);
+    bool write(const mgl_core::Ref<Buffer>& src, const Viewport2D& viewport, int level = 0, int alignment = 1);
+    bool write(const mgl_core::Ref<Buffer>& src, int level = 0, int alignment = 1);
 
     void bind_to_image(int unit, bool read_into = true, bool write = true, int level = 0, int format = 0);
     void use(int index = 0);
@@ -155,4 +155,4 @@ private:
     return m_anisotropy;
   }
 
-} // namespace AppGL
+} // namespace mgl

@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class UniformBlock
   {
@@ -29,12 +29,12 @@ public:
 
 private:
     friend class Context;
-    UniformBlock(const AppCore::String& name, int program_obj, int index, size_t size, Context* ctx);
+    UniformBlock(const mgl_core::String& name, int program_obj, int index, size_t size, Context* ctx);
 
     Context* m_context;
-    AppCore::String m_name;
+    mgl_core::String m_name;
     int m_program_obj;
     int m_index;
     int m_size;
   };
-} // namespace AppGL
+} // namespace mgl

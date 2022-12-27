@@ -18,9 +18,9 @@
 #include "appcore/log.hpp"
 #include "context.hpp"
 
-namespace AppGL
+namespace mgl
 {
-  UniformBlock::UniformBlock(const AppCore::String& name, int program_obj, int index, size_t size, Context* ctx)
+  UniformBlock::UniformBlock(const mgl_core::String& name, int program_obj, int index, size_t size, Context* ctx)
   {
     m_context = ctx;
     m_name = name;
@@ -44,4 +44,4 @@ namespace AppGL
     gl.UniformBlockBinding(m_program_obj, m_index, value);
   }
 
-} // namespace AppGL
+} // namespace mgl

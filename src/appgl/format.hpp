@@ -1,5 +1,5 @@
 #pragma once
-namespace AppGL
+namespace mgl
 {
   struct FormatNode
   {
@@ -37,4 +37,4 @@ namespace AppGL
     FormatInfo info();
     FormatNode* next();
   };
-} // namespace AppGL
+} // namespace mgl

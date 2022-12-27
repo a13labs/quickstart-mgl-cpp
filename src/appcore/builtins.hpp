@@ -17,7 +17,7 @@
 #include "config.h"
 #include "pch.hpp"
 
-#define APPCORE_PROFILE 0
+#define MGL_CORE_PROFILE 0
 
 #ifdef APP_DEBUG
 #  if defined(APP_PLATFORM_WINDOWS)
@@ -28,29 +28,29 @@
 #  else
 #    error "Platform doesn't support debugbreak yet!"
 #  endif
-#  define APPCORE_ENABLE_ASSERTS
+#  define MGL_CORE_ENABLE_ASSERTS
 #else
 #  define APP_DEBUGBREAK()
 #endif
 
-#ifdef APPCORE_ENABLE_ASSERTS
-#  define APPCORE_ASSERT(x, ...)                                                                                                 \
+#ifdef MGL_CORE_ENABLE_ASSERTS
+#  define MGL_CORE_ASSERT(x, ...)                                                                                                \
     {                                                                                                                            \
       if(!(x))                                                                                                                   \
       {                                                                                                                          \
-        APPCORE_TRACE("Assertion Failed: {0}", __VA_ARGS__);                                                                     \
+        MGL_CORE_TRACE("Assertion Failed: {0}", __VA_ARGS__);                                                                    \
         APP_DEBUGBREAK();                                                                                                        \
       }                                                                                                                          \
     }
 #else
-#  define APPCORE_ASSERT(x, y, ...)
+#  define MGL_CORE_ASSERT(x, y, ...)
 #endif
 
 #define BIT(x) 1 << x
 
-#define APPCORE_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define MGL_CORE_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
-namespace AppCore
+namespace mgl_core
 {
 
   /*************************************************************
@@ -97,4 +97,4 @@ namespace AppCore
   using StringList = List<String>;
 
   using Timepoint = std::chrono::time_point<std::chrono::system_clock>;
-} // namespace AppCore
+} // namespace mgl_core

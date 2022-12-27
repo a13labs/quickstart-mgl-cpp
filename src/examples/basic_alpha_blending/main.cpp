@@ -1,6 +1,6 @@
 #include "appwindow/appwindow.hpp"
 
-class ExampleWindow : public AppWindow::Window
+class ExampleWindow : public mgl_window::Window
 {
 
   public:
@@ -9,10 +9,10 @@ class ExampleWindow : public AppWindow::Window
   virtual void on_unload() override;
 
   private:
-  AppCore::Ref<AppGL::Program> m_program;
-  AppCore::Ref<AppGL::Buffer> m_vbo;
-  AppCore::Ref<AppGL::VertexArray> m_vao;
-  AppCore::Ref<AppGL::Uniform> m_scale, m_rotation;
+  mgl_core::Ref<mgl::Program> m_program;
+  mgl_core::Ref<mgl::Buffer> m_vbo;
+  mgl_core::Ref<mgl::VertexArray> m_vao;
+  mgl_core::Ref<mgl::Uniform> m_scale, m_rotation;
   float m_time = 0;
 };
 
@@ -20,14 +20,14 @@ void ExampleWindow::on_draw(float time, float frame_time)
 {
   const auto ctx = context();
   ctx->clear(1.0, 1.0, 1.0);
-  ctx->enable(AppGL::Context::EnableFlag::BLEND);
+  ctx->enable(mgl::Context::EnableFlag::BLEND);
   m_rotation->set_value(time);
   m_vao->render(10);
 }
 
 void ExampleWindow::on_load()
 {
-  APPCORE_INFO("ExampleWindow::on_load");
+  MGL_CORE_INFO("ExampleWindow::on_load");
   set_title("basic_alpha_blending");
 
   const auto ctx = context();
@@ -84,7 +84,7 @@ void ExampleWindow::on_load()
 
 void ExampleWindow::on_unload()
 {
-  APPCORE_INFO("ExampleWindow::on_unload");
+  MGL_CORE_INFO("ExampleWindow::on_unload");
   m_vao->release();
   m_vbo->release();
   m_program->release();

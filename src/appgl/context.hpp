@@ -19,7 +19,7 @@
 #include "glm/glm.hpp"
 #include "glmethods.hpp"
 
-namespace AppGL
+namespace mgl
 {
   struct ContextMode
   {
@@ -31,7 +31,7 @@ namespace AppGL
     };
   };
 
-  class Context : public AppCore::RefFromThis<Context>
+  class Context : public mgl_core::RefFromThis<Context>
   {
 public:
     enum EnableFlag
@@ -55,8 +55,8 @@ public:
     int max_texture_units();
     int default_texture_unit();
     float max_anisotropy();
-    const AppCore::StringList& extensions() const;
-    const AppCore::Ref<Framebuffer>& framebuffer() const;
+    const mgl_core::StringList& extensions() const;
+    const mgl_core::Ref<Framebuffer>& framebuffer() const;
 
     int enable_flags();
     void set_enable_flags(int flags);
@@ -79,99 +79,100 @@ public:
     float polygon_offset_factor();
     float polygon_offset_units();
     void copy_buffer(
-        const AppCore::Ref<Buffer>& src, const AppCore::Ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset);
+        const mgl_core::Ref<Buffer>& src, const mgl_core::Ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset);
 
     // Buffer
-    AppCore::Ref<Buffer> buffer(const AppCore::MemoryBuffer<float>& data, bool dynamic = false);
-    AppCore::Ref<Buffer> buffer(const AppCore::MemoryBuffer<uint32_t>& data, bool dynamic = false);
-    AppCore::Ref<Buffer> buffer(const AppCore::MemoryBuffer<uint16_t>& data, bool dynamic = false);
-    AppCore::Ref<Buffer> buffer(const AppCore::MemoryBuffer<uint8_t>& data, bool dynamic = false);
+    mgl_core::Ref<Buffer> buffer(const mgl_core::MemoryBuffer<float>& data, bool dynamic = false);
+    mgl_core::Ref<Buffer> buffer(const mgl_core::MemoryBuffer<uint32_t>& data, bool dynamic = false);
+    mgl_core::Ref<Buffer> buffer(const mgl_core::MemoryBuffer<uint16_t>& data, bool dynamic = false);
+    mgl_core::Ref<Buffer> buffer(const mgl_core::MemoryBuffer<uint8_t>& data, bool dynamic = false);
 
     // Compute Shader
-    AppCore::Ref<ComputeShader> compute_shader(const AppCore::String& source);
+    mgl_core::Ref<ComputeShader> compute_shader(const mgl_core::String& source);
 
     // Create Shader
-    static AppCore::Ref<Context> create_context(ContextMode::Enum mode, int required);
+    static mgl_core::Ref<Context> create_context(ContextMode::Enum mode, int required);
 
     // Framebuffer
-    AppCore::Ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments, AppCore::Ref<Attachment> depth_attachment);
-    AppCore::Ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments);
-    AppCore::Ref<Framebuffer> framebuffer(AppCore::Ref<Attachment> depth_attachment);
+    mgl_core::Ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments, mgl_core::Ref<Attachment> depth_attachment);
+    mgl_core::Ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments);
+    mgl_core::Ref<Framebuffer> framebuffer(mgl_core::Ref<Attachment> depth_attachment);
 
     // Program
-    AppCore::Ref<Program> program(const ShadersSources& shaders,
-                                  const ShadersOutputs& outputs = {},
-                                  const FragmentOutputs& fragment_outputs = {},
-                                  bool interleaved = true);
+    mgl_core::Ref<Program> program(const ShadersSources& shaders,
+                                   const ShadersOutputs& outputs = {},
+                                   const FragmentOutputs& fragment_outputs = {},
+                                   bool interleaved = true);
 
     // Query
-    AppCore::Ref<Query>
+    mgl_core::Ref<Query>
     query(bool samples = false, bool any_samples = false, bool time_elapsed = false, bool primitives_generated = false);
 
     // Renderbuffer
-    AppCore::Ref<Renderbuffer> renderbuffer(int width, int height, int components = 4, int samples = 0, const char* dtype = "f1");
-    AppCore::Ref<Renderbuffer> depth_renderbuffer(int width, int height, int samples = 0);
+    mgl_core::Ref<Renderbuffer>
+    renderbuffer(int width, int height, int components = 4, int samples = 0, const char* dtype = "f1");
+    mgl_core::Ref<Renderbuffer> depth_renderbuffer(int width, int height, int samples = 0);
 
     // Sampler
-    AppCore::Ref<Sampler> sampler();
+    mgl_core::Ref<Sampler> sampler();
 
     // Scope
-    AppCore::Ref<Scope> scope(AppCore::Ref<Framebuffer> framebuffer = nullptr,
-                              int enable_flags = 0,
-                              const TextureBindings& textures = {},
-                              const BufferBindings& uniform_buffers = {},
-                              const BufferBindings& storage_buffers = {},
-                              const SamplerBindings& samplers = {});
+    mgl_core::Ref<Scope> scope(mgl_core::Ref<Framebuffer> framebuffer = nullptr,
+                               int enable_flags = 0,
+                               const TextureBindings& textures = {},
+                               const BufferBindings& uniform_buffers = {},
+                               const BufferBindings& storage_buffers = {},
+                               const SamplerBindings& samplers = {});
 
     // Texture
-    AppCore::Ref<Texture2D> texture2d(int width,
-                                      int height,
-                                      int components,
-                                      const void* data = nullptr,
-                                      int samples = 0,
-                                      int alignment = 1,
-                                      const char* dtype = "f1",
-                                      int internal_format_override = 0);
+    mgl_core::Ref<Texture2D> texture2d(int width,
+                                       int height,
+                                       int components,
+                                       const void* data = nullptr,
+                                       int samples = 0,
+                                       int alignment = 1,
+                                       const char* dtype = "f1",
+                                       int internal_format_override = 0);
 
-    AppCore::Ref<Texture2D>
+    mgl_core::Ref<Texture2D>
     depth_texture2d(int width, int height, const void* data = nullptr, int samples = 0, int alignment = 0);
 
     // Texture3D
-    AppCore::Ref<Texture3D> texture3d(int width,
-                                      int height,
-                                      int depth,
-                                      int components,
-                                      const void* data = nullptr,
-                                      int alignment = 1,
-                                      const char* dtype = "f1");
+    mgl_core::Ref<Texture3D> texture3d(int width,
+                                       int height,
+                                       int depth,
+                                       int components,
+                                       const void* data = nullptr,
+                                       int alignment = 1,
+                                       const char* dtype = "f1");
 
     // TextureArray
-    AppCore::Ref<TextureArray> texture_array(int width,
-                                             int height,
-                                             int layers,
-                                             int components,
-                                             const void* data = nullptr,
-                                             int alignment = 1,
-                                             const char* dtype = "f1");
+    mgl_core::Ref<TextureArray> texture_array(int width,
+                                              int height,
+                                              int layers,
+                                              int components,
+                                              const void* data = nullptr,
+                                              int alignment = 1,
+                                              const char* dtype = "f1");
 
     // TextureCube
-    AppCore::Ref<TextureCube> texture_cube(int width,
-                                           int height,
-                                           int components,
-                                           const void* data = nullptr,
-                                           int alignment = 1,
-                                           const char* dtype = "f1",
-                                           int internal_format_override = 0);
+    mgl_core::Ref<TextureCube> texture_cube(int width,
+                                            int height,
+                                            int components,
+                                            const void* data = nullptr,
+                                            int alignment = 1,
+                                            const char* dtype = "f1",
+                                            int internal_format_override = 0);
 
     // VertexArray
-    AppCore::Ref<VertexArray> vertex_array(AppCore::Ref<Program> program,
-                                           AppGL::VertexDataArray vertex_data,
-                                           AppCore::Ref<Buffer> index_buffer = nullptr,
-                                           int index_element_size = 4,
-                                           bool skip_errors = false,
-                                           AppGL::RenderMode mode = AppGL::RenderMode::POINTS);
+    mgl_core::Ref<VertexArray> vertex_array(mgl_core::Ref<Program> program,
+                                            mgl::VertexDataArray vertex_data,
+                                            mgl_core::Ref<Buffer> index_buffer = nullptr,
+                                            int index_element_size = 4,
+                                            bool skip_errors = false,
+                                            mgl::RenderMode mode = mgl::RenderMode::POINTS);
 
-    virtual GLFunction load(const AppCore::String& method) = 0;
+    virtual GLFunction load(const mgl_core::String& method) = 0;
     virtual void enter() = 0;
     virtual void exit() = 0;
 
@@ -185,7 +186,7 @@ public:
 
 private:
     void load_functions();
-    AppCore::Ref<Buffer> buffer(void* data, size_t size, bool dynamic);
+    mgl_core::Ref<Buffer> buffer(void* data, size_t size, bool dynamic);
 
 protected:
     bool m_released;
@@ -213,12 +214,12 @@ private:
     int m_provoking_vertex;
     float m_polygon_offset_factor;
     float m_polygon_offset_units;
-    AppCore::StringList m_extensions;
-    AppCore::Ref<Framebuffer> m_default_framebuffer;
-    AppCore::Ref<Framebuffer> m_bound_framebuffer;
+    mgl_core::StringList m_extensions;
+    mgl_core::Ref<Framebuffer> m_default_framebuffer;
+    mgl_core::Ref<Framebuffer> m_bound_framebuffer;
   };
 
-#ifdef APPGL_EGL
+#ifdef MGL_EGL
   class ContextEGL : public Context
   {
 
@@ -226,7 +227,7 @@ public:
     ContextEGL(ContextMode::Enum mode, int required);
     virtual ~ContextEGL() override;
 
-    virtual GLFunction load(const AppCore::String& method) override;
+    virtual GLFunction load(const mgl_core::String& method) override;
     virtual void enter() override;
     virtual void exit() override;
 
@@ -239,7 +240,7 @@ private:
   };
 #endif
 
-#ifdef APPGL_GLX
+#ifdef MGL_GLX
   class ContextGLX : public Context
   {
 
@@ -249,7 +250,7 @@ public:
     virtual ~ContextGLX() override;
 
 public:
-    virtual GLFunction load(const AppCore::String& method) override;
+    virtual GLFunction load(const mgl_core::String& method) override;
 
     virtual void enter() override;
     virtual void exit() override;
@@ -264,7 +265,7 @@ private:
   };
 #endif
 
-#ifdef APPGL_WGL
+#ifdef MGL_WGL
 
 #endif
 
@@ -318,12 +319,12 @@ private:
     return m_max_anisotropy;
   }
 
-  inline const AppCore::StringList& Context::extensions() const
+  inline const mgl_core::StringList& Context::extensions() const
   {
     return m_extensions;
   }
 
-  inline const AppCore::Ref<Framebuffer>& Context::framebuffer() const
+  inline const mgl_core::Ref<Framebuffer>& Context::framebuffer() const
   {
     return m_default_framebuffer;
   }
@@ -383,33 +384,33 @@ private:
     return m_polygon_offset_units;
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const AppCore::MemoryBuffer<float>& data, bool dynamic)
+  inline mgl_core::Ref<Buffer> Context::buffer(const mgl_core::MemoryBuffer<float>& data, bool dynamic)
   {
     return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const AppCore::MemoryBuffer<uint32_t>& data, bool dynamic)
+  inline mgl_core::Ref<Buffer> Context::buffer(const mgl_core::MemoryBuffer<uint32_t>& data, bool dynamic)
   {
     return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const AppCore::MemoryBuffer<uint16_t>& data, bool dynamic)
+  inline mgl_core::Ref<Buffer> Context::buffer(const mgl_core::MemoryBuffer<uint16_t>& data, bool dynamic)
   {
     return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Buffer> Context::buffer(const AppCore::MemoryBuffer<uint8_t>& data, bool dynamic)
+  inline mgl_core::Ref<Buffer> Context::buffer(const mgl_core::MemoryBuffer<uint8_t>& data, bool dynamic)
   {
     return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline AppCore::Ref<Framebuffer> Context::framebuffer(AppCore::Ref<Attachment> depth_attachment)
+  inline mgl_core::Ref<Framebuffer> Context::framebuffer(mgl_core::Ref<Attachment> depth_attachment)
   {
     return framebuffer(AttachmentsRef(), depth_attachment);
   }
 
-  inline AppCore::Ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments)
+  inline mgl_core::Ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments)
   {
-    return framebuffer(color_attachments, AppCore::Ref<Attachment>(nullptr));
+    return framebuffer(color_attachments, mgl_core::Ref<Attachment>(nullptr));
   }
-} // namespace AppGL
+} // namespace mgl

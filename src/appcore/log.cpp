@@ -17,7 +17,7 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-namespace AppCore
+namespace mgl_core
 {
   namespace Log
   {
@@ -39,10 +39,10 @@ namespace AppCore
       logSinks[1]->set_pattern("%^[%T] %n: %v%$");
 #endif
 
-      logger = std::make_shared<spdlog::logger>("AppCore", begin(logSinks), end(logSinks));
+      logger = std::make_shared<spdlog::logger>("mgl_core", begin(logSinks), end(logSinks));
       spdlog::register_logger(logger);
       logger->set_level(spdlog::level::trace);
       logger->flush_on(spdlog::level::trace);
     }
   } // namespace Log
-} // namespace AppCore
+} // namespace mgl_core

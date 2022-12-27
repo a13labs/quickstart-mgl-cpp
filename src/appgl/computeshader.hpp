@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class ComputeShader
   {
@@ -26,18 +26,18 @@ public:
     void release();
     bool released();
 
-    const AppCore::Ref<Uniform> uniform(const AppCore::String& name) const;
-    const AppCore::Ref<UniformBlock> uniform_block(const AppCore::String& name) const;
+    const mgl_core::Ref<Uniform> uniform(const mgl_core::String& name) const;
+    const mgl_core::Ref<UniformBlock> uniform_block(const mgl_core::String& name) const;
 
-    const AppCore::StringList uniforms();
-    const AppCore::StringList uniform_blocks();
+    const mgl_core::StringList uniforms();
+    const mgl_core::StringList uniform_blocks();
 
     size_t num_uniforms();
     size_t num_uniform_blocks();
 
     void run(int x, int y, int z);
 
-    const AppCore::Ref<Uniform> operator[](const AppCore::String& name) const;
+    const mgl_core::Ref<Uniform> operator[](const mgl_core::String& name) const;
 
 private:
     friend class Context;
@@ -51,7 +51,7 @@ private:
     bool m_released;
   };
 
-  inline const AppCore::Ref<Uniform> ComputeShader::uniform(const AppCore::String& name) const
+  inline const mgl_core::Ref<Uniform> ComputeShader::uniform(const mgl_core::String& name) const
   {
     if(m_uniforms_map.find(name) == m_uniforms_map.end())
     {
@@ -60,7 +60,7 @@ private:
     return m_uniforms_map.at(name);
   }
 
-  inline const AppCore::Ref<UniformBlock> ComputeShader::uniform_block(const AppCore::String& name) const
+  inline const mgl_core::Ref<UniformBlock> ComputeShader::uniform_block(const mgl_core::String& name) const
   {
     if(m_uniform_blocks_map.find(name) == m_uniform_blocks_map.end())
     {
@@ -79,7 +79,7 @@ private:
     return m_uniform_blocks_map.size();
   }
 
-  inline const AppCore::Ref<Uniform> ComputeShader::operator[](const AppCore::String& name) const
+  inline const mgl_core::Ref<Uniform> ComputeShader::operator[](const mgl_core::String& name) const
   {
     return uniform(name);
   }
@@ -89,4 +89,4 @@ private:
     return m_released;
   }
 
-} // namespace AppGL
+} // namespace mgl

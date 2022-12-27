@@ -18,12 +18,12 @@
 #include "appcore/log.hpp"
 #include "context.hpp"
 
-namespace AppGL
+namespace mgl
 {
   void Buffer::release()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_released)
@@ -38,11 +38,11 @@ namespace AppGL
 
   bool Buffer::write(const void* src, size_t size, size_t offset)
   {
-    APPCORE_ASSERT(!m_released, "Buffer already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
-    APPCORE_ASSERT(offset >= 0, "invalid offset: {0}", offset)
-    APPCORE_ASSERT(size + offset <= m_size, "out of bounds")
+    MGL_CORE_ASSERT(!m_released, "Buffer already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(offset >= 0, "invalid offset: {0}", offset)
+    MGL_CORE_ASSERT(size + offset <= m_size, "out of bounds")
 
     const GLMethods& gl = m_context->gl();
 
@@ -54,14 +54,14 @@ namespace AppGL
 
   bool Buffer::read_into(void* dst, size_t dst_size, size_t read_size, size_t read_offset, size_t write_offset)
   {
-    APPCORE_ASSERT(!m_released, "Buffer already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
-    APPCORE_ASSERT(read_size >= 0, "invalid size: {0}", read_size)
-    APPCORE_ASSERT(read_offset >= 0, "invalid offset: {0}", read_offset)
-    APPCORE_ASSERT(write_offset >= 0, "invalid write offset: {0}", write_offset)
-    APPCORE_ASSERT(m_size >= read_size + read_offset, "out of bounds")
-    APPCORE_ASSERT(dst_size <= write_offset + read_size, "out of bounds")
+    MGL_CORE_ASSERT(!m_released, "Buffer already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(read_size >= 0, "invalid size: {0}", read_size)
+    MGL_CORE_ASSERT(read_offset >= 0, "invalid offset: {0}", read_offset)
+    MGL_CORE_ASSERT(write_offset >= 0, "invalid write offset: {0}", write_offset)
+    MGL_CORE_ASSERT(m_size >= read_size + read_offset, "out of bounds")
+    MGL_CORE_ASSERT(dst_size <= write_offset + read_size, "out of bounds")
 
     const GLMethods& gl = m_context->gl();
 
@@ -77,9 +77,9 @@ namespace AppGL
 
   void Buffer::clear()
   {
-    APPCORE_ASSERT(!m_released, "Buffer already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(!m_released, "Buffer already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
 
     const GLMethods& gl = m_context->gl();
     gl.BindBuffer(GL_ARRAY_BUFFER, m_buffer_obj);
@@ -88,7 +88,7 @@ namespace AppGL
 
     if(!map)
     {
-      APPCORE_ERROR("Buffer::clear, cannot map the buffer");
+      MGL_CORE_ERROR("Buffer::clear, cannot map the buffer");
       return;
     }
 
@@ -99,9 +99,9 @@ namespace AppGL
 
   void Buffer::orphan(size_t size)
   {
-    APPCORE_ASSERT(!m_released, "Buffer already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(!m_released, "Buffer already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
 
     const GLMethods& gl = m_context->gl();
     gl.BindBuffer(GL_ARRAY_BUFFER, m_buffer_obj);
@@ -110,11 +110,11 @@ namespace AppGL
 
   void Buffer::bind_to_uniform_block(int binding, size_t size, size_t offset)
   {
-    APPCORE_ASSERT(!m_released, "Buffer already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
-    APPCORE_ASSERT(size > 0, "invalid data size: {0}", size)
-    APPCORE_ASSERT(offset > 0, "invalid offset: {0}", offset)
+    MGL_CORE_ASSERT(!m_released, "Buffer already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(size > 0, "invalid data size: {0}", size)
+    MGL_CORE_ASSERT(offset > 0, "invalid offset: {0}", offset)
 
     const GLMethods& gl = m_context->gl();
     gl.BindBufferRange(GL_UNIFORM_BUFFER, binding, m_buffer_obj, offset, size);
@@ -122,14 +122,14 @@ namespace AppGL
 
   void Buffer::bind_to_storage_buffer(int binding, size_t size, size_t offset)
   {
-    APPCORE_ASSERT(!m_released, "Buffer already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
-    APPCORE_ASSERT(size > 0, "invalid data size: {0}", size)
-    APPCORE_ASSERT(offset > 0, "invalid offset: {0}", offset)
+    MGL_CORE_ASSERT(!m_released, "Buffer already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(size > 0, "invalid data size: {0}", size)
+    MGL_CORE_ASSERT(offset > 0, "invalid offset: {0}", offset)
 
     const GLMethods& gl = m_context->gl();
     gl.BindBufferRange(GL_SHADER_STORAGE_BUFFER, binding, m_buffer_obj, offset, size);
   }
 
-} // namespace AppGL
+} // namespace mgl

@@ -10,16 +10,16 @@ target_link_libraries(
 target_link_libraries(
     ${APP_CURRENT_TARGET}
     PRIVATE
-    ${APPCORE_LIB}
+    ${MGL_CORE_LIB}
 )
 
-# AppGL
+# mgl
 target_link_libraries(
     ${APP_CURRENT_TARGET}
     PRIVATE
-    ${APPGL_LIB}
+    ${MGL_LIB}
 )
 
 # Export library
-set(APPWINDOW_LIB appwindow PARENT_SCOPE)
-set(APPWINDOW_INCLUDE ${APP_CURRENT_SOURCE} PARENT_SCOPE)
+set(MGL_WINDOW_LIB appwindow PARENT_SCOPE)
+set(MGL_WINDOW_INCLUDE ${APP_CURRENT_SOURCE} PARENT_SCOPE)

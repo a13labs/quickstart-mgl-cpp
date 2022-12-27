@@ -18,9 +18,9 @@
 #include "appcore/log.hpp"
 #include "context.hpp"
 
-namespace AppGL
+namespace mgl
 {
-  Varying::Varying(const AppCore::String& name, int number, size_t array_length, int dimension)
+  Varying::Varying(const mgl_core::String& name, int number, size_t array_length, int dimension)
   {
     m_name = name;
     m_number = number;
@@ -28,4 +28,4 @@ namespace AppGL
     m_dimension = dimension;
   }
 
-} // namespace AppGL
+} // namespace mgl

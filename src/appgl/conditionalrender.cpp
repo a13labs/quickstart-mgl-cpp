@@ -17,7 +17,7 @@
 #include "conditionalrender.hpp"
 #include "appcore/log.hpp"
 
-namespace AppGL
+namespace mgl
 {
   void ConditionalRender::release() { }
-} // namespace AppGL
+} // namespace mgl

@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Subroutine
   {
@@ -35,10 +35,10 @@ public:
 
 private:
     friend class Context;
-    Subroutine(const AppCore::String& name, int index, Subroutine::Type type);
+    Subroutine(const mgl_core::String& name, int index, Subroutine::Type type);
 
-    AppCore::String m_name;
+    mgl_core::String m_name;
     int m_index;
     Subroutine::Type m_type;
   };
-} // namespace AppGL
+} // namespace mgl

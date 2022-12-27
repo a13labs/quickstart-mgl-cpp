@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Texture
   {
@@ -72,4 +72,4 @@ public:
     return '?';
   }
 
-} // namespace AppGL
+} // namespace mgl

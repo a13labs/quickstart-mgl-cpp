@@ -17,10 +17,10 @@
 #include "appcore/appcore.hpp"
 #include "opengl.hpp"
 
-#define APPGL_MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define APPGL_MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MGL_MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define MGL_MIN(a, b) (((a) < (b)) ? (a) : (b))
 
-namespace AppGL
+namespace mgl
 {
   using GLFunction = void*;
   using GLContext = void*;
@@ -158,37 +158,37 @@ namespace AppGL
 
   struct TextureBinding
   {
-    AppCore::Ref<Texture> texture;
+    mgl_core::Ref<Texture> texture;
     int binding;
   };
 
   struct BufferBinding
   {
-    AppCore::Ref<Buffer> buffer;
+    mgl_core::Ref<Buffer> buffer;
     int binding;
   };
 
   struct SamplerBinding
   {
-    AppCore::Ref<Sampler> sampler;
+    mgl_core::Ref<Sampler> sampler;
     int binding;
   };
 
-  using AttributesMap = AppCore::Dict<AppCore::String, AppCore::Ref<Attribute>>;
-  using SubroutinesMap = AppCore::Dict<AppCore::String, AppCore::Ref<Subroutine>>;
-  using UniformsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Uniform>>;
-  using UniformBlocksMap = AppCore::Dict<AppCore::String, AppCore::Ref<UniformBlock>>;
-  using VaryingsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Varying>>;
-  using AttachmentsRef = AppCore::ListRef<Attachment>;
-  using ShadersOutputs = AppCore::StringList;
-  using FragmentOutputs = AppCore::Dict<AppCore::String, int>;
-  using ColorMasks = AppCore::List<ColorMask>;
-  using Textures = AppCore::ListRef<Texture>;
-  using Buffers = AppCore::ListRef<Buffer>;
-  using Samplers = AppCore::ListRef<Sampler>;
-  using TextureBindings = AppCore::List<TextureBinding>;
-  using BufferBindings = AppCore::List<BufferBinding>;
-  using SamplerBindings = AppCore::List<SamplerBinding>;
+  using AttributesMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<Attribute>>;
+  using SubroutinesMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<Subroutine>>;
+  using UniformsMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<Uniform>>;
+  using UniformBlocksMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<UniformBlock>>;
+  using VaryingsMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<Varying>>;
+  using AttachmentsRef = mgl_core::ListRef<Attachment>;
+  using ShadersOutputs = mgl_core::StringList;
+  using FragmentOutputs = mgl_core::Dict<mgl_core::String, int>;
+  using ColorMasks = mgl_core::List<ColorMask>;
+  using Textures = mgl_core::ListRef<Texture>;
+  using Buffers = mgl_core::ListRef<Buffer>;
+  using Samplers = mgl_core::ListRef<Sampler>;
+  using TextureBindings = mgl_core::List<TextureBinding>;
+  using BufferBindings = mgl_core::List<BufferBinding>;
+  using SamplerBindings = mgl_core::List<SamplerBinding>;
 
   extern const std::string NoShader;
   extern const Viewport2D NullViewport2D;
@@ -197,12 +197,12 @@ namespace AppGL
 
   struct VertexData
   {
-    AppCore::Ref<Buffer> buffer;
+    mgl_core::Ref<Buffer> buffer;
     const char* format;
-    AppCore::StringList attributes;
+    mgl_core::StringList attributes;
   };
 
-  using VertexDataArray = AppCore::List<VertexData>;
+  using VertexDataArray = mgl_core::List<VertexData>;
 
   inline bool operator==(const Viewport2D& lhs, const Viewport2D& rhs)
   {
@@ -235,4 +235,4 @@ namespace AppGL
     return !(lhs == rhs);
   }
 
-} // namespace AppGL
+} // namespace mgl

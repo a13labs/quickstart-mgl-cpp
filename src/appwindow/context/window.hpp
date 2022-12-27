@@ -17,11 +17,11 @@
 #include "appwindow/builtins.hpp"
 #include "input.hpp"
 
-namespace AppWindow
+namespace mgl_window
 {
   typedef struct
   {
-    AppCore::String title = "BaseWindow";
+    mgl_core::String title = "BaseWindow";
     uint32_t width = 800;
     uint32_t height = 600;
     bool fullscreen = false;
@@ -50,8 +50,8 @@ public:
     virtual int height() = 0;
     virtual int aspect_ratio() = 0;
 
-    virtual const AppCore::String& title() const = 0;
-    virtual void set_title(const AppCore::String& value) = 0;
+    virtual const mgl_core::String& title() const = 0;
+    virtual void set_title(const mgl_core::String& value) = 0;
   };
 
   class Window
@@ -69,11 +69,11 @@ public:
     int height();
     int aspect_ratio();
 
-    const AppCore::String& title() const;
-    void set_title(const AppCore::String& value);
+    const mgl_core::String& title() const;
+    void set_title(const mgl_core::String& value);
 
     void toggle_full_screen();
-    AppCore::Ref<AppGL::Context> context();
+    mgl_core::Ref<mgl::Context> context();
 
     inline static Window& current() { return *s_instance; }
 
@@ -101,9 +101,9 @@ public:
 private:
     static Window* s_instance;
     bool m_running;
-    AppCore::Timer m_timer;
-    AppCore::Scope<NativeWindow> m_native_window;
-    AppCore::Ref<AppGL::Context> m_context;
+    mgl_core::Timer m_timer;
+    mgl_core::Scope<NativeWindow> m_native_window;
+    mgl_core::Ref<mgl::Context> m_context;
   };
 
   inline int Window::width()
@@ -121,12 +121,12 @@ private:
     return m_native_window->aspect_ratio();
   }
 
-  inline const AppCore::String& Window::title() const
+  inline const mgl_core::String& Window::title() const
   {
     return m_native_window->title();
   }
 
-  inline void Window::set_title(const AppCore::String& value)
+  inline void Window::set_title(const mgl_core::String& value)
   {
     return m_native_window->set_title(value);
   }
@@ -141,10 +141,10 @@ private:
     m_running = false;
   }
 
-  inline AppCore::Ref<AppGL::Context> Window::context()
+  inline mgl_core::Ref<mgl::Context> Window::context()
   {
     return m_context;
   }
 
-  WindowConfig load_window_configuration(const AppCore::String& filename);
-} // namespace AppWindow
+  WindowConfig load_window_configuration(const mgl_core::String& filename);
+} // namespace mgl_window

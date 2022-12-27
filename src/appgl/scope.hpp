@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Scope
   {
@@ -41,11 +41,11 @@ private:
     Scope() = default;
 
     Context* m_context;
-    AppCore::Ref<Framebuffer> m_framebuffer;
-    AppCore::Ref<Framebuffer> m_old_framebuffer;
+    mgl_core::Ref<Framebuffer> m_framebuffer;
+    mgl_core::Ref<Framebuffer> m_old_framebuffer;
     SamplerBindings m_samplers;
-    AppCore::List<Scope::BindingData> m_textures;
-    AppCore::List<Scope::BindingData> m_buffers;
+    mgl_core::List<Scope::BindingData> m_textures;
+    mgl_core::List<Scope::BindingData> m_buffers;
     int m_enable_flags;
     int m_old_enable_flags;
     bool m_released;
@@ -55,4 +55,4 @@ private:
   {
     return m_released;
   }
-} // namespace AppGL
+} // namespace mgl

@@ -18,12 +18,12 @@
 #include "appcore/log.hpp"
 #include "context.hpp"
 
-namespace AppGL
+namespace mgl
 {
   void Program::release()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_released)
@@ -33,9 +33,9 @@ namespace AppGL
     gl.DeleteProgram(m_program_obj);
   }
 
-  const AppCore::StringList Program::attributes()
+  const mgl_core::StringList Program::attributes()
   {
-    auto result = AppCore::StringList();
+    auto result = mgl_core::StringList();
 
     for(auto&& a : m_attributes_map)
     {
@@ -45,9 +45,9 @@ namespace AppGL
     return result;
   }
 
-  const AppCore::StringList Program::uniforms()
+  const mgl_core::StringList Program::uniforms()
   {
-    auto result = AppCore::StringList();
+    auto result = mgl_core::StringList();
 
     for(auto&& a : m_uniforms_map)
     {
@@ -57,9 +57,9 @@ namespace AppGL
     return result;
   }
 
-  const AppCore::StringList Program::uniform_blocks()
+  const mgl_core::StringList Program::uniform_blocks()
   {
-    auto result = AppCore::StringList();
+    auto result = mgl_core::StringList();
 
     for(auto&& a : m_uniform_blocks_map)
     {
@@ -69,9 +69,9 @@ namespace AppGL
     return result;
   }
 
-  const AppCore::StringList Program::varyings()
+  const mgl_core::StringList Program::varyings()
   {
-    auto result = AppCore::StringList();
+    auto result = mgl_core::StringList();
 
     for(auto&& a : m_varyings_map)
     {
@@ -81,9 +81,9 @@ namespace AppGL
     return result;
   }
 
-  const AppCore::StringList Program::subroutines()
+  const mgl_core::StringList Program::subroutines()
   {
-    auto result = AppCore::StringList();
+    auto result = mgl_core::StringList();
 
     for(auto&& a : m_subroutines_map)
     {
@@ -93,4 +93,4 @@ namespace AppGL
     return result;
   }
 
-} // namespace AppGL
+} // namespace mgl

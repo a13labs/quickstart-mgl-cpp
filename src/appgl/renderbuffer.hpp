@@ -17,7 +17,7 @@
 #include "attachment.hpp"
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Renderbuffer : public Attachment
   {
@@ -79,4 +79,4 @@ private:
     return m_depth;
   }
 
-} // namespace AppGL
+} // namespace mgl

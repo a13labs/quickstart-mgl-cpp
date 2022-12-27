@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[])
 {
-  AppWindow::Window app;
+  mgl_window::Window app;
   app.run();
 
   return 0;

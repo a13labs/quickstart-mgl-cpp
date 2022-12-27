@@ -21,7 +21,7 @@
 #include "SDL2/SDL_syswm.h"
 // #include "glad/glad.h"
 
-namespace AppWindow
+namespace mgl_window
 {
   static uint8_t key_forward_map[256];
   static uint8_t key_reverse_map[256];
@@ -237,7 +237,7 @@ namespace AppWindow
   {
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-      APPCORE_TRACE("BaseWindow: Error initializing SDL");
+      MGL_CORE_TRACE("BaseWindow: Error initializing SDL");
       return false;
     }
 
@@ -269,7 +269,7 @@ namespace AppWindow
       }
     }
 
-    APPCORE_INFO(
+    MGL_CORE_INFO(
         "BaseWindow: Creating window {0},{1} with OpenGL support", m_state.current_config.width, m_state.current_config.height);
     native_window = SDL_CreateWindow(m_state.current_config.title.c_str(),
                                      SDL_WINDOWPOS_CENTERED,
@@ -281,7 +281,7 @@ namespace AppWindow
     if(!native_window)
     {
       auto error = SDL_GetError();
-      APPCORE_TRACE("BaseWindow: Error creating window, '{0}'.", error);
+      MGL_CORE_TRACE("BaseWindow: Error creating window, '{0}'.", error);
       SDL_Quit();
       return false;
     }
@@ -290,7 +290,7 @@ namespace AppWindow
     if(!m_context)
     {
       auto error = SDL_GetError();
-      APPCORE_TRACE("BaseWindow: Error creating OpenGL context, '{0}'.", error);
+      MGL_CORE_TRACE("BaseWindow: Error creating OpenGL context, '{0}'.", error);
       SDL_DestroyWindow(native_window);
       native_window = nullptr;
       SDL_Quit();
@@ -305,7 +305,7 @@ namespace AppWindow
     if(!SDL_GetWindowWMInfo(native_window, &wmi))
     {
       auto error = SDL_GetError();
-      APPCORE_TRACE("BaseWindow: Error retrieving window information: {0}.", error);
+      MGL_CORE_TRACE("BaseWindow: Error retrieving window information: {0}.", error);
       SDL_GL_DeleteContext(m_context);
       SDL_DestroyWindow(native_window);
       m_context = nullptr;
@@ -334,13 +334,13 @@ namespace AppWindow
     SDL_GL_SwapWindow(native_window);
   }
 
-  void WindowSDL::set_title(const AppCore::String& value)
+  void WindowSDL::set_title(const mgl_core::String& value)
   {
     m_title = value;
     SDL_SetWindowTitle(native_window, m_title.c_str());
   }
 
-  const AppCore::String& WindowSDL::title() const
+  const mgl_core::String& WindowSDL::title() const
   {
     return m_title;
   }
@@ -437,4 +437,4 @@ namespace AppWindow
     return m_state.width / m_state.height;
   }
 
-} // namespace AppWindow
+} // namespace mgl_window

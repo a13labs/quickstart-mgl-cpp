@@ -27,7 +27,7 @@
 #  define GET_PROCESS_ID getpid
 #endif
 
-namespace AppCore
+namespace mgl_core
 {
   using FloatingPointMicroseconds = std::chrono::duration<double, std::micro>;
 
@@ -72,7 +72,7 @@ public:
         // profiling output.
         if(Log::logger) // Edge case: begin_session() might be before Log::Init()
         {
-          APPCORE_ERROR("Instrumentor::begin_session('{0}') when session '{1}' already open.", name, m_current_session->name);
+          MGL_CORE_ERROR("Instrumentor::begin_session('{0}') when session '{1}' already open.", name, m_current_session->name);
         }
         internal_end_session();
       }
@@ -115,7 +115,7 @@ private:
     {
       nlohmann::json document;
 
-      document["otherData"] = "{ \"version\":\"AppCore v" APP_SEM_VERSION "\"}"_json;
+      document["otherData"] = "{ \"version\":\"mgl_core v" APP_SEM_VERSION "\"}"_json;
       document["traceEvents"] = m_trace_events;
 
       std::ofstream o(m_filepath);
@@ -201,43 +201,43 @@ private:
       return result;
     }
   } // namespace InstrumentorUtils
-} // namespace AppCore
+} // namespace mgl_core
 
-#ifndef APPCORE_PROFILE
-#  define APPCORE_PROFILE 0
+#ifndef MGL_CORE_PROFILE
+#  define MGL_CORE_PROFILE 0
 #endif
-#if APPCORE_PROFILE
+#if MGL_CORE_PROFILE
 // Resolve which function signature macro will be used. Note that this only
 // is resolved when the (pre)compiler starts, so the syntax highlighting
 // could mark the wrong one in your editor!
 #  if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) ||              \
       defined(__ghs__)
-#    define APPCORE_FUNC_SIG __PRETTY_FUNCTION__
+#    define MGL_CORE_FUNC_SIG __PRETTY_FUNCTION__
 #  elif defined(__DMC__) && (__DMC__ >= 0x810)
-#    define APPCORE_FUNC_SIG __PRETTY_FUNCTION__
+#    define MGL_CORE_FUNC_SIG __PRETTY_FUNCTION__
 #  elif(defined(__FUNCSIG__) || (_MSC_VER))
-#    define APPCORE_FUNC_SIG __FUNCSIG__
+#    define MGL_CORE_FUNC_SIG __FUNCSIG__
 #  elif(defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
-#    define APPCORE_FUNC_SIG __FUNCTION__
+#    define MGL_CORE_FUNC_SIG __FUNCTION__
 #  elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
-#    define APPCORE_FUNC_SIG __FUNC__
+#    define MGL_CORE_FUNC_SIG __FUNC__
 #  elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
-#    define APPCORE_FUNC_SIG __func__
+#    define MGL_CORE_FUNC_SIG __func__
 #  elif defined(__cplusplus) && (__cplusplus >= 201103)
-#    define APPCORE_FUNC_SIG __func__
+#    define MGL_CORE_FUNC_SIG __func__
 #  else
-#    define APPCORE_FUNC_SIG "APPCORE_FUNC_SIG unknown!"
+#    define MGL_CORE_FUNC_SIG "MGL_CORE_FUNC_SIG unknown!"
 #  endif
 
-#  define APPCORE_PROFILE_BEGIN_SESSION() ::AppCore::Instrumentor::get().begin_session("AppCore")
-#  define APPCORE_PROFILE_END_SESSION() ::AppCore::Instrumentor::get().end_session()
-#  define APPCORE_PROFILE_SCOPE(name, category)                                                                                  \
-    constexpr auto fixedName = ::AppCore::InstrumentorUtils::cleanup_output_string(name, "__cdecl ");                            \
-    ::AppCore::InstrumentationTimer timer##__LINE__(fixedName.Data, category)
-#  define APPCORE_PROFILE_FUNCTION(category) APPCORE_PROFILE_SCOPE(APPCORE_FUNC_SIG, category)
+#  define MGL_CORE_PROFILE_BEGIN_SESSION() ::mgl_core::Instrumentor::get().begin_session("mgl_core")
+#  define MGL_CORE_PROFILE_END_SESSION() ::mgl_core::Instrumentor::get().end_session()
+#  define MGL_CORE_PROFILE_SCOPE(name, category)                                                                                 \
+    constexpr auto fixedName = ::mgl_core::InstrumentorUtils::cleanup_output_string(name, "__cdecl ");                           \
+    ::mgl_core::InstrumentationTimer timer##__LINE__(fixedName.Data, category)
+#  define MGL_CORE_PROFILE_FUNCTION(category) MGL_CORE_PROFILE_SCOPE(MGL_CORE_FUNC_SIG, category)
 #else
-#  define APPCORE_PROFILE_BEGIN_SESSION()
-#  define APPCORE_PROFILE_END_SESSION()
-#  define APPCORE_PROFILE_SCOPE(name, category)
-#  define APPCORE_PROFILE_FUNCTION(category)
+#  define MGL_CORE_PROFILE_BEGIN_SESSION()
+#  define MGL_CORE_PROFILE_END_SESSION()
+#  define MGL_CORE_PROFILE_SCOPE(name, category)
+#  define MGL_CORE_PROFILE_FUNCTION(category)
 #endif

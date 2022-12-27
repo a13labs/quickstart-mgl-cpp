@@ -21,12 +21,12 @@
 #include "format.hpp"
 #include "program.hpp"
 
-namespace AppGL
+namespace mgl
 {
   void VertexArray::release()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_released)
@@ -38,16 +38,16 @@ namespace AppGL
     gl.DeleteVertexArrays(1, (GLuint*)&m_vertex_array_obj);
   }
 
-  void VertexArray::render(AppGL::RenderMode mode, int vertices, int first, int instances)
+  void VertexArray::render(mgl::RenderMode mode, int vertices, int first, int instances)
   {
-    APPCORE_ASSERT(!m_released, "Vertex Array already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(vertices < 0)
     {
-      APPCORE_ASSERT(m_num_vertices >= 0, "cannot detect the number of vertices");
+      MGL_CORE_ASSERT(m_num_vertices >= 0, "cannot detect the number of vertices");
       vertices = m_num_vertices;
     }
 
@@ -104,11 +104,11 @@ namespace AppGL
     }
   }
 
-  void VertexArray::render_indirect(const AppCore::Ref<Buffer>& buffer, AppGL::RenderMode mode, int count, int first)
+  void VertexArray::render_indirect(const mgl_core::Ref<Buffer>& buffer, mgl::RenderMode mode, int count, int first)
   {
-    APPCORE_ASSERT(!m_released, "Vertex Array already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     gl.UseProgram(m_program->m_program_obj);
@@ -162,18 +162,18 @@ namespace AppGL
   }
 
   void VertexArray::transform(
-      const AppCore::ListRef<Buffer>& buffers, AppGL::RenderMode mode, int vertices, int first, int instances, int buffer_offset)
+      const mgl_core::ListRef<Buffer>& buffers, mgl::RenderMode mode, int vertices, int first, int instances, int buffer_offset)
   {
-    APPCORE_ASSERT(!m_released, "Vertex Array already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
-    APPCORE_ASSERT(m_program->num_varyings(), "the program has no varyings")
+    MGL_CORE_ASSERT(m_program->num_varyings(), "the program has no varyings")
 
     if(vertices < 0)
     {
-      APPCORE_ASSERT(m_num_vertices >= 0, "cannot detect the number of vertices");
+      MGL_CORE_ASSERT(m_num_vertices >= 0, "cannot detect the number of vertices");
       vertices = m_num_vertices;
     }
 
@@ -194,32 +194,32 @@ namespace AppGL
       switch(m_program->geometry_input())
       {
         case GL_POINTS:
-          APPCORE_ASSERT(mode == GL_POINTS,
-                         "Geometry shader expects POINTS as input. Change the "
-                         "transform mode.");
+          MGL_CORE_ASSERT(mode == GL_POINTS,
+                          "Geometry shader expects POINTS as input. Change the "
+                          "transform mode.");
           break;
         case GL_LINES:
-          APPCORE_ASSERT(mode == GL_LINES || mode == GL_LINE_STRIP || mode == GL_LINE_LOOP || mode == GL_LINES_ADJACENCY,
-                         "Geometry shader expects LINES, LINE_STRIP, GL_LINE_LOOP or "
-                         "GL_LINES_ADJACENCY as input. Change the rendering mode.");
+          MGL_CORE_ASSERT(mode == GL_LINES || mode == GL_LINE_STRIP || mode == GL_LINE_LOOP || mode == GL_LINES_ADJACENCY,
+                          "Geometry shader expects LINES, LINE_STRIP, GL_LINE_LOOP or "
+                          "GL_LINES_ADJACENCY as input. Change the rendering mode.");
           break;
         case GL_LINES_ADJACENCY:
-          APPCORE_ASSERT(mode == GL_LINES_ADJACENCY || mode == GL_LINE_STRIP_ADJACENCY,
-                         "Geometry shader expects LINES_ADJACENCY or LINE_STRIP_ADJACENCY "
-                         "as input. Change the rendering mode.");
+          MGL_CORE_ASSERT(mode == GL_LINES_ADJACENCY || mode == GL_LINE_STRIP_ADJACENCY,
+                          "Geometry shader expects LINES_ADJACENCY or LINE_STRIP_ADJACENCY "
+                          "as input. Change the rendering mode.");
           break;
         case GL_TRIANGLES:
-          APPCORE_ASSERT(mode == GL_TRIANGLES || mode == GL_TRIANGLE_STRIP || mode == GL_TRIANGLE_FAN,
-                         "Geometry shader expects GL_TRIANGLES, GL_TRIANGLE_STRIP "
-                         "or GL_TRIANGLE_FAN as input. Change the rendering mode.");
+          MGL_CORE_ASSERT(mode == GL_TRIANGLES || mode == GL_TRIANGLE_STRIP || mode == GL_TRIANGLE_FAN,
+                          "Geometry shader expects GL_TRIANGLES, GL_TRIANGLE_STRIP "
+                          "or GL_TRIANGLE_FAN as input. Change the rendering mode.");
           break;
         case GL_TRIANGLES_ADJACENCY:
-          APPCORE_ASSERT(mode == GL_TRIANGLES_ADJACENCY || mode == GL_TRIANGLE_STRIP_ADJACENCY,
-                         "Geometry shader expects GL_TRIANGLES_ADJACENCY or "
-                         "GL_TRIANGLE_STRIP_ADJACENCY as input. Change the rendering mode.");
+          MGL_CORE_ASSERT(mode == GL_TRIANGLES_ADJACENCY || mode == GL_TRIANGLE_STRIP_ADJACENCY,
+                          "Geometry shader expects GL_TRIANGLES_ADJACENCY or "
+                          "GL_TRIANGLE_STRIP_ADJACENCY as input. Change the rendering mode.");
           break;
         default:
-          APPCORE_ERROR("Unexpected geometry shader input mode: %d", m_program->geometry_input());
+          MGL_CORE_ERROR("Unexpected geometry shader input mode: %d", m_program->geometry_input());
           return;
           break;
       }
@@ -241,7 +241,7 @@ namespace AppGL
         case GL_TRIANGLE_FAN:
         case GL_TRIANGLES_ADJACENCY:
         case GL_TRIANGLE_STRIP_ADJACENCY: output_mode = GL_TRIANGLES; break;
-        default: APPCORE_ASSERT(false, "Primitive mode not supported: %d", mode); return;
+        default: MGL_CORE_ASSERT(false, "Primitive mode not supported: %d", mode); return;
       }
     }
 
@@ -312,26 +312,26 @@ namespace AppGL
 
   void VertexArray::bind(int location,
                          const char* type,
-                         const AppCore::Ref<Buffer>& buffer,
+                         const mgl_core::Ref<Buffer>& buffer,
                          const char* format,
                          size_t offset,
                          int stride,
                          int divisor,
                          bool normalize)
   {
-    APPCORE_ASSERT(!m_released, "Vertex Array already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     FormatIterator it = FormatIterator(format);
     FormatInfo format_info = it.info();
 
-    APPCORE_ASSERT(!(type[0] == 'f' && normalize), "invalid normalize");
-    APPCORE_ASSERT(!(!format_info.valid || format_info.divisor || format_info.nodes != 1), "invalid format");
+    MGL_CORE_ASSERT(!(type[0] == 'f' && normalize), "invalid normalize");
+    MGL_CORE_ASSERT(!(!format_info.valid || format_info.divisor || format_info.nodes != 1), "invalid format");
 
     FormatNode* node = it.next();
-    APPCORE_ASSERT(node->type, "invalid format");
+    MGL_CORE_ASSERT(node->type, "invalid format");
 
     char* ptr = (char*)offset;
 
@@ -343,17 +343,17 @@ namespace AppGL
       case 'f': gl.VertexAttribPointer(location, node->count, node->type, normalize, stride, ptr); break;
       case 'i': gl.VertexAttribIPointer(location, node->count, node->type, stride, ptr); break;
       case 'd': gl.VertexAttribLPointer(location, node->count, node->type, stride, ptr); break;
-      default: APPCORE_ASSERT(false, "invalid type"); return;
+      default: MGL_CORE_ASSERT(false, "invalid type"); return;
     }
 
     gl.VertexAttribDivisor(location, divisor);
     gl.EnableVertexAttribArray(location);
   }
 
-  void VertexArray::set_index_buffer(const AppCore::Ref<Buffer>& value)
+  void VertexArray::set_index_buffer(const mgl_core::Ref<Buffer>& value)
   {
     m_index_buffer = value;
     m_num_vertices = (int)(m_index_buffer->size() / 4);
   }
 
-} // namespace AppGL
+} // namespace mgl

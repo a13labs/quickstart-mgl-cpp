@@ -18,13 +18,13 @@
 #include "appcore/log.hpp"
 #include "context.hpp"
 
-namespace AppGL
+namespace mgl
 {
-  Subroutine::Subroutine(const AppCore::String& name, int index, Subroutine::Type type)
+  Subroutine::Subroutine(const mgl_core::String& name, int index, Subroutine::Type type)
   {
     m_name = name;
     m_index = index;
     m_type = type;
   }
 
-} // namespace AppGL
+} // namespace mgl

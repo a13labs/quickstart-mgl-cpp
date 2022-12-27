@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Buffer
   {
@@ -30,15 +30,15 @@ public:
     size_t size();
     bool dynamic();
 
-    bool read_into(AppCore::MemoryBuffer<float>&, size_t size, size_t offset, size_t write_offset);
-    bool read_into(AppCore::MemoryBuffer<uint32_t>&, size_t size, size_t offset, size_t write_offset);
-    bool read_into(AppCore::MemoryBuffer<uint8_t>& dst, size_t size, size_t offset, size_t write_offset);
-    bool read_into(AppCore::MemoryBuffer<int>& dst, size_t size, size_t offset, size_t write_offset);
+    bool read_into(mgl_core::MemoryBuffer<float>&, size_t size, size_t offset, size_t write_offset);
+    bool read_into(mgl_core::MemoryBuffer<uint32_t>&, size_t size, size_t offset, size_t write_offset);
+    bool read_into(mgl_core::MemoryBuffer<uint8_t>& dst, size_t size, size_t offset, size_t write_offset);
+    bool read_into(mgl_core::MemoryBuffer<int>& dst, size_t size, size_t offset, size_t write_offset);
 
-    bool write(const AppCore::MemoryBuffer<float>& dst, size_t offset);
-    bool write(const AppCore::MemoryBuffer<uint32_t>& dst, size_t offset);
-    bool write(const AppCore::MemoryBuffer<uint8_t>& dst, size_t offset);
-    bool write(const AppCore::MemoryBuffer<int>& dst, size_t offset);
+    bool write(const mgl_core::MemoryBuffer<float>& dst, size_t offset);
+    bool write(const mgl_core::MemoryBuffer<uint32_t>& dst, size_t offset);
+    bool write(const mgl_core::MemoryBuffer<uint8_t>& dst, size_t offset);
+    bool write(const mgl_core::MemoryBuffer<int>& dst, size_t offset);
 
     void clear();
     void bind_to_uniform_block(int binding = 0, size_t size = 0, size_t offset = -1);
@@ -66,42 +66,42 @@ private:
     bool m_released;
   };
 
-  inline bool Buffer::write(const AppCore::MemoryBuffer<float>& src, size_t offset)
+  inline bool Buffer::write(const mgl_core::MemoryBuffer<float>& src, size_t offset)
   {
     return write(src.data(), src.size_bytes(), offset);
   }
 
-  inline bool Buffer::write(const AppCore::MemoryBuffer<uint32_t>& src, size_t offset)
+  inline bool Buffer::write(const mgl_core::MemoryBuffer<uint32_t>& src, size_t offset)
   {
     return write(src.data(), src.size_bytes(), offset);
   }
 
-  inline bool Buffer::write(const AppCore::MemoryBuffer<uint8_t>& src, size_t offset)
+  inline bool Buffer::write(const mgl_core::MemoryBuffer<uint8_t>& src, size_t offset)
   {
     return write(src.data(), src.size_bytes(), offset);
   }
 
-  inline bool Buffer::write(const AppCore::MemoryBuffer<int>& src, size_t offset)
+  inline bool Buffer::write(const mgl_core::MemoryBuffer<int>& src, size_t offset)
   {
     return write(src.data(), src.size_bytes(), offset);
   }
 
-  inline bool Buffer::read_into(AppCore::MemoryBuffer<float>& dst, size_t size, size_t offset, size_t write_offset)
+  inline bool Buffer::read_into(mgl_core::MemoryBuffer<float>& dst, size_t size, size_t offset, size_t write_offset)
   {
     return read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline bool Buffer::read_into(AppCore::MemoryBuffer<uint32_t>& dst, size_t size, size_t offset, size_t write_offset)
+  inline bool Buffer::read_into(mgl_core::MemoryBuffer<uint32_t>& dst, size_t size, size_t offset, size_t write_offset)
   {
     return read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline bool Buffer::read_into(AppCore::MemoryBuffer<uint8_t>& dst, size_t size, size_t offset, size_t write_offset)
+  inline bool Buffer::read_into(mgl_core::MemoryBuffer<uint8_t>& dst, size_t size, size_t offset, size_t write_offset)
   {
     return read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline bool Buffer::read_into(AppCore::MemoryBuffer<int>& dst, size_t size, size_t offset, size_t write_offset)
+  inline bool Buffer::read_into(mgl_core::MemoryBuffer<int>& dst, size_t size, size_t offset, size_t write_offset)
   {
     return read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
@@ -121,4 +121,4 @@ private:
     return m_released;
   }
 
-} // namespace AppGL
+} // namespace mgl

@@ -17,7 +17,7 @@
 #include "appcore/appcore.hpp"
 #include "input.hpp"
 
-namespace AppWindow
+namespace mgl_window
 {
   enum class EventType
   {
@@ -80,7 +80,7 @@ public:
     virtual EventType get_event_type() const = 0;
     virtual const char* get_name() const = 0;
     virtual int get_category_flags() const = 0;
-    virtual AppCore::String to_string() const { return get_name(); }
+    virtual mgl_core::String to_string() const { return get_name(); }
 
     bool is_category(EventCategory category) { return get_category_flags() & category; }
 
@@ -131,7 +131,7 @@ public:
     uint32_t get_width() const { return m_width; }
     uint32_t get_height() const { return m_height; }
 
-    AppCore::String to_string() const override
+    mgl_core::String to_string() const override
     {
       std::stringstream ss;
       ss << "WindowResizeEvent: " << m_width << ", " << m_height;
@@ -164,7 +164,7 @@ public:
     float get_x() const { return m_mouse_x; }
     float get_y() const { return m_mouse_y; }
 
-    AppCore::String to_string() const override
+    mgl_core::String to_string() const override
     {
       std::stringstream ss;
       ss << "MouseMovedEvent: " << m_mouse_x << ", " << m_mouse_y;
@@ -188,7 +188,7 @@ public:
     float get_x_offset() const { return m_x_offset; }
     float get_y_offset() const { return m_y_offset; }
 
-    AppCore::String to_string() const override
+    mgl_core::String to_string() const override
     {
       std::stringstream ss;
       ss << "MouseScrolledEvent: " << get_x_offset() << ", " << get_y_offset();
@@ -222,7 +222,7 @@ public:
         : MouseButtonEvent(button)
     { }
 
-    AppCore::String to_string() const override
+    mgl_core::String to_string() const override
     {
       std::stringstream ss;
       ss << "MouseButtonPressedEvent: " << m_button;
@@ -239,7 +239,7 @@ public:
         : MouseButtonEvent(button)
     { }
 
-    AppCore::String to_string() const override
+    mgl_core::String to_string() const override
     {
       std::stringstream ss;
       ss << "MouseButtonReleasedEvent: " << m_button;
@@ -276,7 +276,7 @@ public:
 
     int get_repeat_count() const { return m_repeat; }
 
-    AppCore::String to_string() const override
+    mgl_core::String to_string() const override
     {
       std::stringstream ss;
       ss << "KeyPressedEvent: " << m_key_code << " ( repeat:" << m_repeat << ")";
@@ -295,7 +295,7 @@ public:
         : KeyEvent(keycode, modifiers)
     { }
 
-    AppCore::String to_string() const override
+    mgl_core::String to_string() const override
     {
       std::stringstream ss;
       ss << "KeyReleasedEvent: " << m_key_code;
@@ -312,7 +312,7 @@ public:
         : KeyEvent(keycode, modifiers)
     { }
 
-    AppCore::String to_string() const override
+    mgl_core::String to_string() const override
     {
       std::stringstream ss;
       ss << "KeyTypedEvent: " << m_key_code;
@@ -321,4 +321,4 @@ public:
 
     EVENT_CLASS_TYPE(KeyTyped)
   };
-} // namespace AppWindow
+} // namespace mgl_window

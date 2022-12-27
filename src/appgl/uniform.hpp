@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Uniform
   {
@@ -83,13 +83,13 @@ public:
 
 private:
     friend class Context;
-    Uniform(const AppCore::String& name, int gl_type, int program_obj, int location, size_t size, Context* ctx);
+    Uniform(const mgl_core::String& name, int gl_type, int program_obj, int location, size_t size, Context* ctx);
 
     void set_value(void* data, size_t size);
     void get_value(void* data, size_t size);
 
     Context* m_context;
-    AppCore::String m_name;
+    mgl_core::String m_name;
     int m_program_obj;
     int m_gl_type;
     int m_location;
@@ -352,4 +352,4 @@ private:
     set_value((void*)&value, size * sizeof(float));
   }
 
-} // namespace AppGL
+} // namespace mgl

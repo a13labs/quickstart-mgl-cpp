@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class ConditionalRender
   {
@@ -29,4 +29,4 @@ private:
     friend class Context;
     ConditionalRender();
   };
-} // namespace AppGL
+} // namespace mgl

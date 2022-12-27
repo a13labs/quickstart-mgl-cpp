@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifdef APPGL_EGL
+#ifdef MGL_EGL
 
 #  include "appcore/log.hpp"
 #  include "appgl/context.hpp"
@@ -103,7 +103,7 @@ struct EGLContextData
   m_eglGetCurrentDisplayProc m_eglGetCurrentDisplay;
 };
 
-namespace AppGL
+namespace mgl
 {
   ContextEGL::ContextEGL(ContextMode::Enum mode, int required)
   {
@@ -118,7 +118,7 @@ namespace AppGL
     res->libgl = dlopen("libGL.so", RTLD_LAZY);
     if(!res->libgl)
     {
-      APPCORE_ERROR("'libGL.so' not loaded");
+      MGL_CORE_ERROR("'libGL.so' not loaded");
       delete res;
       return;
     }
@@ -126,7 +126,7 @@ namespace AppGL
     res->libegl = dlopen("libEGL.so", RTLD_LAZY);
     if(!res->libegl)
     {
-      APPCORE_ERROR("'libEGL.so' not loaded");
+      MGL_CORE_ERROR("'libEGL.so' not loaded");
       delete res;
       return;
     }
@@ -134,7 +134,7 @@ namespace AppGL
     res->m_eglGetError = (m_eglGetErrorProc)dlsym(res->libegl, "eglGetError");
     if(!res->m_eglGetError)
     {
-      APPCORE_ERROR("eglGetError not found");
+      MGL_CORE_ERROR("eglGetError not found");
       delete res;
       return;
     }
@@ -142,7 +142,7 @@ namespace AppGL
     res->m_eglGetDisplay = (m_eglGetDisplayProc)dlsym(res->libegl, "eglGetDisplay");
     if(!res->m_eglGetDisplay)
     {
-      APPCORE_ERROR("eglGetDisplay not found");
+      MGL_CORE_ERROR("eglGetDisplay not found");
       delete res;
       return;
     }
@@ -150,7 +150,7 @@ namespace AppGL
     res->m_eglInitialize = (m_eglInitializeProc)dlsym(res->libegl, "eglInitialize");
     if(!res->m_eglInitialize)
     {
-      APPCORE_ERROR("eglInitialize not found");
+      MGL_CORE_ERROR("eglInitialize not found");
       delete res;
       return;
     }
@@ -158,7 +158,7 @@ namespace AppGL
     res->m_eglChooseConfig = (m_eglChooseConfigProc)dlsym(res->libegl, "eglChooseConfig");
     if(!res->m_eglChooseConfig)
     {
-      APPCORE_ERROR("eglChooseConfig not found");
+      MGL_CORE_ERROR("eglChooseConfig not found");
       delete res;
       return;
     }
@@ -166,7 +166,7 @@ namespace AppGL
     res->m_eglBindAPI = (m_eglBindAPIProc)dlsym(res->libegl, "eglBindAPI");
     if(!res->m_eglBindAPI)
     {
-      APPCORE_ERROR("eglBindAPI not found");
+      MGL_CORE_ERROR("eglBindAPI not found");
       delete res;
       return;
     }
@@ -174,7 +174,7 @@ namespace AppGL
     res->m_eglCreateContext = (m_eglCreateContextProc)dlsym(res->libegl, "eglCreateContext");
     if(!res->m_eglCreateContext)
     {
-      APPCORE_ERROR("eglCreateContext not found");
+      MGL_CORE_ERROR("eglCreateContext not found");
       delete res;
       return;
     }
@@ -182,7 +182,7 @@ namespace AppGL
     res->m_eglDestroyContext = (m_eglDestroyContextProc)dlsym(res->libegl, "eglDestroyContext");
     if(!res->m_eglDestroyContext)
     {
-      APPCORE_ERROR("eglDestroyContext not found");
+      MGL_CORE_ERROR("eglDestroyContext not found");
       delete res;
       return;
     }
@@ -190,7 +190,7 @@ namespace AppGL
     res->m_eglMakeCurrent = (m_eglMakeCurrentProc)dlsym(res->libegl, "eglMakeCurrent");
     if(!res->m_eglMakeCurrent)
     {
-      APPCORE_ERROR("eglMakeCurrent not found");
+      MGL_CORE_ERROR("eglMakeCurrent not found");
       delete res;
       return;
     }
@@ -198,7 +198,7 @@ namespace AppGL
     res->m_eglGetProcAddress = (m_eglGetProcAddressProc)dlsym(res->libegl, "eglGetProcAddress");
     if(!res->m_eglGetProcAddress)
     {
-      APPCORE_ERROR("eglGetProcAddress not found");
+      MGL_CORE_ERROR("eglGetProcAddress not found");
       delete res;
       return;
     }
@@ -206,7 +206,7 @@ namespace AppGL
     res->m_eglQueryDevicesEXT = (m_eglQueryDevicesEXTProc)res->m_eglGetProcAddress("eglQueryDevicesEXT");
     if(!res->m_eglQueryDevicesEXT)
     {
-      APPCORE_ERROR("eglQueryDevicesEXT not found");
+      MGL_CORE_ERROR("eglQueryDevicesEXT not found");
       delete res;
       return;
     }
@@ -214,7 +214,7 @@ namespace AppGL
     res->m_eglGetPlatformDisplayEXT = (m_eglGetPlatformDisplayEXTProc)res->m_eglGetProcAddress("eglGetPlatformDisplayEXT");
     if(!res->m_eglGetPlatformDisplayEXT)
     {
-      APPCORE_ERROR("eglGetPlatformDisplayEXT not found");
+      MGL_CORE_ERROR("eglGetPlatformDisplayEXT not found");
       delete res;
       return;
     }
@@ -222,7 +222,7 @@ namespace AppGL
     res->m_eglGetCurrentDisplay = (m_eglGetCurrentDisplayProc)res->m_eglGetProcAddress("eglGetCurrentDisplay");
     if(!res->m_eglGetCurrentDisplay)
     {
-      APPCORE_ERROR("eglGetCurrentDisplay not found");
+      MGL_CORE_ERROR("eglGetCurrentDisplay not found");
       delete res;
       return;
     }
@@ -230,7 +230,7 @@ namespace AppGL
     res->m_eglGetCurrentContext = (m_eglGetCurrentContextProc)res->m_eglGetProcAddress("eglGetCurrentContext");
     if(!res->m_eglGetCurrentContext)
     {
-      APPCORE_ERROR("eglGetCurrentContext not found");
+      MGL_CORE_ERROR("eglGetCurrentContext not found");
       delete res;
       return;
     }
@@ -238,7 +238,7 @@ namespace AppGL
     res->m_eglGetCurrentSurface = (m_eglGetCurrentSurfaceProc)res->m_eglGetProcAddress("eglGetCurrentSurface");
     if(!res->m_eglGetCurrentSurface)
     {
-      APPCORE_ERROR("eglGetCurrentSurfaceProc not found");
+      MGL_CORE_ERROR("eglGetCurrentSurfaceProc not found");
       delete res;
       return;
     }
@@ -252,14 +252,14 @@ namespace AppGL
         EGLint num_devices;
         if(!res->m_eglQueryDevicesEXT(0, NULL, &num_devices))
         {
-          APPCORE_ERROR("eglQueryDevicesEXT failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglQueryDevicesEXT failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
 
         if(device_index >= num_devices)
         {
-          APPCORE_ERROR("requested device index %d, but found %d devices", device_index, num_devices);
+          MGL_CORE_ERROR("requested device index %d, but found %d devices", device_index, num_devices);
           delete res;
           return;
         }
@@ -267,7 +267,7 @@ namespace AppGL
         EGLDeviceEXT* devices = (EGLDeviceEXT*)malloc(sizeof(EGLDeviceEXT) * num_devices);
         if(!res->m_eglQueryDevicesEXT(num_devices, devices, &num_devices))
         {
-          APPCORE_ERROR("eglQueryDevicesEXT failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglQueryDevicesEXT failed (0x%x)", res->m_eglGetError());
           free(devices);
           delete res;
           return;
@@ -278,7 +278,7 @@ namespace AppGL
         res->dpy = res->m_eglGetPlatformDisplayEXT(EGL_PLATFORM_DEVICE_EXT, device, 0);
         if(res->dpy == EGL_NO_DISPLAY)
         {
-          APPCORE_ERROR("eglGetPlatformDisplayEXT failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglGetPlatformDisplayEXT failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
@@ -286,55 +286,46 @@ namespace AppGL
         EGLint major, minor;
         if(!res->m_eglInitialize(res->dpy, &major, &minor))
         {
-          APPCORE_ERROR("eglInitialize failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglInitialize failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
 
-        EGLint config_attribs[] = {EGL_SURFACE_TYPE,
-                                   EGL_PBUFFER_BIT,
-                                   EGL_BLUE_SIZE,
-                                   8,
-                                   EGL_GREEN_SIZE,
-                                   8,
-                                   EGL_RED_SIZE,
-                                   8,
-                                   EGL_DEPTH_SIZE,
-                                   8,
-                                   EGL_RENDERABLE_TYPE,
-                                   EGL_OPENGL_BIT,
-                                   EGL_NONE};
+        EGLint config_attribs[] = {
+          EGL_SURFACE_TYPE,    EGL_PBUFFER_BIT, EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_DEPTH_SIZE, 8,
+          EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,  EGL_NONE
+        };
 
         EGLint num_configs = 0;
         if(!res->m_eglChooseConfig(res->dpy, config_attribs, &res->cfg, 1, &num_configs))
         {
-          APPCORE_ERROR("eglChooseConfig failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglChooseConfig failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
 
         if(!res->m_eglBindAPI(EGL_OPENGL_API))
         {
-          APPCORE_ERROR("eglBindAPI failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglBindAPI failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
 
         int ctxattribs[] = {
-            EGL_CONTEXT_MAJOR_VERSION,
-            required / 100 % 10,
-            EGL_CONTEXT_MINOR_VERSION,
-            required / 10 % 10,
-            EGL_CONTEXT_OPENGL_PROFILE_MASK,
-            EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
-            // EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE, 1,
-            EGL_NONE,
+          EGL_CONTEXT_MAJOR_VERSION,
+          required / 100 % 10,
+          EGL_CONTEXT_MINOR_VERSION,
+          required / 10 % 10,
+          EGL_CONTEXT_OPENGL_PROFILE_MASK,
+          EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
+          // EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE, 1,
+          EGL_NONE,
         };
 
         res->ctx = res->m_eglCreateContext(res->dpy, res->cfg, EGL_NO_CONTEXT, ctxattribs);
         if(!res->ctx)
         {
-          APPCORE_ERROR("eglCreateContext failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglCreateContext failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
@@ -348,7 +339,7 @@ namespace AppGL
         EGLContext ctx_share = res->m_eglGetCurrentContext();
         if(!ctx_share)
         {
-          APPCORE_ERROR("(share) eglGetCurrentContext: cannot detect OpenGL context");
+          MGL_CORE_ERROR("(share) eglGetCurrentContext: cannot detect OpenGL context");
           delete res;
           return;
         }
@@ -356,7 +347,7 @@ namespace AppGL
         res->wnd = res->m_eglGetCurrentSurface(EGL_DRAW);
         if(!res->wnd)
         {
-          APPCORE_ERROR("(share) m_eglGetCurrentSurface failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("(share) m_eglGetCurrentSurface failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
@@ -364,55 +355,46 @@ namespace AppGL
         res->dpy = res->m_eglGetCurrentDisplay();
         if(res->dpy == EGL_NO_DISPLAY)
         {
-          APPCORE_ERROR("eglGetCurrentDisplay failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglGetCurrentDisplay failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
 
-        EGLint config_attribs[] = {EGL_SURFACE_TYPE,
-                                   EGL_WINDOW_BIT,
-                                   EGL_BLUE_SIZE,
-                                   8,
-                                   EGL_GREEN_SIZE,
-                                   8,
-                                   EGL_RED_SIZE,
-                                   8,
-                                   EGL_DEPTH_SIZE,
-                                   24,
-                                   EGL_RENDERABLE_TYPE,
-                                   EGL_OPENGL_BIT,
-                                   EGL_NONE};
+        EGLint config_attribs[] = {
+          EGL_SURFACE_TYPE,    EGL_WINDOW_BIT, EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_DEPTH_SIZE, 24,
+          EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT, EGL_NONE
+        };
 
         EGLint num_configs = 0;
         if(!res->m_eglChooseConfig(res->dpy, config_attribs, &res->cfg, 1, &num_configs))
         {
-          APPCORE_ERROR("eglChooseConfig failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglChooseConfig failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
 
         if(!res->m_eglBindAPI(EGL_OPENGL_API))
         {
-          APPCORE_ERROR("eglBindAPI failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglBindAPI failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
 
         int ctxattribs[] = {
-            EGL_CONTEXT_MAJOR_VERSION,
-            required / 100 % 10,
-            EGL_CONTEXT_MINOR_VERSION,
-            required / 10 % 10,
-            EGL_CONTEXT_OPENGL_PROFILE_MASK,
-            EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
-            // EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE, 1,
-            EGL_NONE,
+          EGL_CONTEXT_MAJOR_VERSION,
+          required / 100 % 10,
+          EGL_CONTEXT_MINOR_VERSION,
+          required / 10 % 10,
+          EGL_CONTEXT_OPENGL_PROFILE_MASK,
+          EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
+          // EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE, 1,
+          EGL_NONE,
         };
 
         res->ctx = res->m_eglCreateContext(res->dpy, res->cfg, ctx_share, ctxattribs);
         if(!res->ctx)
         {
-          APPCORE_ERROR("eglCreateContext failed (0x%x)", res->m_eglGetError());
+          MGL_CORE_ERROR("eglCreateContext failed (0x%x)", res->m_eglGetError());
           delete res;
           return;
         }
@@ -421,7 +403,7 @@ namespace AppGL
       }
       break;
       default: {
-        APPCORE_ERROR("Detect mode not supported");
+        MGL_CORE_ERROR("Detect mode not supported");
         delete res;
         return;
       }
@@ -438,7 +420,7 @@ namespace AppGL
       delete(EGLContextData*)m_context;
   }
 
-  GLFunction ContextEGL::load(const AppCore::String& method)
+  GLFunction ContextEGL::load(const mgl_core::String& method)
   {
     if(!m_context)
       return nullptr;
@@ -486,5 +468,5 @@ namespace AppGL
   {
     return m_context != nullptr && !m_released;
   }
-} // namespace AppGL
+} // namespace mgl
 #endif

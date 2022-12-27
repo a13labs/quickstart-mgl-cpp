@@ -18,12 +18,12 @@
 #include "appcore/log.hpp"
 #include "context.hpp"
 
-namespace AppGL
+namespace mgl
 {
   void Query::begin()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_query_obj[Query::Keys::SAMPLES_PASSED])
@@ -49,8 +49,8 @@ namespace AppGL
 
   void Query::end()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_query_obj[Query::Keys::SAMPLES_PASSED])
@@ -76,8 +76,8 @@ namespace AppGL
 
   void Query::begin_render()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_query_obj[Query::Keys::ANY_SAMPLES_PASSED])
@@ -90,22 +90,22 @@ namespace AppGL
     }
     else
     {
-      APPCORE_ERROR("no samples");
+      MGL_CORE_ERROR("no samples");
     }
   }
 
   void Query::end_render()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     gl.EndConditionalRender();
   }
 
   int Query::samples()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     int samples = 0;
     gl.GetQueryObjectiv(m_query_obj[Query::Keys::SAMPLES_PASSED], GL_QUERY_RESULT, &samples);
@@ -114,8 +114,8 @@ namespace AppGL
 
   int Query::primitives()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     int primitives = 0;
     gl.GetQueryObjectiv(m_query_obj[Query::Keys::PRIMITIVES_GENERATED], GL_QUERY_RESULT, &primitives);
@@ -124,12 +124,12 @@ namespace AppGL
 
   int Query::elapsed()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     int elapsed = 0;
     gl.GetQueryObjectiv(m_query_obj[Query::Keys::TIME_ELAPSED], GL_QUERY_RESULT, &elapsed);
     return elapsed;
   }
 
-} // namespace AppGL
+} // namespace mgl

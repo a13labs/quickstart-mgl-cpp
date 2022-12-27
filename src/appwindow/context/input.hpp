@@ -16,7 +16,7 @@
 #pragma once
 #include "appcore/appcore.hpp"
 
-namespace AppWindow
+namespace mgl_window
 {
   struct Modifier
   {
@@ -185,4 +185,4 @@ namespace AppWindow
     return input_state.pressed_mouse_buttons[button & 0xff];
   }
 
-} // namespace AppWindow
+} // namespace mgl_window

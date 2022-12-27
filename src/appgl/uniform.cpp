@@ -18,7 +18,7 @@
 #include "appcore/log.hpp"
 #include "context.hpp"
 
-namespace AppGL
+namespace mgl
 {
   static Uniform::DataType gl_bool = { false, 1, 4 };
   static Uniform::DataType gl_bool_vec2 = { false, 2, 8 };
@@ -150,11 +150,11 @@ namespace AppGL
       case GL_DOUBLE_MAT4x2: return &gl_double_mat_4x2;
       case GL_DOUBLE_MAT4x3: return &gl_double_mat_4x3;
       case GL_DOUBLE_MAT4: return &gl_double_mat_4;
-      default: APPCORE_ASSERT(false, "invalid gl type"); return nullptr;
+      default: MGL_CORE_ASSERT(false, "invalid gl type"); return nullptr;
     };
   }
 
-  Uniform::Uniform(const AppCore::String& name, int gl_type, int program_obj, int location, size_t size, Context* ctx)
+  Uniform::Uniform(const mgl_core::String& name, int gl_type, int program_obj, int location, size_t size, Context* ctx)
   {
     m_context = ctx;
     m_name = name;
@@ -173,7 +173,7 @@ namespace AppGL
 
   void Uniform::set_value(void* data, size_t size)
   {
-    APPCORE_ASSERT(size == (size_t)(m_size * m_data_type->element_size), "invalid data size");
+    MGL_CORE_ASSERT(size == (size_t)(m_size * m_data_type->element_size), "invalid data size");
 
     const GLMethods& gl = m_context->gl();
 
@@ -431,14 +431,14 @@ namespace AppGL
         gl.UniformMatrix4dv(m_location, m_size, false, (double*)ptr);
       }
       break;
-      default: APPCORE_ASSERT(false, "invalid gl type"); break;
+      default: MGL_CORE_ASSERT(false, "invalid gl type"); break;
     }
   }
 
   void Uniform::get_value(void* data, size_t size)
   {
 
-    APPCORE_ASSERT(size == (size_t)(m_size * m_data_type->element_size), "invalid data size");
+    MGL_CORE_ASSERT(size == (size_t)(m_size * m_data_type->element_size), "invalid data size");
 
     const GLMethods& gl = m_context->gl();
     char* ptr = (char*)data;
@@ -698,8 +698,8 @@ namespace AppGL
           gl.GetUniformdv(m_program_obj, m_location + i, (double*)(ptr + i * m_data_type->element_size));
         }
         break;
-        default: APPCORE_ASSERT(false, "invalid gl type"); break;
+        default: MGL_CORE_ASSERT(false, "invalid gl type"); break;
       }
     }
   }
-} // namespace AppGL
+} // namespace mgl

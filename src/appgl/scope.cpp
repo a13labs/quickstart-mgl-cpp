@@ -20,7 +20,7 @@
 #include "framebuffer.hpp"
 #include "sampler.hpp"
 
-namespace AppGL
+namespace mgl
 {
   void Scope::release()
   {
@@ -40,9 +40,9 @@ namespace AppGL
 
   void Scope::begin()
   {
-    APPCORE_ASSERT(!m_released, "Scope released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(!m_released, "Scope released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     const int& flags = m_enable_flags;
@@ -65,7 +65,7 @@ namespace AppGL
 
     for(auto&& sampler : m_samplers)
     {
-      APPCORE_ASSERT(sampler.sampler, "invalid sampler");
+      MGL_CORE_ASSERT(sampler.sampler, "invalid sampler");
       sampler.sampler->use(sampler.binding);
     }
 
@@ -117,9 +117,9 @@ namespace AppGL
 
   void Scope::end()
   {
-    APPCORE_ASSERT(!m_released, "Scope released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(!m_released, "Scope released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     const int& flags = m_old_enable_flags;
 
@@ -173,4 +173,4 @@ namespace AppGL
     }
   }
 
-} // namespace AppGL
+} // namespace mgl

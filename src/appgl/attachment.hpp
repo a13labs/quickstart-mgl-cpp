@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Attachment
   {
@@ -30,4 +30,4 @@ public:
     virtual ~Attachment() = default;
     virtual Attachment::Type attachment_type() = 0;
   };
-} // namespace AppGL
+} // namespace mgl

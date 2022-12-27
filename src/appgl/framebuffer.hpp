@@ -17,9 +17,9 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace AppGL
+namespace mgl
 {
-  class Framebuffer : public AppCore::RefFromThis<Framebuffer>
+  class Framebuffer : public mgl_core::RefFromThis<Framebuffer>
   {
 public:
     ~Framebuffer() = default;
@@ -51,7 +51,7 @@ public:
     void clear(const glm::vec4& color, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
     void clear(float r, float g, float b, float a = 0.0, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
 
-    bool read_into(AppCore::MemoryBuffer<u_int8_t>& dst,
+    bool read_into(mgl_core::MemoryBuffer<u_int8_t>& dst,
                    const Viewport2D& viewport = NullViewport2D,
                    int components = 3,
                    int attachment = 0,
@@ -59,7 +59,7 @@ public:
                    const char* dtype = "f1",
                    size_t write_offset = 0);
 
-    bool read_into(AppCore::Ref<Buffer> dst,
+    bool read_into(mgl_core::Ref<Buffer> dst,
                    const Viewport2D& viewport = NullViewport2D,
                    int components = 3,
                    int attachment = 0,
@@ -159,4 +159,4 @@ private:
     set_color_mask({ mask });
   }
 
-} // namespace AppGL
+} // namespace mgl

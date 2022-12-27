@@ -19,12 +19,12 @@
 #include "context.hpp"
 #include "framebuffer.hpp"
 
-namespace AppGL
+namespace mgl
 {
   void Renderbuffer::release()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_released)
@@ -41,4 +41,4 @@ namespace AppGL
     return Attachment::RENDERBUFFER;
   }
 
-} // namespace AppGL
+} // namespace mgl

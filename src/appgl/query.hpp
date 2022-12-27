@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace AppGL
+namespace mgl
 {
   class Query
   {
@@ -49,4 +49,4 @@ private:
     Context* m_context;
     int m_query_obj[Query::Keys::COUNT];
   };
-} // namespace AppGL
+} // namespace mgl

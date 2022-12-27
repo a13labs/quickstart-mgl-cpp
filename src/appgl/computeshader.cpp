@@ -18,12 +18,12 @@
 #include "appcore/log.hpp"
 #include "context.hpp"
 
-namespace AppGL
+namespace mgl
 {
   void ComputeShader::release()
   {
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     if(m_released)
@@ -37,18 +37,18 @@ namespace AppGL
 
   void ComputeShader::run(int x, int y, int z)
   {
-    APPCORE_ASSERT(!m_released, "Compute Shader already released");
-    APPCORE_ASSERT(m_context, "No context");
-    APPCORE_ASSERT(!m_context->released(), "Context already released");
+    MGL_CORE_ASSERT(!m_released, "Compute Shader already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
     gl.UseProgram(m_program_obj);
     gl.DispatchCompute(x, y, z);
   }
 
-  const AppCore::StringList ComputeShader::uniforms()
+  const mgl_core::StringList ComputeShader::uniforms()
   {
-    auto result = AppCore::StringList();
+    auto result = mgl_core::StringList();
 
     for(auto&& a : m_uniforms_map)
     {
@@ -58,9 +58,9 @@ namespace AppGL
     return result;
   }
 
-  const AppCore::StringList ComputeShader::uniform_blocks()
+  const mgl_core::StringList ComputeShader::uniform_blocks()
   {
-    auto result = AppCore::StringList();
+    auto result = mgl_core::StringList();
 
     for(auto&& a : m_uniform_blocks_map)
     {
@@ -70,4 +70,4 @@ namespace AppGL
     return result;
   }
 
-} // namespace AppGL
+} // namespace mgl

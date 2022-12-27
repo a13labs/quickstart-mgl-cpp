@@ -1,17 +1,17 @@
 target_link_libraries(
     ${APP_CURRENT_TARGET}
     PRIVATE
-    ${APPCORE_LIB}
+    ${MGL_CORE_LIB}
 )
 
 target_link_libraries(
     ${APP_CURRENT_TARGET}
     PRIVATE
-    ${APPGL_LIB}
+    ${MGL_LIB}
 )
 
 target_link_libraries(
     ${APP_CURRENT_TARGET}
     PRIVATE
-    ${APPWINDOW_LIB}
+    ${MGL_WINDOW_LIB}
 )

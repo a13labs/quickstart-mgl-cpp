@@ -38,7 +38,7 @@
 #include "varying.hpp"
 #include "vertexarray.hpp"
 
-namespace AppGL
+namespace mgl
 {
 
   static const int SHADER_TYPE[5] = {
@@ -70,7 +70,7 @@ namespace AppGL
       case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS: message = "the framebuffer is not complete (INCOMPLETE_LAYER_TARGETS)"; break;
     }
 
-    APPCORE_ERROR(message);
+    MGL_CORE_ERROR(message);
   }
 
   void Context::load_functions()
@@ -79,70 +79,70 @@ namespace AppGL
     void** gl_function = (void**)&m_gl;
     for(int i = 0; GL_FUNCTIONS[i]; ++i)
     {
-      APPCORE_INFO("Loading GL function: {0}", GL_FUNCTIONS[i]);
+      MGL_CORE_INFO("Loading GL function: {0}", GL_FUNCTIONS[i]);
       auto func = load(GL_FUNCTIONS[i]);
-      APPCORE_ASSERT(func != nullptr, "Loading GL function {0}", GL_FUNCTIONS[i]);
+      MGL_CORE_ASSERT(func != nullptr, "Loading GL function {0}", GL_FUNCTIONS[i]);
       gl_function[i] = func;
     }
   }
 
-  AppCore::Ref<Context> Context::create_context(ContextMode::Enum mode, int required)
+  mgl_core::Ref<Context> Context::create_context(ContextMode::Enum mode, int required)
   {
 
     Context* ctx = nullptr;
 
-#ifdef APPGL_EGL
-    APPCORE_INFO("Trying EGL context!");
+#ifdef MGL_EGL
+    MGL_CORE_INFO("Trying EGL context!");
     ctx = new ContextEGL(mode, required);
     if(!ctx->is_valid())
     {
-      APPCORE_INFO("EGL not supported!");
+      MGL_CORE_INFO("EGL not supported!");
       delete(ctx);
       ctx = nullptr;
     }
     else
     {
-      APPCORE_INFO("EGL supported!");
+      MGL_CORE_INFO("EGL supported!");
     }
 #endif
-#ifdef APPGL_GLX
+#ifdef MGL_GLX
     if(!ctx)
     {
-      APPCORE_INFO("Trying GLX context!");
+      MGL_CORE_INFO("Trying GLX context!");
       ctx = new ContextGLX(mode, required);
       if(!ctx->is_valid())
       {
-        APPCORE_INFO("GLX not supported!");
+        MGL_CORE_INFO("GLX not supported!");
         delete(ctx);
         ctx = nullptr;
       }
     }
     else
     {
-      APPCORE_INFO("GLX supported!");
+      MGL_CORE_INFO("GLX supported!");
     }
 #endif
-#ifdef APPGL_WGL
+#ifdef MGL_WGL
     if(!ctx)
     {
-      APPCORE_INFO("Trying WGL context!");
+      MGL_CORE_INFO("Trying WGL context!");
       ctx = new ContextWGL(mode, required);
       if(!ctx->is_valid())
       {
-        APPCORE_INFO("WGL not supported!");
+        MGL_CORE_INFO("WGL not supported!");
         delete(ctx);
         ctx = nullptr;
       }
     }
     else
     {
-      APPCORE_INFO("WGL supported!");
+      MGL_CORE_INFO("WGL supported!");
     }
 #endif
 
     if(!ctx)
     {
-      APPCORE_ERROR("Error creating context! No more backends available.");
+      MGL_CORE_ERROR("Error creating context! No more backends available.");
       return nullptr;
     }
 
@@ -158,7 +158,7 @@ namespace AppGL
     gl.GetIntegerv(GL_MAJOR_VERSION, &major);
     gl.GetIntegerv(GL_MINOR_VERSION, &minor);
 
-    APPCORE_INFO("GL Version: {0}.{1}", major, minor);
+    MGL_CORE_INFO("GL Version: {0}.{1}", major, minor);
 
     ctx->m_version_code = major * 100 + minor * 10;
 
@@ -169,7 +169,7 @@ namespace AppGL
     for(int i = 0; i < num_extensions; i++)
     {
       const char* ext = (const char*)gl.GetStringi(GL_EXTENSIONS, i);
-      APPCORE_INFO("Found GL extension: {0}", ext);
+      MGL_CORE_INFO("Found GL extension: {0}", ext);
       ctx->m_extensions.push_back(ext);
     }
 
@@ -257,7 +257,7 @@ namespace AppGL
       framebuffer->m_height = scissor_box[3];
       framebuffer->m_dynamic = true;
 
-      ctx->m_default_framebuffer = AppCore::Ref<Framebuffer>(framebuffer);
+      ctx->m_default_framebuffer = mgl_core::Ref<Framebuffer>(framebuffer);
     }
 
     ctx->m_bound_framebuffer = ctx->m_default_framebuffer;
@@ -279,13 +279,13 @@ namespace AppGL
 
     gl.GetError(); // clear errors
 
-    return AppCore::Ref<Context>(ctx);
+    return mgl_core::Ref<Context>(ctx);
   }
 
-  AppCore::Ref<Buffer> Context::buffer(void* data, size_t reserve, bool dynamic)
+  mgl_core::Ref<Buffer> Context::buffer(void* data, size_t reserve, bool dynamic)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
-    APPCORE_ASSERT(reserve >= 0, "invalid buffer size: {0}", reserve);
+    MGL_CORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(reserve >= 0, "invalid buffer size: {0}", reserve);
 
     const GLMethods& gl = m_gl;
 
@@ -300,7 +300,7 @@ namespace AppGL
 
     if(!buffer->m_buffer_obj)
     {
-      APPCORE_ERROR("Cannot create buffer");
+      MGL_CORE_ERROR("Cannot create buffer");
       delete buffer;
       return nullptr;
     }
@@ -310,12 +310,12 @@ namespace AppGL
 
     buffer->m_context = this;
 
-    return AppCore::Ref<Buffer>(buffer);
+    return mgl_core::Ref<Buffer>(buffer);
   }
 
-  AppCore::Ref<ComputeShader> Context::compute_shader(const AppCore::String& source)
+  mgl_core::Ref<ComputeShader> Context::compute_shader(const mgl_core::String& source)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     auto compute_shader = new ComputeShader();
@@ -328,7 +328,7 @@ namespace AppGL
     if(!program_obj)
     {
       delete compute_shader;
-      APPCORE_ERROR("cannot create program");
+      MGL_CORE_ERROR("cannot create program");
       return nullptr;
     }
 
@@ -337,7 +337,7 @@ namespace AppGL
     if(!shader_obj)
     {
       delete compute_shader;
-      APPCORE_ERROR("cannot create the shader object");
+      MGL_CORE_ERROR("cannot create the shader object");
       return nullptr;
     }
 
@@ -362,7 +362,7 @@ namespace AppGL
 
       gl.DeleteShader(shader_obj);
 
-      APPCORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
+      MGL_CORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
 
       delete[] log;
       delete compute_shader;
@@ -389,7 +389,7 @@ namespace AppGL
 
       gl.DeleteProgram(program_obj);
 
-      APPCORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
+      MGL_CORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
 
       delete[] log;
       delete compute_shader;
@@ -421,7 +421,7 @@ namespace AppGL
       }
 
       compute_shader->m_uniforms_map.insert(
-          { name, AppCore::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
+          { name, mgl_core::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
     }
 
     int num_uniform_blocks = 0;
@@ -440,17 +440,17 @@ namespace AppGL
       clean_glsl_name(name, name_len);
 
       compute_shader->m_uniform_blocks_map.insert(
-          { name, AppCore::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
+          { name, mgl_core::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
     }
 
-    return AppCore::Ref<ComputeShader>(compute_shader);
+    return mgl_core::Ref<ComputeShader>(compute_shader);
   }
 
-  AppCore::Ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments,
-                                                 AppCore::Ref<Attachment> depth_attachment)
+  mgl_core::Ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments,
+                                                  mgl_core::Ref<Attachment> depth_attachment)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
-    APPCORE_ASSERT(color_attachments.size(), "missing color attachments");
+    MGL_CORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(color_attachments.size(), "missing color attachments");
     const GLMethods& gl = m_gl;
 
     int width = 0;
@@ -459,7 +459,7 @@ namespace AppGL
 
     if(!color_attachments.size() && depth_attachment == nullptr)
     {
-      APPCORE_ERROR("the framebuffer is empty");
+      MGL_CORE_ERROR("the framebuffer is empty");
       return nullptr;
     }
 
@@ -469,11 +469,11 @@ namespace AppGL
       if(attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(attachment);
-        APPCORE_ASSERT(texture, "Not a texture2D");
+        MGL_CORE_ASSERT(texture, "Not a texture2D");
 
         if(texture->m_depth)
         {
-          APPCORE_ERROR("color_attachments[{0}] is a depth attachment", i);
+          MGL_CORE_ERROR("color_attachments[{0}] is a depth attachment", i);
           return nullptr;
         }
 
@@ -487,7 +487,7 @@ namespace AppGL
         {
           if(texture->m_width != width || texture->m_height != height || texture->m_samples != samples)
           {
-            APPCORE_ERROR("the color_attachments have different sizes or samples");
+            MGL_CORE_ERROR("the color_attachments have different sizes or samples");
             return nullptr;
           }
         }
@@ -495,11 +495,11 @@ namespace AppGL
       else if(attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(attachment);
-        APPCORE_ASSERT(renderbuffer, "Not a Renderbuffer");
+        MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
 
         if(renderbuffer->m_depth)
         {
-          APPCORE_ERROR("color_attachments[{0}] is a depth attachment", i);
+          MGL_CORE_ERROR("color_attachments[{0}] is a depth attachment", i);
           return nullptr;
         }
 
@@ -513,7 +513,7 @@ namespace AppGL
         {
           if(renderbuffer->m_width != width || renderbuffer->m_height != height || renderbuffer->m_samples != samples)
           {
-            APPCORE_ERROR("the color_attachments have different sizes or samples");
+            MGL_CORE_ERROR("the color_attachments have different sizes or samples");
             return nullptr;
           }
         }
@@ -526,17 +526,17 @@ namespace AppGL
       if(depth_attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(depth_attachment);
-        APPCORE_ASSERT(texture, "Not a texture2D");
+        MGL_CORE_ASSERT(texture, "Not a texture2D");
 
         if(!texture->m_depth)
         {
-          APPCORE_ERROR("the depth_attachment is a color attachment");
+          MGL_CORE_ERROR("the depth_attachment is a color attachment");
           return nullptr;
         }
 
         if(texture->m_context != this)
         {
-          APPCORE_ERROR("the depth_attachment belongs to a different context");
+          MGL_CORE_ERROR("the depth_attachment belongs to a different context");
           return nullptr;
         }
 
@@ -544,7 +544,7 @@ namespace AppGL
         {
           if(texture->m_width != width || texture->m_height != height || texture->m_samples != samples)
           {
-            APPCORE_ERROR("the depth_attachment have different sizes or samples");
+            MGL_CORE_ERROR("the depth_attachment have different sizes or samples");
             return nullptr;
           }
         }
@@ -558,17 +558,17 @@ namespace AppGL
       else if(depth_attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(depth_attachment);
-        APPCORE_ASSERT(renderbuffer, "Not a Renderbuffer");
+        MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
 
         if(!renderbuffer->m_depth)
         {
-          APPCORE_ERROR("the depth_attachment is a color attachment");
+          MGL_CORE_ERROR("the depth_attachment is a color attachment");
           return nullptr;
         }
 
         if(renderbuffer->m_context != this)
         {
-          APPCORE_ERROR("the depth_attachment belongs to a different context");
+          MGL_CORE_ERROR("the depth_attachment belongs to a different context");
           return nullptr;
         }
 
@@ -576,7 +576,7 @@ namespace AppGL
         {
           if(renderbuffer->m_width != width || renderbuffer->m_height != height || renderbuffer->m_samples != samples)
           {
-            APPCORE_ERROR("the depth_attachment have different sizes or samples");
+            MGL_CORE_ERROR("the depth_attachment have different sizes or samples");
             return nullptr;
           }
         }
@@ -589,7 +589,7 @@ namespace AppGL
       }
       else
       {
-        APPCORE_ERROR("the depth_attachment must be a Renderbuffer or Texture not %s");
+        MGL_CORE_ERROR("the depth_attachment must be a Renderbuffer or Texture not %s");
         return nullptr;
       }
     }
@@ -609,7 +609,7 @@ namespace AppGL
       if(attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(attachment);
-        APPCORE_ASSERT(texture, "Not a texture2D");
+        MGL_CORE_ASSERT(texture, "Not a texture2D");
         framebuffer->m_color_masks[i] = {
           texture->m_components >= 1, texture->m_components >= 2, texture->m_components >= 3, texture->m_components >= 4
         };
@@ -617,7 +617,7 @@ namespace AppGL
       else if(attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(attachment);
-        APPCORE_ASSERT(renderbuffer, "Not a Renderbuffer");
+        MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
         framebuffer->m_color_masks[i] = { renderbuffer->m_components >= 1,
                                           renderbuffer->m_components >= 2,
                                           renderbuffer->m_components >= 3,
@@ -640,7 +640,7 @@ namespace AppGL
 
     if(!framebuffer->m_framebuffer_obj)
     {
-      APPCORE_ERROR("cannot create framebuffer");
+      MGL_CORE_ERROR("cannot create framebuffer");
       delete framebuffer;
       return nullptr;
     }
@@ -657,7 +657,7 @@ namespace AppGL
       if(attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(attachment);
-        APPCORE_ASSERT(texture, "Not a texture2D");
+        MGL_CORE_ASSERT(texture, "Not a texture2D");
 
         gl.FramebufferTexture2D(GL_FRAMEBUFFER,
                                 GL_COLOR_ATTACHMENT0 + i,
@@ -668,7 +668,7 @@ namespace AppGL
       else if(attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(attachment);
-        APPCORE_ASSERT(renderbuffer, "Not a Renderbuffer");
+        MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
 
         gl.FramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_RENDERBUFFER, renderbuffer->m_renderbuffer_obj);
       }
@@ -679,7 +679,7 @@ namespace AppGL
       if(depth_attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(depth_attachment);
-        APPCORE_ASSERT(texture, "Not a texture2D");
+        MGL_CORE_ASSERT(texture, "Not a texture2D");
 
         gl.FramebufferTexture2D(GL_FRAMEBUFFER,
                                 GL_DEPTH_ATTACHMENT,
@@ -690,7 +690,7 @@ namespace AppGL
       else if(depth_attachment->attachment_type() == Attachment::Type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(depth_attachment);
-        APPCORE_ASSERT(renderbuffer, "Not a Renderbuffer");
+        MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
 
         gl.FramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer->m_renderbuffer_obj);
       }
@@ -707,15 +707,15 @@ namespace AppGL
       return nullptr;
     }
 
-    return AppCore::Ref<Framebuffer>(framebuffer);
+    return mgl_core::Ref<Framebuffer>(framebuffer);
   }
 
-  AppCore::Ref<Program> Context::program(const ShadersSources& shaders,
-                                         const ShadersOutputs& outputs,
-                                         const FragmentOutputs& fragment_outputs,
-                                         bool interleaved)
+  mgl_core::Ref<Program> Context::program(const ShadersSources& shaders,
+                                          const ShadersOutputs& outputs,
+                                          const FragmentOutputs& fragment_outputs,
+                                          bool interleaved)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     Program* program = new Program();
@@ -727,7 +727,7 @@ namespace AppGL
 
     if(!program_obj)
     {
-      APPCORE_ERROR("cannot create program");
+      MGL_CORE_ERROR("cannot create program");
       delete program;
       return nullptr;
     }
@@ -747,7 +747,7 @@ namespace AppGL
 
       if(!shader_obj)
       {
-        APPCORE_ERROR("cannot create shader");
+        MGL_CORE_ERROR("cannot create shader");
         delete program;
         return nullptr;
       }
@@ -780,7 +780,7 @@ namespace AppGL
 
         gl.DeleteShader(shader_obj);
 
-        APPCORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
+        MGL_CORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
 
         delete[] log;
         delete program;
@@ -839,7 +839,7 @@ namespace AppGL
 
       gl.DeleteProgram(program_obj);
 
-      APPCORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
+      MGL_CORE_ERROR("{0}\n\n{1}\n{2}\n{3}\n", message, title, underline, log);
 
       delete[] log;
       delete program;
@@ -1002,7 +1002,7 @@ namespace AppGL
       clean_glsl_name(name, name_len);
 
       program->m_attributes_map.insert(
-          { name, AppCore::Ref<Attribute>(new Attribute(name, type, program->m_program_obj, location, array_length)) });
+          { name, mgl_core::Ref<Attribute>(new Attribute(name, type, program->m_program_obj, location, array_length)) });
     }
 
     for(int i = 0; i < num_varyings; ++i)
@@ -1015,7 +1015,7 @@ namespace AppGL
 
       gl.GetTransformFeedbackVarying(program->m_program_obj, i, 256, &name_len, &array_length, (GLenum*)&type, name);
 
-      program->m_varyings_map.insert({ name, AppCore::Ref<Varying>(new Varying(name, i, array_length, dimension)) });
+      program->m_varyings_map.insert({ name, mgl_core::Ref<Varying>(new Varying(name, i, array_length, dimension)) });
     }
 
     for(int i = 0; i < num_uniforms; ++i)
@@ -1035,7 +1035,8 @@ namespace AppGL
         continue;
       }
 
-      program->m_uniforms_map.insert({ name, AppCore::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
+      program->m_uniforms_map.insert(
+          { name, mgl_core::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
     }
 
     for(int i = 0; i < num_uniform_blocks; ++i)
@@ -1051,7 +1052,7 @@ namespace AppGL
       clean_glsl_name(name, name_len);
 
       program->m_uniform_blocks_map.insert(
-          { name, AppCore::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
+          { name, mgl_core::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
     }
 
     if(program->m_context->version_code() >= 400)
@@ -1059,7 +1060,7 @@ namespace AppGL
       for(int st = 0; st < 5; ++st)
       {
         int num_subroutines = 0;
-        auto type = AppGL::Subroutine::Type(SHADER_TYPE[st]);
+        auto type = mgl::Subroutine::Type(SHADER_TYPE[st]);
 
         gl.GetProgramStageiv(program_obj, type, GL_ACTIVE_SUBROUTINES, &num_subroutines);
 
@@ -1074,17 +1075,17 @@ namespace AppGL
           gl.GetActiveSubroutineName(program_obj, type, i, 256, &name_len, name);
           int index = gl.GetSubroutineIndex(program_obj, type, name);
 
-          program->m_subroutines_map.insert({ name, AppCore::Ref<Subroutine>(new Subroutine(name, index, type)) });
+          program->m_subroutines_map.insert({ name, mgl_core::Ref<Subroutine>(new Subroutine(name, index, type)) });
         }
       }
     }
 
-    return AppCore::Ref<Program>(program);
+    return mgl_core::Ref<Program>(program);
   }
 
-  AppCore::Ref<Query> Context::query(bool samples, bool any_samples, bool time_elapsed, bool primitives_generated)
+  mgl_core::Ref<Query> Context::query(bool samples, bool any_samples, bool time_elapsed, bool primitives_generated)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     if(!(samples || any_samples || time_elapsed || primitives_generated))
@@ -1134,23 +1135,23 @@ namespace AppGL
       query->m_query_obj[Query::Keys::PRIMITIVES_GENERATED] = 0;
     }
 
-    return AppCore::Ref<Query>(query);
+    return mgl_core::Ref<Query>(query);
   }
 
-  AppCore::Ref<Renderbuffer> Context::renderbuffer(int width, int height, int components, int samples, const char* dtype)
+  mgl_core::Ref<Renderbuffer> Context::renderbuffer(int width, int height, int components, int samples, const char* dtype)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     if(components < 1 || components > 4)
     {
-      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      MGL_CORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
       return nullptr;
     }
 
     if((samples & (samples - 1)) || samples > m_max_samples)
     {
-      APPCORE_ERROR("The number of samples is invalid got: {0}", samples);
+      MGL_CORE_ERROR("The number of samples is invalid got: {0}", samples);
       return nullptr;
     }
 
@@ -1158,7 +1159,7 @@ namespace AppGL
 
     if(!data_type)
     {
-      APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
+      MGL_CORE_ERROR("Invalid data type got: '{0}'", dtype);
       return nullptr;
     }
 
@@ -1179,7 +1180,7 @@ namespace AppGL
 
     if(!renderbuffer->m_renderbuffer_obj)
     {
-      APPCORE_ERROR("Cannot create RenderBuffer");
+      MGL_CORE_ERROR("Cannot create RenderBuffer");
       delete(renderbuffer);
       return nullptr;
     }
@@ -1195,17 +1196,17 @@ namespace AppGL
       gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, format, width, height);
     }
 
-    return AppCore::Ref<Renderbuffer>(renderbuffer);
+    return mgl_core::Ref<Renderbuffer>(renderbuffer);
   }
 
-  AppCore::Ref<Renderbuffer> Context::depth_renderbuffer(int width, int height, int samples)
+  mgl_core::Ref<Renderbuffer> Context::depth_renderbuffer(int width, int height, int samples)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     if((samples & (samples - 1)) || samples > m_max_samples)
     {
-      APPCORE_ERROR("The number of samples is invalid got: {0}", samples);
+      MGL_CORE_ERROR("The number of samples is invalid got: {0}", samples);
       return nullptr;
     }
 
@@ -1224,7 +1225,7 @@ namespace AppGL
 
     if(!renderbuffer->m_renderbuffer_obj)
     {
-      APPCORE_ERROR("Cannot create RenderBuffer");
+      MGL_CORE_ERROR("Cannot create RenderBuffer");
       delete(renderbuffer);
       return nullptr;
     }
@@ -1240,12 +1241,12 @@ namespace AppGL
       gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);
     }
 
-    return AppCore::Ref<Renderbuffer>(renderbuffer);
+    return mgl_core::Ref<Renderbuffer>(renderbuffer);
   }
 
-  AppCore::Ref<Sampler> Context::sampler()
+  mgl_core::Ref<Sampler> Context::sampler()
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     auto sampler = new Sampler();
@@ -1266,18 +1267,18 @@ namespace AppGL
 
     gl.GenSamplers(1, (GLuint*)&sampler->m_sampler_obj);
 
-    return AppCore::Ref<Sampler>(sampler);
+    return mgl_core::Ref<Sampler>(sampler);
   }
 
-  AppCore::Ref<Scope> Context::scope(AppCore::Ref<Framebuffer> framebuffer,
-                                     int enable_flags,
-                                     const TextureBindings& textures,
-                                     const BufferBindings& uniform_buffers,
-                                     const BufferBindings& storage_buffers,
-                                     const SamplerBindings& samplers)
+  mgl_core::Ref<Scope> Context::scope(mgl_core::Ref<Framebuffer> framebuffer,
+                                      int enable_flags,
+                                      const TextureBindings& textures,
+                                      const BufferBindings& uniform_buffers,
+                                      const BufferBindings& storage_buffers,
+                                      const SamplerBindings& samplers)
   {
 
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
 
     auto scope = new Scope();
     scope->m_released = false;
@@ -1286,8 +1287,8 @@ namespace AppGL
     scope->m_old_enable_flags = Context::EnableFlag::INVALID;
     scope->m_framebuffer = framebuffer;
     scope->m_old_framebuffer = m_bound_framebuffer;
-    scope->m_textures = AppCore::List<Scope::BindingData>(textures.size());
-    scope->m_buffers = AppCore::List<Scope::BindingData>(uniform_buffers.size() + storage_buffers.size());
+    scope->m_textures = mgl_core::List<Scope::BindingData>(textures.size());
+    scope->m_buffers = mgl_core::List<Scope::BindingData>(uniform_buffers.size() + storage_buffers.size());
     scope->m_samplers = samplers;
 
     int i = 0;
@@ -1296,13 +1297,13 @@ namespace AppGL
       int texture_type;
       int texture_obj;
 
-      APPCORE_ASSERT(t.texture, "Texture is null");
+      MGL_CORE_ASSERT(t.texture, "Texture is null");
 
       switch(t.texture->texture_type())
       {
         case Texture::Type::TEXTURE_2D: {
           auto texture = std::dynamic_pointer_cast<Texture2D>(t.texture);
-          APPCORE_ASSERT(texture != nullptr, "invalid texture");
+          MGL_CORE_ASSERT(texture != nullptr, "invalid texture");
           texture_type = texture->m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
           texture_obj = texture->m_texture_obj;
         }
@@ -1310,21 +1311,21 @@ namespace AppGL
         break;
         case Texture::Type::TEXTURE_3D: {
           auto texture = std::dynamic_pointer_cast<Texture3D>(t.texture);
-          APPCORE_ASSERT(texture != nullptr, "invalid texture");
+          MGL_CORE_ASSERT(texture != nullptr, "invalid texture");
           texture_type = GL_TEXTURE_3D;
           texture_obj = texture->m_texture_obj;
         }
         break;
         case Texture::Type::TEXTURE_CUBE: {
           auto texture = std::dynamic_pointer_cast<Texture3D>(t.texture);
-          APPCORE_ASSERT(texture != nullptr, "invalid texture");
+          MGL_CORE_ASSERT(texture != nullptr, "invalid texture");
           texture_type = GL_TEXTURE_CUBE_MAP;
           texture_obj = texture->m_texture_obj;
         }
         break;
         default:
           delete scope;
-          APPCORE_ERROR("invalid texture");
+          MGL_CORE_ERROR("invalid texture");
           return nullptr;
       }
 
@@ -1338,7 +1339,7 @@ namespace AppGL
     i = 0;
     for(auto&& b : uniform_buffers)
     {
-      APPCORE_ASSERT(b.buffer, "buffer is null");
+      MGL_CORE_ASSERT(b.buffer, "buffer is null");
 
       scope->m_buffers[i].binding = b.binding;
       scope->m_buffers[i].gl_object = b.buffer->m_buffer_obj;
@@ -1348,7 +1349,7 @@ namespace AppGL
 
     for(auto&& b : storage_buffers)
     {
-      APPCORE_ASSERT(b.buffer, "buffer is null");
+      MGL_CORE_ASSERT(b.buffer, "buffer is null");
 
       scope->m_buffers[i].binding = b.binding;
       scope->m_buffers[i].gl_object = b.buffer->m_buffer_obj;
@@ -1356,42 +1357,42 @@ namespace AppGL
       i++;
     }
 
-    return AppCore::Ref<Scope>(scope);
+    return mgl_core::Ref<Scope>(scope);
   }
 
-  AppCore::Ref<Texture2D> Context::texture2d(int width,
-                                             int height,
-                                             int components,
-                                             const void* data,
-                                             int samples,
-                                             int alignment,
-                                             const char* dtype,
-                                             int internal_format_override)
+  mgl_core::Ref<Texture2D> Context::texture2d(int width,
+                                              int height,
+                                              int components,
+                                              const void* data,
+                                              int samples,
+                                              int alignment,
+                                              const char* dtype,
+                                              int internal_format_override)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     if(components < 1 || components > 4)
     {
-      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      MGL_CORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
       return nullptr;
     }
 
     if((samples & (samples - 1)) || samples > m_max_samples)
     {
-      APPCORE_ERROR("The number of samples is invalid got: {0}", samples);
+      MGL_CORE_ERROR("The number of samples is invalid got: {0}", samples);
       return nullptr;
     }
 
     if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
     {
-      APPCORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
+      MGL_CORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
       return nullptr;
     }
 
     if(data != nullptr && samples)
     {
-      APPCORE_ERROR("Multisample textures are not writable directly", alignment);
+      MGL_CORE_ERROR("Multisample textures are not writable directly", alignment);
       return nullptr;
     }
 
@@ -1399,7 +1400,7 @@ namespace AppGL
 
     if(!data_type)
     {
-      APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
+      MGL_CORE_ERROR("Invalid data type got: '{0}'", dtype);
       return nullptr;
     }
 
@@ -1434,7 +1435,7 @@ namespace AppGL
 
     if(!texture->m_texture_obj)
     {
-      APPCORE_ERROR("cannot create texture");
+      MGL_CORE_ERROR("cannot create texture");
       delete texture;
       return nullptr;
     }
@@ -1462,29 +1463,29 @@ namespace AppGL
       }
     }
 
-    return AppCore::Ref<Texture2D>(texture);
+    return mgl_core::Ref<Texture2D>(texture);
   }
 
-  AppCore::Ref<Texture2D> Context::depth_texture2d(int width, int height, const void* data, int samples, int alignment)
+  mgl_core::Ref<Texture2D> Context::depth_texture2d(int width, int height, const void* data, int samples, int alignment)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     if((samples & (samples - 1)) || samples > m_max_samples)
     {
-      APPCORE_ERROR("The number of samples is invalid got: {0}", samples);
+      MGL_CORE_ERROR("The number of samples is invalid got: {0}", samples);
       return nullptr;
     }
 
     if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
     {
-      APPCORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
+      MGL_CORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
       return nullptr;
     }
 
     if(data != nullptr && samples)
     {
-      APPCORE_ERROR("Multisample textures are not writable directly", alignment);
+      MGL_CORE_ERROR("Multisample textures are not writable directly", alignment);
       return nullptr;
     }
 
@@ -1510,7 +1511,7 @@ namespace AppGL
 
     if(!texture->m_texture_obj)
     {
-      APPCORE_ERROR("cannot create texture");
+      MGL_CORE_ERROR("cannot create texture");
       delete texture;
       return nullptr;
     }
@@ -1535,24 +1536,24 @@ namespace AppGL
       gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
     }
 
-    return AppCore::Ref<Texture2D>(texture);
+    return mgl_core::Ref<Texture2D>(texture);
   }
 
-  AppCore::Ref<Texture3D>
+  mgl_core::Ref<Texture3D>
   Context::texture3d(int width, int height, int depth, int components, const void* data, int alignment, const char* dtype)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     if(components < 1 || components > 4)
     {
-      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      MGL_CORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
       return nullptr;
     }
 
     if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
     {
-      APPCORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
+      MGL_CORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
       return nullptr;
     }
 
@@ -1560,7 +1561,7 @@ namespace AppGL
 
     if(!data_type)
     {
-      APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
+      MGL_CORE_ERROR("Invalid data type got: '{0}'", dtype);
       return nullptr;
     }
 
@@ -1587,7 +1588,7 @@ namespace AppGL
 
     if(!texture->m_texture_obj)
     {
-      APPCORE_ERROR("cannot create texture");
+      MGL_CORE_ERROR("cannot create texture");
       delete texture;
       return nullptr;
     }
@@ -1613,24 +1614,24 @@ namespace AppGL
       gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
-    return AppCore::Ref<Texture3D>(texture);
+    return mgl_core::Ref<Texture3D>(texture);
   }
 
-  AppCore::Ref<TextureArray>
+  mgl_core::Ref<TextureArray>
   Context::texture_array(int width, int height, int layers, int components, const void* data, int alignment, const char* dtype)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     if(components < 1 || components > 4)
     {
-      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      MGL_CORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
       return nullptr;
     }
 
     if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
     {
-      APPCORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
+      MGL_CORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
       return nullptr;
     }
 
@@ -1638,7 +1639,7 @@ namespace AppGL
 
     if(!data_type)
     {
-      APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
+      MGL_CORE_ERROR("Invalid data type got: '{0}'", dtype);
       return nullptr;
     }
 
@@ -1664,7 +1665,7 @@ namespace AppGL
 
     if(!texture->m_texture_obj)
     {
-      APPCORE_ERROR("cannot create texture");
+      MGL_CORE_ERROR("cannot create texture");
       delete texture;
       return nullptr;
     }
@@ -1690,25 +1691,25 @@ namespace AppGL
       gl.TexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
-    return AppCore::Ref<TextureArray>(texture);
+    return mgl_core::Ref<TextureArray>(texture);
   }
 
-  AppCore::Ref<TextureCube> Context::texture_cube(
+  mgl_core::Ref<TextureCube> Context::texture_cube(
       int width, int height, int components, const void* data, int alignment, const char* dtype, int internal_format_override)
   {
 
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     if(components < 1 || components > 4)
     {
-      APPCORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
+      MGL_CORE_ERROR("Components must be 1, 2, 3 or 4, got: {0}", components);
       return nullptr;
     }
 
     if(alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8)
     {
-      APPCORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
+      MGL_CORE_ERROR("The alignment must be 1, 2, 4 or 8, got: {0}", alignment);
       return nullptr;
     }
 
@@ -1716,7 +1717,7 @@ namespace AppGL
 
     if(!data_type)
     {
-      APPCORE_ERROR("Invalid data type got: '{0}'", dtype);
+      MGL_CORE_ERROR("Invalid data type got: '{0}'", dtype);
       return nullptr;
     }
 
@@ -1739,7 +1740,7 @@ namespace AppGL
 
     if(!texture->m_texture_obj)
     {
-      APPCORE_ERROR("cannot create texture");
+      MGL_CORE_ERROR("cannot create texture");
       delete texture;
       return nullptr;
     }
@@ -1780,28 +1781,28 @@ namespace AppGL
       gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
-    return AppCore::Ref<TextureCube>(texture);
+    return mgl_core::Ref<TextureCube>(texture);
   }
 
-  AppCore::Ref<VertexArray> Context::vertex_array(AppCore::Ref<Program> program,
-                                                  AppGL::VertexDataArray vertex_data,
-                                                  AppCore::Ref<Buffer> index_buffer,
-                                                  int index_element_size,
-                                                  bool skip_errors,
-                                                  AppGL::RenderMode mode)
+  mgl_core::Ref<VertexArray> Context::vertex_array(mgl_core::Ref<Program> program,
+                                                   mgl::VertexDataArray vertex_data,
+                                                   mgl_core::Ref<Buffer> index_buffer,
+                                                   int index_element_size,
+                                                   bool skip_errors,
+                                                   mgl::RenderMode mode)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
     if(program->m_context != this)
     {
-      APPCORE_ERROR("the program belongs to a different context");
+      MGL_CORE_ERROR("the program belongs to a different context");
       return nullptr;
     }
 
     if(index_buffer != nullptr && index_buffer->m_context != this)
     {
-      APPCORE_ERROR("the index_buffer belongs to a different context");
+      MGL_CORE_ERROR("the index_buffer belongs to a different context");
       return nullptr;
     }
 
@@ -1810,13 +1811,13 @@ namespace AppGL
     {
       if(v_data.buffer == nullptr)
       {
-        APPCORE_ERROR("vertex_data[{0}]: verempty vertex buffer", i);
+        MGL_CORE_ERROR("vertex_data[{0}]: verempty vertex buffer", i);
         return nullptr;
       }
 
       if(v_data.buffer->m_context != this)
       {
-        APPCORE_ERROR("vertex_data[{0}]: vertex buffer belongs to a different context", i);
+        MGL_CORE_ERROR("vertex_data[{0}]: vertex buffer belongs to a different context", i);
         return nullptr;
       }
 
@@ -1825,19 +1826,19 @@ namespace AppGL
 
       if(!format_info.valid)
       {
-        APPCORE_ERROR("vertex_data[{0}]: invalid invalid format", i);
+        MGL_CORE_ERROR("vertex_data[{0}]: invalid invalid format", i);
         return nullptr;
       }
 
       if(!v_data.attributes.size())
       {
-        APPCORE_ERROR("vertex_data[{0}]: attributes must not be empty", i);
+        MGL_CORE_ERROR("vertex_data[{0}]: attributes must not be empty", i);
         return nullptr;
       }
 
       if((int)v_data.attributes.size() != format_info.nodes)
       {
-        APPCORE_ERROR(
+        MGL_CORE_ERROR(
             "vertex_data[{0}]: format and attributes size mismatch {1} != {2}", i, format_info.nodes, v_data.attributes.size());
         return nullptr;
       }
@@ -1847,7 +1848,7 @@ namespace AppGL
 
     if(index_element_size != 1 && index_element_size != 2 && index_element_size != 4)
     {
-      APPCORE_ERROR("index_element_size must be 1, 2, or 4, not %d", index_element_size);
+      MGL_CORE_ERROR("index_element_size must be 1, 2, or 4, not %d", index_element_size);
       return nullptr;
     }
 
@@ -1868,7 +1869,7 @@ namespace AppGL
 
     if(!array->m_vertex_array_obj)
     {
-      APPCORE_ERROR("cannot create vertex array");
+      MGL_CORE_ERROR("cannot create vertex array");
       delete array;
       return nullptr;
     }
@@ -1959,12 +1960,12 @@ namespace AppGL
       array->m_subroutines = new unsigned[array->m_num_subroutines];
     }
 
-    return AppCore::Ref<VertexArray>(array);
+    return mgl_core::Ref<VertexArray>(array);
   }
 
   void Context::set_enable_flags(int flags)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     m_enable_flags = flags;
 
     if(flags & Context::EnableFlag::BLEND)
@@ -2015,7 +2016,7 @@ namespace AppGL
 
   void Context::enable(int flags)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     m_enable_flags |= flags;
 
     if(flags & Context::EnableFlag::BLEND)
@@ -2046,7 +2047,7 @@ namespace AppGL
 
   void Context::disable(int flags)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
 
     m_enable_flags &= ~flags;
 
@@ -2077,17 +2078,17 @@ namespace AppGL
   }
 
   void Context::copy_buffer(
-      const AppCore::Ref<Buffer>& src, const AppCore::Ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset)
+      const mgl_core::Ref<Buffer>& src, const mgl_core::Ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset)
   {
-    APPCORE_ASSERT(read_offset >= 0 && write_offset >= 0, "buffer underflow");
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(read_offset >= 0 && write_offset >= 0, "buffer underflow");
+    MGL_CORE_ASSERT(!released(), "Context already released");
 
     if(size < 0)
     {
       size = src->size() - read_offset;
     }
 
-    APPCORE_ASSERT((read_offset + size <= src->size() && write_offset + size <= dst->size()), "buffer overflow");
+    MGL_CORE_ASSERT((read_offset + size <= src->size() && write_offset + size <= dst->size()), "buffer overflow");
 
     m_gl.BindBuffer(GL_COPY_READ_BUFFER, src->m_buffer_obj);
     m_gl.BindBuffer(GL_COPY_WRITE_BUFFER, dst->m_buffer_obj);
@@ -2096,34 +2097,34 @@ namespace AppGL
 
   void Context::enable_direct(int value)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     m_gl.Enable(value);
   }
 
   void Context::disable_direct(int value)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     m_gl.Disable(value);
   }
 
   void Context::finish()
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
     m_gl.Finish();
   }
 
   void Context::clear_samplers(int start, int end)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
 
-    start = APPGL_MAX(start, 0);
+    start = MGL_MAX(start, 0);
     if(end == -1)
     {
       end = m_max_texture_units;
     }
     else
     {
-      end = APPGL_MIN(end, m_max_texture_units);
+      end = MGL_MIN(end, m_max_texture_units);
     }
 
     for(int i = start; i < end; i++)
@@ -2134,16 +2135,16 @@ namespace AppGL
 
   void Context::clear(const glm::vec4& color, float depth, const Viewport2D& viewport)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
-    APPCORE_ASSERT(m_bound_framebuffer, "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(m_bound_framebuffer, "Context already released");
     m_bound_framebuffer->clear(color, depth, viewport);
   }
 
   void Context::clear(float r, float g, float b, float a, float depth, const Viewport2D& viewport)
   {
-    APPCORE_ASSERT(!released(), "Context already released");
-    APPCORE_ASSERT(m_bound_framebuffer, "Context already released");
+    MGL_CORE_ASSERT(!released(), "Context already released");
+    MGL_CORE_ASSERT(m_bound_framebuffer, "Context already released");
     m_bound_framebuffer->clear(r, g, b, a, depth, viewport);
   }
 
-} // namespace AppGL
+} // namespace mgl

@@ -1,7 +1,7 @@
 #include "format.hpp"
 #include "opengl.hpp"
 
-namespace AppGL
+namespace mgl
 {
   FormatNode* InvalidFormat = (FormatNode*)(-1);
 
@@ -268,4 +268,4 @@ namespace AppGL
     }
   }
 
-} // namespace AppGL
+} // namespace mgl

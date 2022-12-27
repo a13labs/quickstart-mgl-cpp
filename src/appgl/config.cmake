@@ -1,11 +1,11 @@
 if(WIN32)
-    add_definitions(-DAPPGL_WGL)
+    add_definitions(-DMGL_WGL)
 elseif (UNIX)
     if (OpenGL_EGL_FOUND)
-        add_definitions(-DAPPGL_EGL)
+        add_definitions(-DMGL_EGL)
     endif()
     if (OpenGL_GLX_FOUND)
-        add_definitions(-DAPPGL_GLX)
+        add_definitions(-DMGL_GLX)
     endif()
 endif()
 
@@ -29,9 +29,9 @@ target_link_libraries(
 target_link_libraries(
     ${APP_CURRENT_TARGET}
     PRIVATE
-    ${APPCORE_LIB}
+    ${MGL_CORE_LIB}
 )
 
 # Export library
-set(APPGL_LIB appgl PARENT_SCOPE)
-set(APPGL_INCLUDE ${APP_CURRENT_SOURCE} PARENT_SCOPE)
+set(MGL_LIB appgl PARENT_SCOPE)
+set(MGL_INCLUDE ${APP_CURRENT_SOURCE} PARENT_SCOPE)
