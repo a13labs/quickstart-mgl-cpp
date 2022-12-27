@@ -19,7 +19,7 @@ set(
     json    "https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent" v3.9.1 
 )
 
-set(MGL_LIBRARIES "appcore" "appgl" "appwindow")
+set(MGL_LIBRARIES "mgl_core" "mgl" "mgl_window")
 set(MGL_EXECUTABLES "app")
 set(MGL_EXAMPLES 
     "basic_simple_color_triangle"

@@ -1,4 +1,4 @@
-#include "appwindow/appwindow.hpp"
+#include "mgl_window/mgl_window.hpp"
 
 class ExampleWindow : public mgl_window::Window
 {
