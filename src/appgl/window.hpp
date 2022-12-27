@@ -38,6 +38,9 @@ public:
     virtual bool on_window_resize(AppCore::Events::WindowResizeEvent& event) override;
     AppCore::Ref<Context> context();
 
+    virtual void initialize_event_handler() override;
+    virtual void toggle_full_screen() override;
+
     virtual void set_title(const AppCore::String& value) override;
     virtual const AppCore::String& title() const override;
 
@@ -45,6 +48,7 @@ private:
     SDL_GLContext m_context;
     AppCore::Ref<Context> m_shared_context;
     AppCore::String m_title;
+    SDL_Window* native_window = nullptr;
   };
 
   inline AppCore::Ref<Context> Window::context()

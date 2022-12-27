@@ -1,20 +1,3 @@
-# # GLAD 
-# set(GLAD_DIR "${APP_CURRENT_SOURCE}/glad")
-# set(GLAD_INCLUDE_DIR "${GLAD_DIR}/include")
-
-# add_library(glad "${GLAD_DIR}/src/glad.c")
-
-# target_include_directories(
-#     glad
-#     PUBLIC 
-#     "${GLAD_DIR}/include"
-# )
-
-# # GLAD Platform specific configuration
-# if (UNIX)
-#     target_link_libraries(glad ${CMAKE_DL_LIBS})
-# endif()
-
 if(WIN32)
     add_definitions(-DAPPGL_WGL)
 elseif (UNIX)
@@ -34,19 +17,13 @@ target_include_directories(
     "${GLM_DIR}"
 )
 
-# # GLAD Multi-Language GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs.
-# # https://glad.dav1d.de/
-# target_include_directories( 
-#     ${APP_CURRENT_TARGET}
-#     PUBLIC
-#     "${GLAD_INCLUDE_DIR}"
-# )
-
-# target_link_libraries(
-#     ${APP_CURRENT_TARGET}
-#     PUBLIC
-#     glad
-# )
+# SDL - Simple DirectMedia Layer
+# https://www.libsdl.org/
+target_link_libraries( 
+    ${APP_CURRENT_TARGET}
+    PUBLIC
+    SDL2::SDL2main SDL2::SDL2
+)
 
 # OpenGL Support
 # https://www.opengl.org/

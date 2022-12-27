@@ -18,8 +18,6 @@
 #include "input.hpp"
 #include "log.hpp"
 
-#include "SDL2/SDL_syswm.h"
-
 namespace AppCore
 {
   namespace Application
@@ -32,7 +30,6 @@ namespace AppCore
       Log::init();
 
       m_state.current_config = config;
-      m_state.native_window = nullptr;
       s_instance = this;
       m_running = false;
     }
@@ -67,12 +64,6 @@ namespace AppCore
       if(m_running)
         return;
 
-      if(SDL_Init(SDL_INIT_VIDEO) < 0)
-      {
-        APPCORE_TRACE("BaseWindow: Error initializing SDL");
-        return;
-      }
-
       if(!create_window())
       {
         APPCORE_TRACE("BaseWindow: Error creating Window");
@@ -80,60 +71,10 @@ namespace AppCore
         return;
       }
 
-      Input::init();
       m_state.handler = APPCORE_BIND_EVENT_FN(BaseWindow::on_event);
-
-      SDL_AddEventWatch(
-          [](void* userdata, SDL_Event* currentEvent) -> int {
-            WindowState& m_state = *(WindowState*)userdata;
-            switch(currentEvent->type)
-            {
-              case SDL_WINDOWEVENT:
-                switch(currentEvent->window.event)
-                {
-                  case SDL_WINDOWEVENT_RESIZED: {
-                    auto w = currentEvent->window.data1;
-                    auto h = currentEvent->window.data2;
-                    Events::WindowResizeEvent event(w, h);
-                    m_state.handler(event);
-                  }
-                  break;
-                  case SDL_WINDOWEVENT_CLOSE: {
-                    Events::WindowCloseEvent event;
-                    m_state.handler(event);
-                  }
-                  break;
-                  default: break;
-                }
-                break;
-              case SDL_MOUSEMOTION:
-              case SDL_MOUSEBUTTONDOWN:
-              case SDL_MOUSEBUTTONUP:
-              case SDL_MOUSEWHEEL:
-              case SDL_KEYDOWN:
-              case SDL_KEYUP: {
-                Input::update_state(currentEvent, m_state.handler);
-
-                if(Input::is_key_pressed(m_state.current_config.exit_key))
-                {
-                  BaseWindow::current().quit();
-                }
-
-                if(Input::is_key_pressed(m_state.current_config.fullscreen_key))
-                {
-                  BaseWindow::current().toggle_full_screen();
-                }
-              }
-              break;
-              default: break;
-            }
-
-            return 0;
-          },
-          &m_state);
+      initialize_event_handler();
 
       m_running = true;
-
       APPCORE_PROFILE_BEGIN_SESSION();
 
       on_load();
@@ -155,7 +96,6 @@ namespace AppCore
 
       APPCORE_PROFILE_END_SESSION();
       destroy_window();
-      SDL_Quit();
     }
 
     void BaseWindow::quit()
@@ -163,26 +103,10 @@ namespace AppCore
       m_running = false;
     }
 
-    void BaseWindow::toggle_full_screen()
-    {
-      m_state.fullscreen = !m_state.fullscreen;
-      if(m_state.fullscreen)
-      {
-        SDL_SetWindowFullscreen(m_state.native_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-        return;
-      }
-
-      SDL_RestoreWindow(m_state.native_window);
-      SDL_SetWindowSize(m_state.native_window, m_state.current_config.width, m_state.current_config.height);
-      SDL_SetWindowPosition(m_state.native_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-      SDL_SetWindowFullscreen(m_state.native_window, 0);
-    }
-
     bool BaseWindow::on_window_resize(AppCore::Events::WindowResizeEvent& event)
     {
       m_state.width = event.get_width();
       m_state.height = event.get_height();
-      m_state.aspect_ratio = m_state.width / m_state.height;
       return true;
     }
 

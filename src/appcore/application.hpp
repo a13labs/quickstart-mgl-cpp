@@ -19,8 +19,6 @@
 #include "input.hpp"
 #include "timer.hpp"
 
-#include "SDL2/SDL.h"
-
 namespace AppCore
 {
   namespace Application
@@ -44,11 +42,9 @@ namespace AppCore
     {
       EventHandler handler;
       WindowConfig current_config = WindowConfig();
-      SDL_Window* native_window = nullptr;
       bool fullscreen = false;
       int width;
       int height;
-      float aspect_ratio;
     } WindowState;
 
     class BaseWindow
@@ -62,12 +58,13 @@ namespace AppCore
       virtual bool create_window() = 0;
       virtual void destroy_window() = 0;
       virtual void swap_buffers() = 0;
+      virtual void initialize_event_handler() = 0;
       virtual void set_title(const AppCore::String& value) = 0;
+      virtual void toggle_full_screen() = 0;
 
       virtual const AppCore::String& title() const;
       void run();
       void quit();
-      void toggle_full_screen();
 
       float aspect_ratio();
 
@@ -104,11 +101,9 @@ namespace AppCore
       Timer m_timer;
     };
 
-    WindowConfig load_window_configuration(const String& filename);
-
     inline float BaseWindow::aspect_ratio()
     {
-      return m_state.aspect_ratio;
+      return m_state.width / m_state.height;
     }
 
     inline const AppCore::String& BaseWindow::title() const
@@ -116,6 +111,7 @@ namespace AppCore
       return m_state.current_config.title;
     }
 
+    WindowConfig load_window_configuration(const String& filename);
   } // namespace Application
 
 } // namespace AppCore
