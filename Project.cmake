@@ -20,7 +20,8 @@ set(
 )
 
 set(MGL_LIBRARIES "mgl_core" "mgl" "mgl_window")
-set(MGL_EXECUTABLES "app")
+
+set(MGL_BUILD_EXAMPLES ON)
 set(MGL_EXAMPLES 
     "basic_simple_color_triangle"
     "basic_alpha_blending"

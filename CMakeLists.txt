@@ -85,10 +85,12 @@ foreach(EXECUTABLE ${MGL_EXECUTABLES})
   AddExecutable(${EXECUTABLE})
 endforeach()
 
-foreach(EXAMPLE ${MGL_EXAMPLES})
-  message(STATUS "Adding examples: '${EXAMPLE}")
-  AddExample(${EXAMPLE})
-endforeach()
+if(MGL_BUILD_EXAMPLES)
+  foreach(EXAMPLE ${MGL_EXAMPLES})
+    message(STATUS "Adding examples: '${EXAMPLE}")
+    AddExample(${EXAMPLE})
+  endforeach()
+endif()
 
 # Unit Testing
 # https://github.com/google/googletest.git
