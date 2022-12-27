@@ -26,9 +26,9 @@ public:
 
 private:
     friend class Context;
-    Varying(const mgl_core::String& name, int number, size_t array_length, int m_dimension);
+    Varying(const mgl_core::string& name, int number, size_t array_length, int m_dimension);
 
-    mgl_core::String m_name;
+    mgl_core::string m_name;
     int m_number;
     size_t m_array_length;
     int m_dimension;

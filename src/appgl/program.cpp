@@ -33,9 +33,9 @@ namespace mgl
     gl.DeleteProgram(m_program_obj);
   }
 
-  const mgl_core::StringList Program::attributes()
+  const mgl_core::string_list Program::attributes()
   {
-    auto result = mgl_core::StringList();
+    auto result = mgl_core::string_list();
 
     for(auto&& a : m_attributes_map)
     {
@@ -45,9 +45,9 @@ namespace mgl
     return result;
   }
 
-  const mgl_core::StringList Program::uniforms()
+  const mgl_core::string_list Program::uniforms()
   {
-    auto result = mgl_core::StringList();
+    auto result = mgl_core::string_list();
 
     for(auto&& a : m_uniforms_map)
     {
@@ -57,9 +57,9 @@ namespace mgl
     return result;
   }
 
-  const mgl_core::StringList Program::uniform_blocks()
+  const mgl_core::string_list Program::uniform_blocks()
   {
-    auto result = mgl_core::StringList();
+    auto result = mgl_core::string_list();
 
     for(auto&& a : m_uniform_blocks_map)
     {
@@ -69,9 +69,9 @@ namespace mgl
     return result;
   }
 
-  const mgl_core::StringList Program::varyings()
+  const mgl_core::string_list Program::varyings()
   {
-    auto result = mgl_core::StringList();
+    auto result = mgl_core::string_list();
 
     for(auto&& a : m_varyings_map)
     {
@@ -81,9 +81,9 @@ namespace mgl
     return result;
   }
 
-  const mgl_core::StringList Program::subroutines()
+  const mgl_core::string_list Program::subroutines()
   {
-    auto result = mgl_core::StringList();
+    auto result = mgl_core::string_list();
 
     for(auto&& a : m_subroutines_map)
     {

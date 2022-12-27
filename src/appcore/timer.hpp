@@ -25,9 +25,9 @@ public:
     void toogle_pause();
 
 private:
-    Timepoint m_start_time;
-    Timepoint m_stop_time;
-    Timepoint m_pause_time;
+    timepoint m_start_time;
+    timepoint m_stop_time;
+    timepoint m_pause_time;
     float m_last_frame;
     std::chrono::nanoseconds m_offset;
     bool m_paused;

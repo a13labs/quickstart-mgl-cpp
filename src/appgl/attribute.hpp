@@ -36,9 +36,9 @@ public:
 
 private:
     friend class Context;
-    Attribute(const mgl_core::String& name, int gl_type, int program_obj, int location, size_t array_length);
+    Attribute(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t array_length);
 
-    mgl_core::String m_name;
+    mgl_core::string m_name;
     int m_program_obj;
     int m_gl_type;
     DataType* m_data_type;

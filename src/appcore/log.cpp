@@ -22,9 +22,9 @@ namespace mgl_core
   namespace Log
   {
 
-    Ref<spdlog::logger> logger;
+    ref<spdlog::logger> logger;
 
-    void init(const String& logfile)
+    void init(const string& logfile)
     {
 
       std::vector<spdlog::sink_ptr> logSinks;

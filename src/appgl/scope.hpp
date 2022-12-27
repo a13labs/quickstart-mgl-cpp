@@ -41,11 +41,11 @@ private:
     Scope() = default;
 
     Context* m_context;
-    mgl_core::Ref<Framebuffer> m_framebuffer;
-    mgl_core::Ref<Framebuffer> m_old_framebuffer;
+    mgl_core::ref<Framebuffer> m_framebuffer;
+    mgl_core::ref<Framebuffer> m_old_framebuffer;
     SamplerBindings m_samplers;
-    mgl_core::List<Scope::BindingData> m_textures;
-    mgl_core::List<Scope::BindingData> m_buffers;
+    mgl_core::list<Scope::BindingData> m_textures;
+    mgl_core::list<Scope::BindingData> m_buffers;
     int m_enable_flags;
     int m_old_enable_flags;
     bool m_released;

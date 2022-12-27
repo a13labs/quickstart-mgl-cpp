@@ -46,9 +46,9 @@ namespace mgl
     gl.DispatchCompute(x, y, z);
   }
 
-  const mgl_core::StringList ComputeShader::uniforms()
+  const mgl_core::string_list ComputeShader::uniforms()
   {
-    auto result = mgl_core::StringList();
+    auto result = mgl_core::string_list();
 
     for(auto&& a : m_uniforms_map)
     {
@@ -58,9 +58,9 @@ namespace mgl
     return result;
   }
 
-  const mgl_core::StringList ComputeShader::uniform_blocks()
+  const mgl_core::string_list ComputeShader::uniform_blocks()
   {
-    auto result = mgl_core::StringList();
+    auto result = mgl_core::string_list();
 
     for(auto&& a : m_uniform_blocks_map)
     {

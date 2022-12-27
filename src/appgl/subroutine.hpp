@@ -35,9 +35,9 @@ public:
 
 private:
     friend class Context;
-    Subroutine(const mgl_core::String& name, int index, Subroutine::Type type);
+    Subroutine(const mgl_core::string& name, int index, Subroutine::Type type);
 
-    mgl_core::String m_name;
+    mgl_core::string m_name;
     int m_index;
     Subroutine::Type m_type;
   };

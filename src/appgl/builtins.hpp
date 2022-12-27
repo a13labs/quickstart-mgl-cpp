@@ -158,37 +158,37 @@ namespace mgl
 
   struct TextureBinding
   {
-    mgl_core::Ref<Texture> texture;
+    mgl_core::ref<Texture> texture;
     int binding;
   };
 
   struct BufferBinding
   {
-    mgl_core::Ref<Buffer> buffer;
+    mgl_core::ref<Buffer> buffer;
     int binding;
   };
 
   struct SamplerBinding
   {
-    mgl_core::Ref<Sampler> sampler;
+    mgl_core::ref<Sampler> sampler;
     int binding;
   };
 
-  using AttributesMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<Attribute>>;
-  using SubroutinesMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<Subroutine>>;
-  using UniformsMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<Uniform>>;
-  using UniformBlocksMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<UniformBlock>>;
-  using VaryingsMap = mgl_core::Dict<mgl_core::String, mgl_core::Ref<Varying>>;
-  using AttachmentsRef = mgl_core::ListRef<Attachment>;
-  using ShadersOutputs = mgl_core::StringList;
-  using FragmentOutputs = mgl_core::Dict<mgl_core::String, int>;
-  using ColorMasks = mgl_core::List<ColorMask>;
-  using Textures = mgl_core::ListRef<Texture>;
-  using Buffers = mgl_core::ListRef<Buffer>;
-  using Samplers = mgl_core::ListRef<Sampler>;
-  using TextureBindings = mgl_core::List<TextureBinding>;
-  using BufferBindings = mgl_core::List<BufferBinding>;
-  using SamplerBindings = mgl_core::List<SamplerBinding>;
+  using AttributesMap = mgl_core::dict<mgl_core::string, mgl_core::ref<Attribute>>;
+  using SubroutinesMap = mgl_core::dict<mgl_core::string, mgl_core::ref<Subroutine>>;
+  using UniformsMap = mgl_core::dict<mgl_core::string, mgl_core::ref<Uniform>>;
+  using UniformBlocksMap = mgl_core::dict<mgl_core::string, mgl_core::ref<UniformBlock>>;
+  using VaryingsMap = mgl_core::dict<mgl_core::string, mgl_core::ref<Varying>>;
+  using AttachmentsRef = mgl_core::ref_list<Attachment>;
+  using ShadersOutputs = mgl_core::string_list;
+  using FragmentOutputs = mgl_core::dict<mgl_core::string, int>;
+  using ColorMasks = mgl_core::list<ColorMask>;
+  using Textures = mgl_core::ref_list<Texture>;
+  using Buffers = mgl_core::ref_list<Buffer>;
+  using Samplers = mgl_core::ref_list<Sampler>;
+  using TextureBindings = mgl_core::list<TextureBinding>;
+  using BufferBindings = mgl_core::list<BufferBinding>;
+  using SamplerBindings = mgl_core::list<SamplerBinding>;
 
   extern const std::string NoShader;
   extern const Viewport2D NullViewport2D;
@@ -197,12 +197,12 @@ namespace mgl
 
   struct VertexData
   {
-    mgl_core::Ref<Buffer> buffer;
+    mgl_core::ref<Buffer> buffer;
     const char* format;
-    mgl_core::StringList attributes;
+    mgl_core::string_list attributes;
   };
 
-  using VertexDataArray = mgl_core::List<VertexData>;
+  using VertexDataArray = mgl_core::list<VertexData>;
 
   inline bool operator==(const Viewport2D& lhs, const Viewport2D& rhs)
   {

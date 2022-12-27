@@ -154,7 +154,7 @@ namespace mgl
     };
   }
 
-  Uniform::Uniform(const mgl_core::String& name, int gl_type, int program_obj, int location, size_t size, Context* ctx)
+  Uniform::Uniform(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t size, Context* ctx)
   {
     m_context = ctx;
     m_name = name;

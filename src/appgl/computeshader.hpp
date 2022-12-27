@@ -26,18 +26,18 @@ public:
     void release();
     bool released();
 
-    const mgl_core::Ref<Uniform> uniform(const mgl_core::String& name) const;
-    const mgl_core::Ref<UniformBlock> uniform_block(const mgl_core::String& name) const;
+    const mgl_core::ref<Uniform> uniform(const mgl_core::string& name) const;
+    const mgl_core::ref<UniformBlock> uniform_block(const mgl_core::string& name) const;
 
-    const mgl_core::StringList uniforms();
-    const mgl_core::StringList uniform_blocks();
+    const mgl_core::string_list uniforms();
+    const mgl_core::string_list uniform_blocks();
 
     size_t num_uniforms();
     size_t num_uniform_blocks();
 
     void run(int x, int y, int z);
 
-    const mgl_core::Ref<Uniform> operator[](const mgl_core::String& name) const;
+    const mgl_core::ref<Uniform> operator[](const mgl_core::string& name) const;
 
 private:
     friend class Context;
@@ -51,7 +51,7 @@ private:
     bool m_released;
   };
 
-  inline const mgl_core::Ref<Uniform> ComputeShader::uniform(const mgl_core::String& name) const
+  inline const mgl_core::ref<Uniform> ComputeShader::uniform(const mgl_core::string& name) const
   {
     if(m_uniforms_map.find(name) == m_uniforms_map.end())
     {
@@ -60,7 +60,7 @@ private:
     return m_uniforms_map.at(name);
   }
 
-  inline const mgl_core::Ref<UniformBlock> ComputeShader::uniform_block(const mgl_core::String& name) const
+  inline const mgl_core::ref<UniformBlock> ComputeShader::uniform_block(const mgl_core::string& name) const
   {
     if(m_uniform_blocks_map.find(name) == m_uniform_blocks_map.end())
     {
@@ -79,7 +79,7 @@ private:
     return m_uniform_blocks_map.size();
   }
 
-  inline const mgl_core::Ref<Uniform> ComputeShader::operator[](const mgl_core::String& name) const
+  inline const mgl_core::ref<Uniform> ComputeShader::operator[](const mgl_core::string& name) const
   {
     return uniform(name);
   }

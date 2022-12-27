@@ -334,13 +334,13 @@ namespace mgl_window
     SDL_GL_SwapWindow(native_window);
   }
 
-  void WindowSDL::set_title(const mgl_core::String& value)
+  void WindowSDL::set_title(const mgl_core::string& value)
   {
     m_title = value;
     SDL_SetWindowTitle(native_window, m_title.c_str());
   }
 
-  const mgl_core::String& WindowSDL::title() const
+  const mgl_core::string& WindowSDL::title() const
   {
     return m_title;
   }

@@ -29,10 +29,10 @@ public:
 
 private:
     friend class Context;
-    UniformBlock(const mgl_core::String& name, int program_obj, int index, size_t size, Context* ctx);
+    UniformBlock(const mgl_core::string& name, int program_obj, int index, size_t size, Context* ctx);
 
     Context* m_context;
-    mgl_core::String m_name;
+    mgl_core::string m_name;
     int m_program_obj;
     int m_index;
     int m_size;

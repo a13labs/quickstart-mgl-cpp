@@ -134,7 +134,7 @@ namespace mgl
     m_context->m_bound_framebuffer = shared_from_this();
   }
 
-  bool Framebuffer::read_into(mgl_core::MemoryBuffer<uint8_t>& dst,
+  bool Framebuffer::read_into(mgl_core::mem_buffer<uint8_t>& dst,
                               const Viewport2D& viewport,
                               int components,
                               int attachment,
@@ -192,7 +192,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Framebuffer::read_into(mgl_core::Ref<Buffer> dst,
+  bool Framebuffer::read_into(mgl_core::ref<Buffer> dst,
                               const Viewport2D& viewport,
                               int components,
                               int attachment,

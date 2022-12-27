@@ -21,7 +21,7 @@ namespace mgl_window
 {
   typedef struct
   {
-    mgl_core::String title = "BaseWindow";
+    mgl_core::string title = "BaseWindow";
     uint32_t width = 800;
     uint32_t height = 600;
     bool fullscreen = false;
@@ -50,8 +50,8 @@ public:
     virtual int height() = 0;
     virtual int aspect_ratio() = 0;
 
-    virtual const mgl_core::String& title() const = 0;
-    virtual void set_title(const mgl_core::String& value) = 0;
+    virtual const mgl_core::string& title() const = 0;
+    virtual void set_title(const mgl_core::string& value) = 0;
   };
 
   class Window
@@ -69,11 +69,11 @@ public:
     int height();
     int aspect_ratio();
 
-    const mgl_core::String& title() const;
-    void set_title(const mgl_core::String& value);
+    const mgl_core::string& title() const;
+    void set_title(const mgl_core::string& value);
 
     void toggle_full_screen();
-    mgl_core::Ref<mgl::Context> context();
+    mgl_core::ref<mgl::Context> context();
 
     inline static Window& current() { return *s_instance; }
 
@@ -102,8 +102,8 @@ private:
     static Window* s_instance;
     bool m_running;
     mgl_core::Timer m_timer;
-    mgl_core::Scope<NativeWindow> m_native_window;
-    mgl_core::Ref<mgl::Context> m_context;
+    mgl_core::scope<NativeWindow> m_native_window;
+    mgl_core::ref<mgl::Context> m_context;
   };
 
   inline int Window::width()
@@ -121,12 +121,12 @@ private:
     return m_native_window->aspect_ratio();
   }
 
-  inline const mgl_core::String& Window::title() const
+  inline const mgl_core::string& Window::title() const
   {
     return m_native_window->title();
   }
 
-  inline void Window::set_title(const mgl_core::String& value)
+  inline void Window::set_title(const mgl_core::string& value)
   {
     return m_native_window->set_title(value);
   }
@@ -141,10 +141,10 @@ private:
     m_running = false;
   }
 
-  inline mgl_core::Ref<mgl::Context> Window::context()
+  inline mgl_core::ref<mgl::Context> Window::context()
   {
     return m_context;
   }
 
-  WindowConfig load_window_configuration(const mgl_core::String& filename);
+  WindowConfig load_window_configuration(const mgl_core::string& filename);
 } // namespace mgl_window

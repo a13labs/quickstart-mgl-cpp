@@ -108,7 +108,7 @@ namespace mgl_window
     m_native_window->destroy_window();
   }
 
-  WindowConfig load_window_configuration(const mgl_core::String& filename)
+  WindowConfig load_window_configuration(const mgl_core::string& filename)
   {
     // TODO: Implement load from JSON
     return WindowConfig();

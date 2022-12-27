@@ -20,7 +20,7 @@
 
 namespace mgl
 {
-  UniformBlock::UniformBlock(const mgl_core::String& name, int program_obj, int index, size_t size, Context* ctx)
+  UniformBlock::UniformBlock(const mgl_core::string& name, int program_obj, int index, size_t size, Context* ctx)
   {
     m_context = ctx;
     m_name = name;

@@ -23,8 +23,8 @@ namespace mgl_core
 
   namespace Log
   {
-    void init(const String& file = "app.log");
-    extern Ref<spdlog::logger> logger;
+    void init(const string& file = "app.log");
+    extern ref<spdlog::logger> logger;
   }; // namespace Log
 
 } // namespace mgl_core

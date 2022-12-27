@@ -9,10 +9,10 @@ class ExampleWindow : public mgl_window::Window
   virtual void on_unload() override;
 
   private:
-  mgl_core::Ref<mgl::Program> m_program;
-  mgl_core::Ref<mgl::Buffer> m_vbo;
-  mgl_core::Ref<mgl::VertexArray> m_vao;
-  mgl_core::Ref<mgl::Uniform> m_scale, m_rotation;
+  mgl_core::ref<mgl::Program> m_program;
+  mgl_core::ref<mgl::Buffer> m_vbo;
+  mgl_core::ref<mgl::VertexArray> m_vao;
+  mgl_core::ref<mgl::Uniform> m_scale, m_rotation;
   float m_time = 0;
 };
 

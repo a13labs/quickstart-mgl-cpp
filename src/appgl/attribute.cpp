@@ -98,7 +98,7 @@ namespace mgl
     };
   }
 
-  Attribute::Attribute(const mgl_core::String& name, int gl_type, int program_obj, int location, size_t array_length)
+  Attribute::Attribute(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t array_length)
   {
     m_name = name;
     m_gl_type = gl_type;

@@ -42,7 +42,7 @@ namespace mgl
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  bool TextureCube::read_into(mgl_core::MemoryBuffer<uint8_t>& dst, int face, int alignment, size_t write_offset)
+  bool TextureCube::read_into(mgl_core::mem_buffer<uint8_t>& dst, int face, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -71,7 +71,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::read_into(mgl_core::Ref<Buffer>& dst, int face, int alignment, size_t write_offset)
+  bool TextureCube::read_into(mgl_core::ref<Buffer>& dst, int face, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -95,7 +95,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const mgl_core::MemoryBuffer<uint8_t>& src, int face, const Viewport2D& viewport, int alignment)
+  bool TextureCube::write(const mgl_core::mem_buffer<uint8_t>& src, int face, const Viewport2D& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -127,7 +127,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const mgl_core::MemoryBuffer<uint8_t>& src, int face, int alignment)
+  bool TextureCube::write(const mgl_core::mem_buffer<uint8_t>& src, int face, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -159,7 +159,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const mgl_core::Ref<Buffer>& src, int face, const Viewport2D& viewport, int alignment)
+  bool TextureCube::write(const mgl_core::ref<Buffer>& src, int face, const Viewport2D& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -187,7 +187,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const mgl_core::Ref<Buffer>& src, int face, int alignment)
+  bool TextureCube::write(const mgl_core::ref<Buffer>& src, int face, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -261,7 +261,7 @@ namespace mgl
     gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }
 
-  mgl_core::String TextureCube::swizzle()
+  mgl_core::string TextureCube::swizzle()
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -288,7 +288,7 @@ namespace mgl
     return swizzle;
   }
 
-  void TextureCube::set_swizzle(const mgl_core::String& value)
+  void TextureCube::set_swizzle(const mgl_core::string& value)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");

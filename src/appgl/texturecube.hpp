@@ -35,19 +35,19 @@ public:
     const Texture::Filter& filter() const;
     void set_filter(const Texture::Filter& value);
 
-    mgl_core::String swizzle();
-    void set_swizzle(const mgl_core::String& value);
+    mgl_core::string swizzle();
+    void set_swizzle(const mgl_core::string& value);
 
     float anisotropy();
     void set_anisotropy(float value);
 
-    bool read_into(mgl_core::MemoryBuffer<uint8_t>& dst, int face, int alignment = 1, size_t write_offset = 0);
-    bool read_into(mgl_core::Ref<Buffer>& dst, int face, int alignment = 1, size_t write_offset = 0);
+    bool read_into(mgl_core::mem_buffer<uint8_t>& dst, int face, int alignment = 1, size_t write_offset = 0);
+    bool read_into(mgl_core::ref<Buffer>& dst, int face, int alignment = 1, size_t write_offset = 0);
 
-    bool write(const mgl_core::MemoryBuffer<uint8_t>& src, int face, const Viewport2D& viewport, int alignment = 1);
-    bool write(const mgl_core::MemoryBuffer<uint8_t>& src, int face, int alignment = 1);
-    bool write(const mgl_core::Ref<Buffer>& src, int face, const Viewport2D& viewport, int alignment = 1);
-    bool write(const mgl_core::Ref<Buffer>& src, int face, int alignment = 1);
+    bool write(const mgl_core::mem_buffer<uint8_t>& src, int face, const Viewport2D& viewport, int alignment = 1);
+    bool write(const mgl_core::mem_buffer<uint8_t>& src, int face, int alignment = 1);
+    bool write(const mgl_core::ref<Buffer>& src, int face, const Viewport2D& viewport, int alignment = 1);
+    bool write(const mgl_core::ref<Buffer>& src, int face, int alignment = 1);
 
     void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
     void use(int index = 0);

@@ -20,7 +20,7 @@
 
 namespace mgl
 {
-  Varying::Varying(const mgl_core::String& name, int number, size_t array_length, int dimension)
+  Varying::Varying(const mgl_core::string& name, int number, size_t array_length, int dimension)
   {
     m_name = name;
     m_number = number;

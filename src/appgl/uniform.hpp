@@ -83,13 +83,13 @@ public:
 
 private:
     friend class Context;
-    Uniform(const mgl_core::String& name, int gl_type, int program_obj, int location, size_t size, Context* ctx);
+    Uniform(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t size, Context* ctx);
 
     void set_value(void* data, size_t size);
     void get_value(void* data, size_t size);
 
     Context* m_context;
-    mgl_core::String m_name;
+    mgl_core::string m_name;
     int m_program_obj;
     int m_gl_type;
     int m_location;

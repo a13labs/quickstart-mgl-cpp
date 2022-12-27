@@ -33,18 +33,18 @@ namespace mgl_core
 
   struct ProfileResult
   {
-    String name;
+    string name;
 
     FloatingPointMicroseconds start;
     std::chrono::microseconds elapsed_time;
     std::thread::id thread_id;
     int process_id;
-    String category;
+    string category;
   };
 
   struct InstrumentationSession
   {
-    String name;
+    string name;
   };
 
   class Instrumentor
@@ -52,7 +52,7 @@ namespace mgl_core
 private:
     std::mutex m_mutex;
     InstrumentationSession* m_current_session;
-    String m_filepath;
+    string m_filepath;
     nlohmann::json m_trace_events;
 
 public:
@@ -60,7 +60,7 @@ public:
         : m_current_session(nullptr)
     { }
 
-    void begin_session(const String& name, const String& filepath = "results.json")
+    void begin_session(const string& name, const string& filepath = "results.json")
     {
       std::lock_guard lock(m_mutex);
       m_filepath = filepath;

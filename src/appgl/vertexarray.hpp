@@ -29,11 +29,11 @@ public:
 
     void render(mgl::RenderMode mode = mgl::RenderMode::TRIANGLES, int vertices = -1, int first = 0, int instances = -1);
     void render(int instances);
-    void render_indirect(const mgl_core::Ref<Buffer>& buffer, mgl::RenderMode mode, int count = -1, int first = -1);
+    void render_indirect(const mgl_core::ref<Buffer>& buffer, mgl::RenderMode mode, int count = -1, int first = -1);
     void
-    transform(const mgl_core::Ref<Buffer>& buffer, mgl::RenderMode mode, int vertices = -1, int first = 0, int instances = -1);
+    transform(const mgl_core::ref<Buffer>& buffer, mgl::RenderMode mode, int vertices = -1, int first = 0, int instances = -1);
 
-    void transform(const mgl_core::ListRef<Buffer>& buffers,
+    void transform(const mgl_core::ref_list<Buffer>& buffers,
                    mgl::RenderMode mode,
                    int vertices = -1,
                    int first = 0,
@@ -42,14 +42,14 @@ public:
 
     void bind(int location,
               const char* type,
-              const mgl_core::Ref<Buffer>& buffer,
+              const mgl_core::ref<Buffer>& buffer,
               const char* format,
               size_t offset = 0,
               int stride = 0,
               int divisor = 0,
               bool normalize = false);
 
-    void set_index_buffer(const mgl_core::Ref<Buffer>& value);
+    void set_index_buffer(const mgl_core::ref<Buffer>& value);
 
     int vertices();
     int instances();
@@ -59,8 +59,8 @@ private:
     VertexArray() = default;
 
     Context* m_context;
-    mgl_core::Ref<Program> m_program;
-    mgl_core::Ref<Buffer> m_index_buffer;
+    mgl_core::ref<Program> m_program;
+    mgl_core::ref<Buffer> m_index_buffer;
     int m_index_element_size;
     int m_index_element_type;
     unsigned* m_subroutines;
@@ -72,7 +72,7 @@ private:
   };
 
   inline void
-  VertexArray::transform(const mgl_core::Ref<Buffer>& buffer, mgl::RenderMode mode, int vertices, int first, int instances)
+  VertexArray::transform(const mgl_core::ref<Buffer>& buffer, mgl::RenderMode mode, int vertices, int first, int instances)
   {
     transform({ buffer }, mode, vertices, first, instances);
   }

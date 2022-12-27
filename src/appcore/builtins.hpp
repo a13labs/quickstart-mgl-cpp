@@ -58,43 +58,43 @@ namespace mgl_core
  *************************************************************/
 
   template <typename T>
-  using Scope = std::unique_ptr<T>;
+  using scope = std::unique_ptr<T>;
 
   template <typename T, typename... Args>
-  constexpr Scope<T> create_scope(Args&&... args)
+  constexpr scope<T> create_scope(Args&&... args)
   {
     return std::make_unique<T>(std::forward<Args>(args)...);
   }
 
   template <typename T>
-  using Ref = std::shared_ptr<T>;
+  using ref = std::shared_ptr<T>;
 
   template <typename T>
-  using ListRef = std::vector<Ref<T>>;
+  using ref_list = std::vector<ref<T>>;
 
   template <typename T>
-  using QueueRef = std::queue<Ref<T>>;
+  using ref_queue = std::queue<ref<T>>;
 
   template <typename T, typename... Args>
-  constexpr Ref<T> create_ref(Args&&... args)
+  constexpr ref<T> create_ref(Args&&... args)
   {
     return std::make_shared<T>(std::forward<Args>(args)...);
   }
 
   template <typename T>
-  using RefFromThis = std::enable_shared_from_this<T>;
+  using ref_from_this = std::enable_shared_from_this<T>;
 
   template <typename T>
-  using MemoryBuffer = tcb::span<T>;
+  using mem_buffer = tcb::span<T>;
 
   template <typename T>
-  using List = std::vector<T>;
+  using list = std::vector<T>;
 
   template <typename k, typename v>
-  using Dict = std::map<k, v>;
+  using dict = std::map<k, v>;
 
-  using String = std::string;
-  using StringList = List<String>;
+  using string = std::string;
+  using string_list = list<string>;
 
-  using Timepoint = std::chrono::time_point<std::chrono::system_clock>;
+  using timepoint = std::chrono::time_point<std::chrono::system_clock>;
 } // namespace mgl_core

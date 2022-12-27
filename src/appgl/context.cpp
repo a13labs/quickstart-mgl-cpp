@@ -86,7 +86,7 @@ namespace mgl
     }
   }
 
-  mgl_core::Ref<Context> Context::create_context(ContextMode::Enum mode, int required)
+  mgl_core::ref<Context> Context::create_context(ContextMode::Enum mode, int required)
   {
 
     Context* ctx = nullptr;
@@ -257,7 +257,7 @@ namespace mgl
       framebuffer->m_height = scissor_box[3];
       framebuffer->m_dynamic = true;
 
-      ctx->m_default_framebuffer = mgl_core::Ref<Framebuffer>(framebuffer);
+      ctx->m_default_framebuffer = mgl_core::ref<Framebuffer>(framebuffer);
     }
 
     ctx->m_bound_framebuffer = ctx->m_default_framebuffer;
@@ -279,10 +279,10 @@ namespace mgl
 
     gl.GetError(); // clear errors
 
-    return mgl_core::Ref<Context>(ctx);
+    return mgl_core::ref<Context>(ctx);
   }
 
-  mgl_core::Ref<Buffer> Context::buffer(void* data, size_t reserve, bool dynamic)
+  mgl_core::ref<Buffer> Context::buffer(void* data, size_t reserve, bool dynamic)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     MGL_CORE_ASSERT(reserve >= 0, "invalid buffer size: {0}", reserve);
@@ -310,10 +310,10 @@ namespace mgl
 
     buffer->m_context = this;
 
-    return mgl_core::Ref<Buffer>(buffer);
+    return mgl_core::ref<Buffer>(buffer);
   }
 
-  mgl_core::Ref<ComputeShader> Context::compute_shader(const mgl_core::String& source)
+  mgl_core::ref<ComputeShader> Context::compute_shader(const mgl_core::string& source)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
@@ -421,7 +421,7 @@ namespace mgl
       }
 
       compute_shader->m_uniforms_map.insert(
-          { name, mgl_core::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
+          { name, mgl_core::ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
     }
 
     int num_uniform_blocks = 0;
@@ -440,14 +440,14 @@ namespace mgl
       clean_glsl_name(name, name_len);
 
       compute_shader->m_uniform_blocks_map.insert(
-          { name, mgl_core::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
+          { name, mgl_core::ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
     }
 
-    return mgl_core::Ref<ComputeShader>(compute_shader);
+    return mgl_core::ref<ComputeShader>(compute_shader);
   }
 
-  mgl_core::Ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments,
-                                                  mgl_core::Ref<Attachment> depth_attachment)
+  mgl_core::ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments,
+                                                  mgl_core::ref<Attachment> depth_attachment)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     MGL_CORE_ASSERT(color_attachments.size(), "missing color attachments");
@@ -707,10 +707,10 @@ namespace mgl
       return nullptr;
     }
 
-    return mgl_core::Ref<Framebuffer>(framebuffer);
+    return mgl_core::ref<Framebuffer>(framebuffer);
   }
 
-  mgl_core::Ref<Program> Context::program(const ShadersSources& shaders,
+  mgl_core::ref<Program> Context::program(const ShadersSources& shaders,
                                           const ShadersOutputs& outputs,
                                           const FragmentOutputs& fragment_outputs,
                                           bool interleaved)
@@ -1002,7 +1002,7 @@ namespace mgl
       clean_glsl_name(name, name_len);
 
       program->m_attributes_map.insert(
-          { name, mgl_core::Ref<Attribute>(new Attribute(name, type, program->m_program_obj, location, array_length)) });
+          { name, mgl_core::ref<Attribute>(new Attribute(name, type, program->m_program_obj, location, array_length)) });
     }
 
     for(int i = 0; i < num_varyings; ++i)
@@ -1015,7 +1015,7 @@ namespace mgl
 
       gl.GetTransformFeedbackVarying(program->m_program_obj, i, 256, &name_len, &array_length, (GLenum*)&type, name);
 
-      program->m_varyings_map.insert({ name, mgl_core::Ref<Varying>(new Varying(name, i, array_length, dimension)) });
+      program->m_varyings_map.insert({ name, mgl_core::ref<Varying>(new Varying(name, i, array_length, dimension)) });
     }
 
     for(int i = 0; i < num_uniforms; ++i)
@@ -1036,7 +1036,7 @@ namespace mgl
       }
 
       program->m_uniforms_map.insert(
-          { name, mgl_core::Ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
+          { name, mgl_core::ref<Uniform>(new Uniform(name, type, program_obj, location, size, this)) });
     }
 
     for(int i = 0; i < num_uniform_blocks; ++i)
@@ -1052,7 +1052,7 @@ namespace mgl
       clean_glsl_name(name, name_len);
 
       program->m_uniform_blocks_map.insert(
-          { name, mgl_core::Ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
+          { name, mgl_core::ref<UniformBlock>(new UniformBlock(name, program_obj, index, size, this)) });
     }
 
     if(program->m_context->version_code() >= 400)
@@ -1075,15 +1075,15 @@ namespace mgl
           gl.GetActiveSubroutineName(program_obj, type, i, 256, &name_len, name);
           int index = gl.GetSubroutineIndex(program_obj, type, name);
 
-          program->m_subroutines_map.insert({ name, mgl_core::Ref<Subroutine>(new Subroutine(name, index, type)) });
+          program->m_subroutines_map.insert({ name, mgl_core::ref<Subroutine>(new Subroutine(name, index, type)) });
         }
       }
     }
 
-    return mgl_core::Ref<Program>(program);
+    return mgl_core::ref<Program>(program);
   }
 
-  mgl_core::Ref<Query> Context::query(bool samples, bool any_samples, bool time_elapsed, bool primitives_generated)
+  mgl_core::ref<Query> Context::query(bool samples, bool any_samples, bool time_elapsed, bool primitives_generated)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
@@ -1135,10 +1135,10 @@ namespace mgl
       query->m_query_obj[Query::Keys::PRIMITIVES_GENERATED] = 0;
     }
 
-    return mgl_core::Ref<Query>(query);
+    return mgl_core::ref<Query>(query);
   }
 
-  mgl_core::Ref<Renderbuffer> Context::renderbuffer(int width, int height, int components, int samples, const char* dtype)
+  mgl_core::ref<Renderbuffer> Context::renderbuffer(int width, int height, int components, int samples, const char* dtype)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
@@ -1196,10 +1196,10 @@ namespace mgl
       gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, format, width, height);
     }
 
-    return mgl_core::Ref<Renderbuffer>(renderbuffer);
+    return mgl_core::ref<Renderbuffer>(renderbuffer);
   }
 
-  mgl_core::Ref<Renderbuffer> Context::depth_renderbuffer(int width, int height, int samples)
+  mgl_core::ref<Renderbuffer> Context::depth_renderbuffer(int width, int height, int samples)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
@@ -1241,10 +1241,10 @@ namespace mgl
       gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);
     }
 
-    return mgl_core::Ref<Renderbuffer>(renderbuffer);
+    return mgl_core::ref<Renderbuffer>(renderbuffer);
   }
 
-  mgl_core::Ref<Sampler> Context::sampler()
+  mgl_core::ref<Sampler> Context::sampler()
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
@@ -1267,10 +1267,10 @@ namespace mgl
 
     gl.GenSamplers(1, (GLuint*)&sampler->m_sampler_obj);
 
-    return mgl_core::Ref<Sampler>(sampler);
+    return mgl_core::ref<Sampler>(sampler);
   }
 
-  mgl_core::Ref<Scope> Context::scope(mgl_core::Ref<Framebuffer> framebuffer,
+  mgl_core::ref<Scope> Context::scope(mgl_core::ref<Framebuffer> framebuffer,
                                       int enable_flags,
                                       const TextureBindings& textures,
                                       const BufferBindings& uniform_buffers,
@@ -1287,8 +1287,8 @@ namespace mgl
     scope->m_old_enable_flags = Context::EnableFlag::INVALID;
     scope->m_framebuffer = framebuffer;
     scope->m_old_framebuffer = m_bound_framebuffer;
-    scope->m_textures = mgl_core::List<Scope::BindingData>(textures.size());
-    scope->m_buffers = mgl_core::List<Scope::BindingData>(uniform_buffers.size() + storage_buffers.size());
+    scope->m_textures = mgl_core::list<Scope::BindingData>(textures.size());
+    scope->m_buffers = mgl_core::list<Scope::BindingData>(uniform_buffers.size() + storage_buffers.size());
     scope->m_samplers = samplers;
 
     int i = 0;
@@ -1357,10 +1357,10 @@ namespace mgl
       i++;
     }
 
-    return mgl_core::Ref<Scope>(scope);
+    return mgl_core::ref<Scope>(scope);
   }
 
-  mgl_core::Ref<Texture2D> Context::texture2d(int width,
+  mgl_core::ref<Texture2D> Context::texture2d(int width,
                                               int height,
                                               int components,
                                               const void* data,
@@ -1463,10 +1463,10 @@ namespace mgl
       }
     }
 
-    return mgl_core::Ref<Texture2D>(texture);
+    return mgl_core::ref<Texture2D>(texture);
   }
 
-  mgl_core::Ref<Texture2D> Context::depth_texture2d(int width, int height, const void* data, int samples, int alignment)
+  mgl_core::ref<Texture2D> Context::depth_texture2d(int width, int height, const void* data, int samples, int alignment)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
@@ -1536,10 +1536,10 @@ namespace mgl
       gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
     }
 
-    return mgl_core::Ref<Texture2D>(texture);
+    return mgl_core::ref<Texture2D>(texture);
   }
 
-  mgl_core::Ref<Texture3D>
+  mgl_core::ref<Texture3D>
   Context::texture3d(int width, int height, int depth, int components, const void* data, int alignment, const char* dtype)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
@@ -1614,10 +1614,10 @@ namespace mgl
       gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
-    return mgl_core::Ref<Texture3D>(texture);
+    return mgl_core::ref<Texture3D>(texture);
   }
 
-  mgl_core::Ref<TextureArray>
+  mgl_core::ref<TextureArray>
   Context::texture_array(int width, int height, int layers, int components, const void* data, int alignment, const char* dtype)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
@@ -1691,10 +1691,10 @@ namespace mgl
       gl.TexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
-    return mgl_core::Ref<TextureArray>(texture);
+    return mgl_core::ref<TextureArray>(texture);
   }
 
-  mgl_core::Ref<TextureCube> Context::texture_cube(
+  mgl_core::ref<TextureCube> Context::texture_cube(
       int width, int height, int components, const void* data, int alignment, const char* dtype, int internal_format_override)
   {
 
@@ -1781,12 +1781,12 @@ namespace mgl
       gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
-    return mgl_core::Ref<TextureCube>(texture);
+    return mgl_core::ref<TextureCube>(texture);
   }
 
-  mgl_core::Ref<VertexArray> Context::vertex_array(mgl_core::Ref<Program> program,
+  mgl_core::ref<VertexArray> Context::vertex_array(mgl_core::ref<Program> program,
                                                    mgl::VertexDataArray vertex_data,
-                                                   mgl_core::Ref<Buffer> index_buffer,
+                                                   mgl_core::ref<Buffer> index_buffer,
                                                    int index_element_size,
                                                    bool skip_errors,
                                                    mgl::RenderMode mode)
@@ -1960,7 +1960,7 @@ namespace mgl
       array->m_subroutines = new unsigned[array->m_num_subroutines];
     }
 
-    return mgl_core::Ref<VertexArray>(array);
+    return mgl_core::ref<VertexArray>(array);
   }
 
   void Context::set_enable_flags(int flags)
@@ -2078,7 +2078,7 @@ namespace mgl
   }
 
   void Context::copy_buffer(
-      const mgl_core::Ref<Buffer>& src, const mgl_core::Ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset)
+      const mgl_core::ref<Buffer>& src, const mgl_core::ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset)
   {
     MGL_CORE_ASSERT(read_offset >= 0 && write_offset >= 0, "buffer underflow");
     MGL_CORE_ASSERT(!released(), "Context already released");

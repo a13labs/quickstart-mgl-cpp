@@ -31,7 +31,7 @@ namespace mgl
     };
   };
 
-  class Context : public mgl_core::RefFromThis<Context>
+  class Context : public mgl_core::ref_from_this<Context>
   {
 public:
     enum EnableFlag
@@ -55,8 +55,8 @@ public:
     int max_texture_units();
     int default_texture_unit();
     float max_anisotropy();
-    const mgl_core::StringList& extensions() const;
-    const mgl_core::Ref<Framebuffer>& framebuffer() const;
+    const mgl_core::string_list& extensions() const;
+    const mgl_core::ref<Framebuffer>& framebuffer() const;
 
     int enable_flags();
     void set_enable_flags(int flags);
@@ -79,45 +79,45 @@ public:
     float polygon_offset_factor();
     float polygon_offset_units();
     void copy_buffer(
-        const mgl_core::Ref<Buffer>& src, const mgl_core::Ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset);
+        const mgl_core::ref<Buffer>& src, const mgl_core::ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset);
 
     // Buffer
-    mgl_core::Ref<Buffer> buffer(const mgl_core::MemoryBuffer<float>& data, bool dynamic = false);
-    mgl_core::Ref<Buffer> buffer(const mgl_core::MemoryBuffer<uint32_t>& data, bool dynamic = false);
-    mgl_core::Ref<Buffer> buffer(const mgl_core::MemoryBuffer<uint16_t>& data, bool dynamic = false);
-    mgl_core::Ref<Buffer> buffer(const mgl_core::MemoryBuffer<uint8_t>& data, bool dynamic = false);
+    mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<float>& data, bool dynamic = false);
+    mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic = false);
+    mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic = false);
+    mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic = false);
 
     // Compute Shader
-    mgl_core::Ref<ComputeShader> compute_shader(const mgl_core::String& source);
+    mgl_core::ref<ComputeShader> compute_shader(const mgl_core::string& source);
 
     // Create Shader
-    static mgl_core::Ref<Context> create_context(ContextMode::Enum mode, int required);
+    static mgl_core::ref<Context> create_context(ContextMode::Enum mode, int required);
 
     // Framebuffer
-    mgl_core::Ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments, mgl_core::Ref<Attachment> depth_attachment);
-    mgl_core::Ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments);
-    mgl_core::Ref<Framebuffer> framebuffer(mgl_core::Ref<Attachment> depth_attachment);
+    mgl_core::ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments, mgl_core::ref<Attachment> depth_attachment);
+    mgl_core::ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments);
+    mgl_core::ref<Framebuffer> framebuffer(mgl_core::ref<Attachment> depth_attachment);
 
     // Program
-    mgl_core::Ref<Program> program(const ShadersSources& shaders,
+    mgl_core::ref<Program> program(const ShadersSources& shaders,
                                    const ShadersOutputs& outputs = {},
                                    const FragmentOutputs& fragment_outputs = {},
                                    bool interleaved = true);
 
     // Query
-    mgl_core::Ref<Query>
+    mgl_core::ref<Query>
     query(bool samples = false, bool any_samples = false, bool time_elapsed = false, bool primitives_generated = false);
 
     // Renderbuffer
-    mgl_core::Ref<Renderbuffer>
+    mgl_core::ref<Renderbuffer>
     renderbuffer(int width, int height, int components = 4, int samples = 0, const char* dtype = "f1");
-    mgl_core::Ref<Renderbuffer> depth_renderbuffer(int width, int height, int samples = 0);
+    mgl_core::ref<Renderbuffer> depth_renderbuffer(int width, int height, int samples = 0);
 
     // Sampler
-    mgl_core::Ref<Sampler> sampler();
+    mgl_core::ref<Sampler> sampler();
 
     // Scope
-    mgl_core::Ref<Scope> scope(mgl_core::Ref<Framebuffer> framebuffer = nullptr,
+    mgl_core::ref<Scope> scope(mgl_core::ref<Framebuffer> framebuffer = nullptr,
                                int enable_flags = 0,
                                const TextureBindings& textures = {},
                                const BufferBindings& uniform_buffers = {},
@@ -125,7 +125,7 @@ public:
                                const SamplerBindings& samplers = {});
 
     // Texture
-    mgl_core::Ref<Texture2D> texture2d(int width,
+    mgl_core::ref<Texture2D> texture2d(int width,
                                        int height,
                                        int components,
                                        const void* data = nullptr,
@@ -134,11 +134,11 @@ public:
                                        const char* dtype = "f1",
                                        int internal_format_override = 0);
 
-    mgl_core::Ref<Texture2D>
+    mgl_core::ref<Texture2D>
     depth_texture2d(int width, int height, const void* data = nullptr, int samples = 0, int alignment = 0);
 
     // Texture3D
-    mgl_core::Ref<Texture3D> texture3d(int width,
+    mgl_core::ref<Texture3D> texture3d(int width,
                                        int height,
                                        int depth,
                                        int components,
@@ -147,7 +147,7 @@ public:
                                        const char* dtype = "f1");
 
     // TextureArray
-    mgl_core::Ref<TextureArray> texture_array(int width,
+    mgl_core::ref<TextureArray> texture_array(int width,
                                               int height,
                                               int layers,
                                               int components,
@@ -156,7 +156,7 @@ public:
                                               const char* dtype = "f1");
 
     // TextureCube
-    mgl_core::Ref<TextureCube> texture_cube(int width,
+    mgl_core::ref<TextureCube> texture_cube(int width,
                                             int height,
                                             int components,
                                             const void* data = nullptr,
@@ -165,14 +165,14 @@ public:
                                             int internal_format_override = 0);
 
     // VertexArray
-    mgl_core::Ref<VertexArray> vertex_array(mgl_core::Ref<Program> program,
+    mgl_core::ref<VertexArray> vertex_array(mgl_core::ref<Program> program,
                                             mgl::VertexDataArray vertex_data,
-                                            mgl_core::Ref<Buffer> index_buffer = nullptr,
+                                            mgl_core::ref<Buffer> index_buffer = nullptr,
                                             int index_element_size = 4,
                                             bool skip_errors = false,
                                             mgl::RenderMode mode = mgl::RenderMode::POINTS);
 
-    virtual GLFunction load(const mgl_core::String& method) = 0;
+    virtual GLFunction load(const mgl_core::string& method) = 0;
     virtual void enter() = 0;
     virtual void exit() = 0;
 
@@ -186,7 +186,7 @@ public:
 
 private:
     void load_functions();
-    mgl_core::Ref<Buffer> buffer(void* data, size_t size, bool dynamic);
+    mgl_core::ref<Buffer> buffer(void* data, size_t size, bool dynamic);
 
 protected:
     bool m_released;
@@ -214,9 +214,9 @@ private:
     int m_provoking_vertex;
     float m_polygon_offset_factor;
     float m_polygon_offset_units;
-    mgl_core::StringList m_extensions;
-    mgl_core::Ref<Framebuffer> m_default_framebuffer;
-    mgl_core::Ref<Framebuffer> m_bound_framebuffer;
+    mgl_core::string_list m_extensions;
+    mgl_core::ref<Framebuffer> m_default_framebuffer;
+    mgl_core::ref<Framebuffer> m_bound_framebuffer;
   };
 
 #ifdef MGL_EGL
@@ -227,7 +227,7 @@ public:
     ContextEGL(ContextMode::Enum mode, int required);
     virtual ~ContextEGL() override;
 
-    virtual GLFunction load(const mgl_core::String& method) override;
+    virtual GLFunction load(const mgl_core::string& method) override;
     virtual void enter() override;
     virtual void exit() override;
 
@@ -250,7 +250,7 @@ public:
     virtual ~ContextGLX() override;
 
 public:
-    virtual GLFunction load(const mgl_core::String& method) override;
+    virtual GLFunction load(const mgl_core::string& method) override;
 
     virtual void enter() override;
     virtual void exit() override;
@@ -319,12 +319,12 @@ private:
     return m_max_anisotropy;
   }
 
-  inline const mgl_core::StringList& Context::extensions() const
+  inline const mgl_core::string_list& Context::extensions() const
   {
     return m_extensions;
   }
 
-  inline const mgl_core::Ref<Framebuffer>& Context::framebuffer() const
+  inline const mgl_core::ref<Framebuffer>& Context::framebuffer() const
   {
     return m_default_framebuffer;
   }
@@ -384,33 +384,33 @@ private:
     return m_polygon_offset_units;
   }
 
-  inline mgl_core::Ref<Buffer> Context::buffer(const mgl_core::MemoryBuffer<float>& data, bool dynamic)
+  inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<float>& data, bool dynamic)
   {
     return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline mgl_core::Ref<Buffer> Context::buffer(const mgl_core::MemoryBuffer<uint32_t>& data, bool dynamic)
+  inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic)
   {
     return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline mgl_core::Ref<Buffer> Context::buffer(const mgl_core::MemoryBuffer<uint16_t>& data, bool dynamic)
+  inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic)
   {
     return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline mgl_core::Ref<Buffer> Context::buffer(const mgl_core::MemoryBuffer<uint8_t>& data, bool dynamic)
+  inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic)
   {
     return buffer(data.data(), data.size_bytes(), dynamic);
   }
 
-  inline mgl_core::Ref<Framebuffer> Context::framebuffer(mgl_core::Ref<Attachment> depth_attachment)
+  inline mgl_core::ref<Framebuffer> Context::framebuffer(mgl_core::ref<Attachment> depth_attachment)
   {
     return framebuffer(AttachmentsRef(), depth_attachment);
   }
 
-  inline mgl_core::Ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments)
+  inline mgl_core::ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments)
   {
-    return framebuffer(color_attachments, mgl_core::Ref<Attachment>(nullptr));
+    return framebuffer(color_attachments, mgl_core::ref<Attachment>(nullptr));
   }
 } // namespace mgl

@@ -42,7 +42,7 @@ namespace mgl
     return Texture::TEXTURE_3D;
   }
 
-  bool Texture3D::read_into(mgl_core::MemoryBuffer<uint8_t>& dst, int alignment, size_t write_offset)
+  bool Texture3D::read_into(mgl_core::mem_buffer<uint8_t>& dst, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -70,7 +70,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::read_into(mgl_core::Ref<Buffer>& dst, int alignment, size_t write_offset)
+  bool Texture3D::read_into(mgl_core::ref<Buffer>& dst, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -93,7 +93,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const mgl_core::MemoryBuffer<uint8_t>& src, const Viewport3D& viewport, int alignment)
+  bool Texture3D::write(const mgl_core::mem_buffer<uint8_t>& src, const Viewport3D& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -126,7 +126,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const mgl_core::MemoryBuffer<uint8_t>& src, int alignment)
+  bool Texture3D::write(const mgl_core::mem_buffer<uint8_t>& src, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -159,7 +159,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const mgl_core::Ref<Buffer>& src, const Viewport3D& viewport, int alignment)
+  bool Texture3D::write(const mgl_core::ref<Buffer>& src, const Viewport3D& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -189,7 +189,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const mgl_core::Ref<Buffer>& src, int alignment)
+  bool Texture3D::write(const mgl_core::ref<Buffer>& src, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -351,7 +351,7 @@ namespace mgl
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }
 
-  mgl_core::String Texture3D::swizzle()
+  mgl_core::string Texture3D::swizzle()
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -378,7 +378,7 @@ namespace mgl
     return swizzle;
   }
 
-  void Texture3D::set_swizzle(const mgl_core::String& value)
+  void Texture3D::set_swizzle(const mgl_core::string& value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
