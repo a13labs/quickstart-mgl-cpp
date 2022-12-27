@@ -19,9 +19,11 @@ set(
     json    "https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent" v3.9.1 
 )
 
-set(APP_LIBRARIES "appcore" "appgl")
+set(APP_LIBRARIES "appcore" "appgl" "appwindow")
 set(APP_EXECUTABLES "app")
 set(APP_EXAMPLES 
     "basic_simple_color_triangle"
     "basic_alpha_blending"
    )
+
+set(APP_SHOW_CMAKE_VARS OFF)

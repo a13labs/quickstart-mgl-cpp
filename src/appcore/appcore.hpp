@@ -96,11 +96,5 @@ namespace AppCore
   using String = std::string;
   using StringList = List<String>;
 
-  namespace Events
-  {
-    class Event;
-  } // namespace Events
-
-  using EventHandler = std::function<void(Events::Event&)>;
   using Timepoint = std::chrono::time_point<std::chrono::system_clock>;
 } // namespace AppCore

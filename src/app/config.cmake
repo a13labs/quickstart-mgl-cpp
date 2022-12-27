@@ -9,3 +9,9 @@ target_link_libraries(
     PRIVATE
     ${APPGL_LIB}
 )
+
+target_link_libraries(
+    ${APP_CURRENT_TARGET}
+    PRIVATE
+    ${APPWINDOW_LIB}
+)

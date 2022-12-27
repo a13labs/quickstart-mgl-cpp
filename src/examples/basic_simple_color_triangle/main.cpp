@@ -2,11 +2,11 @@
 #include "appgl/context.hpp"
 #include "appgl/datatype.hpp"
 #include "appgl/program.hpp"
-#include "appgl/sdl/window.hpp"
 #include "appgl/shaderssources.hpp"
 #include "appgl/vertexarray.hpp"
+#include "appwindow/sdl/window.hpp"
 
-class ExampleWindow : public AppGL::Window
+class ExampleWindow : public AppWindow::Window
 {
 
   public:

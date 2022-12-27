@@ -1,9 +1,9 @@
 #include "appgl/datatype.hpp"
-#include "appgl/sdl/window.hpp"
+#include "appwindow/sdl/window.hpp"
 
 int main(int argc, char* argv[])
 {
-  AppGL::Window app;
+  AppWindow::Window app;
   app.run();
 
   return 0;

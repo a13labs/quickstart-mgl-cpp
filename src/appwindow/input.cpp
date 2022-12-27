@@ -18,10 +18,7 @@
 
 #include "SDL2/SDL.h"
 
-namespace AppCore
+namespace AppWindow
 {
-  namespace Input
-  {
-    InputState input_state;
-  } // namespace Input
-} // namespace AppCore
+  InputState input_state;
+} // namespace AppWindow

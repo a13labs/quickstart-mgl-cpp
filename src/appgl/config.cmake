@@ -17,14 +17,6 @@ target_include_directories(
     "${GLM_DIR}"
 )
 
-# SDL - Simple DirectMedia Layer
-# https://www.libsdl.org/
-target_link_libraries( 
-    ${APP_CURRENT_TARGET}
-    PUBLIC
-    SDL2::SDL2main SDL2::SDL2
-)
-
 # OpenGL Support
 # https://www.opengl.org/
 target_link_libraries(
@@ -40,5 +32,6 @@ target_link_libraries(
     ${APPCORE_LIB}
 )
 
+# Export library
 set(APPGL_LIB appgl PARENT_SCOPE)
 set(APPGL_INCLUDE ${APP_CURRENT_SOURCE} PARENT_SCOPE)

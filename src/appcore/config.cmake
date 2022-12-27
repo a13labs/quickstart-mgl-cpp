@@ -1,4 +1,3 @@
-# GLAD 
 # Logging Library setup
 # https://github.com/gabime/spdlog.git
 target_link_libraries( 
@@ -15,5 +14,6 @@ target_link_libraries(
     nlohmann_json::nlohmann_json
 )
 
+# Export library
 set(APPCORE_LIB appcore PARENT_SCOPE)
 set(APPCORE_INCLUDE ${APP_CURRENT_SOURCE} PARENT_SCOPE)
