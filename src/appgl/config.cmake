@@ -12,7 +12,7 @@ endif()
 # GLM Library setup
 # https://github.com/g-truc/glm
 target_include_directories( 
-    ${APP_CURRENT_TARGET}
+    ${MGL_CURRENT_TARGET}
     PUBLIC
     "${GLM_DIR}"
 )
@@ -20,18 +20,18 @@ target_include_directories(
 # OpenGL Support
 # https://www.opengl.org/
 target_link_libraries(
-    ${APP_CURRENT_TARGET}
+    ${MGL_CURRENT_TARGET}
     PUBLIC
     OpenGL::OpenGL
 )
 
 # AppCore
 target_link_libraries(
-    ${APP_CURRENT_TARGET}
+    ${MGL_CURRENT_TARGET}
     PRIVATE
     ${MGL_CORE_LIB}
 )
 
 # Export library
 set(MGL_LIB appgl PARENT_SCOPE)
-set(MGL_INCLUDE ${APP_CURRENT_SOURCE} PARENT_SCOPE)
+set(MGL_INCLUDE ${MGL_CURRENT_SOURCE} PARENT_SCOPE)

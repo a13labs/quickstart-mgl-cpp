@@ -19,10 +19,10 @@
 #include <nlohmann/json.hpp>
 #include <sys/types.h>
 
-#ifdef APP_PLATFORM_WINDOWS
+#ifdef MGL_PLATFORM_WINDOWS
 #  include <process.h>
 #  define GET_PROCESS_ID _getpid
-#elif APP_PLATFORM_LINUX
+#elif MGL_PLATFORM_LINUX
 #  include <unistd.h>
 #  define GET_PROCESS_ID getpid
 #endif
@@ -115,7 +115,7 @@ private:
     {
       nlohmann::json document;
 
-      document["otherData"] = "{ \"version\":\"mgl_core v" APP_SEM_VERSION "\"}"_json;
+      document["otherData"] = "{ \"version\":\"mgl_core v" MGL_SEM_VERSION "\"}"_json;
       document["traceEvents"] = m_trace_events;
 
       std::ofstream o(m_filepath);

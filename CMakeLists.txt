@@ -11,14 +11,14 @@ include(cmake/Build.cmake)
 
 project(
   APP
-  VERSION ${APP_VERSION_MAJOR}.${APP_VERSION_MINOR}.${APP_VERSION_RELEASE}
-  DESCRIPTION ${APP_DESCRIPTION}
-  HOMEPAGE_URL ${APP_HOMEPAGE_URL}
+  VERSION ${MGL_VERSION_MAJOR}.${MGL_VERSION_MINOR}.${MGL_VERSION_RELEASE}
+  DESCRIPTION ${MGL_DESCRIPTION}
+  HOMEPAGE_URL ${MGL_HOMEPAGE_URL}
   LANGUAGES CXX C
 )
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-  add_definitions(-DAPP_DEBUG)
+  add_definitions(-DMGL_DEBUG)
 endif()
 
 # Support both 32 and 64 bit builds
@@ -30,9 +30,9 @@ endif ()
 
 # Platform specific configuration
 if(WIN32)
-  add_definitions(-DAPP_PLATFORM_WINDOWS)
+  add_definitions(-DMGL_PLATFORM_WINDOWS)
 elseif (UNIX)
-  add_definitions(-DAPP_PLATFORM_LINUX)
+  add_definitions(-DMGL_PLATFORM_LINUX)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -52,8 +52,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_OUTPUT_DIR}/bin")
 set(CMAKE_INSTALL_PREFIX "${PROJECT_OUTPUT_DIR}/dist")
 
 # Activate Unit Testing
-if(NOT DEFINED ENV{APP_NO_TESTS})
-  add_definitions(-DAPP_TESTS)
+if(NOT DEFINED ENV{MGL_NO_TESTS})
+  add_definitions(-DMGL_TESTS)
 endif()
 
 # Pass version variables to Application
@@ -68,36 +68,36 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/config.cmake")
   include("${CMAKE_CURRENT_SOURCE_DIR}/config.cmake")
 endif()
 
-while(APP_EXTERNAL_PROJECTS)
-  list(POP_FRONT APP_EXTERNAL_PROJECTS PRJ_NAME PRJ_GIT_REPO PRJ_GIT_TAG)
+while(MGL_EXTERNAL_PROJECTS)
+  list(POP_FRONT MGL_EXTERNAL_PROJECTS PRJ_NAME PRJ_GIT_REPO PRJ_GIT_TAG)
   message(STATUS ${PRJ_NAME} ${PRJ_GIT_REPO} ${PRJ_GIT_TAG} )
   AddExternalProject(${PRJ_NAME} ${PRJ_GIT_REPO} ${PRJ_GIT_TAG})
 endwhile()
 
 # Application/Libraries Source
-foreach(APP_LIB ${APP_LIBRARIES})
-  message(STATUS "Adding library: '${APP_LIB}")
-  AddLibrary(${APP_LIB})
+foreach(LIB ${MGL_LIBRARIES})
+  message(STATUS "Adding library: '${LIB}")
+  AddLibrary(${LIB})
 endforeach()
 
-foreach(APP_EXECUTABLE ${APP_EXECUTABLES})
-  message(STATUS "Adding executable: '${APP_EXECUTABLE}")
-  AddExecutable(${APP_EXECUTABLE})
+foreach(EXECUTABLE ${MGL_EXECUTABLES})
+  message(STATUS "Adding executable: '${EXECUTABLE}")
+  AddExecutable(${EXECUTABLE})
 endforeach()
 
-foreach(APP_EXAMPLE ${APP_EXAMPLES})
-  message(STATUS "Adding examples: '${APP_EXAMPLE}")
-  AddExample(${APP_EXAMPLE})
+foreach(EXAMPLE ${MGL_EXAMPLES})
+  message(STATUS "Adding examples: '${EXAMPLE}")
+  AddExample(${EXAMPLE})
 endforeach()
 
 # Unit Testing
 # https://github.com/google/googletest.git
 
-if(DEFINED ENV{APP_NO_BUILD_TESTS})
-  set(APP_BUILD_TESTS OFF)
+if(DEFINED ENV{MGL_NO_BUILD_TESTS})
+  set(MGL_BUILD_TESTS OFF)
 endif()
 
-if(APP_BUILD_TESTS)
+if(MGL_BUILD_TESTS)
   # Prevent overriding the parent project's compiler/linker
   # settings on Windows
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -122,7 +122,7 @@ if(APP_BUILD_TESTS)
 endif() 
 
 # Debug CMake Vars, uncomment to show CMake vars
-if(APP_SHOW_CMAKE_VARS) 
+if(MGL_SHOW_CMAKE_VARS) 
   get_cmake_property(_variableNames VARIABLES)
   list (SORT _variableNames)
   foreach (_variableName ${_variableNames})

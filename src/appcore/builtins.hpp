@@ -19,18 +19,18 @@
 
 #define MGL_CORE_PROFILE 0
 
-#ifdef APP_DEBUG
-#  if defined(APP_PLATFORM_WINDOWS)
-#    define APP_DEBUGBREAK() __debugbreak()
-#  elif defined(APP_PLATFORM_LINUX)
+#ifdef MGL_DEBUG
+#  if defined(MGL_PLATFORM_WINDOWS)
+#    define MGL_DEBUGBREAK() __debugbreak()
+#  elif defined(MGL_PLATFORM_LINUX)
 #    include <signal.h>
-#    define APP_DEBUGBREAK() raise(SIGTRAP)
+#    define MGL_DEBUGBREAK() raise(SIGTRAP)
 #  else
 #    error "Platform doesn't support debugbreak yet!"
 #  endif
 #  define MGL_CORE_ENABLE_ASSERTS
 #else
-#  define APP_DEBUGBREAK()
+#  define MGL_DEBUGBREAK()
 #endif
 
 #ifdef MGL_CORE_ENABLE_ASSERTS
@@ -39,7 +39,7 @@
       if(!(x))                                                                                                                   \
       {                                                                                                                          \
         MGL_CORE_TRACE("Assertion Failed: {0}", __VA_ARGS__);                                                                    \
-        APP_DEBUGBREAK();                                                                                                        \
+        MGL_DEBUGBREAK();                                                                                                        \
       }                                                                                                                          \
     }
 #else

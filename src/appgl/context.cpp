@@ -199,7 +199,7 @@ namespace mgl
     int bound_framebuffer = 0;
     gl.GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &bound_framebuffer);
 
-#ifdef APP_OSX
+#ifdef MGL_OSX
 
     if(ctx->Mode() == ContextMode::Standalone)
     {
