@@ -36,7 +36,7 @@ namespace mgl
     gl.DeleteRenderbuffers(1, (GLuint*)&m_renderbuffer_obj);
   }
 
-  Attachment::Type Renderbuffer::attachment_type()
+  Attachment::type Renderbuffer::attachment_type()
   {
     return Attachment::RENDERBUFFER;
   }

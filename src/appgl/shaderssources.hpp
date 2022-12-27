@@ -20,7 +20,7 @@ namespace mgl
 {
   struct shaders_sources
   {
-    enum Type
+    enum type
     {
       VERTEX_SHADER,
       FRAGMENT_SHADER,

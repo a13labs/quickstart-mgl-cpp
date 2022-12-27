@@ -27,7 +27,7 @@ public:
     void release();
     bool released();
 
-    virtual Texture::Type texture_type() override;
+    virtual Texture::type texture_type() override;
     int width();
     int height();
     int depth();
@@ -42,8 +42,8 @@ public:
     bool repeat_z();
     void set_repeat_z(bool value);
 
-    const Texture::Filter& filter() const;
-    void set_filter(const Texture::Filter& value);
+    const Texture::filter& filter() const;
+    void set_filter(const Texture::filter& value);
 
     mgl_core::string swizzle();
     void set_swizzle(const mgl_core::string& value);
@@ -71,7 +71,7 @@ private:
     int m_height;
     int m_depth;
     int m_components;
-    Texture::Filter m_filter;
+    Texture::filter m_filter;
     int m_max_level;
     bool m_repeat_x;
     bool m_repeat_y;
@@ -114,7 +114,7 @@ private:
     return m_repeat_y;
   }
 
-  inline const Texture::Filter& Texture3D::filter() const
+  inline const Texture::filter& Texture3D::filter() const
   {
     return m_filter;
   }

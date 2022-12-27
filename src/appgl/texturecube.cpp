@@ -22,7 +22,7 @@
 
 namespace mgl
 {
-  Texture::Type TextureCube::texture_type()
+  Texture::type TextureCube::texture_type()
   {
     return Texture::TEXTURE_CUBE;
   }
@@ -245,7 +245,7 @@ namespace mgl
     gl.BindTexture(GL_TEXTURE_CUBE_MAP, m_texture_obj);
   }
 
-  void TextureCube::set_filter(const Texture::Filter& value)
+  void TextureCube::set_filter(const Texture::filter& value)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");

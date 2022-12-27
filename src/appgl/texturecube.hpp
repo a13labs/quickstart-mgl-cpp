@@ -23,7 +23,7 @@ namespace mgl
   {
 public:
     ~TextureCube() = default;
-    virtual Texture::Type texture_type() override;
+    virtual Texture::type texture_type() override;
 
     void release();
     bool released();
@@ -32,8 +32,8 @@ public:
     int height();
     int components();
 
-    const Texture::Filter& filter() const;
-    void set_filter(const Texture::Filter& value);
+    const Texture::filter& filter() const;
+    void set_filter(const Texture::filter& value);
 
     mgl_core::string swizzle();
     void set_swizzle(const mgl_core::string& value);
@@ -62,7 +62,7 @@ private:
     int m_width;
     int m_height;
     int m_components;
-    Texture::Filter m_filter;
+    Texture::filter m_filter;
     int m_max_level;
     float m_anisotropy;
     bool m_released;
@@ -88,7 +88,7 @@ private:
     return m_height;
   }
 
-  inline const Texture::Filter& TextureCube::filter() const
+  inline const Texture::filter& TextureCube::filter() const
   {
     return m_filter;
   }

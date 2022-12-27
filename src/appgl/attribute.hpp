@@ -22,7 +22,7 @@ namespace mgl
   class Attribute
   {
 public:
-    struct DataType
+    struct data_type
     {
       int dimension;
       int scalar_type;
@@ -41,7 +41,7 @@ private:
     mgl_core::string m_name;
     int m_program_obj;
     int m_gl_type;
-    DataType* m_data_type;
+    data_type* m_data_type;
     int m_location;
     size_t m_array_length;
   };

@@ -309,7 +309,7 @@ namespace mgl
     gl.TexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   }
 
-  void TextureArray::set_filter(const Texture::Filter& value)
+  void TextureArray::set_filter(const Texture::filter& value)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");

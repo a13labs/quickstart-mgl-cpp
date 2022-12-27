@@ -20,42 +20,42 @@
 
 namespace mgl
 {
-  static Attribute::DataType gl_int = { 1, 0x1404, 1, 1, false, "i" };
-  static Attribute::DataType gl_int_vec2 = { 2, 0x1404, 1, 2, false, "i" };
-  static Attribute::DataType gl_int_vec3 = { 3, 0x1404, 1, 3, false, "i" };
-  static Attribute::DataType gl_int_vec4 = { 4, 0x1404, 1, 4, false, "i" };
-  static Attribute::DataType gl_unsigned_int = { 1, 0x1405, 1, 1, false, "i" };
-  static Attribute::DataType gl_unsigned_int_vec2 = { 2, 0x1405, 1, 2, false, "i" };
-  static Attribute::DataType gl_unsigned_int_vec3 = { 3, 0x1405, 1, 3, false, "i" };
-  static Attribute::DataType gl_unsigned_int_vec4 = { 4, 0x1405, 1, 4, false, "i" };
-  static Attribute::DataType gl_float = { 1, 0x1406, 1, 1, true, "f" };
-  static Attribute::DataType gl_float_vec2 = { 2, 0x1406, 1, 2, true, "f" };
-  static Attribute::DataType gl_float_vec3 = { 3, 0x1406, 1, 3, true, "f" };
-  static Attribute::DataType gl_float_vec4 = { 4, 0x1406, 1, 4, true, "f" };
-  static Attribute::DataType gl_double = { 1, 0x140a, 1, 1, false, "d" };
-  static Attribute::DataType gl_double_vec2 = { 2, 0x140a, 1, 2, false, "d" };
-  static Attribute::DataType gl_double_vec3 = { 3, 0x140a, 1, 3, false, "d" };
-  static Attribute::DataType gl_double_vec4 = { 4, 0x140a, 1, 4, false, "d" };
-  static Attribute::DataType gl_float_mat_2 = { 4, 0x1406, 2, 2, true, "f" };
-  static Attribute::DataType gl_float_mat_2x3 = { 6, 0x1406, 2, 3, true, "f" };
-  static Attribute::DataType gl_float_mat_2x4 = { 8, 0x1406, 2, 4, true, "f" };
-  static Attribute::DataType gl_float_mat_3x2 = { 6, 0x1406, 3, 2, true, "f" };
-  static Attribute::DataType gl_float_mat_3 = { 9, 0x1406, 3, 3, true, "f" };
-  static Attribute::DataType gl_float_mat_3x4 = { 12, 0x1406, 3, 4, true, "f" };
-  static Attribute::DataType gl_float_mat_4x2 = { 8, 0x1406, 4, 2, true, "f" };
-  static Attribute::DataType gl_float_mat_4x3 = { 12, 0x1406, 4, 3, true, "f" };
-  static Attribute::DataType gl_float_mat_4 = { 16, 0x1406, 4, 4, true, "f" };
-  static Attribute::DataType gl_double_mat_2 = { 4, 0x140a, 2, 2, false, "d" };
-  static Attribute::DataType gl_double_mat_2x3 = { 6, 0x140a, 2, 3, false, "d" };
-  static Attribute::DataType gl_double_mat_2x4 = { 8, 0x140a, 2, 4, false, "d" };
-  static Attribute::DataType gl_double_mat_3x2 = { 6, 0x140a, 3, 2, false, "d" };
-  static Attribute::DataType gl_double_mat_3 = { 9, 0x140a, 3, 3, false, "d" };
-  static Attribute::DataType gl_double_mat_3x4 = { 12, 0x140a, 3, 4, false, "d" };
-  static Attribute::DataType gl_double_mat_4x2 = { 8, 0x140a, 4, 2, false, "d" };
-  static Attribute::DataType gl_double_mat_4x3 = { 12, 0x140a, 4, 3, false, "d" };
-  static Attribute::DataType gl_double_mat_4 = { 16, 0x140a, 4, 4, false, "d" };
+  static Attribute::data_type gl_int = { 1, 0x1404, 1, 1, false, "i" };
+  static Attribute::data_type gl_int_vec2 = { 2, 0x1404, 1, 2, false, "i" };
+  static Attribute::data_type gl_int_vec3 = { 3, 0x1404, 1, 3, false, "i" };
+  static Attribute::data_type gl_int_vec4 = { 4, 0x1404, 1, 4, false, "i" };
+  static Attribute::data_type gl_unsigned_int = { 1, 0x1405, 1, 1, false, "i" };
+  static Attribute::data_type gl_unsigned_int_vec2 = { 2, 0x1405, 1, 2, false, "i" };
+  static Attribute::data_type gl_unsigned_int_vec3 = { 3, 0x1405, 1, 3, false, "i" };
+  static Attribute::data_type gl_unsigned_int_vec4 = { 4, 0x1405, 1, 4, false, "i" };
+  static Attribute::data_type gl_float = { 1, 0x1406, 1, 1, true, "f" };
+  static Attribute::data_type gl_float_vec2 = { 2, 0x1406, 1, 2, true, "f" };
+  static Attribute::data_type gl_float_vec3 = { 3, 0x1406, 1, 3, true, "f" };
+  static Attribute::data_type gl_float_vec4 = { 4, 0x1406, 1, 4, true, "f" };
+  static Attribute::data_type gl_double = { 1, 0x140a, 1, 1, false, "d" };
+  static Attribute::data_type gl_double_vec2 = { 2, 0x140a, 1, 2, false, "d" };
+  static Attribute::data_type gl_double_vec3 = { 3, 0x140a, 1, 3, false, "d" };
+  static Attribute::data_type gl_double_vec4 = { 4, 0x140a, 1, 4, false, "d" };
+  static Attribute::data_type gl_float_mat_2 = { 4, 0x1406, 2, 2, true, "f" };
+  static Attribute::data_type gl_float_mat_2x3 = { 6, 0x1406, 2, 3, true, "f" };
+  static Attribute::data_type gl_float_mat_2x4 = { 8, 0x1406, 2, 4, true, "f" };
+  static Attribute::data_type gl_float_mat_3x2 = { 6, 0x1406, 3, 2, true, "f" };
+  static Attribute::data_type gl_float_mat_3 = { 9, 0x1406, 3, 3, true, "f" };
+  static Attribute::data_type gl_float_mat_3x4 = { 12, 0x1406, 3, 4, true, "f" };
+  static Attribute::data_type gl_float_mat_4x2 = { 8, 0x1406, 4, 2, true, "f" };
+  static Attribute::data_type gl_float_mat_4x3 = { 12, 0x1406, 4, 3, true, "f" };
+  static Attribute::data_type gl_float_mat_4 = { 16, 0x1406, 4, 4, true, "f" };
+  static Attribute::data_type gl_double_mat_2 = { 4, 0x140a, 2, 2, false, "d" };
+  static Attribute::data_type gl_double_mat_2x3 = { 6, 0x140a, 2, 3, false, "d" };
+  static Attribute::data_type gl_double_mat_2x4 = { 8, 0x140a, 2, 4, false, "d" };
+  static Attribute::data_type gl_double_mat_3x2 = { 6, 0x140a, 3, 2, false, "d" };
+  static Attribute::data_type gl_double_mat_3 = { 9, 0x140a, 3, 3, false, "d" };
+  static Attribute::data_type gl_double_mat_3x4 = { 12, 0x140a, 3, 4, false, "d" };
+  static Attribute::data_type gl_double_mat_4x2 = { 8, 0x140a, 4, 2, false, "d" };
+  static Attribute::data_type gl_double_mat_4x3 = { 12, 0x140a, 4, 3, false, "d" };
+  static Attribute::data_type gl_double_mat_4 = { 16, 0x140a, 4, 4, false, "d" };
 
-  Attribute::DataType* attribute_lookup_table(int gl_type)
+  Attribute::data_type* attribute_lookup_table(int gl_type)
   {
 
     switch(gl_type)

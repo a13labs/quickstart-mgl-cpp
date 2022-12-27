@@ -31,10 +31,10 @@ namespace mgl
     };
   };
 
-  class Context : public mgl_core::ref_from_this<Context>
+  class Context
   {
 public:
-    enum EnableFlag
+    enum flag
     {
       NOTHING = 0,
       BLEND = BIT(1),

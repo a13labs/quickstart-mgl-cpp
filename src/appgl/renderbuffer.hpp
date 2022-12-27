@@ -27,7 +27,7 @@ public:
     void release();
     bool released();
 
-    virtual Attachment::Type attachment_type() override;
+    virtual Attachment::type attachment_type() override;
     int width();
     int height();
     int samples();

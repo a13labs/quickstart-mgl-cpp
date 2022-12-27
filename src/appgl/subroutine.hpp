@@ -21,7 +21,7 @@ namespace mgl
 {
   class Subroutine
   {
-    enum Type
+    enum type
     {
       VERTEX_SHADER = GL_VERTEX_SHADER,
       FRAGMENT_SHADER = GL_FRAGMENT_SHADER,
@@ -35,10 +35,10 @@ public:
 
 private:
     friend class Context;
-    Subroutine(const mgl_core::string& name, int index, Subroutine::Type type);
+    Subroutine(const mgl_core::string& name, int index, Subroutine::type type);
 
     mgl_core::string m_name;
     int m_index;
-    Subroutine::Type m_type;
+    Subroutine::type m_type;
   };
 } // namespace mgl

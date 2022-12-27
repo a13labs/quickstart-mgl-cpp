@@ -38,12 +38,12 @@ namespace mgl
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  Attachment::Type Texture2D::attachment_type()
+  Attachment::type Texture2D::attachment_type()
   {
     return Attachment::TEXTURE;
   }
 
-  Texture::Type Texture2D::texture_type()
+  Texture::type Texture2D::texture_type()
   {
     return Texture::TEXTURE_2D;
   }
@@ -353,7 +353,7 @@ namespace mgl
     gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   }
 
-  void Texture2D::set_filter(const Texture2D::Filter& value)
+  void Texture2D::set_filter(const Texture::filter& value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");

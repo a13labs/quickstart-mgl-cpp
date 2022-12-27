@@ -20,7 +20,7 @@ void ExampleWindow::on_draw(float time, float frame_time)
 {
   const auto ctx = context();
   ctx->clear(1.0, 1.0, 1.0);
-  ctx->enable(mgl::Context::EnableFlag::BLEND);
+  ctx->enable(mgl::Context::flag::BLEND);
   m_rotation->set_value(time);
   m_vao->render(10);
 }

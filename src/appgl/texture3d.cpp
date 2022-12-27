@@ -37,7 +37,7 @@ namespace mgl
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  Texture::Type Texture3D::texture_type()
+  Texture::type Texture3D::texture_type()
   {
     return Texture::TEXTURE_3D;
   }
@@ -335,7 +335,7 @@ namespace mgl
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
   }
 
-  void Texture3D::set_filter(const Texture::Filter& value)
+  void Texture3D::set_filter(const Texture::filter& value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");

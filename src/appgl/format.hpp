@@ -1,7 +1,7 @@
 #pragma once
 namespace mgl
 {
-  struct FormatNode
+  struct format_node
   {
     int size;
     int count;
@@ -9,16 +9,16 @@ namespace mgl
     bool normalize;
   };
 
-  struct FormatInfo
+  struct format_info
   {
     int size;
     int nodes;
     int divisor;
     bool valid;
 
-    static FormatInfo invalid()
+    static format_info invalid()
     {
-      FormatInfo invalid;
+      format_info invalid;
       invalid.size = 0;
       invalid.nodes = 0;
       invalid.divisor = 0;
@@ -27,14 +27,14 @@ namespace mgl
     }
   };
 
-  struct FormatIterator
+  struct format_iterator
   {
     const char* ptr;
-    FormatNode node;
+    format_node node;
 
-    FormatIterator(const char* str);
+    format_iterator(const char* str);
 
-    FormatInfo info();
-    FormatNode* next();
+    format_info info();
+    format_node* next();
   };
 } // namespace mgl

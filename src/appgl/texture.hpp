@@ -21,21 +21,21 @@ namespace mgl
   class Texture
   {
 public:
-    enum Type
+    enum type
     {
       TEXTURE_2D,
       TEXTURE_3D,
       TEXTURE_CUBE,
     };
 
-    struct Filter
+    struct filter
     {
       int min_filter;
       int mag_filter;
     };
 
     virtual ~Texture() = default;
-    virtual Texture::Type texture_type() = 0;
+    virtual Texture::type texture_type() = 0;
   };
 
   inline int swizzle_from_char(char c)

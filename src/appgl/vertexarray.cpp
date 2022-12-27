@@ -303,7 +303,7 @@ namespace mgl
     }
 
     gl.EndTransformFeedback();
-    if(~m_context->enable_flags() & Context::EnableFlag::RASTERIZER_DISCARD)
+    if(~m_context->enable_flags() & Context::flag::RASTERIZER_DISCARD)
     {
       gl.Disable(GL_RASTERIZER_DISCARD);
     }
@@ -324,13 +324,13 @@ namespace mgl
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
-    FormatIterator it = FormatIterator(format);
-    FormatInfo format_info = it.info();
+    format_iterator it = format_iterator(format);
+    format_info format_info = it.info();
 
     MGL_CORE_ASSERT(!(type[0] == 'f' && normalize), "invalid normalize");
     MGL_CORE_ASSERT(!(!format_info.valid || format_info.divisor || format_info.nodes != 1), "invalid format");
 
-    FormatNode* node = it.next();
+    format_node* node = it.next();
     MGL_CORE_ASSERT(node->type, "invalid format");
 
     char* ptr = (char*)offset;

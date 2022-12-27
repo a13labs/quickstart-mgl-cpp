@@ -21,13 +21,13 @@ namespace mgl
   class Attachment
   {
 public:
-    enum Type
+    enum type
     {
       TEXTURE,
       RENDERBUFFER
     };
 
     virtual ~Attachment() = default;
-    virtual Attachment::Type attachment_type() = 0;
+    virtual Attachment::type attachment_type() = 0;
   };
 } // namespace mgl

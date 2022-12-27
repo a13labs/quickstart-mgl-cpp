@@ -38,8 +38,8 @@ public:
     bool repeat_y();
     void set_repeat_y(bool value);
 
-    const Texture::Filter& filter() const;
-    void set_filter(const Texture::Filter& value);
+    const Texture::filter& filter() const;
+    void set_filter(const Texture::filter& value);
 
     mgl_core::string swizzle();
     void set_swizzle(const mgl_core::string& value);
@@ -70,7 +70,7 @@ private:
     int m_height;
     int m_layers;
     int m_components;
-    Texture::Filter m_filter;
+    Texture::filter m_filter;
     int m_max_level;
     bool m_repeat_x;
     bool m_repeat_y;
@@ -113,7 +113,7 @@ private:
     return m_repeat_y;
   }
 
-  inline const Texture::Filter& TextureArray::filter() const
+  inline const Texture::filter& TextureArray::filter() const
   {
     return m_filter;
   }

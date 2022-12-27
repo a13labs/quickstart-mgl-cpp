@@ -3,26 +3,26 @@
 
 namespace mgl
 {
-  FormatNode* InvalidFormat = (FormatNode*)(-1);
+  format_node* InvalidFormat = (format_node*)(-1);
 
-  FormatIterator::FormatIterator(const char* str)
+  format_iterator::format_iterator(const char* str)
       : ptr(str)
   { }
 
-  FormatInfo FormatIterator::info()
+  format_info format_iterator::info()
   {
-    FormatInfo info;
+    format_info info;
     info.size = 0;
     info.nodes = 0;
     info.divisor = 0;
     info.valid = true;
 
-    FormatIterator it = FormatIterator(ptr);
-    while(FormatNode* node = it.next())
+    format_iterator it = format_iterator(ptr);
+    while(format_node* node = it.next())
     {
       if(node == InvalidFormat)
       {
-        return FormatInfo::invalid();
+        return format_info::invalid();
       }
       info.size += node->size;
       if(node->type)
@@ -45,19 +45,19 @@ namespace mgl
 
         case 'v': break;
 
-        default: return FormatInfo::invalid();
+        default: return format_info::invalid();
       }
 
       if(*it.ptr)
       {
-        return FormatInfo::invalid();
+        return format_info::invalid();
       }
     }
 
     return info;
   }
 
-  FormatNode* FormatIterator::next()
+  format_node* format_iterator::next()
   {
     node.count = 0;
     while(true)

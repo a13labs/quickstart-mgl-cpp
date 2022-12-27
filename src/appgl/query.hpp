@@ -21,7 +21,7 @@ namespace mgl
   class Query
   {
 public:
-    enum Keys
+    enum keys
     {
       SAMPLES_PASSED,
       ANY_SAMPLES_PASSED,
@@ -47,6 +47,6 @@ private:
     Query() = default;
 
     Context* m_context;
-    int m_query_obj[Query::Keys::COUNT];
+    int m_query_obj[Query::keys::COUNT];
   };
 } // namespace mgl

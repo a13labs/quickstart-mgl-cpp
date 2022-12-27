@@ -22,17 +22,17 @@ namespace mgl
   class Sampler
   {
 public:
-    enum Func
+    enum func
     {
       NONE = 0x0000,
-      NEVER = 0x0200,
-      LESS = 0x0201,
-      EQUAL = 0x0202,
-      LESS_EQUAL = 0x0203,
-      GREATER = 0x0204,
-      NOT_EQUAL = 0x0205,
-      GREATER_EQUAL = 0x0206,
-      ALWAYS = 0x0207,
+      NEVER = GL_NEVER,
+      LESS = GL_LESS,
+      EQUAL = GL_EQUAL,
+      LESS_EQUAL = GL_LEQUAL,
+      GREATER = GL_GREATER,
+      NOT_EQUAL = GL_NOTEQUAL,
+      GREATER_EQUAL = GL_GEQUAL,
+      ALWAYS = GL_ALWAYS,
     };
 
     struct Filter
@@ -62,8 +62,8 @@ public:
     const Sampler::Filter& filter() const;
     void set_filter(const Sampler::Filter& value);
 
-    Sampler::Func compare_func();
-    void set_compare_func(Sampler::Func value);
+    Sampler::func compare_func();
+    void set_compare_func(Sampler::func value);
 
     float anisotropy();
     void set_anisotropy(float value);
@@ -85,7 +85,7 @@ private:
     Context* m_context;
     int m_sampler_obj;
     float m_anisotropy;
-    Sampler::Func m_compare_func;
+    Sampler::func m_compare_func;
     bool m_repeat_x;
     bool m_repeat_y;
     bool m_repeat_z;
@@ -141,7 +141,7 @@ private:
     return m_filter;
   }
 
-  inline Sampler::Func Sampler::compare_func()
+  inline Sampler::func Sampler::compare_func()
   {
     return m_compare_func;
   }

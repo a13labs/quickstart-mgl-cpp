@@ -26,24 +26,24 @@ namespace mgl
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
-    if(m_query_obj[Query::Keys::SAMPLES_PASSED])
+    if(m_query_obj[Query::keys::SAMPLES_PASSED])
     {
-      gl.BeginQuery(GL_SAMPLES_PASSED, m_query_obj[Query::Keys::SAMPLES_PASSED]);
+      gl.BeginQuery(GL_SAMPLES_PASSED, m_query_obj[Query::keys::SAMPLES_PASSED]);
     }
 
-    if(m_query_obj[Query::Keys::ANY_SAMPLES_PASSED])
+    if(m_query_obj[Query::keys::ANY_SAMPLES_PASSED])
     {
-      gl.BeginQuery(GL_ANY_SAMPLES_PASSED, m_query_obj[Query::Keys::ANY_SAMPLES_PASSED]);
+      gl.BeginQuery(GL_ANY_SAMPLES_PASSED, m_query_obj[Query::keys::ANY_SAMPLES_PASSED]);
     }
 
-    if(m_query_obj[Query::Keys::TIME_ELAPSED])
+    if(m_query_obj[Query::keys::TIME_ELAPSED])
     {
-      gl.BeginQuery(GL_TIME_ELAPSED, m_query_obj[Query::Keys::TIME_ELAPSED]);
+      gl.BeginQuery(GL_TIME_ELAPSED, m_query_obj[Query::keys::TIME_ELAPSED]);
     }
 
-    if(m_query_obj[Query::Keys::PRIMITIVES_GENERATED])
+    if(m_query_obj[Query::keys::PRIMITIVES_GENERATED])
     {
-      gl.BeginQuery(GL_PRIMITIVES_GENERATED, m_query_obj[Query::Keys::PRIMITIVES_GENERATED]);
+      gl.BeginQuery(GL_PRIMITIVES_GENERATED, m_query_obj[Query::keys::PRIMITIVES_GENERATED]);
     }
   }
 
@@ -53,22 +53,22 @@ namespace mgl
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
-    if(m_query_obj[Query::Keys::SAMPLES_PASSED])
+    if(m_query_obj[Query::keys::SAMPLES_PASSED])
     {
       gl.EndQuery(GL_SAMPLES_PASSED);
     }
 
-    if(m_query_obj[Query::Keys::ANY_SAMPLES_PASSED])
+    if(m_query_obj[Query::keys::ANY_SAMPLES_PASSED])
     {
       gl.EndQuery(GL_ANY_SAMPLES_PASSED);
     }
 
-    if(m_query_obj[Query::Keys::TIME_ELAPSED])
+    if(m_query_obj[Query::keys::TIME_ELAPSED])
     {
       gl.EndQuery(GL_TIME_ELAPSED);
     }
 
-    if(m_query_obj[Query::Keys::PRIMITIVES_GENERATED])
+    if(m_query_obj[Query::keys::PRIMITIVES_GENERATED])
     {
       gl.EndQuery(GL_PRIMITIVES_GENERATED);
     }
@@ -80,13 +80,13 @@ namespace mgl
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
-    if(m_query_obj[Query::Keys::ANY_SAMPLES_PASSED])
+    if(m_query_obj[Query::keys::ANY_SAMPLES_PASSED])
     {
-      gl.BeginConditionalRender(m_query_obj[Query::Keys::ANY_SAMPLES_PASSED], GL_QUERY_NO_WAIT);
+      gl.BeginConditionalRender(m_query_obj[Query::keys::ANY_SAMPLES_PASSED], GL_QUERY_NO_WAIT);
     }
-    else if(m_query_obj[Query::Keys::SAMPLES_PASSED])
+    else if(m_query_obj[Query::keys::SAMPLES_PASSED])
     {
-      gl.BeginConditionalRender(m_query_obj[Query::Keys::SAMPLES_PASSED], GL_QUERY_NO_WAIT);
+      gl.BeginConditionalRender(m_query_obj[Query::keys::SAMPLES_PASSED], GL_QUERY_NO_WAIT);
     }
     else
     {
@@ -108,7 +108,7 @@ namespace mgl
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     int samples = 0;
-    gl.GetQueryObjectiv(m_query_obj[Query::Keys::SAMPLES_PASSED], GL_QUERY_RESULT, &samples);
+    gl.GetQueryObjectiv(m_query_obj[Query::keys::SAMPLES_PASSED], GL_QUERY_RESULT, &samples);
     return samples;
   }
 
@@ -118,7 +118,7 @@ namespace mgl
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     int primitives = 0;
-    gl.GetQueryObjectiv(m_query_obj[Query::Keys::PRIMITIVES_GENERATED], GL_QUERY_RESULT, &primitives);
+    gl.GetQueryObjectiv(m_query_obj[Query::keys::PRIMITIVES_GENERATED], GL_QUERY_RESULT, &primitives);
     return primitives;
   }
 
@@ -128,7 +128,7 @@ namespace mgl
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     int elapsed = 0;
-    gl.GetQueryObjectiv(m_query_obj[Query::Keys::TIME_ELAPSED], GL_QUERY_RESULT, &elapsed);
+    gl.GetQueryObjectiv(m_query_obj[Query::keys::TIME_ELAPSED], GL_QUERY_RESULT, &elapsed);
     return elapsed;
   }
 

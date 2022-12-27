@@ -41,8 +41,8 @@ public:
     void release();
     bool released();
 
-    virtual Attachment::Type attachment_type() override;
-    virtual Texture::Type texture_type() override;
+    virtual Attachment::type attachment_type() override;
+    virtual Texture::type texture_type() override;
     int width();
     int height();
     int samples();
@@ -55,8 +55,8 @@ public:
     bool repeat_y();
     void set_repeat_y(bool value);
 
-    const Texture::Filter& filter() const;
-    void set_filter(const Texture::Filter& value);
+    const Texture::filter& filter() const;
+    void set_filter(const Texture::filter& value);
 
     mgl_core::string swizzle();
     void set_swizzle(const mgl_core::string& value);
@@ -91,7 +91,7 @@ private:
     bool m_depth;
     int m_samples;
     int m_components;
-    Texture::Filter m_filter;
+    Texture::filter m_filter;
     int m_max_level;
     Texture2D::Func m_compare_func;
     float m_anisotropy;
@@ -140,7 +140,7 @@ private:
     return m_repeat_y;
   }
 
-  inline const Texture::Filter& Texture2D::filter() const
+  inline const Texture::filter& Texture2D::filter() const
   {
     return m_filter;
   }

@@ -22,7 +22,7 @@ namespace mgl
   class Uniform
   {
 public:
-    struct DataType
+    struct data_type
     {
       bool matrix;
       int dimension;
@@ -94,7 +94,7 @@ private:
     int m_gl_type;
     int m_location;
     int m_size;
-    DataType* m_data_type;
+    data_type* m_data_type;
     uint8_t* m_data;
   };
 

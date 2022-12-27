@@ -466,7 +466,7 @@ namespace mgl
     int i = 0;
     for(auto&& attachment : color_attachments)
     {
-      if(attachment->attachment_type() == Attachment::Type::TEXTURE)
+      if(attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(attachment);
         MGL_CORE_ASSERT(texture, "Not a texture2D");
@@ -492,7 +492,7 @@ namespace mgl
           }
         }
       }
-      else if(attachment->attachment_type() == Attachment::Type::TEXTURE)
+      else if(attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
@@ -523,7 +523,7 @@ namespace mgl
 
     if(depth_attachment != nullptr)
     {
-      if(depth_attachment->attachment_type() == Attachment::Type::TEXTURE)
+      if(depth_attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(depth_attachment);
         MGL_CORE_ASSERT(texture, "Not a texture2D");
@@ -555,7 +555,7 @@ namespace mgl
           samples = texture->m_samples;
         }
       }
-      else if(depth_attachment->attachment_type() == Attachment::Type::TEXTURE)
+      else if(depth_attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(depth_attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
@@ -606,7 +606,7 @@ namespace mgl
 
       framebuffer->m_draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
 
-      if(attachment->attachment_type() == Attachment::Type::TEXTURE)
+      if(attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(attachment);
         MGL_CORE_ASSERT(texture, "Not a texture2D");
@@ -614,7 +614,7 @@ namespace mgl
           texture->m_components >= 1, texture->m_components >= 2, texture->m_components >= 3, texture->m_components >= 4
         };
       }
-      else if(attachment->attachment_type() == Attachment::Type::TEXTURE)
+      else if(attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
@@ -654,7 +654,7 @@ namespace mgl
 
     for(auto&& attachment : color_attachments)
     {
-      if(attachment->attachment_type() == Attachment::Type::TEXTURE)
+      if(attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(attachment);
         MGL_CORE_ASSERT(texture, "Not a texture2D");
@@ -665,7 +665,7 @@ namespace mgl
                                 texture->m_texture_obj,
                                 0);
       }
-      else if(attachment->attachment_type() == Attachment::Type::TEXTURE)
+      else if(attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
@@ -676,7 +676,7 @@ namespace mgl
 
     if(depth_attachment)
     {
-      if(depth_attachment->attachment_type() == Attachment::Type::TEXTURE)
+      if(depth_attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto texture = std::dynamic_pointer_cast<Texture2D>(depth_attachment);
         MGL_CORE_ASSERT(texture, "Not a texture2D");
@@ -687,7 +687,7 @@ namespace mgl
                                 texture->m_texture_obj,
                                 0);
       }
-      else if(depth_attachment->attachment_type() == Attachment::Type::TEXTURE)
+      else if(depth_attachment->attachment_type() == Attachment::type::TEXTURE)
       {
         auto renderbuffer = std::dynamic_pointer_cast<Renderbuffer>(depth_attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
@@ -862,28 +862,28 @@ namespace mgl
 
     if(program->m_context->version_code() >= 400)
     {
-      if(!shaders.sources[shaders_sources::Type::VERTEX_SHADER].empty())
+      if(!shaders.sources[shaders_sources::type::VERTEX_SHADER].empty())
       {
         gl.GetProgramStageiv(program_obj, GL_VERTEX_SHADER, GL_ACTIVE_SUBROUTINES, &num_vertex_shader_subroutines);
         gl.GetProgramStageiv(
             program_obj, GL_VERTEX_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_vertex_shader_subroutine_uniforms);
       }
 
-      if(!shaders.sources[shaders_sources::Type::FRAGMENT_SHADER].empty())
+      if(!shaders.sources[shaders_sources::type::FRAGMENT_SHADER].empty())
       {
         gl.GetProgramStageiv(program_obj, GL_FRAGMENT_SHADER, GL_ACTIVE_SUBROUTINES, &num_fragment_shader_subroutines);
         gl.GetProgramStageiv(
             program_obj, GL_FRAGMENT_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_fragment_shader_subroutine_uniforms);
       }
 
-      if(!shaders.sources[shaders_sources::Type::GEOMETRY_SHADER].empty())
+      if(!shaders.sources[shaders_sources::type::GEOMETRY_SHADER].empty())
       {
         gl.GetProgramStageiv(program_obj, GL_GEOMETRY_SHADER, GL_ACTIVE_SUBROUTINES, &num_geometry_shader_subroutines);
         gl.GetProgramStageiv(
             program_obj, GL_GEOMETRY_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_geometry_shader_subroutine_uniforms);
       }
 
-      if(!shaders.sources[shaders_sources::Type::TESS_EVALUATION_SHADER].empty())
+      if(!shaders.sources[shaders_sources::type::TESS_EVALUATION_SHADER].empty())
       {
         gl.GetProgramStageiv(
             program_obj, GL_TESS_EVALUATION_SHADER, GL_ACTIVE_SUBROUTINES, &num_tess_evaluation_shader_subroutines);
@@ -893,7 +893,7 @@ namespace mgl
                              &num_tess_evaluation_shader_subroutine_uniforms);
       }
 
-      if(!shaders.sources[shaders_sources::Type::TESS_CONTROL_SHADER].empty())
+      if(!shaders.sources[shaders_sources::type::TESS_CONTROL_SHADER].empty())
       {
         gl.GetProgramStageiv(program_obj, GL_TESS_CONTROL_SHADER, GL_ACTIVE_SUBROUTINES, &num_tess_control_shader_subroutines);
         gl.GetProgramStageiv(
@@ -907,7 +907,7 @@ namespace mgl
     program->m_num_tess_evaluation_shader_subroutines = num_tess_evaluation_shader_subroutine_uniforms;
     program->m_num_tess_control_shader_subroutines = num_tess_control_shader_subroutine_uniforms;
 
-    if(!shaders.sources[shaders_sources::Type::GEOMETRY_SHADER].empty())
+    if(!shaders.sources[shaders_sources::type::GEOMETRY_SHADER].empty())
     {
 
       int geometry_in = 0;
@@ -1060,7 +1060,7 @@ namespace mgl
       for(int st = 0; st < 5; ++st)
       {
         int num_subroutines = 0;
-        auto type = mgl::Subroutine::Type(SHADER_TYPE[st]);
+        auto type = mgl::Subroutine::type(SHADER_TYPE[st]);
 
         gl.GetProgramStageiv(program_obj, type, GL_ACTIVE_SUBROUTINES, &num_subroutines);
 
@@ -1101,38 +1101,38 @@ namespace mgl
 
     if(samples)
     {
-      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::SAMPLES_PASSED]);
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::keys::SAMPLES_PASSED]);
     }
     else
     {
-      query->m_query_obj[Query::Keys::SAMPLES_PASSED] = 0;
+      query->m_query_obj[Query::keys::SAMPLES_PASSED] = 0;
     }
 
     if(any_samples)
     {
-      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::ANY_SAMPLES_PASSED]);
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::keys::ANY_SAMPLES_PASSED]);
     }
     else
     {
-      query->m_query_obj[Query::Keys::ANY_SAMPLES_PASSED] = 0;
+      query->m_query_obj[Query::keys::ANY_SAMPLES_PASSED] = 0;
     }
 
     if(time_elapsed)
     {
-      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::TIME_ELAPSED]);
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::keys::TIME_ELAPSED]);
     }
     else
     {
-      query->m_query_obj[Query::Keys::TIME_ELAPSED] = 0;
+      query->m_query_obj[Query::keys::TIME_ELAPSED] = 0;
     }
 
     if(primitives_generated)
     {
-      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::Keys::PRIMITIVES_GENERATED]);
+      gl.GenQueries(1, (GLuint*)&query->m_query_obj[Query::keys::PRIMITIVES_GENERATED]);
     }
     else
     {
-      query->m_query_obj[Query::Keys::PRIMITIVES_GENERATED] = 0;
+      query->m_query_obj[Query::keys::PRIMITIVES_GENERATED] = 0;
     }
 
     return mgl_core::ref<Query>(query);
@@ -1257,7 +1257,7 @@ namespace mgl
     sampler->m_repeat_x = true;
     sampler->m_repeat_y = true;
     sampler->m_repeat_z = true;
-    sampler->m_compare_func = Sampler::Func::NONE;
+    sampler->m_compare_func = Sampler::func::NONE;
     sampler->m_border_color[0] = 0.0;
     sampler->m_border_color[1] = 0.0;
     sampler->m_border_color[2] = 0.0;
@@ -1284,7 +1284,7 @@ namespace mgl
     scope->m_released = false;
     scope->m_context = this;
     scope->m_enable_flags = enable_flags;
-    scope->m_old_enable_flags = Context::EnableFlag::INVALID;
+    scope->m_old_enable_flags = Context::flag::INVALID;
     scope->m_framebuffer = framebuffer;
     scope->m_old_framebuffer = m_bound_framebuffer;
     scope->m_textures = mgl_core::list<Scope::BindingData>(textures.size());
@@ -1301,7 +1301,7 @@ namespace mgl
 
       switch(t.texture->texture_type())
       {
-        case Texture::Type::TEXTURE_2D: {
+        case Texture::type::TEXTURE_2D: {
           auto texture = std::dynamic_pointer_cast<Texture2D>(t.texture);
           MGL_CORE_ASSERT(texture != nullptr, "invalid texture");
           texture_type = texture->m_samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
@@ -1309,14 +1309,14 @@ namespace mgl
         }
         /* code */
         break;
-        case Texture::Type::TEXTURE_3D: {
+        case Texture::type::TEXTURE_3D: {
           auto texture = std::dynamic_pointer_cast<Texture3D>(t.texture);
           MGL_CORE_ASSERT(texture != nullptr, "invalid texture");
           texture_type = GL_TEXTURE_3D;
           texture_obj = texture->m_texture_obj;
         }
         break;
-        case Texture::Type::TEXTURE_CUBE: {
+        case Texture::type::TEXTURE_CUBE: {
           auto texture = std::dynamic_pointer_cast<Texture3D>(t.texture);
           MGL_CORE_ASSERT(texture != nullptr, "invalid texture");
           texture_type = GL_TEXTURE_CUBE_MAP;
@@ -1821,8 +1821,8 @@ namespace mgl
         return nullptr;
       }
 
-      FormatIterator it = FormatIterator(v_data.format);
-      FormatInfo format_info = it.info();
+      format_iterator it = format_iterator(v_data.format);
+      format_info format_info = it.info();
 
       if(!format_info.valid)
       {
@@ -1888,8 +1888,8 @@ namespace mgl
       auto buffer = v_data.buffer;
       const char* format = v_data.format;
 
-      FormatIterator it = FormatIterator(format);
-      FormatInfo format_info = it.info();
+      format_iterator it = format_iterator(format);
+      format_info format_info = it.info();
 
       int buf_vertices = (int)(buffer->size() / format_info.size);
 
@@ -1904,7 +1904,7 @@ namespace mgl
 
       for(size_t j = 0; j < v_data.attributes.size(); ++j)
       {
-        FormatNode* node = it.next();
+        format_node* node = it.next();
 
         while(!node->type)
         {
@@ -1968,7 +1968,7 @@ namespace mgl
     MGL_CORE_ASSERT(!released(), "Context already released");
     m_enable_flags = flags;
 
-    if(flags & Context::EnableFlag::BLEND)
+    if(flags & Context::flag::BLEND)
     {
       m_gl.Enable(GL_BLEND);
     }
@@ -1977,7 +1977,7 @@ namespace mgl
       m_gl.Disable(GL_BLEND);
     }
 
-    if(flags & Context::EnableFlag::DEPTH_TEST)
+    if(flags & Context::flag::DEPTH_TEST)
     {
       m_gl.Enable(GL_DEPTH_TEST);
     }
@@ -1986,7 +1986,7 @@ namespace mgl
       m_gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & Context::EnableFlag::CULL_FACE)
+    if(flags & Context::flag::CULL_FACE)
     {
       m_gl.Enable(GL_CULL_FACE);
     }
@@ -1995,7 +1995,7 @@ namespace mgl
       m_gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & Context::EnableFlag::RASTERIZER_DISCARD)
+    if(flags & Context::flag::RASTERIZER_DISCARD)
     {
       m_gl.Enable(GL_RASTERIZER_DISCARD);
     }
@@ -2004,7 +2004,7 @@ namespace mgl
       m_gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Context::EnableFlag::PROGRAM_POINT_SIZE)
+    if(flags & Context::flag::PROGRAM_POINT_SIZE)
     {
       m_gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -2019,27 +2019,27 @@ namespace mgl
     MGL_CORE_ASSERT(!released(), "Context already released");
     m_enable_flags |= flags;
 
-    if(flags & Context::EnableFlag::BLEND)
+    if(flags & Context::flag::BLEND)
     {
       m_gl.Enable(GL_BLEND);
     }
 
-    if(flags & Context::EnableFlag::DEPTH_TEST)
+    if(flags & Context::flag::DEPTH_TEST)
     {
       m_gl.Enable(GL_DEPTH_TEST);
     }
 
-    if(flags & Context::EnableFlag::CULL_FACE)
+    if(flags & Context::flag::CULL_FACE)
     {
       m_gl.Enable(GL_CULL_FACE);
     }
 
-    if(flags & Context::EnableFlag::RASTERIZER_DISCARD)
+    if(flags & Context::flag::RASTERIZER_DISCARD)
     {
       m_gl.Enable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Context::EnableFlag::PROGRAM_POINT_SIZE)
+    if(flags & Context::flag::PROGRAM_POINT_SIZE)
     {
       m_gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -2051,27 +2051,27 @@ namespace mgl
 
     m_enable_flags &= ~flags;
 
-    if(flags & Context::EnableFlag::BLEND)
+    if(flags & Context::flag::BLEND)
     {
       m_gl.Disable(GL_BLEND);
     }
 
-    if(flags & Context::EnableFlag::DEPTH_TEST)
+    if(flags & Context::flag::DEPTH_TEST)
     {
       m_gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & Context::EnableFlag::CULL_FACE)
+    if(flags & Context::flag::CULL_FACE)
     {
       m_gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & Context::EnableFlag::RASTERIZER_DISCARD)
+    if(flags & Context::flag::RASTERIZER_DISCARD)
     {
       m_gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & Context::EnableFlag::PROGRAM_POINT_SIZE)
+    if(flags & Context::flag::PROGRAM_POINT_SIZE)
     {
       m_gl.Disable(GL_PROGRAM_POINT_SIZE);
     }

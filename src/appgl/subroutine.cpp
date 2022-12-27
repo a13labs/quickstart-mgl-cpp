@@ -20,7 +20,7 @@
 
 namespace mgl
 {
-  Subroutine::Subroutine(const mgl_core::string& name, int index, Subroutine::Type type)
+  Subroutine::Subroutine(const mgl_core::string& name, int index, Subroutine::type type)
   {
     m_name = name;
     m_index = index;
