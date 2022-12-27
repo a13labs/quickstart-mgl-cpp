@@ -42,7 +42,7 @@ namespace mgl
     }
   }
 
-  void Framebuffer::clear(float r, float g, float b, float a, float depth, const Viewport2D& viewport)
+  void Framebuffer::clear(float r, float g, float b, float a, float depth, const viewport_2d& viewport)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -67,7 +67,7 @@ namespace mgl
     gl.DepthMask(m_depth_mask);
 
     // Respect the passed in viewport even with scissor enabled
-    if(viewport != NullViewport2D)
+    if(viewport != null_viewport_2d)
     {
       gl.Enable(GL_SCISSOR_TEST);
       gl.Scissor(viewport.x, viewport.y, viewport.width, viewport.height);
@@ -135,7 +135,7 @@ namespace mgl
   }
 
   bool Framebuffer::read_into(mgl_core::mem_buffer<uint8_t>& dst,
-                              const Viewport2D& viewport,
+                              const viewport_2d& viewport,
                               int components,
                               int attachment,
                               int alignment,
@@ -148,7 +148,7 @@ namespace mgl
     const GLMethods& gl = m_context->gl();
 
     MGL_CORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
-    DataType* data_type = from_dtype(dtype, strlen(dtype));
+    data_type* data_type = from_dtype(dtype, strlen(dtype));
     MGL_CORE_ASSERT(data_type != nullptr, "invalid dtype");
 
     bool read_depth = false;
@@ -163,7 +163,7 @@ namespace mgl
     int y = 0;
     int width = m_width;
     int height = m_height;
-    if(viewport != NullViewport2D)
+    if(viewport != null_viewport_2d)
     {
       x = viewport.x;
       y = viewport.y;
@@ -193,7 +193,7 @@ namespace mgl
   }
 
   bool Framebuffer::read_into(mgl_core::ref<Buffer> dst,
-                              const Viewport2D& viewport,
+                              const viewport_2d& viewport,
                               int components,
                               int attachment,
                               int alignment,
@@ -206,7 +206,7 @@ namespace mgl
     const GLMethods& gl = m_context->gl();
 
     MGL_CORE_ASSERT(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8, "alignment must be 1, 2, 4 or 8");
-    DataType* data_type = from_dtype(dtype, strlen(dtype));
+    data_type* data_type = from_dtype(dtype, strlen(dtype));
     MGL_CORE_ASSERT(data_type != nullptr, "invalid dtype");
 
     bool read_depth = false;
@@ -221,7 +221,7 @@ namespace mgl
     int y = 0;
     int width = m_width;
     int height = m_height;
-    if(viewport != NullViewport2D)
+    if(viewport != null_viewport_2d)
     {
       x = viewport.x;
       y = viewport.y;
@@ -244,7 +244,7 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  void Framebuffer::set_color_mask(const ColorMasks& masks)
+  void Framebuffer::set_color_mask(const color_masks& masks)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");

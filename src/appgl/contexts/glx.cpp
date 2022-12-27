@@ -30,7 +30,7 @@ namespace mgl
 
   ContextGLX::~ContextGLX() { }
 
-  GLFunction ContextGLX::load(const mgl_core::string& method)
+  gl_function ContextGLX::load(const mgl_core::string& method)
   {
     return nullptr;
   }

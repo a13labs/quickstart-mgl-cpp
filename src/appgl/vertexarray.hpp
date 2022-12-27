@@ -27,14 +27,14 @@ public:
     void release();
     bool released();
 
-    void render(mgl::RenderMode mode = mgl::RenderMode::TRIANGLES, int vertices = -1, int first = 0, int instances = -1);
+    void render(mgl::render_mode mode = mgl::render_mode::TRIANGLES, int vertices = -1, int first = 0, int instances = -1);
     void render(int instances);
-    void render_indirect(const mgl_core::ref<Buffer>& buffer, mgl::RenderMode mode, int count = -1, int first = -1);
+    void render_indirect(const mgl_core::ref<Buffer>& buffer, mgl::render_mode mode, int count = -1, int first = -1);
     void
-    transform(const mgl_core::ref<Buffer>& buffer, mgl::RenderMode mode, int vertices = -1, int first = 0, int instances = -1);
+    transform(const mgl_core::ref<Buffer>& buffer, mgl::render_mode mode, int vertices = -1, int first = 0, int instances = -1);
 
     void transform(const mgl_core::ref_list<Buffer>& buffers,
-                   mgl::RenderMode mode,
+                   mgl::render_mode mode,
                    int vertices = -1,
                    int first = 0,
                    int instances = -1,
@@ -72,7 +72,7 @@ private:
   };
 
   inline void
-  VertexArray::transform(const mgl_core::ref<Buffer>& buffer, mgl::RenderMode mode, int vertices, int first, int instances)
+  VertexArray::transform(const mgl_core::ref<Buffer>& buffer, mgl::render_mode mode, int vertices, int first, int instances)
   {
     transform({ buffer }, mode, vertices, first, instances);
   }

@@ -35,22 +35,22 @@ namespace mgl
   static int n1_internal_format[5] = { 0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8 };
   static int n2_internal_format[5] = { 0, GL_R16, GL_RG16, GL_RGB16, GL_RGBA16 };
 
-  static DataType f1 = { float_base_format, f1_internal_format, GL_UNSIGNED_BYTE, 1, true };
-  static DataType f2 = { float_base_format, f2_internal_format, GL_HALF_FLOAT, 2, true };
-  static DataType f4 = { float_base_format, f4_internal_format, GL_FLOAT, 4, true };
-  static DataType u1 = { int_base_format, u1_internal_format, GL_UNSIGNED_BYTE, 1, false };
-  static DataType u2 = { int_base_format, u2_internal_format, GL_UNSIGNED_SHORT, 2, false };
-  static DataType u4 = { int_base_format, u4_internal_format, GL_UNSIGNED_INT, 4, false };
-  static DataType i1 = { int_base_format, i1_internal_format, GL_BYTE, 1, false };
-  static DataType i2 = { int_base_format, i2_internal_format, GL_SHORT, 2, false };
-  static DataType i4 = { int_base_format, i4_internal_format, GL_INT, 4, false };
+  static data_type f1 = { float_base_format, f1_internal_format, GL_UNSIGNED_BYTE, 1, true };
+  static data_type f2 = { float_base_format, f2_internal_format, GL_HALF_FLOAT, 2, true };
+  static data_type f4 = { float_base_format, f4_internal_format, GL_FLOAT, 4, true };
+  static data_type u1 = { int_base_format, u1_internal_format, GL_UNSIGNED_BYTE, 1, false };
+  static data_type u2 = { int_base_format, u2_internal_format, GL_UNSIGNED_SHORT, 2, false };
+  static data_type u4 = { int_base_format, u4_internal_format, GL_UNSIGNED_INT, 4, false };
+  static data_type i1 = { int_base_format, i1_internal_format, GL_BYTE, 1, false };
+  static data_type i2 = { int_base_format, i2_internal_format, GL_SHORT, 2, false };
+  static data_type i4 = { int_base_format, i4_internal_format, GL_INT, 4, false };
 
-  static DataType nu1 = { float_base_format, n1_internal_format, GL_UNSIGNED_BYTE, 1, false };
-  static DataType nu2 = { float_base_format, n2_internal_format, GL_UNSIGNED_SHORT, 2, false };
-  static DataType ni1 = { float_base_format, n1_internal_format, GL_BYTE, 1, false };
-  static DataType ni2 = { float_base_format, n2_internal_format, GL_SHORT, 2, false };
+  static data_type nu1 = { float_base_format, n1_internal_format, GL_UNSIGNED_BYTE, 1, false };
+  static data_type nu2 = { float_base_format, n2_internal_format, GL_UNSIGNED_SHORT, 2, false };
+  static data_type ni1 = { float_base_format, n1_internal_format, GL_BYTE, 1, false };
+  static data_type ni2 = { float_base_format, n2_internal_format, GL_SHORT, 2, false };
 
-  DataType* from_dtype(const char* dtype, size_t size)
+  data_type* from_dtype(const char* dtype, size_t size)
   {
     if(size < 2 || size > 3)
       return nullptr;

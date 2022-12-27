@@ -94,14 +94,14 @@ public:
     static mgl_core::ref<Context> create_context(ContextMode::Enum mode, int required);
 
     // Framebuffer
-    mgl_core::ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments, mgl_core::ref<Attachment> depth_attachment);
-    mgl_core::ref<Framebuffer> framebuffer(const AttachmentsRef& color_attachments);
+    mgl_core::ref<Framebuffer> framebuffer(const attachments_ref& color_attachments, mgl_core::ref<Attachment> depth_attachment);
+    mgl_core::ref<Framebuffer> framebuffer(const attachments_ref& color_attachments);
     mgl_core::ref<Framebuffer> framebuffer(mgl_core::ref<Attachment> depth_attachment);
 
     // Program
-    mgl_core::ref<Program> program(const ShadersSources& shaders,
-                                   const ShadersOutputs& outputs = {},
-                                   const FragmentOutputs& fragment_outputs = {},
+    mgl_core::ref<Program> program(const shaders_sources& shaders,
+                                   const shaders_outputs& outputs = {},
+                                   const fragment_outputs& fragment_outputs = {},
                                    bool interleaved = true);
 
     // Query
@@ -119,10 +119,10 @@ public:
     // Scope
     mgl_core::ref<Scope> scope(mgl_core::ref<Framebuffer> framebuffer = nullptr,
                                int enable_flags = 0,
-                               const TextureBindings& textures = {},
-                               const BufferBindings& uniform_buffers = {},
-                               const BufferBindings& storage_buffers = {},
-                               const SamplerBindings& samplers = {});
+                               const texture_bindings& textures = {},
+                               const buffer_bindings& uniform_buffers = {},
+                               const buffer_bindings& storage_buffers = {},
+                               const sampler_bindings& samplers = {});
 
     // Texture
     mgl_core::ref<Texture2D> texture2d(int width,
@@ -166,13 +166,13 @@ public:
 
     // VertexArray
     mgl_core::ref<VertexArray> vertex_array(mgl_core::ref<Program> program,
-                                            mgl::VertexDataArray vertex_data,
+                                            mgl::vertex_data_list vertex_data,
                                             mgl_core::ref<Buffer> index_buffer = nullptr,
                                             int index_element_size = 4,
                                             bool skip_errors = false,
-                                            mgl::RenderMode mode = mgl::RenderMode::POINTS);
+                                            mgl::render_mode mode = mgl::render_mode::POINTS);
 
-    virtual GLFunction load(const mgl_core::string& method) = 0;
+    virtual gl_function load(const mgl_core::string& method) = 0;
     virtual void enter() = 0;
     virtual void exit() = 0;
 
@@ -181,8 +181,8 @@ public:
 
     bool released();
     ContextMode::Enum mode();
-    void clear(const glm::vec4& color, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
-    void clear(float r, float g, float b, float a = 0.0, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
+    void clear(const glm::vec4& color, float depth = 0.0, const viewport_2d& viewport = null_viewport_2d);
+    void clear(float r, float g, float b, float a = 0.0, float depth = 0.0, const viewport_2d& viewport = null_viewport_2d);
 
 private:
     void load_functions();
@@ -227,7 +227,7 @@ public:
     ContextEGL(ContextMode::Enum mode, int required);
     virtual ~ContextEGL() override;
 
-    virtual GLFunction load(const mgl_core::string& method) override;
+    virtual gl_function load(const mgl_core::string& method) override;
     virtual void enter() override;
     virtual void exit() override;
 
@@ -236,7 +236,7 @@ public:
     virtual bool is_valid() override;
 
 private:
-    GLContext m_context;
+    gl_context m_context;
   };
 #endif
 
@@ -250,7 +250,7 @@ public:
     virtual ~ContextGLX() override;
 
 public:
-    virtual GLFunction load(const mgl_core::string& method) override;
+    virtual gl_function load(const mgl_core::string& method) override;
 
     virtual void enter() override;
     virtual void exit() override;
@@ -261,7 +261,7 @@ public:
 
 private:
     ContextMode::Enum m_mode;
-    GLContext m_context;
+    gl_context m_context;
   };
 #endif
 
@@ -406,10 +406,10 @@ private:
 
   inline mgl_core::ref<Framebuffer> Context::framebuffer(mgl_core::ref<Attachment> depth_attachment)
   {
-    return framebuffer(AttachmentsRef(), depth_attachment);
+    return framebuffer(attachments_ref(), depth_attachment);
   }
 
-  inline mgl_core::ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments)
+  inline mgl_core::ref<Framebuffer> Context::framebuffer(const attachments_ref& color_attachments)
   {
     return framebuffer(color_attachments, mgl_core::ref<Attachment>(nullptr));
   }

@@ -38,7 +38,7 @@ namespace mgl
     gl.DeleteVertexArrays(1, (GLuint*)&m_vertex_array_obj);
   }
 
-  void VertexArray::render(mgl::RenderMode mode, int vertices, int first, int instances)
+  void VertexArray::render(mgl::render_mode mode, int vertices, int first, int instances)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -104,7 +104,7 @@ namespace mgl
     }
   }
 
-  void VertexArray::render_indirect(const mgl_core::ref<Buffer>& buffer, mgl::RenderMode mode, int count, int first)
+  void VertexArray::render_indirect(const mgl_core::ref<Buffer>& buffer, mgl::render_mode mode, int count, int first)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -162,7 +162,7 @@ namespace mgl
   }
 
   void VertexArray::transform(
-      const mgl_core::ref_list<Buffer>& buffers, mgl::RenderMode mode, int vertices, int first, int instances, int buffer_offset)
+      const mgl_core::ref_list<Buffer>& buffers, mgl::render_mode mode, int vertices, int first, int instances, int buffer_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");

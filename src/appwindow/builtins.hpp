@@ -16,5 +16,5 @@ namespace mgl_window
   class MouseButtonPressedEvent;
   class MouseButtonReleasedEvent;
 
-  using EventHandler = std::function<void(Event&)>;
+  using event_handler = std::function<void(Event&)>;
 } // namespace mgl_window

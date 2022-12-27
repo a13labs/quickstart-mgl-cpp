@@ -19,7 +19,7 @@
 namespace mgl
 {
 
-  struct DataType
+  struct data_type
   {
     int* base_format;
     int* internal_format;
@@ -28,6 +28,6 @@ namespace mgl
     bool float_type;
   };
 
-  DataType* from_dtype(const char* dtype, size_t size);
+  data_type* from_dtype(const char* dtype, size_t size);
 
 } // namespace mgl

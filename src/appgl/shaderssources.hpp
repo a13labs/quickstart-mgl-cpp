@@ -18,7 +18,7 @@
 
 namespace mgl
 {
-  struct ShadersSources
+  struct shaders_sources
   {
     enum Type
     {
@@ -31,33 +31,33 @@ namespace mgl
       COUNT,
     };
 
-    mgl_core::string sources[ShadersSources::COUNT];
+    mgl_core::string sources[shaders_sources::COUNT];
 
-    ShadersSources(const mgl_core::string& vs_source,
-                   const mgl_core::string& fs_source,
-                   const mgl_core::string& gs_source,
-                   const mgl_core::string& tes_source,
-                   const mgl_core::string& tcs_source)
+    shaders_sources(const mgl_core::string& vs_source,
+                    const mgl_core::string& fs_source,
+                    const mgl_core::string& gs_source,
+                    const mgl_core::string& tes_source,
+                    const mgl_core::string& tcs_source)
         : sources{ vs_source, fs_source, gs_source, tes_source, tcs_source }
     { }
 
-    ShadersSources(const mgl_core::string& vs_source,
-                   const mgl_core::string& fs_source,
-                   const mgl_core::string& gs_source,
-                   const mgl_core::string& tes_source)
-        : sources{ vs_source, fs_source, gs_source, tes_source, NoShader }
+    shaders_sources(const mgl_core::string& vs_source,
+                    const mgl_core::string& fs_source,
+                    const mgl_core::string& gs_source,
+                    const mgl_core::string& tes_source)
+        : sources{ vs_source, fs_source, gs_source, tes_source, no_shader }
     { }
 
-    ShadersSources(const mgl_core::string& vs_source, const mgl_core::string& fs_source, const mgl_core::string& gs_source)
-        : sources{ vs_source, fs_source, gs_source, NoShader, NoShader }
+    shaders_sources(const mgl_core::string& vs_source, const mgl_core::string& fs_source, const mgl_core::string& gs_source)
+        : sources{ vs_source, fs_source, gs_source, no_shader, no_shader }
     { }
 
-    ShadersSources(const mgl_core::string& vs_source, const mgl_core::string& fs_source)
-        : sources{ vs_source, fs_source, NoShader, NoShader, NoShader }
+    shaders_sources(const mgl_core::string& vs_source, const mgl_core::string& fs_source)
+        : sources{ vs_source, fs_source, no_shader, no_shader, no_shader }
     { }
 
-    ShadersSources(const mgl_core::string& vs_source)
-        : sources{ vs_source, NoShader, NoShader, NoShader, NoShader }
+    shaders_sources(const mgl_core::string& vs_source)
+        : sources{ vs_source, no_shader, no_shader, no_shader, no_shader }
     { }
   };
 } // namespace mgl

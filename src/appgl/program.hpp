@@ -69,11 +69,11 @@ private:
     int m_num_tess_evaluation_shader_subroutines;
     int m_num_tess_control_shader_subroutines;
 
-    UniformsMap m_uniforms_map;
-    UniformBlocksMap m_uniform_blocks_map;
-    AttributesMap m_attributes_map;
-    VaryingsMap m_varyings_map;
-    SubroutinesMap m_subroutines_map;
+    uniforms_dict m_uniforms_map;
+    uniform_blocks_dict m_uniform_blocks_map;
+    attributes_dict m_attributes_map;
+    varyings_dict m_varyings_map;
+    subroutines_dict m_subroutines_map;
   };
 
   inline bool Program::released()

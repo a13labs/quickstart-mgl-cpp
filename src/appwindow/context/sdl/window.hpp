@@ -24,7 +24,7 @@ namespace mgl_window
 {
   typedef struct
   {
-    EventHandler handler;
+    event_handler handler;
     WindowConfig current_config = WindowConfig();
     bool fullscreen = false;
     int width;
@@ -48,7 +48,7 @@ public:
     virtual int height() override;
     virtual int aspect_ratio() override;
 
-    virtual void initialize_event_handler(const EventHandler& handler) override;
+    virtual void initialize_event_handler(const event_handler& handler) override;
     virtual void toggle_full_screen() override;
 
     virtual void set_title(const mgl_core::string& value) override;

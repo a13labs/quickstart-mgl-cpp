@@ -39,7 +39,7 @@ private:
     Renderbuffer(){};
 
     Context* m_context;
-    DataType* m_data_type;
+    data_type* m_data_type;
     int m_renderbuffer_obj;
     int m_width;
     int m_height;

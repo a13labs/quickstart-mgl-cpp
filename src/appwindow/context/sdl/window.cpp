@@ -156,7 +156,7 @@ namespace mgl_window
     add_key_translation(SDL_SCANCODE_RGUI, Key::RightMeta);
   }
 
-  void update_state(SDL_Event* event, const EventHandler& handler)
+  void update_state(SDL_Event* event, const event_handler& handler)
   {
     switch(event->type)
     {
@@ -345,7 +345,7 @@ namespace mgl_window
     return m_title;
   }
 
-  void WindowSDL::initialize_event_handler(const EventHandler& handler)
+  void WindowSDL::initialize_event_handler(const event_handler& handler)
   {
     m_state.handler = handler;
     init();

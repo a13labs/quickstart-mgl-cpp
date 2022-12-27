@@ -46,8 +46,8 @@ private:
     Context* m_context;
     int m_program_obj;
     int m_shader_obj;
-    UniformsMap m_uniforms_map;
-    UniformBlocksMap m_uniform_blocks_map;
+    uniforms_dict m_uniforms_map;
+    uniform_blocks_dict m_uniform_blocks_map;
     bool m_released;
   };
 

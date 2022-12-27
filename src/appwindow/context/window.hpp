@@ -43,7 +43,7 @@ public:
     virtual void destroy_window() = 0;
     virtual void process_events() = 0;
     virtual void swap_buffers() = 0;
-    virtual void initialize_event_handler(const EventHandler& handler) = 0;
+    virtual void initialize_event_handler(const event_handler& handler) = 0;
     virtual void toggle_full_screen() = 0;
 
     virtual int width() = 0;

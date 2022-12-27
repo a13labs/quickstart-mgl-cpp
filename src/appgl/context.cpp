@@ -446,7 +446,7 @@ namespace mgl
     return mgl_core::ref<ComputeShader>(compute_shader);
   }
 
-  mgl_core::ref<Framebuffer> Context::framebuffer(const AttachmentsRef& color_attachments,
+  mgl_core::ref<Framebuffer> Context::framebuffer(const attachments_ref& color_attachments,
                                                   mgl_core::ref<Attachment> depth_attachment)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
@@ -598,7 +598,7 @@ namespace mgl
     framebuffer->m_released = false;
     framebuffer->m_draw_buffers_len = color_attachments.size();
     framebuffer->m_draw_buffers = new unsigned[color_attachments.size()];
-    framebuffer->m_color_masks = ColorMasks(color_attachments.size());
+    framebuffer->m_color_masks = color_masks(color_attachments.size());
 
     for(size_t i = 0; i < color_attachments.size(); ++i)
     {
@@ -710,9 +710,9 @@ namespace mgl
     return mgl_core::ref<Framebuffer>(framebuffer);
   }
 
-  mgl_core::ref<Program> Context::program(const ShadersSources& shaders,
-                                          const ShadersOutputs& outputs,
-                                          const FragmentOutputs& fragment_outputs,
+  mgl_core::ref<Program> Context::program(const shaders_sources& shaders,
+                                          const shaders_outputs& outputs,
+                                          const fragment_outputs& fragment_outputs,
                                           bool interleaved)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
@@ -721,7 +721,7 @@ namespace mgl
     Program* program = new Program();
     program->m_released = false;
     program->m_context = this;
-    program->m_transform = shaders.sources[ShadersSources::FRAGMENT_SHADER].empty();
+    program->m_transform = shaders.sources[shaders_sources::FRAGMENT_SHADER].empty();
 
     int program_obj = gl.CreateProgram();
 
@@ -734,7 +734,7 @@ namespace mgl
 
     int shader_objs[] = { 0, 0, 0, 0, 0 };
 
-    for(int i = 0; i < ShadersSources::COUNT; ++i)
+    for(int i = 0; i < shaders_sources::COUNT; ++i)
     {
       if(shaders.sources[i] == "")
       {
@@ -814,7 +814,7 @@ namespace mgl
 
     gl.LinkProgram(program_obj);
 
-    for(int i = 0; i < ShadersSources::COUNT; ++i)
+    for(int i = 0; i < shaders_sources::COUNT; ++i)
     {
       if(shader_objs[i])
       {
@@ -862,28 +862,28 @@ namespace mgl
 
     if(program->m_context->version_code() >= 400)
     {
-      if(!shaders.sources[ShadersSources::Type::VERTEX_SHADER].empty())
+      if(!shaders.sources[shaders_sources::Type::VERTEX_SHADER].empty())
       {
         gl.GetProgramStageiv(program_obj, GL_VERTEX_SHADER, GL_ACTIVE_SUBROUTINES, &num_vertex_shader_subroutines);
         gl.GetProgramStageiv(
             program_obj, GL_VERTEX_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_vertex_shader_subroutine_uniforms);
       }
 
-      if(!shaders.sources[ShadersSources::Type::FRAGMENT_SHADER].empty())
+      if(!shaders.sources[shaders_sources::Type::FRAGMENT_SHADER].empty())
       {
         gl.GetProgramStageiv(program_obj, GL_FRAGMENT_SHADER, GL_ACTIVE_SUBROUTINES, &num_fragment_shader_subroutines);
         gl.GetProgramStageiv(
             program_obj, GL_FRAGMENT_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_fragment_shader_subroutine_uniforms);
       }
 
-      if(!shaders.sources[ShadersSources::Type::GEOMETRY_SHADER].empty())
+      if(!shaders.sources[shaders_sources::Type::GEOMETRY_SHADER].empty())
       {
         gl.GetProgramStageiv(program_obj, GL_GEOMETRY_SHADER, GL_ACTIVE_SUBROUTINES, &num_geometry_shader_subroutines);
         gl.GetProgramStageiv(
             program_obj, GL_GEOMETRY_SHADER, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_geometry_shader_subroutine_uniforms);
       }
 
-      if(!shaders.sources[ShadersSources::Type::TESS_EVALUATION_SHADER].empty())
+      if(!shaders.sources[shaders_sources::Type::TESS_EVALUATION_SHADER].empty())
       {
         gl.GetProgramStageiv(
             program_obj, GL_TESS_EVALUATION_SHADER, GL_ACTIVE_SUBROUTINES, &num_tess_evaluation_shader_subroutines);
@@ -893,7 +893,7 @@ namespace mgl
                              &num_tess_evaluation_shader_subroutine_uniforms);
       }
 
-      if(!shaders.sources[ShadersSources::Type::TESS_CONTROL_SHADER].empty())
+      if(!shaders.sources[shaders_sources::Type::TESS_CONTROL_SHADER].empty())
       {
         gl.GetProgramStageiv(program_obj, GL_TESS_CONTROL_SHADER, GL_ACTIVE_SUBROUTINES, &num_tess_control_shader_subroutines);
         gl.GetProgramStageiv(
@@ -907,7 +907,7 @@ namespace mgl
     program->m_num_tess_evaluation_shader_subroutines = num_tess_evaluation_shader_subroutine_uniforms;
     program->m_num_tess_control_shader_subroutines = num_tess_control_shader_subroutine_uniforms;
 
-    if(!shaders.sources[ShadersSources::Type::GEOMETRY_SHADER].empty())
+    if(!shaders.sources[shaders_sources::Type::GEOMETRY_SHADER].empty())
     {
 
       int geometry_in = 0;
@@ -1272,10 +1272,10 @@ namespace mgl
 
   mgl_core::ref<Scope> Context::scope(mgl_core::ref<Framebuffer> framebuffer,
                                       int enable_flags,
-                                      const TextureBindings& textures,
-                                      const BufferBindings& uniform_buffers,
-                                      const BufferBindings& storage_buffers,
-                                      const SamplerBindings& samplers)
+                                      const texture_bindings& textures,
+                                      const buffer_bindings& uniform_buffers,
+                                      const buffer_bindings& storage_buffers,
+                                      const sampler_bindings& samplers)
   {
 
     MGL_CORE_ASSERT(!released(), "Context already released");
@@ -1785,11 +1785,11 @@ namespace mgl
   }
 
   mgl_core::ref<VertexArray> Context::vertex_array(mgl_core::ref<Program> program,
-                                                   mgl::VertexDataArray vertex_data,
+                                                   mgl::vertex_data_list vertex_data,
                                                    mgl_core::ref<Buffer> index_buffer,
                                                    int index_element_size,
                                                    bool skip_errors,
-                                                   mgl::RenderMode mode)
+                                                   mgl::render_mode mode)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
@@ -2133,14 +2133,14 @@ namespace mgl
     }
   }
 
-  void Context::clear(const glm::vec4& color, float depth, const Viewport2D& viewport)
+  void Context::clear(const glm::vec4& color, float depth, const viewport_2d& viewport)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     MGL_CORE_ASSERT(m_bound_framebuffer, "Context already released");
     m_bound_framebuffer->clear(color, depth, viewport);
   }
 
-  void Context::clear(float r, float g, float b, float a, float depth, const Viewport2D& viewport)
+  void Context::clear(float r, float g, float b, float a, float depth, const viewport_2d& viewport)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     MGL_CORE_ASSERT(m_bound_framebuffer, "Context already released");

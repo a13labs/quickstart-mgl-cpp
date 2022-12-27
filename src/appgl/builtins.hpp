@@ -22,10 +22,10 @@
 
 namespace mgl
 {
-  using GLFunction = void*;
-  using GLContext = void*;
+  using gl_function = void*;
+  using gl_context = void*;
 
-  enum RenderMode
+  enum render_mode
   {
     POINTS = 0x0000,
     LINES = 0x0001,
@@ -41,35 +41,35 @@ namespace mgl
     PATCHES = 0x000E,
   };
 
-  struct ColorMask
+  struct color_mask
   {
     bool r, g, b, a;
   };
 
-  struct DataType;
+  struct data_type;
 
-  struct Viewport2D
+  struct viewport_2d
   {
     int x;
     int y;
     int width;
     int height;
 
-    Viewport2D(int x, int y, int w, int h)
+    viewport_2d(int x, int y, int w, int h)
         : x(x)
         , y(y)
         , width(w)
         , height(h)
     { }
 
-    Viewport2D(int w, int h)
+    viewport_2d(int w, int h)
         : x(0)
         , y(0)
         , width(w)
         , height(h)
     { }
 
-    Viewport2D()
+    viewport_2d()
         : x(0)
         , y(0)
         , width(0)
@@ -77,7 +77,7 @@ namespace mgl
     { }
   };
 
-  struct Viewport3D
+  struct viewport_3d
   {
     int x;
     int y;
@@ -86,7 +86,7 @@ namespace mgl
     int height;
     int depth;
 
-    Viewport3D(int x, int y, int z, int w, int h, int d)
+    viewport_3d(int x, int y, int z, int w, int h, int d)
         : x(x)
         , y(y)
         , z(z)
@@ -95,7 +95,7 @@ namespace mgl
         , depth(d)
     { }
 
-    Viewport3D(int w, int h, int d)
+    viewport_3d(int w, int h, int d)
         : x(0)
         , y(0)
         , z(0)
@@ -104,7 +104,7 @@ namespace mgl
         , depth(d)
     { }
 
-    Viewport3D()
+    viewport_3d()
         : x(0)
         , y(0)
         , z(0)
@@ -114,23 +114,23 @@ namespace mgl
     { }
   };
 
-  struct Size
+  struct size
   {
     int width;
     int height;
 
-    Size(int w, int h)
+    size(int w, int h)
         : width(w)
         , height(h)
     { }
 
-    Size()
+    size()
         : width(0)
         , height(0)
     { }
   };
 
-  struct ShadersSources;
+  struct shaders_sources;
 
   class Attribute;
   class Attachment;
@@ -156,81 +156,81 @@ namespace mgl
   class VertexArray;
   class Window;
 
-  struct TextureBinding
+  struct texture_binding
   {
     mgl_core::ref<Texture> texture;
     int binding;
   };
 
-  struct BufferBinding
+  struct buffer_binding
   {
     mgl_core::ref<Buffer> buffer;
     int binding;
   };
 
-  struct SamplerBinding
+  struct sampler_binding
   {
     mgl_core::ref<Sampler> sampler;
     int binding;
   };
 
-  using AttributesMap = mgl_core::dict<mgl_core::string, mgl_core::ref<Attribute>>;
-  using SubroutinesMap = mgl_core::dict<mgl_core::string, mgl_core::ref<Subroutine>>;
-  using UniformsMap = mgl_core::dict<mgl_core::string, mgl_core::ref<Uniform>>;
-  using UniformBlocksMap = mgl_core::dict<mgl_core::string, mgl_core::ref<UniformBlock>>;
-  using VaryingsMap = mgl_core::dict<mgl_core::string, mgl_core::ref<Varying>>;
-  using AttachmentsRef = mgl_core::ref_list<Attachment>;
-  using ShadersOutputs = mgl_core::string_list;
-  using FragmentOutputs = mgl_core::dict<mgl_core::string, int>;
-  using ColorMasks = mgl_core::list<ColorMask>;
-  using Textures = mgl_core::ref_list<Texture>;
-  using Buffers = mgl_core::ref_list<Buffer>;
-  using Samplers = mgl_core::ref_list<Sampler>;
-  using TextureBindings = mgl_core::list<TextureBinding>;
-  using BufferBindings = mgl_core::list<BufferBinding>;
-  using SamplerBindings = mgl_core::list<SamplerBinding>;
+  using attributes_dict = mgl_core::dict<mgl_core::string, mgl_core::ref<Attribute>>;
+  using subroutines_dict = mgl_core::dict<mgl_core::string, mgl_core::ref<Subroutine>>;
+  using uniforms_dict = mgl_core::dict<mgl_core::string, mgl_core::ref<Uniform>>;
+  using uniform_blocks_dict = mgl_core::dict<mgl_core::string, mgl_core::ref<UniformBlock>>;
+  using varyings_dict = mgl_core::dict<mgl_core::string, mgl_core::ref<Varying>>;
+  using attachments_ref = mgl_core::ref_list<Attachment>;
+  using shaders_outputs = mgl_core::string_list;
+  using fragment_outputs = mgl_core::dict<mgl_core::string, int>;
+  using color_masks = mgl_core::list<color_mask>;
+  using textures = mgl_core::ref_list<Texture>;
+  using buffers = mgl_core::ref_list<Buffer>;
+  using samplers = mgl_core::ref_list<Sampler>;
+  using texture_bindings = mgl_core::list<texture_binding>;
+  using buffer_bindings = mgl_core::list<buffer_binding>;
+  using sampler_bindings = mgl_core::list<sampler_binding>;
 
-  extern const std::string NoShader;
-  extern const Viewport2D NullViewport2D;
-  extern const Viewport3D NullViewport3D;
-  extern const Size NullSize;
+  extern const std::string no_shader;
+  extern const viewport_2d null_viewport_2d;
+  extern const viewport_3d null_viewport_3d;
+  extern const size null_size;
 
-  struct VertexData
+  struct vertex_data
   {
     mgl_core::ref<Buffer> buffer;
     const char* format;
     mgl_core::string_list attributes;
   };
 
-  using VertexDataArray = mgl_core::list<VertexData>;
+  using vertex_data_list = mgl_core::list<vertex_data>;
 
-  inline bool operator==(const Viewport2D& lhs, const Viewport2D& rhs)
+  inline bool operator==(const viewport_2d& lhs, const viewport_2d& rhs)
   {
     return lhs.x == rhs.x && lhs.y == rhs.y && lhs.width == rhs.width && lhs.height == rhs.height;
   }
 
-  inline bool operator==(const Viewport3D& lhs, const Viewport3D& rhs)
+  inline bool operator==(const viewport_3d& lhs, const viewport_3d& rhs)
   {
     return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.width == rhs.width && lhs.height == rhs.height &&
            lhs.depth == rhs.depth;
   }
 
-  inline bool operator==(const Size& lhs, const Size& rhs)
+  inline bool operator==(const size& lhs, const size& rhs)
   {
     return lhs.width == rhs.width && lhs.height == rhs.height;
   }
 
-  inline bool operator!=(const Viewport2D& lhs, const Viewport2D& rhs)
+  inline bool operator!=(const viewport_2d& lhs, const viewport_2d& rhs)
   {
     return !(lhs == rhs);
   }
 
-  inline bool operator!=(const Viewport3D& lhs, const Viewport3D& rhs)
+  inline bool operator!=(const viewport_3d& lhs, const viewport_3d& rhs)
   {
     return !(lhs == rhs);
   }
 
-  inline bool operator!=(const Size& lhs, const Size& rhs)
+  inline bool operator!=(const size& lhs, const size& rhs)
   {
     return !(lhs == rhs);
   }

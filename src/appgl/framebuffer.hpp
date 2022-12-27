@@ -27,18 +27,18 @@ public:
     void release();
     bool released();
 
-    const Viewport2D& viewport();
-    void set_viewport(const Viewport2D& r);
+    const viewport_2d& viewport();
+    void set_viewport(const viewport_2d& r);
 
-    const Viewport2D& scissor();
-    void set_scissor(const Viewport2D& r);
+    const viewport_2d& scissor();
+    void set_scissor(const viewport_2d& r);
 
     void enable_scissor();
     void disable_scissor();
 
-    const ColorMasks& color_mask() const;
-    void set_color_mask(const ColorMask& mask);
-    void set_color_mask(const ColorMasks& masks);
+    const color_masks& color_mask() const;
+    void set_color_mask(const mgl::color_mask& mask);
+    void set_color_mask(const mgl::color_masks& masks);
 
     bool depth_mask();
     void set_depth_mask(bool value);
@@ -48,11 +48,11 @@ public:
 
     bool bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits);
 
-    void clear(const glm::vec4& color, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
-    void clear(float r, float g, float b, float a = 0.0, float depth = 0.0, const Viewport2D& viewport = NullViewport2D);
+    void clear(const glm::vec4& color, float depth = 0.0, const viewport_2d& viewport = null_viewport_2d);
+    void clear(float r, float g, float b, float a = 0.0, float depth = 0.0, const viewport_2d& viewport = null_viewport_2d);
 
     bool read_into(mgl_core::mem_buffer<u_int8_t>& dst,
-                   const Viewport2D& viewport = NullViewport2D,
+                   const viewport_2d& viewport = null_viewport_2d,
                    int components = 3,
                    int attachment = 0,
                    int alignment = 1,
@@ -60,7 +60,7 @@ public:
                    size_t write_offset = 0);
 
     bool read_into(mgl_core::ref<Buffer> dst,
-                   const Viewport2D& viewport = NullViewport2D,
+                   const viewport_2d& viewport = null_viewport_2d,
                    int components = 3,
                    int attachment = 0,
                    int alignment = 1,
@@ -79,10 +79,10 @@ private:
     Context* m_context;
     int m_framebuffer_obj;
 
-    Viewport2D m_viewport;
+    viewport_2d m_viewport;
     bool m_scissor_enabled;
-    Viewport2D m_scissor;
-    ColorMasks m_color_masks;
+    viewport_2d m_scissor;
+    color_masks m_color_masks;
 
     int m_draw_buffers_len;
     unsigned* m_draw_buffers;
@@ -102,20 +102,20 @@ private:
     return m_released;
   }
 
-  inline const Viewport2D& Framebuffer::viewport()
+  inline const viewport_2d& Framebuffer::viewport()
   {
     return m_viewport;
   }
-  inline void Framebuffer::set_viewport(const Viewport2D& r)
+  inline void Framebuffer::set_viewport(const viewport_2d& r)
   {
     m_viewport = r;
   }
 
-  inline const Viewport2D& Framebuffer::scissor()
+  inline const viewport_2d& Framebuffer::scissor()
   {
     return m_scissor;
   }
-  inline void Framebuffer::set_scissor(const Viewport2D& r)
+  inline void Framebuffer::set_scissor(const viewport_2d& r)
   {
     m_scissor = r;
   }
@@ -129,12 +129,12 @@ private:
     m_scissor_enabled = false;
   }
 
-  inline void Framebuffer::clear(const glm::vec4& color, float depth, const Viewport2D& viewport)
+  inline void Framebuffer::clear(const glm::vec4& color, float depth, const viewport_2d& viewport)
   {
     clear(color.r, color.g, color.b, color.a, depth, viewport);
   }
 
-  inline const ColorMasks& Framebuffer::color_mask() const
+  inline const color_masks& Framebuffer::color_mask() const
   {
     return m_color_masks;
   }
@@ -154,7 +154,7 @@ private:
     return m_height;
   }
 
-  inline void Framebuffer::set_color_mask(const ColorMask& mask)
+  inline void Framebuffer::set_color_mask(const mgl::color_mask& mask)
   {
     set_color_mask({ mask });
   }

@@ -420,7 +420,7 @@ namespace mgl
       delete(EGLContextData*)m_context;
   }
 
-  GLFunction ContextEGL::load(const mgl_core::string& method)
+  gl_function ContextEGL::load(const mgl_core::string& method)
   {
     if(!m_context)
       return nullptr;
