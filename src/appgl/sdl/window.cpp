@@ -14,9 +14,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+#include "window.hpp"
 #include "appcore/log.hpp"
 #include "appgl/context.hpp"
-#include "appgl/window.hpp"
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_syswm.h"
