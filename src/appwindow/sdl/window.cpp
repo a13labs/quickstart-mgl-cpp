@@ -384,12 +384,12 @@ namespace AppWindow
 
               if(is_key_pressed(m_state.current_config.exit_key))
               {
-                BaseWindow::current().quit();
+                Window::current().quit();
               }
 
               if(is_key_pressed(m_state.current_config.fullscreen_key))
               {
-                BaseWindow::current().toggle_full_screen();
+                Window::current().toggle_full_screen();
               }
             }
             break;

@@ -58,12 +58,12 @@ public:
     virtual void set_title(const AppCore::String& value) = 0;
   };
 
-  class BaseWindow
+  class Window
   {
 
 public:
-    BaseWindow(const WindowConfig& config = WindowConfig());
-    virtual ~BaseWindow() = default;
+    Window(const WindowConfig& config = WindowConfig());
+    virtual ~Window() = default;
 
 public:
     void run();
@@ -79,7 +79,7 @@ public:
     void toggle_full_screen();
     AppCore::Ref<AppGL::Context> context();
 
-    inline static BaseWindow& current() { return *s_instance; }
+    inline static Window& current() { return *s_instance; }
 
     // Events
     void on_event(Event& event);
@@ -103,49 +103,49 @@ public:
     virtual void on_unload(){};
 
 private:
-    static BaseWindow* s_instance;
+    static Window* s_instance;
     bool m_running;
     AppCore::Timer m_timer;
     AppCore::Scope<NativeWindow> m_native_window;
     AppCore::Ref<AppGL::Context> m_context;
   };
 
-  inline int BaseWindow::width()
+  inline int Window::width()
   {
     return m_native_window->width();
   }
 
-  inline int BaseWindow::height()
+  inline int Window::height()
   {
     return m_native_window->height();
   }
 
-  inline int BaseWindow::aspect_ratio()
+  inline int Window::aspect_ratio()
   {
     return m_native_window->aspect_ratio();
   }
 
-  inline const AppCore::String& BaseWindow::title() const
+  inline const AppCore::String& Window::title() const
   {
     return m_native_window->title();
   }
 
-  inline void BaseWindow::set_title(const AppCore::String& value)
+  inline void Window::set_title(const AppCore::String& value)
   {
     return m_native_window->set_title(value);
   }
 
-  inline void BaseWindow::toggle_full_screen()
+  inline void Window::toggle_full_screen()
   {
     return m_native_window->toggle_full_screen();
   }
 
-  inline void BaseWindow::quit()
+  inline void Window::quit()
   {
     m_running = false;
   }
 
-  inline AppCore::Ref<AppGL::Context> BaseWindow::context()
+  inline AppCore::Ref<AppGL::Context> Window::context()
   {
     return m_context;
   }

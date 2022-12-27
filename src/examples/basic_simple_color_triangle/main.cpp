@@ -6,7 +6,7 @@
 #include "appgl/vertexarray.hpp"
 #include "appwindow/window.hpp"
 
-class ExampleWindow : public AppWindow::BaseWindow
+class ExampleWindow : public AppWindow::Window
 {
 
   public:

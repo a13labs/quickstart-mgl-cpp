@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[])
 {
-  AppWindow::BaseWindow app;
+  AppWindow::Window app;
   app.run();
 
   return 0;

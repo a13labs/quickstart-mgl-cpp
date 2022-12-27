@@ -23,9 +23,9 @@
 namespace AppWindow
 {
 
-  BaseWindow* BaseWindow::s_instance = nullptr;
+  Window* Window::s_instance = nullptr;
 
-  BaseWindow::BaseWindow(const WindowConfig& config)
+  Window::Window(const WindowConfig& config)
   {
     APPCORE_ASSERT(!s_instance, "BaseWindow already running!");
     AppCore::Log::init();
@@ -35,32 +35,32 @@ namespace AppWindow
     m_running = false;
   }
 
-  void BaseWindow::on_event(Event& event)
+  void Window::on_event(Event& event)
   {
     EventDispatcher dispatcher(event);
 
     // Dispatch Windows Events
-    dispatcher.dispatch<WindowCloseEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_window_close));
-    dispatcher.dispatch<WindowResizeEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_window_resize));
+    dispatcher.dispatch<WindowCloseEvent>(APPCORE_BIND_EVENT_FN(Window::on_window_close));
+    dispatcher.dispatch<WindowResizeEvent>(APPCORE_BIND_EVENT_FN(Window::on_window_resize));
 
     // Dispatch key events to be handled by the application
-    dispatcher.dispatch<KeyPressedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_key_pressed));
-    dispatcher.dispatch<KeyReleasedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_key_released));
+    dispatcher.dispatch<KeyPressedEvent>(APPCORE_BIND_EVENT_FN(Window::on_key_pressed));
+    dispatcher.dispatch<KeyReleasedEvent>(APPCORE_BIND_EVENT_FN(Window::on_key_released));
 
     // Dispatch mouse events to be handled by the application
-    dispatcher.dispatch<MouseMovedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_moved));
-    dispatcher.dispatch<MouseScrolledEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_scrolled));
-    dispatcher.dispatch<MouseButtonPressedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_button_pressed));
-    dispatcher.dispatch<MouseButtonReleasedEvent>(APPCORE_BIND_EVENT_FN(BaseWindow::on_mouse_button_released));
+    dispatcher.dispatch<MouseMovedEvent>(APPCORE_BIND_EVENT_FN(Window::on_mouse_moved));
+    dispatcher.dispatch<MouseScrolledEvent>(APPCORE_BIND_EVENT_FN(Window::on_mouse_scrolled));
+    dispatcher.dispatch<MouseButtonPressedEvent>(APPCORE_BIND_EVENT_FN(Window::on_mouse_button_pressed));
+    dispatcher.dispatch<MouseButtonReleasedEvent>(APPCORE_BIND_EVENT_FN(Window::on_mouse_button_released));
   }
 
-  bool BaseWindow::on_window_close(WindowCloseEvent& event)
+  bool Window::on_window_close(WindowCloseEvent& event)
   {
     m_running = false;
     return true;
   }
 
-  void BaseWindow::run()
+  void Window::run()
   {
     if(m_running)
       return;
@@ -80,7 +80,7 @@ namespace AppWindow
       return;
     }
 
-    m_native_window->initialize_event_handler(APPCORE_BIND_EVENT_FN(BaseWindow::on_event));
+    m_native_window->initialize_event_handler(APPCORE_BIND_EVENT_FN(Window::on_event));
 
     m_running = true;
     APPCORE_PROFILE_BEGIN_SESSION();
