@@ -226,7 +226,7 @@ namespace mgl_window
     }
   }
 
-  WindowSDL::WindowSDL(const WindowConfig& config)
+  WindowSDL::WindowSDL(const window_config& config)
   {
     m_state.current_config = config;
     m_state.width = config.width;
@@ -351,7 +351,7 @@ namespace mgl_window
     init();
     SDL_AddEventWatch(
         [](void* userdata, SDL_Event* currentEvent) -> int {
-          WindowState& m_state = *(WindowState*)userdata;
+          window_state& m_state = *(window_state*)userdata;
           switch(currentEvent->type)
           {
             case SDL_WINDOWEVENT:

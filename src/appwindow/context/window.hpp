@@ -19,7 +19,7 @@
 
 namespace mgl_window
 {
-  typedef struct
+  struct window_config
   {
     mgl_core::string title = "BaseWindow";
     uint32_t width = 800;
@@ -31,12 +31,12 @@ namespace mgl_window
     bool cursor = true;
     Key::Enum exit_key = Key::Esc;
     Key::Enum fullscreen_key = Key::F11;
-  } WindowConfig;
+  };
 
   class NativeWindow
   {
 public:
-    NativeWindow(const WindowConfig& config = WindowConfig()){};
+    NativeWindow(const window_config& config = window_config()){};
     virtual ~NativeWindow() = default;
 
     virtual bool create_window() = 0;
@@ -58,7 +58,7 @@ public:
   {
 
 public:
-    Window(const WindowConfig& config = WindowConfig());
+    Window(const window_config& config = window_config());
     virtual ~Window() = default;
 
 public:
@@ -146,5 +146,5 @@ private:
     return m_context;
   }
 
-  WindowConfig load_window_configuration(const mgl_core::string& filename);
+  window_config load_window_configuration(const mgl_core::string& filename);
 } // namespace mgl_window

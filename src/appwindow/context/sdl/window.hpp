@@ -22,20 +22,20 @@
 
 namespace mgl_window
 {
-  typedef struct
+  struct window_state
   {
     event_handler handler;
-    WindowConfig current_config = WindowConfig();
+    window_config current_config = window_config();
     bool fullscreen = false;
     int width;
     int height;
-  } WindowState;
+  };
 
   class WindowSDL : public NativeWindow
   {
 
 public:
-    WindowSDL(const WindowConfig& config = WindowConfig());
+    WindowSDL(const window_config& config = window_config());
     virtual ~WindowSDL() = default;
 
 public:
@@ -58,6 +58,6 @@ private:
     SDL_GLContext m_context;
     mgl_core::string m_title;
     SDL_Window* native_window = nullptr;
-    WindowState m_state;
+    window_state m_state;
   };
 } // namespace mgl_window

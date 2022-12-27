@@ -26,7 +26,7 @@ namespace mgl_window
 
   Window* Window::s_instance = nullptr;
 
-  Window::Window(const WindowConfig& config)
+  Window::Window(const window_config& config)
   {
     MGL_CORE_ASSERT(!s_instance, "BaseWindow already running!");
     mgl_core::Log::init();
@@ -108,9 +108,9 @@ namespace mgl_window
     m_native_window->destroy_window();
   }
 
-  WindowConfig load_window_configuration(const mgl_core::string& filename)
+  window_config load_window_configuration(const mgl_core::string& filename)
   {
     // TODO: Implement load from JSON
-    return WindowConfig();
+    return window_config();
   }
 } // namespace mgl_window
