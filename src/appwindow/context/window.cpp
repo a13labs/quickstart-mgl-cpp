@@ -14,11 +14,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "window.hpp"
+#include "appwindow/context/window.hpp"
 #include "appcore/log.hpp"
 #include "appgl/context.hpp"
+#include "appwindow/context/sdl/window.hpp"
 #include "input.hpp"
-#include "sdl/window.hpp"
 
 namespace AppWindow
 {

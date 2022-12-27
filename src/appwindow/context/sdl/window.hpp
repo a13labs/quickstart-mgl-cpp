@@ -15,9 +15,9 @@
 */
 #pragma once
 #include "appgl/appgl.hpp"
-#include "appwindow/event.hpp"
-#include "appwindow/input.hpp"
-#include "appwindow/window.hpp"
+#include "appwindow/context/event.hpp"
+#include "appwindow/context/input.hpp"
+#include "appwindow/context/window.hpp"
 
 #include "SDL2/SDL.h"
 

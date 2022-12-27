@@ -1,5 +1,5 @@
 #include "appgl/datatype.hpp"
-#include "appwindow/window.hpp"
+#include "appwindow/context/window.hpp"
 
 int main(int argc, char* argv[])
 {

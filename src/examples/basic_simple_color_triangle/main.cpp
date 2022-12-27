@@ -4,7 +4,7 @@
 #include "appgl/program.hpp"
 #include "appgl/shaderssources.hpp"
 #include "appgl/vertexarray.hpp"
-#include "appwindow/window.hpp"
+#include "appwindow/context/window.hpp"
 
 class ExampleWindow : public AppWindow::Window
 {

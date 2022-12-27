@@ -17,7 +17,7 @@
 #include "appcore/appcore.hpp"
 #include "appcore/timer.hpp"
 #include "appgl/appgl.hpp"
-#include "appwindow.hpp"
+#include "appwindow/appwindow.hpp"
 #include "event.hpp"
 #include "input.hpp"
 
