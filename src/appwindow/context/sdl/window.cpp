@@ -271,14 +271,14 @@ namespace mgl_window
 
     MGL_CORE_INFO(
         "BaseWindow: Creating window {0},{1} with OpenGL support", m_state.current_config.width, m_state.current_config.height);
-    native_window = SDL_CreateWindow(m_state.current_config.title.c_str(),
-                                     SDL_WINDOWPOS_CENTERED,
-                                     SDL_WINDOWPOS_CENTERED,
-                                     m_state.current_config.width,
-                                     m_state.current_config.height,
-                                     flags);
+    m_native_window = SDL_CreateWindow(m_state.current_config.title.c_str(),
+                                       SDL_WINDOWPOS_CENTERED,
+                                       SDL_WINDOWPOS_CENTERED,
+                                       m_state.current_config.width,
+                                       m_state.current_config.height,
+                                       flags);
 
-    if(!native_window)
+    if(!m_native_window)
     {
       auto error = SDL_GetError();
       MGL_CORE_TRACE("BaseWindow: Error creating window, '{0}'.", error);
@@ -286,13 +286,13 @@ namespace mgl_window
       return false;
     }
 
-    m_context = SDL_GL_CreateContext(native_window);
+    m_context = SDL_GL_CreateContext(m_native_window);
     if(!m_context)
     {
       auto error = SDL_GetError();
       MGL_CORE_TRACE("BaseWindow: Error creating OpenGL context, '{0}'.", error);
-      SDL_DestroyWindow(native_window);
-      native_window = nullptr;
+      SDL_DestroyWindow(m_native_window);
+      m_native_window = nullptr;
       SDL_Quit();
       return false;
     }
@@ -302,14 +302,14 @@ namespace mgl_window
     SDL_SysWMinfo wmi;
     SDL_VERSION(&wmi.version);
 
-    if(!SDL_GetWindowWMInfo(native_window, &wmi))
+    if(!SDL_GetWindowWMInfo(m_native_window, &wmi))
     {
       auto error = SDL_GetError();
       MGL_CORE_TRACE("BaseWindow: Error retrieving window information: {0}.", error);
       SDL_GL_DeleteContext(m_context);
-      SDL_DestroyWindow(native_window);
+      SDL_DestroyWindow(m_native_window);
       m_context = nullptr;
-      native_window = nullptr;
+      m_native_window = nullptr;
       return false;
     }
 
@@ -323,21 +323,21 @@ namespace mgl_window
   void WindowSDL::destroy_window()
   {
     SDL_GL_DeleteContext(m_context);
-    SDL_DestroyWindow(native_window);
+    SDL_DestroyWindow(m_native_window);
     m_context = nullptr;
-    native_window = nullptr;
+    m_native_window = nullptr;
     SDL_Quit();
   }
 
   void WindowSDL::swap_buffers()
   {
-    SDL_GL_SwapWindow(native_window);
+    SDL_GL_SwapWindow(m_native_window);
   }
 
   void WindowSDL::set_title(const mgl_core::string& value)
   {
     m_title = value;
-    SDL_SetWindowTitle(native_window, m_title.c_str());
+    SDL_SetWindowTitle(m_native_window, m_title.c_str());
   }
 
   const mgl_core::string& WindowSDL::title() const
@@ -406,14 +406,14 @@ namespace mgl_window
     m_state.fullscreen = !m_state.fullscreen;
     if(m_state.fullscreen)
     {
-      SDL_SetWindowFullscreen(native_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+      SDL_SetWindowFullscreen(m_native_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
       return;
     }
 
-    SDL_RestoreWindow(native_window);
-    SDL_SetWindowSize(native_window, m_state.current_config.width, m_state.current_config.height);
-    SDL_SetWindowPosition(native_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-    SDL_SetWindowFullscreen(native_window, 0);
+    SDL_RestoreWindow(m_native_window);
+    SDL_SetWindowSize(m_native_window, m_state.current_config.width, m_state.current_config.height);
+    SDL_SetWindowPosition(m_native_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    SDL_SetWindowFullscreen(m_native_window, 0);
   }
 
   void WindowSDL::process_events()
@@ -435,6 +435,13 @@ namespace mgl_window
   int WindowSDL::aspect_ratio()
   {
     return m_state.width / m_state.height;
+  }
+
+  mgl::size WindowSDL::get_drawable_size()
+  {
+    int x, y;
+    SDL_GL_GetDrawableSize(m_native_window, &x, &y);
+    return { x, y };
   }
 
 } // namespace mgl_window

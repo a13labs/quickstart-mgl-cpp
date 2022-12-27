@@ -108,6 +108,13 @@ namespace mgl_window
     m_native_window->destroy_window();
   }
 
+  bool Window::on_window_resize(WindowResizeEvent& event)
+  {
+    auto size = m_native_window->get_drawable_size();
+    m_context->screen()->set_viewport({ 0, 0, size.width, size.height });
+    return true;
+  }
+
   window_config load_window_configuration(const mgl_core::string& filename)
   {
     // TODO: Implement load from JSON

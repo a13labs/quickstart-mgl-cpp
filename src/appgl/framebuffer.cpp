@@ -298,4 +298,38 @@ namespace mgl
     return gl.GetError() == GL_NO_ERROR;
   }
 
+  void Framebuffer::set_viewport(const viewport_2d& r)
+  {
+    MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+
+    if(m_context->released())
+      return;
+
+    m_viewport = r;
+
+    if(m_framebuffer_obj == m_context->m_bound_framebuffer->m_framebuffer_obj)
+    {
+      gl.Viewport(m_viewport.x, m_viewport.y, m_viewport.width, m_viewport.height);
+    }
+  }
+
+  void Framebuffer::set_scissor(const viewport_2d& r)
+  {
+    MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    const GLMethods& gl = m_context->gl();
+
+    if(m_context->released())
+      return;
+
+    m_scissor = r;
+
+    if(m_framebuffer_obj == m_context->m_bound_framebuffer->m_framebuffer_obj)
+    {
+      gl.Scissor(m_scissor.x, m_scissor.y, m_scissor.width, m_scissor.height);
+    }
+  }
+
 } // namespace mgl

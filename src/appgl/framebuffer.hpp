@@ -106,18 +106,10 @@ private:
   {
     return m_viewport;
   }
-  inline void Framebuffer::set_viewport(const viewport_2d& r)
-  {
-    m_viewport = r;
-  }
 
   inline const viewport_2d& Framebuffer::scissor()
   {
     return m_scissor;
-  }
-  inline void Framebuffer::set_scissor(const viewport_2d& r)
-  {
-    m_scissor = r;
   }
 
   inline void Framebuffer::enable_scissor()

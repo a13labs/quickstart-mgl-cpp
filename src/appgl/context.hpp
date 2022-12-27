@@ -45,7 +45,7 @@ public:
     int default_texture_unit();
     float max_anisotropy();
     const mgl_core::string_list& extensions() const;
-    const mgl_core::ref<Framebuffer>& framebuffer() const;
+    const mgl_core::ref<Framebuffer>& screen() const;
 
     int enable_flags();
     void set_enable_flags(int flags);
@@ -313,7 +313,7 @@ private:
     return m_extensions;
   }
 
-  inline const mgl_core::ref<Framebuffer>& Context::framebuffer() const
+  inline const mgl_core::ref<Framebuffer>& Context::screen() const
   {
     return m_default_framebuffer;
   }
