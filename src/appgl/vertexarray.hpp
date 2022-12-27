@@ -33,7 +33,7 @@ public:
     void
     transform(const AppCore::Ref<Buffer>& buffer, AppGL::RenderMode mode, int vertices = -1, int first = 0, int instances = -1);
 
-    void transform(const AppCore::VectorRef<Buffer>& buffers,
+    void transform(const AppCore::ListRef<Buffer>& buffers,
                    AppGL::RenderMode mode,
                    int vertices = -1,
                    int first = 0,

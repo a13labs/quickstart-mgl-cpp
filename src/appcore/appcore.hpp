@@ -70,7 +70,7 @@ namespace AppCore
   using Ref = std::shared_ptr<T>;
 
   template <typename T>
-  using VectorRef = std::vector<Ref<T>>;
+  using ListRef = std::vector<Ref<T>>;
 
   template <typename T>
   using QueueRef = std::queue<Ref<T>>;

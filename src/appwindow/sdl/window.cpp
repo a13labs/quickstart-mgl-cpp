@@ -16,7 +16,6 @@
 */
 #include "window.hpp"
 #include "appcore/log.hpp"
-#include "appgl/context.hpp"
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_syswm.h"
@@ -300,20 +299,6 @@ namespace AppWindow
 
     SDL_GL_SetSwapInterval(m_state.current_config.VSync ? 1 : 0);
 
-    m_shared_context = AppGL::Context::create_context(AppGL::ContextMode::SHARE, 330);
-
-    if(!m_shared_context)
-    {
-      APPCORE_TRACE("Window: Error initializing GL shared context.");
-      SDL_GL_DeleteContext(m_context);
-      SDL_DestroyWindow(native_window);
-      m_shared_context = nullptr;
-      m_context = nullptr;
-      native_window = nullptr;
-      SDL_Quit();
-      return false;
-    }
-
     SDL_SysWMinfo wmi;
     SDL_VERSION(&wmi.version);
 
@@ -321,10 +306,8 @@ namespace AppWindow
     {
       auto error = SDL_GetError();
       APPCORE_TRACE("BaseWindow: Error retrieving window information: {0}.", error);
-      m_shared_context->release();
       SDL_GL_DeleteContext(m_context);
       SDL_DestroyWindow(native_window);
-      m_shared_context = nullptr;
       m_context = nullptr;
       native_window = nullptr;
       return false;
@@ -339,10 +322,8 @@ namespace AppWindow
 
   void WindowSDL::destroy_window()
   {
-    m_shared_context->release();
     SDL_GL_DeleteContext(m_context);
     SDL_DestroyWindow(native_window);
-    m_shared_context = nullptr;
     m_context = nullptr;
     native_window = nullptr;
     SDL_Quit();
@@ -439,11 +420,6 @@ namespace AppWindow
   {
     SDL_Event e;
     SDL_PollEvent(&e);
-  }
-
-  AppCore::Ref<AppGL::Context> WindowSDL::context()
-  {
-    return m_shared_context;
   }
 
   int WindowSDL::width()

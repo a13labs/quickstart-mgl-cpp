@@ -179,13 +179,13 @@ namespace AppGL
   using UniformsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Uniform>>;
   using UniformBlocksMap = AppCore::Dict<AppCore::String, AppCore::Ref<UniformBlock>>;
   using VaryingsMap = AppCore::Dict<AppCore::String, AppCore::Ref<Varying>>;
-  using AttachmentsRef = AppCore::VectorRef<Attachment>;
+  using AttachmentsRef = AppCore::ListRef<Attachment>;
   using ShadersOutputs = AppCore::StringList;
   using FragmentOutputs = AppCore::Dict<AppCore::String, int>;
   using ColorMasks = AppCore::List<ColorMask>;
-  using Textures = AppCore::VectorRef<Texture>;
-  using Buffers = AppCore::VectorRef<Buffer>;
-  using Samplers = AppCore::VectorRef<Sampler>;
+  using Textures = AppCore::ListRef<Texture>;
+  using Buffers = AppCore::ListRef<Buffer>;
+  using Samplers = AppCore::ListRef<Sampler>;
   using TextureBindings = AppCore::List<TextureBinding>;
   using BufferBindings = AppCore::List<BufferBinding>;
   using SamplerBindings = AppCore::List<SamplerBinding>;

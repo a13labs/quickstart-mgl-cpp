@@ -37,11 +37,11 @@ public:
     enum EnableFlag
     {
       NOTHING = 0,
-      BLEND = 1,
-      DEPTH_TEST = 2,
-      CULL_FACE = 4,
-      RASTERIZER_DISCARD = 8,
-      PROGRAM_POINT_SIZE = 16,
+      BLEND = BIT(1),
+      DEPTH_TEST = BIT(2),
+      CULL_FACE = BIT(3),
+      RASTERIZER_DISCARD = BIT(4),
+      PROGRAM_POINT_SIZE = BIT(5),
       INVALID = 0x40000000
     };
 

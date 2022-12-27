@@ -161,12 +161,8 @@ namespace AppGL
     }
   }
 
-  void VertexArray::transform(const AppCore::VectorRef<Buffer>& buffers,
-                              AppGL::RenderMode mode,
-                              int vertices,
-                              int first,
-                              int instances,
-                              int buffer_offset)
+  void VertexArray::transform(
+      const AppCore::ListRef<Buffer>& buffers, AppGL::RenderMode mode, int vertices, int first, int instances, int buffer_offset)
   {
     APPCORE_ASSERT(!m_released, "Vertex Array already released");
     APPCORE_ASSERT(m_context, "No context");

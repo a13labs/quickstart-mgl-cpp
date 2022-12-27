@@ -16,6 +16,7 @@
 */
 #include "window.hpp"
 #include "appcore/log.hpp"
+#include "appgl/context.hpp"
 #include "input.hpp"
 #include "sdl/window.hpp"
 
@@ -70,6 +71,15 @@ namespace AppWindow
       return;
     }
 
+    m_context = AppGL::Context::create_context(AppGL::ContextMode::SHARE, 330);
+
+    if(!m_context)
+    {
+      APPCORE_TRACE("BaseWindow: Error initializing GL shared context.");
+      m_native_window->destroy_window();
+      return;
+    }
+
     m_native_window->initialize_event_handler(APPCORE_BIND_EVENT_FN(BaseWindow::on_event));
 
     m_running = true;
@@ -92,6 +102,8 @@ namespace AppWindow
     on_unload();
 
     APPCORE_PROFILE_END_SESSION();
+
+    m_context->release();
     m_native_window->destroy_window();
   }
 

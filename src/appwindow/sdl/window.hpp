@@ -45,7 +45,6 @@ public:
     virtual void swap_buffers() override;
     virtual void process_events() override;
 
-    virtual AppCore::Ref<AppGL::Context> context() override;
     virtual int width() override;
     virtual int height() override;
     virtual int aspect_ratio() override;
@@ -58,7 +57,6 @@ public:
 
 private:
     SDL_GLContext m_context;
-    AppCore::Ref<AppGL::Context> m_shared_context;
     AppCore::String m_title;
     SDL_Window* native_window = nullptr;
     WindowState m_state;

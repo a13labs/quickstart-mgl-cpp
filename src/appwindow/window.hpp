@@ -50,7 +50,6 @@ public:
     virtual void initialize_event_handler(const EventHandler& handler) = 0;
     virtual void toggle_full_screen() = 0;
 
-    virtual AppCore::Ref<AppGL::Context> context() = 0;
     virtual int width() = 0;
     virtual int height() = 0;
     virtual int aspect_ratio() = 0;
@@ -108,6 +107,7 @@ private:
     bool m_running;
     AppCore::Timer m_timer;
     AppCore::Scope<NativeWindow> m_native_window;
+    AppCore::Ref<AppGL::Context> m_context;
   };
 
   inline int BaseWindow::width()
@@ -147,7 +147,7 @@ private:
 
   inline AppCore::Ref<AppGL::Context> BaseWindow::context()
   {
-    return m_native_window->context();
+    return m_context;
   }
 
   WindowConfig load_window_configuration(const AppCore::String& filename);
