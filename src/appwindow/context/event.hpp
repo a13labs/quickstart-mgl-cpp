@@ -15,8 +15,6 @@
 */
 #pragma once
 #include "appcore/appcore.hpp"
-#include "appcore/instrumentor.hpp"
-#include "appcore/log.hpp"
 #include "input.hpp"
 
 namespace AppWindow

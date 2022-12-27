@@ -1,8 +1,6 @@
 #pragma once
-#include "appcore/appcore.hpp"
+#include "builtins.hpp"
 
-namespace AppWindow
-{
-  class Event;
-  using EventHandler = std::function<void(Event&)>;
-} // namespace AppWindow
+#include "context/event.hpp"
+#include "context/input.hpp"
+#include "context/window.hpp"

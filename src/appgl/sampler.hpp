@@ -14,7 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "appgl.hpp"
+#include "builtins.hpp"
 #include "glm/vec4.hpp"
 
 namespace AppGL
@@ -148,7 +148,7 @@ private:
 
   inline void Sampler::set_border_color(float r, float g, float b, float a)
   {
-    set_border_color({r, g, b, a});
+    set_border_color({ r, g, b, a });
   }
 
 } // namespace AppGL

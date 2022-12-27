@@ -1,10 +1,4 @@
-#include "appgl/buffer.hpp"
-#include "appgl/context.hpp"
-#include "appgl/datatype.hpp"
-#include "appgl/program.hpp"
-#include "appgl/shaderssources.hpp"
-#include "appgl/vertexarray.hpp"
-#include "appwindow/context/window.hpp"
+#include "appwindow/appwindow.hpp"
 
 class ExampleWindow : public AppWindow::Window
 {

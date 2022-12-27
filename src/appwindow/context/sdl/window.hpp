@@ -14,7 +14,6 @@
    limitations under the License.
 */
 #pragma once
-#include "appgl/appgl.hpp"
 #include "appwindow/context/event.hpp"
 #include "appwindow/context/input.hpp"
 #include "appwindow/context/window.hpp"

@@ -15,7 +15,6 @@
 */
 #pragma once
 #include "appcore/appcore.hpp"
-#include "appcore/log.hpp"
 
 namespace AppWindow
 {

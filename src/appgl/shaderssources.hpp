@@ -14,7 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "appgl.hpp"
+#include "builtins.hpp"
 
 namespace AppGL
 {
@@ -38,26 +38,26 @@ namespace AppGL
                    const AppCore::String& gs_source,
                    const AppCore::String& tes_source,
                    const AppCore::String& tcs_source)
-        : sources{vs_source, fs_source, gs_source, tes_source, tcs_source}
+        : sources{ vs_source, fs_source, gs_source, tes_source, tcs_source }
     { }
 
     ShadersSources(const AppCore::String& vs_source,
                    const AppCore::String& fs_source,
                    const AppCore::String& gs_source,
                    const AppCore::String& tes_source)
-        : sources{vs_source, fs_source, gs_source, tes_source, NoShader}
+        : sources{ vs_source, fs_source, gs_source, tes_source, NoShader }
     { }
 
     ShadersSources(const AppCore::String& vs_source, const AppCore::String& fs_source, const AppCore::String& gs_source)
-        : sources{vs_source, fs_source, gs_source, NoShader, NoShader}
+        : sources{ vs_source, fs_source, gs_source, NoShader, NoShader }
     { }
 
     ShadersSources(const AppCore::String& vs_source, const AppCore::String& fs_source)
-        : sources{vs_source, fs_source, NoShader, NoShader, NoShader}
+        : sources{ vs_source, fs_source, NoShader, NoShader, NoShader }
     { }
 
     ShadersSources(const AppCore::String& vs_source)
-        : sources{vs_source, NoShader, NoShader, NoShader, NoShader}
+        : sources{ vs_source, NoShader, NoShader, NoShader, NoShader }
     { }
   };
 } // namespace AppGL

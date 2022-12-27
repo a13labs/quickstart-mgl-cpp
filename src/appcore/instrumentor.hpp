@@ -14,7 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "appcore.hpp"
+#include "builtins.hpp"
 #include "log.hpp"
 #include <nlohmann/json.hpp>
 #include <sys/types.h>
@@ -76,7 +76,7 @@ public:
         }
         internal_end_session();
       }
-      m_current_session = new InstrumentationSession({name});
+      m_current_session = new InstrumentationSession({ name });
     }
 
     void end_session()
@@ -156,12 +156,12 @@ public:
     void stop()
     {
       auto end_timepoint = std::chrono::steady_clock::now();
-      auto high_res_start = FloatingPointMicroseconds{m_start_timepoint.time_since_epoch()};
+      auto high_res_start = FloatingPointMicroseconds{ m_start_timepoint.time_since_epoch() };
       auto elapsed_time = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint).time_since_epoch() -
                           std::chrono::time_point_cast<std::chrono::microseconds>(m_start_timepoint).time_since_epoch();
 
       Instrumentor::get().write_profile(
-          {m_name, high_res_start, elapsed_time, std::this_thread::get_id(), GET_PROCESS_ID(), m_category});
+          { m_name, high_res_start, elapsed_time, std::this_thread::get_id(), GET_PROCESS_ID(), m_category });
 
       m_stopped = true;
     }

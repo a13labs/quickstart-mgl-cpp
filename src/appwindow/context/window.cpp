@@ -18,6 +18,7 @@
 #include "appcore/log.hpp"
 #include "appgl/context.hpp"
 #include "appwindow/context/sdl/window.hpp"
+#include "event.hpp"
 #include "input.hpp"
 
 namespace AppWindow

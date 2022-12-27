@@ -14,11 +14,7 @@
    limitations under the License.
 */
 #pragma once
-#include "appcore/appcore.hpp"
-#include "appcore/timer.hpp"
-#include "appgl/appgl.hpp"
-#include "appwindow/appwindow.hpp"
-#include "event.hpp"
+#include "appwindow/builtins.hpp"
 #include "input.hpp"
 
 namespace AppWindow
