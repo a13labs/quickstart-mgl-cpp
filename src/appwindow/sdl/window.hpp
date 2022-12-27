@@ -23,14 +23,21 @@
 
 namespace AppWindow
 {
-  class Window : public BaseWindow
+  typedef struct
+  {
+    EventHandler handler;
+    WindowConfig current_config = WindowConfig();
+    bool fullscreen = false;
+    int width;
+    int height;
+  } WindowState;
+
+  class WindowSDL : public NativeWindow
   {
 
 public:
-    Window(const WindowConfig& config = WindowConfig())
-        : BaseWindow(config)
-    { }
-    virtual ~Window() = default;
+    WindowSDL(const WindowConfig& config = WindowConfig());
+    virtual ~WindowSDL() = default;
 
 public:
     virtual bool create_window() override;
@@ -38,10 +45,12 @@ public:
     virtual void swap_buffers() override;
     virtual void process_events() override;
 
-    virtual bool on_window_resize(WindowResizeEvent& event) override;
-    AppCore::Ref<AppGL::Context> context();
+    virtual AppCore::Ref<AppGL::Context> context() override;
+    virtual int width() override;
+    virtual int height() override;
+    virtual int aspect_ratio() override;
 
-    virtual void initialize_event_handler() override;
+    virtual void initialize_event_handler(const EventHandler& handler) override;
     virtual void toggle_full_screen() override;
 
     virtual void set_title(const AppCore::String& value) override;
@@ -52,10 +61,6 @@ private:
     AppCore::Ref<AppGL::Context> m_shared_context;
     AppCore::String m_title;
     SDL_Window* native_window = nullptr;
+    WindowState m_state;
   };
-
-  inline AppCore::Ref<AppGL::Context> Window::context()
-  {
-    return m_shared_context;
-  }
 } // namespace AppWindow

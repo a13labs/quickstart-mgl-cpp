@@ -16,6 +16,7 @@
 #pragma once
 #include "appcore/appcore.hpp"
 #include "appcore/timer.hpp"
+#include "appgl/appgl.hpp"
 #include "appwindow.hpp"
 #include "event.hpp"
 #include "input.hpp"
@@ -36,14 +37,27 @@ namespace AppWindow
     Key::Enum fullscreen_key = Key::F11;
   } WindowConfig;
 
-  typedef struct
+  class NativeWindow
   {
-    EventHandler handler;
-    WindowConfig current_config = WindowConfig();
-    bool fullscreen = false;
-    int width;
-    int height;
-  } WindowState;
+public:
+    NativeWindow(const WindowConfig& config = WindowConfig()){};
+    virtual ~NativeWindow() = default;
+
+    virtual bool create_window() = 0;
+    virtual void destroy_window() = 0;
+    virtual void process_events() = 0;
+    virtual void swap_buffers() = 0;
+    virtual void initialize_event_handler(const EventHandler& handler) = 0;
+    virtual void toggle_full_screen() = 0;
+
+    virtual AppCore::Ref<AppGL::Context> context() = 0;
+    virtual int width() = 0;
+    virtual int height() = 0;
+    virtual int aspect_ratio() = 0;
+
+    virtual const AppCore::String& title() const = 0;
+    virtual void set_title(const AppCore::String& value) = 0;
+  };
 
   class BaseWindow
   {
@@ -53,21 +67,19 @@ public:
     virtual ~BaseWindow() = default;
 
 public:
-    virtual bool create_window() = 0;
-    virtual void destroy_window() = 0;
-    virtual void process_events() = 0;
-    virtual void swap_buffers() = 0;
-    virtual void initialize_event_handler() = 0;
-    virtual void set_title(const AppCore::String& value) = 0;
-    virtual void toggle_full_screen() = 0;
-
-    virtual const AppCore::String& title() const;
     void run();
     void quit();
 
-    float aspect_ratio();
+    int width();
+    int height();
+    int aspect_ratio();
 
-public:
+    const AppCore::String& title() const;
+    void set_title(const AppCore::String& value);
+
+    void toggle_full_screen();
+    AppCore::Ref<AppGL::Context> context();
+
     inline static BaseWindow& current() { return *s_instance; }
 
     // Events
@@ -75,7 +87,7 @@ public:
 
     // Windows Events
     virtual bool on_window_close(WindowCloseEvent& event);
-    virtual bool on_window_resize(WindowResizeEvent& event);
+    virtual bool on_window_resize(WindowResizeEvent& event) { return true; };
 
     // Keys Events
     virtual bool on_key_pressed(KeyPressedEvent& event) { return true; }
@@ -91,23 +103,51 @@ public:
     virtual void on_load(){};
     virtual void on_unload(){};
 
-protected:
-    WindowState m_state;
-
 private:
     static BaseWindow* s_instance;
     bool m_running;
     AppCore::Timer m_timer;
+    AppCore::Scope<NativeWindow> m_native_window;
   };
 
-  inline float BaseWindow::aspect_ratio()
+  inline int BaseWindow::width()
   {
-    return m_state.width / m_state.height;
+    return m_native_window->width();
+  }
+
+  inline int BaseWindow::height()
+  {
+    return m_native_window->height();
+  }
+
+  inline int BaseWindow::aspect_ratio()
+  {
+    return m_native_window->aspect_ratio();
   }
 
   inline const AppCore::String& BaseWindow::title() const
   {
-    return m_state.current_config.title;
+    return m_native_window->title();
+  }
+
+  inline void BaseWindow::set_title(const AppCore::String& value)
+  {
+    return m_native_window->set_title(value);
+  }
+
+  inline void BaseWindow::toggle_full_screen()
+  {
+    return m_native_window->toggle_full_screen();
+  }
+
+  inline void BaseWindow::quit()
+  {
+    m_running = false;
+  }
+
+  inline AppCore::Ref<AppGL::Context> BaseWindow::context()
+  {
+    return m_native_window->context();
   }
 
   WindowConfig load_window_configuration(const AppCore::String& filename);

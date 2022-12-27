@@ -5,9 +5,9 @@
 #include "appgl/shaderssources.hpp"
 #include "appgl/uniform.hpp"
 #include "appgl/vertexarray.hpp"
-#include "appwindow/sdl/window.hpp"
+#include "appwindow/window.hpp"
 
-class ExampleWindow : public AppWindow::Window
+class ExampleWindow : public AppWindow::BaseWindow
 {
 
   public:

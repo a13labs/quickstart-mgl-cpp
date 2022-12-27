@@ -17,9 +17,11 @@
 #include "window.hpp"
 #include "appcore/log.hpp"
 #include "input.hpp"
+#include "sdl/window.hpp"
 
 namespace AppWindow
 {
+
   BaseWindow* BaseWindow::s_instance = nullptr;
 
   BaseWindow::BaseWindow(const WindowConfig& config)
@@ -27,7 +29,7 @@ namespace AppWindow
     APPCORE_ASSERT(!s_instance, "BaseWindow already running!");
     AppCore::Log::init();
 
-    m_state.current_config = config;
+    m_native_window = AppCore::create_scope<WindowSDL>(config);
     s_instance = this;
     m_running = false;
   }
@@ -62,14 +64,13 @@ namespace AppWindow
     if(m_running)
       return;
 
-    if(!create_window())
+    if(!m_native_window->create_window())
     {
       APPCORE_TRACE("BaseWindow: Error creating Window");
       return;
     }
 
-    m_state.handler = APPCORE_BIND_EVENT_FN(BaseWindow::on_event);
-    initialize_event_handler();
+    m_native_window->initialize_event_handler(APPCORE_BIND_EVENT_FN(BaseWindow::on_event));
 
     m_running = true;
     APPCORE_PROFILE_BEGIN_SESSION();
@@ -79,10 +80,10 @@ namespace AppWindow
 
     while(m_running)
     {
-      process_events();
+      m_native_window->process_events();
       auto frame_time = m_timer.next_frame();
       on_draw(frame_time.current, frame_time.delta);
-      swap_buffers();
+      m_native_window->swap_buffers();
 #if APPCORE_PROFILE
       // Since we are profiling we just render one frame
       m_running = false;
@@ -91,19 +92,7 @@ namespace AppWindow
     on_unload();
 
     APPCORE_PROFILE_END_SESSION();
-    destroy_window();
-  }
-
-  void BaseWindow::quit()
-  {
-    m_running = false;
-  }
-
-  bool BaseWindow::on_window_resize(WindowResizeEvent& event)
-  {
-    m_state.width = event.get_width();
-    m_state.height = event.get_height();
-    return true;
+    m_native_window->destroy_window();
   }
 
   WindowConfig load_window_configuration(const AppCore::String& filename)

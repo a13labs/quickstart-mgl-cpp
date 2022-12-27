@@ -227,7 +227,14 @@ namespace AppWindow
     }
   }
 
-  bool Window::create_window()
+  WindowSDL::WindowSDL(const WindowConfig& config)
+  {
+    m_state.current_config = config;
+    m_state.width = config.width;
+    m_state.height = config.height;
+  }
+
+  bool WindowSDL::create_window()
   {
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -330,7 +337,7 @@ namespace AppWindow
     return true;
   }
 
-  void Window::destroy_window()
+  void WindowSDL::destroy_window()
   {
     m_shared_context->release();
     SDL_GL_DeleteContext(m_context);
@@ -341,29 +348,25 @@ namespace AppWindow
     SDL_Quit();
   }
 
-  void Window::swap_buffers()
+  void WindowSDL::swap_buffers()
   {
     SDL_GL_SwapWindow(native_window);
   }
 
-  bool Window::on_window_resize(WindowResizeEvent& event)
-  {
-    return BaseWindow::on_window_resize(event);
-  }
-
-  void Window::set_title(const AppCore::String& value)
+  void WindowSDL::set_title(const AppCore::String& value)
   {
     m_title = value;
     SDL_SetWindowTitle(native_window, m_title.c_str());
   }
 
-  const AppCore::String& Window::title() const
+  const AppCore::String& WindowSDL::title() const
   {
     return m_title;
   }
 
-  void Window::initialize_event_handler()
+  void WindowSDL::initialize_event_handler(const EventHandler& handler)
   {
+    m_state.handler = handler;
     init();
     SDL_AddEventWatch(
         [](void* userdata, SDL_Event* currentEvent) -> int {
@@ -377,6 +380,8 @@ namespace AppWindow
                   auto w = currentEvent->window.data1;
                   auto h = currentEvent->window.data2;
                   WindowResizeEvent event(w, h);
+                  m_state.width = w;
+                  m_state.height = h;
                   m_state.handler(event);
                 }
                 break;
@@ -415,7 +420,7 @@ namespace AppWindow
         &m_state);
   }
 
-  void Window::toggle_full_screen()
+  void WindowSDL::toggle_full_screen()
   {
     m_state.fullscreen = !m_state.fullscreen;
     if(m_state.fullscreen)
@@ -430,10 +435,30 @@ namespace AppWindow
     SDL_SetWindowFullscreen(native_window, 0);
   }
 
-  void Window::process_events()
+  void WindowSDL::process_events()
   {
     SDL_Event e;
     SDL_PollEvent(&e);
+  }
+
+  AppCore::Ref<AppGL::Context> WindowSDL::context()
+  {
+    return m_shared_context;
+  }
+
+  int WindowSDL::width()
+  {
+    return m_state.width;
+  }
+
+  int WindowSDL::height()
+  {
+    return m_state.height;
+  }
+
+  int WindowSDL::aspect_ratio()
+  {
+    return m_state.width / m_state.height;
   }
 
 } // namespace AppWindow
