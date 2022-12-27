@@ -52,6 +52,19 @@ namespace mgl
     INVALID = 0x40000000
   };
 
+  enum compare_func
+  {
+    NONE = 0x0000,
+    NEVER = GL_NEVER,
+    LESS = GL_LESS,
+    EQUAL = GL_EQUAL,
+    LESS_EQUAL = GL_LEQUAL,
+    GREATER = GL_GREATER,
+    NOT_EQUAL = GL_NOTEQUAL,
+    GREATER_EQUAL = GL_GEQUAL,
+    ALWAYS = GL_ALWAYS,
+  };
+
   struct color_mask
   {
     bool r, g, b, a;

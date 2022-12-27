@@ -23,19 +23,6 @@ namespace mgl
   class Texture2D : public Attachment, public Texture
   {
 public:
-    enum Func
-    {
-      NONE = 0x0000,
-      NEVER = GL_NEVER,
-      LESS = GL_LESS,
-      EQUAL = GL_EQUAL,
-      LESS_EQUAL = GL_LEQUAL,
-      GREATER = GL_GREATER,
-      NOT_EQUAL = GL_NOTEQUAL,
-      GREATER_EQUAL = GL_GEQUAL,
-      ALWAYS = GL_ALWAYS,
-    };
-
     ~Texture2D() = default;
 
     void release();
@@ -61,8 +48,8 @@ public:
     mgl_core::string swizzle();
     void set_swizzle(const mgl_core::string& value);
 
-    Texture2D::Func compare_func();
-    void set_compare_func(Texture2D::Func value);
+    mgl::compare_func compare_func();
+    void set_compare_func(mgl::compare_func value);
 
     float anisotropy();
     void set_anisotropy(float value);
@@ -93,7 +80,7 @@ private:
     int m_components;
     Texture::filter m_filter;
     int m_max_level;
-    Texture2D::Func m_compare_func;
+    mgl::compare_func m_compare_func;
     float m_anisotropy;
     bool m_repeat_x;
     bool m_repeat_y;
@@ -145,7 +132,7 @@ private:
     return m_filter;
   }
 
-  inline Texture2D::Func Texture2D::compare_func()
+  inline mgl::compare_func Texture2D::compare_func()
   {
     return m_compare_func;
   }

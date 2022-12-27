@@ -1257,7 +1257,7 @@ namespace mgl
     sampler->m_repeat_x = true;
     sampler->m_repeat_y = true;
     sampler->m_repeat_z = true;
-    sampler->m_compare_func = Sampler::func::NONE;
+    sampler->m_compare_func = mgl::compare_func::NONE;
     sampler->m_border_color[0] = 0.0;
     sampler->m_border_color[1] = 0.0;
     sampler->m_border_color[2] = 0.0;
@@ -1420,7 +1420,7 @@ namespace mgl
     texture->m_samples = samples;
     texture->m_data_type = data_type;
     texture->m_max_level = 0;
-    texture->m_compare_func = Texture2D::Func::NONE;
+    texture->m_compare_func = mgl::compare_func::NONE;
     texture->m_anisotropy = 1.0f;
     texture->m_depth = false;
 
@@ -1498,7 +1498,7 @@ namespace mgl
     texture->m_samples = samples;
     texture->m_data_type = from_dtype("f4", 2);
     texture->m_max_level = 0;
-    texture->m_compare_func = Texture2D::Func::EQUAL;
+    texture->m_compare_func = mgl::compare_func::EQUAL;
     texture->m_anisotropy = 1.0f;
     texture->m_depth = true;
     texture->m_filter = { GL_LINEAR, GL_LINEAR };

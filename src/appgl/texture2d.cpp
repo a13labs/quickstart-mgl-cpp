@@ -440,7 +440,7 @@ namespace mgl
     }
   }
 
-  void Texture2D::set_compare_func(Texture2D::Func value)
+  void Texture2D::set_compare_func(mgl::compare_func value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
