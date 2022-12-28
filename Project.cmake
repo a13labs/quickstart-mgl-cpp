@@ -19,7 +19,7 @@ set(
     json    "https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent" v3.9.1 
 )
 
-set(MGL_LIBRARIES "mgl_core" "mgl" "mgl_window")
+set(MGL_LIBRARIES "mgl_core" "mgl_opengl" "mgl_window")
 
 set(MGL_BUILD_EXAMPLES ON)
 set(MGL_EXAMPLES 

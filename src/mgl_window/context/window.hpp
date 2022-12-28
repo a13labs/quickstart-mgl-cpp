@@ -74,7 +74,7 @@ public:
     void set_title(const mgl_core::string& value);
 
     void toggle_full_screen();
-    mgl_core::ref<mgl::Context> context();
+    mgl_core::ref<mgl_opengl::Context> context();
 
     inline static Window& current() { return *s_instance; }
 
@@ -104,7 +104,7 @@ private:
     bool m_running;
     mgl_core::Timer m_timer;
     mgl_core::scope<NativeWindow> m_native_window;
-    mgl_core::ref<mgl::Context> m_context;
+    mgl_core::ref<mgl_opengl::Context> m_context;
   };
 
   inline int Window::width()
@@ -142,7 +142,7 @@ private:
     m_running = false;
   }
 
-  inline mgl_core::ref<mgl::Context> Window::context()
+  inline mgl_core::ref<mgl_opengl::Context> Window::context()
   {
     return m_context;
   }

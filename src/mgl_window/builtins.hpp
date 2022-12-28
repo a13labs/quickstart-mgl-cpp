@@ -1,6 +1,6 @@
 #pragma once
-#include "mgl/mgl.hpp"
 #include "mgl_core/mgl_core.hpp"
+#include "mgl_opengl/mgl_opengl.hpp"
 
 namespace mgl_window
 {

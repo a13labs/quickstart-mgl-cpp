@@ -116,7 +116,7 @@ namespace mgl_window
       }
     }
 
-    mgl_core::ref<mgl::Texture> load_texture_2d(const mgl_core::string& path, const texture_2d_load_opts& opts)
+    mgl_core::ref<mgl_opengl::Texture> load_texture_2d(const mgl_core::string& path, const texture_2d_load_opts& opts)
     {
       MGL_CORE_ASSERT(Window::current().context(), "No context!");
       const auto ctx = Window::current().context();
@@ -169,12 +169,12 @@ namespace mgl_window
       return true;
     }
 
-    mgl_core::ref<mgl::Program> load_program(const mgl_core::string& path, const program_load_opts& opts)
+    mgl_core::ref<mgl_opengl::Program> load_program(const mgl_core::string& path, const program_load_opts& opts)
     {
       return nullptr;
     }
 
-    mgl_core::ref<mgl::Program> load_program(const program_load_opts& opts)
+    mgl_core::ref<mgl_opengl::Program> load_program(const program_load_opts& opts)
     {
       return nullptr;
     }

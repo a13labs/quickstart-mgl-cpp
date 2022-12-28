@@ -50,6 +50,9 @@
 
 #define MGL_CORE_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
+#define MGL_MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define MGL_MIN(a, b) (((a) < (b)) ? (a) : (b))
+
 namespace mgl_core
 {
 

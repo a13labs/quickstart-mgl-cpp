@@ -17,8 +17,8 @@
 #include "mgl_window/context/window.hpp"
 #include "event.hpp"
 #include "input.hpp"
-#include "mgl/context.hpp"
 #include "mgl_core/log.hpp"
+#include "mgl_opengl/context.hpp"
 #include "mgl_window/context/sdl/window.hpp"
 
 namespace mgl_window
@@ -72,7 +72,7 @@ namespace mgl_window
       return;
     }
 
-    m_context = mgl::Context::create_context(mgl::ContextMode::SHARE, 330);
+    m_context = mgl_opengl::Context::create_context(mgl_opengl::ContextMode::SHARE, 330);
 
     if(!m_context)
     {

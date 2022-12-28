@@ -10,14 +10,14 @@ target_link_libraries(
 target_link_libraries(
     ${MGL_CURRENT_TARGET}
     PRIVATE
-    ${MGL_CORE_LIB}
+    mgl_core::mgl_core
 )
 
-# mgl
+# mgl_opengl
 target_link_libraries(
     ${MGL_CURRENT_TARGET}
     PRIVATE
-    ${MGL_LIB}
+    mgl_opengl::mgl_opengl
 )
 
 # Export library
