@@ -35,7 +35,7 @@ public:
     size_t num_uniforms();
     size_t num_uniform_blocks();
 
-    void run(int x, int y, int z);
+    void run(int x = 1, int y = 1, int z = 1);
 
     const mgl_core::ref<Uniform> operator[](const mgl_core::string& name) const;
 

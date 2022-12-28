@@ -27,6 +27,14 @@
             "program": "${workspaceFolder}/output/bin/basic_simple_color_triangle",
             "args": [],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "compute_shader",
+            "program": "${workspaceFolder}/output/bin/compute_shader",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

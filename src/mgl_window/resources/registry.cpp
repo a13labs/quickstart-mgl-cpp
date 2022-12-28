@@ -16,7 +16,7 @@ namespace mgl_window
 
     mipmap_levels null_mipmap_levels = { 0, 0 };
     texture_2d_load_opts texture_2d_load_defaults = { false, true, null_mipmap_levels, 1.0 };
-    program_load_opts program_load_defaults = { true, {}, {} };
+    program_load_opts program_load_defaults = { {}, {} };
     data_load_opts data_load_defaults = { mgl_core::input_file::in | mgl_core::input_file::binary };
 
     bool append_unique_path(const mgl_core::string& value, mgl_core::path_list& list)

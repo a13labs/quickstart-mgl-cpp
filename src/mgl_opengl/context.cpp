@@ -291,9 +291,9 @@ namespace mgl_opengl
 
     auto buffer = new Buffer();
     buffer->m_released = false;
-
     buffer->m_size = reserve;
     buffer->m_dynamic = dynamic;
+    buffer->m_context = this;
 
     buffer->m_buffer_obj = 0;
     gl.GenBuffers(1, (GLuint*)&buffer->m_buffer_obj);
@@ -307,8 +307,6 @@ namespace mgl_opengl
 
     gl.BindBuffer(GL_ARRAY_BUFFER, buffer->m_buffer_obj);
     gl.BufferData(GL_ARRAY_BUFFER, reserve, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
-
-    buffer->m_context = this;
 
     return mgl_core::ref<Buffer>(buffer);
   }

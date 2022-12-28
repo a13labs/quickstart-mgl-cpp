@@ -57,6 +57,10 @@ namespace mgl_opengl
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
+
+    if(read_size == 0)
+      read_size = m_size;
+
     MGL_CORE_ASSERT(read_size >= 0, "invalid size: {0}", read_size)
     MGL_CORE_ASSERT(read_offset >= 0, "invalid offset: {0}", read_offset)
     MGL_CORE_ASSERT(write_offset >= 0, "invalid write offset: {0}", write_offset)
@@ -102,8 +106,13 @@ namespace mgl_opengl
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
-
     const GLMethods& gl = m_context->gl();
+
+    if(size == 0)
+    {
+      size = m_size;
+    }
+
     gl.BindBuffer(GL_ARRAY_BUFFER, m_buffer_obj);
     gl.BufferData(GL_ARRAY_BUFFER, size, 0, m_dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
   }
@@ -113,10 +122,15 @@ namespace mgl_opengl
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
-    MGL_CORE_ASSERT(size > 0, "invalid data size: {0}", size)
-    MGL_CORE_ASSERT(offset > 0, "invalid offset: {0}", offset)
-
+    MGL_CORE_ASSERT(size >= 0, "invalid data size: {0}", size)
+    MGL_CORE_ASSERT(offset >= 0, "invalid offset: {0}", offset)
     const GLMethods& gl = m_context->gl();
+
+    if(size == 0)
+    {
+      size = m_size - offset;
+    }
+
     gl.BindBufferRange(GL_UNIFORM_BUFFER, binding, m_buffer_obj, offset, size);
   }
 
@@ -125,10 +139,15 @@ namespace mgl_opengl
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
-    MGL_CORE_ASSERT(size > 0, "invalid data size: {0}", size)
-    MGL_CORE_ASSERT(offset > 0, "invalid offset: {0}", offset)
-
+    MGL_CORE_ASSERT(size >= 0, "invalid data size: {0}", size)
+    MGL_CORE_ASSERT(offset >= 0, "invalid offset: {0}", offset)
     const GLMethods& gl = m_context->gl();
+
+    if(size == 0)
+    {
+      size = m_size - offset;
+    }
+
     gl.BindBufferRange(GL_SHADER_STORAGE_BUFFER, binding, m_buffer_obj, offset, size);
   }
 

@@ -328,11 +328,14 @@ namespace mgl_opengl
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
-    format_iterator it = format_iterator(format);
-    format_info format_info = it.info();
-
     MGL_CORE_ASSERT(!(type[0] == 'f' && normalize), "invalid normalize");
+
+    format_iterator it = format_iterator(format);
+
+#ifdef MGL_CORE_ENABLE_ASSERTS
+    format_info format_info = it.info();
     MGL_CORE_ASSERT(!(!format_info.valid || format_info.divisor || format_info.nodes != 1), "invalid format");
+#endif
 
     format_node* node = it.next();
     MGL_CORE_ASSERT(node->type, "invalid format");

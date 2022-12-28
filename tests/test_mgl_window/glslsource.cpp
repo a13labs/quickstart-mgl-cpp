@@ -18,7 +18,7 @@
 
 TEST(AntomicCoreTest, LayerTests)
 {
-  auto shader = mgl_window::resources::ShaderSource(R""""(
+  auto shader = mgl_window::resources::ShaderSource(R"(
 #ifdef VERTEX_SHADER
             #version 330
 
@@ -63,9 +63,9 @@ TEST(AntomicCoreTest, LayerTests)
                 f_color = vec4(texture(Texture, v_text).rgb * lum, 1.0);
             }
 #endif
-)"""");
+)");
 
-  auto vs_expected = mgl_core::string(R""""(
+  auto vs_expected = mgl_core::string(R"(
 #define VERTEX_SHADER
 #define A 1
 #define B 2
@@ -114,9 +114,9 @@ TEST(AntomicCoreTest, LayerTests)
                 f_color = vec4(texture(Texture, v_text).rgb * lum, 1.0);
             }
 #endif
-)"""");
+)");
 
-  auto fs_expected = mgl_core::string(R""""(
+  auto fs_expected = mgl_core::string(R"(
 #define FRAGMENT_SHADER
 #define A 1
 #define B 2
@@ -165,7 +165,7 @@ TEST(AntomicCoreTest, LayerTests)
                 f_color = vec4(texture(Texture, v_text).rgb * lum, 1.0);
             }
 #endif
-)"""");
+)");
 
   mgl_core::trim(vs_expected);
   mgl_core::trim(fs_expected);

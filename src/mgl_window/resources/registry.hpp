@@ -35,7 +35,6 @@ namespace mgl_window
 
     struct program_load_opts
     {
-      bool reloadable;
       shader_defines defines;
       mgl_opengl::shaders_outputs outputs;
     };

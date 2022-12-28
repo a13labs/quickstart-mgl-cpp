@@ -16,7 +16,6 @@
 #pragma once
 #include "builtins.hpp"
 #include "log.hpp"
-#include <nlohmann/json.hpp>
 #include <sys/types.h>
 
 #ifdef MGL_PLATFORM_WINDOWS
@@ -53,7 +52,7 @@ private:
     std::mutex m_mutex;
     instrumentation_session* m_current_session;
     string m_filepath;
-    nlohmann::json m_trace_events;
+    json m_trace_events;
 
 public:
     Instrumentor()
@@ -91,7 +90,7 @@ public:
       tidss << result.thread_id;
       uint64_t tid = std::stoull(tidss.str());
 
-      nlohmann::json traceEvent;
+      json traceEvent;
       traceEvent["cat"] = "function," + result.category;
       traceEvent["dur"] = result.elapsed_time.count();
       traceEvent["name"] = result.name;
@@ -113,7 +112,7 @@ public:
 private:
     void write_trace_document()
     {
-      nlohmann::json document;
+      json document;
 
       document["otherData"] = "{ \"version\":\"mgl_core v" MGL_SEM_VERSION "\"}"_json;
       document["traceEvents"] = m_trace_events;

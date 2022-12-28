@@ -32,7 +32,7 @@ void ExampleWindow::on_load()
 
   const auto ctx = context();
   m_program = ctx->program({
-      R""""(
+      R"(
                 #version 330
 
                 in vec2 vert;
@@ -50,15 +50,15 @@ void ExampleWindow::on_load()
                     gl_Position = vec4((rot * vert)*scale, 0.0, 1.0);
                     // gl_Position = vec4(vert, 0.0, 1.0);
                 }
-              )"""",
-      R""""(
+              )",
+      R"(
                 #version 330
                 in vec4 frag_color;
                 out vec4 color;
                 void main() {
                     color = vec4(frag_color);
                 }
-            )"""",
+            )",
 
   });
 

@@ -16,6 +16,7 @@
 #pragma once
 #include "config.h"
 #include "pch.hpp"
+#include <nlohmann/json.hpp>
 
 #define MGL_CORE_PROFILE 0
 
@@ -224,4 +225,6 @@ namespace mgl_core
   using output_file = std::ofstream;
   using openmode = std::ifstream::openmode;
   extern const path null_path;
+
+  using json = nlohmann::json;
 } // namespace mgl_core

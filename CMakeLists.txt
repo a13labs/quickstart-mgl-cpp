@@ -86,6 +86,13 @@ foreach(EXECUTABLE ${MGL_EXECUTABLES})
 endforeach()
 
 if(MGL_BUILD_EXAMPLES)
+
+  while(MGL_EXAMPLES_EXTERNAL_PROJECTS)
+    list(POP_FRONT MGL_EXAMPLES_EXTERNAL_PROJECTS PRJ_NAME PRJ_GIT_REPO PRJ_GIT_TAG)
+    message(STATUS ${PRJ_NAME} ${PRJ_GIT_REPO} ${PRJ_GIT_TAG} )
+    AddExternalProject(${PRJ_NAME} ${PRJ_GIT_REPO} ${PRJ_GIT_TAG})
+  endwhile()
+
   foreach(EXAMPLE ${MGL_EXAMPLES})
     message(STATUS "Adding examples: '${EXAMPLE}")
     AddExample(${EXAMPLE})

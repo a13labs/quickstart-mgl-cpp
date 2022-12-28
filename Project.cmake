@@ -15,16 +15,21 @@ set(MGL_BUILD_TESTS ON)
 set(
     MGL_EXTERNAL_PROJECTS 
     glm     "https://github.com/g-truc/glm"                                      0.9.9.8
-    spdlog  "https://github.com/gabime/spdlog.git"                               v1.9.0   
-    json    "https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent" v3.9.1 
+    spdlog  "https://github.com/gabime/spdlog.git"                               v1.10.0   
+    json    "https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent" v3.11.2 
 )
 
 set(MGL_LIBRARIES "mgl_core" "mgl_opengl" "mgl_window")
 
 set(MGL_BUILD_EXAMPLES ON)
+set(
+    MGL_EXAMPLES_EXTERNAL_PROJECTS 
+    NumCpp     "https://github.com/dpilger26/NumCpp.git"                        Version_2.8.0
+)
 set(MGL_EXAMPLES 
     "basic_simple_color_triangle"
     "basic_alpha_blending"
+    "compute_shader"
    )
-
+set(NUMCPP_NO_USE_BOOST ON)
 set(MGL_SHOW_CMAKE_VARS OFF)

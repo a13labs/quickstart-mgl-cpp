@@ -28,7 +28,7 @@ void ExampleWindow::on_load()
 
   const auto ctx = context();
   m_program = ctx->program({
-      R""""(
+      R"(
                 #version 330
 
                 in vec2 in_vert;
@@ -40,8 +40,8 @@ void ExampleWindow::on_load()
                     gl_Position = vec4(in_vert, 0.0, 1.0);
                     v_color = in_color;
                 }
-              )"""",
-      R""""(
+              )",
+      R"(
                 #version 330
 
                 in vec3 v_color;
@@ -51,7 +51,7 @@ void ExampleWindow::on_load()
                     // We're not interested in changing the alpha value
                     f_color = vec4(v_color, 1.0);
                 }
-            )"""",
+            )",
 
   });
 
