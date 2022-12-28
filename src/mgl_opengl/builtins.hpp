@@ -69,7 +69,7 @@ namespace mgl_opengl
 
   struct data_type;
 
-  struct shaders_sources;
+  struct glsl_sources;
 
   class Attribute;
   class Attachment;

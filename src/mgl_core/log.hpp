@@ -20,18 +20,17 @@
 
 namespace mgl_core
 {
-
-  namespace Log
+  namespace log
   {
     void init(const string& file = "app.log");
     extern ref<spdlog::logger> logger;
-  }; // namespace Log
+  }; // namespace log
 
 } // namespace mgl_core
 
 // log macros
-#define MGL_CORE_TRACE(...) ::mgl_core::Log::logger->trace(__VA_ARGS__)
-#define MGL_CORE_INFO(...) ::mgl_core::Log::logger->info(__VA_ARGS__)
-#define MGL_CORE_WARN(...) ::mgl_core::Log::logger->warn(__VA_ARGS__)
-#define MGL_CORE_ERROR(...) ::mgl_core::Log::logger->error(__VA_ARGS__)
-#define MGL_CORE_CRITICAL(...) ::mgl_core::Log::logger->critical(__VA_ARGS__)
+#define MGL_CORE_TRACE(...) ::mgl_core::log::logger->trace(__VA_ARGS__)
+#define MGL_CORE_INFO(...) ::mgl_core::log::logger->info(__VA_ARGS__)
+#define MGL_CORE_WARN(...) ::mgl_core::log::logger->warn(__VA_ARGS__)
+#define MGL_CORE_ERROR(...) ::mgl_core::log::logger->error(__VA_ARGS__)
+#define MGL_CORE_CRITICAL(...) ::mgl_core::log::logger->critical(__VA_ARGS__)

@@ -20,4 +20,42 @@ namespace mgl_core
   string join(const string& delimiter, const list<uint8_t>& list);
   string join(const string& delimiter, const list<float>& list);
 
+  inline void ltrim(string& s)
+  {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+  }
+
+  inline void rtrim(string& s)
+  {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+  }
+
+  inline void trim(string& s)
+  {
+    rtrim(s);
+    ltrim(s);
+  }
+
+  inline string ltrim_copy(string s)
+  {
+    ltrim(s);
+    return s;
+  }
+
+  inline string rtrim_copy(string s)
+  {
+    rtrim(s);
+    return s;
+  }
+
+  inline string trim_copy(string s)
+  {
+    trim(s);
+    return s;
+  }
+
+  inline bool in(const string& e, const string& str)
+  {
+    return str.find(e);
+  }
 } // namespace mgl_core

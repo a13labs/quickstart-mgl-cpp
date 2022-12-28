@@ -29,7 +29,7 @@ namespace mgl_window
   Window::Window(const window_config& config)
   {
     MGL_CORE_ASSERT(!s_instance, "BaseWindow already running!");
-    mgl_core::Log::init();
+    mgl_core::log::init();
 
     m_native_window = mgl_core::create_scope<WindowSDL>(config);
     s_instance = this;

@@ -29,20 +29,20 @@
 
 namespace mgl_core
 {
-  using FloatingPointMicroseconds = std::chrono::duration<double, std::micro>;
+  using floating_point_microseconds = std::chrono::duration<double, std::micro>;
 
-  struct ProfileResult
+  struct profile_result
   {
     string name;
 
-    FloatingPointMicroseconds start;
+    floating_point_microseconds start;
     std::chrono::microseconds elapsed_time;
     std::thread::id thread_id;
     int process_id;
     string category;
   };
 
-  struct InstrumentationSession
+  struct instrumentation_session
   {
     string name;
   };
@@ -51,7 +51,7 @@ namespace mgl_core
   {
 private:
     std::mutex m_mutex;
-    InstrumentationSession* m_current_session;
+    instrumentation_session* m_current_session;
     string m_filepath;
     nlohmann::json m_trace_events;
 
@@ -70,13 +70,13 @@ public:
         // Subsequent profiling output meant for the original session will end up in the
         // newly opened session instead.  That's better than having badly formatted
         // profiling output.
-        if(Log::logger) // Edge case: begin_session() might be before Log::Init()
+        if(log::logger) // Edge case: begin_session() might be before Log::Init()
         {
           MGL_CORE_ERROR("Instrumentor::begin_session('{0}') when session '{1}' already open.", name, m_current_session->name);
         }
         internal_end_session();
       }
-      m_current_session = new InstrumentationSession({ name });
+      m_current_session = new instrumentation_session({ name });
     }
 
     void end_session()
@@ -85,7 +85,7 @@ public:
       internal_end_session();
     }
 
-    void write_profile(const ProfileResult& result)
+    void write_profile(const profile_result& result)
     {
       std::stringstream tidss;
       tidss << result.thread_id;
@@ -156,7 +156,7 @@ public:
     void stop()
     {
       auto end_timepoint = std::chrono::steady_clock::now();
-      auto high_res_start = FloatingPointMicroseconds{ m_start_timepoint.time_since_epoch() };
+      auto high_res_start = floating_point_microseconds{ m_start_timepoint.time_since_epoch() };
       auto elapsed_time = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint).time_since_epoch() -
                           std::chrono::time_point_cast<std::chrono::microseconds>(m_start_timepoint).time_since_epoch();
 
@@ -172,11 +172,11 @@ private:
     bool m_stopped;
   };
 
-  namespace InstrumentorUtils
+  namespace instrumentor_utils
   {
 
     template <size_t N>
-    struct ChangeResult
+    struct change_result
     {
       char Data[N];
     };
@@ -184,7 +184,7 @@ private:
     template <size_t N, size_t K>
     constexpr auto cleanup_output_string(const char (&expr)[N], const char (&remove)[K])
     {
-      ChangeResult<N> result = {};
+      change_result<N> result = {};
 
       size_t src_index = 0;
       size_t dst_index = 0;
@@ -200,7 +200,7 @@ private:
       }
       return result;
     }
-  } // namespace InstrumentorUtils
+  } // namespace instrumentor_utils
 } // namespace mgl_core
 
 #ifndef MGL_CORE_PROFILE
@@ -232,7 +232,7 @@ private:
 #  define MGL_CORE_PROFILE_BEGIN_SESSION() ::mgl_core::Instrumentor::get().begin_session("mgl_core")
 #  define MGL_CORE_PROFILE_END_SESSION() ::mgl_core::Instrumentor::get().end_session()
 #  define MGL_CORE_PROFILE_SCOPE(name, category)                                                                                 \
-    constexpr auto fixedName = ::mgl_core::InstrumentorUtils::cleanup_output_string(name, "__cdecl ");                           \
+    constexpr auto fixedName = ::mgl_core::instrumentor_utils::cleanup_output_string(name, "__cdecl ");                          \
     ::mgl_core::InstrumentationTimer timer##__LINE__(fixedName.Data, category)
 #  define MGL_CORE_PROFILE_FUNCTION(category) MGL_CORE_PROFILE_SCOPE(MGL_CORE_FUNC_SIG, category)
 #else

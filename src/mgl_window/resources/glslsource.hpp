@@ -7,6 +7,7 @@ namespace mgl_window
   {
     class ShaderSource
     {
+  public:
       enum type
       {
         VERTEX_SHADER,
@@ -16,12 +17,11 @@ namespace mgl_window
         TESS_CONTROL_SHADER,
       };
 
-  public:
       ShaderSource(const mgl_core::string& source);
       ~ShaderSource() = default;
 
       const mgl_core::string source(ShaderSource::type type, const shader_defines& defines = {});
-      const mgl_core::string_list attributes();
+      const mgl_core::string_list outputs();
 
   private:
       void handle_includes(int depth = 0, int source_id = 0);

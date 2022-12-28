@@ -18,7 +18,7 @@
 
 namespace mgl_opengl
 {
-  struct shaders_sources
+  struct glsl_sources
   {
     enum type
     {
@@ -31,33 +31,39 @@ namespace mgl_opengl
       COUNT,
     };
 
-    mgl_core::string sources[shaders_sources::COUNT];
+    mgl_core::string sources[glsl_sources::COUNT];
 
-    shaders_sources(const mgl_core::string& vs_source,
-                    const mgl_core::string& fs_source,
-                    const mgl_core::string& gs_source,
-                    const mgl_core::string& tes_source,
-                    const mgl_core::string& tcs_source)
+    glsl_sources(const mgl_core::string& vs_source,
+                 const mgl_core::string& fs_source,
+                 const mgl_core::string& gs_source,
+                 const mgl_core::string& tes_source,
+                 const mgl_core::string& tcs_source)
         : sources{ vs_source, fs_source, gs_source, tes_source, tcs_source }
     { }
 
-    shaders_sources(const mgl_core::string& vs_source,
-                    const mgl_core::string& fs_source,
-                    const mgl_core::string& gs_source,
-                    const mgl_core::string& tes_source)
+    glsl_sources(const mgl_core::string& vs_source,
+                 const mgl_core::string& fs_source,
+                 const mgl_core::string& gs_source,
+                 const mgl_core::string& tes_source)
         : sources{ vs_source, fs_source, gs_source, tes_source, no_shader }
     { }
 
-    shaders_sources(const mgl_core::string& vs_source, const mgl_core::string& fs_source, const mgl_core::string& gs_source)
+    glsl_sources(const mgl_core::string& vs_source, const mgl_core::string& fs_source, const mgl_core::string& gs_source)
         : sources{ vs_source, fs_source, gs_source, no_shader, no_shader }
     { }
 
-    shaders_sources(const mgl_core::string& vs_source, const mgl_core::string& fs_source)
+    glsl_sources(const mgl_core::string& vs_source, const mgl_core::string& fs_source)
         : sources{ vs_source, fs_source, no_shader, no_shader, no_shader }
     { }
 
-    shaders_sources(const mgl_core::string& vs_source)
+    glsl_sources(const mgl_core::string& vs_source)
         : sources{ vs_source, no_shader, no_shader, no_shader, no_shader }
     { }
+
+    inline const mgl_core::string& vertex() { return sources[type::VERTEX_SHADER]; }
+    inline const mgl_core::string& fragment() { return sources[type::FRAGMENT_SHADER]; }
+    inline const mgl_core::string& geometry() { return sources[type::GEOMETRY_SHADER]; }
+    inline const mgl_core::string& tess_control() { return sources[type::TESS_CONTROL_SHADER]; }
+    inline const mgl_core::string& tess_evaluation() { return sources[type::TESS_EVALUATION_SHADER]; }
   };
 } // namespace mgl_opengl

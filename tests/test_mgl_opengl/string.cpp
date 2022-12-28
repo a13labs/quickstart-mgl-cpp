@@ -13,31 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#pragma once
+#include "mgl_core/string.hpp"
+#include "gtest/gtest.h"
 
-#include "span.hpp"
-#include <algorithm>
-#include <any>
-#include <array>
-#include <chrono>
-#include <cstdint>
-#include <cstring>
-#include <filesystem>
-#include <fstream>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <map>
-#include <memory>
-#include <mutex>
-#include <queue>
-#include <sstream>
-#include <stack>
-#include <string>
-#include <thread>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
-#include <variant>
-#include <vector>
+TEST(AntomicCoreTest, LayerTests)
+{
+
+  auto str = mgl_core::format("This is a {0}!", "test");
+  // A test layer
+  EXPECT_EQ(str, "This is a test!");
+}

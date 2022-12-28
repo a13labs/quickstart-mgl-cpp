@@ -36,13 +36,8 @@ namespace mgl_window
     struct program_load_opts
     {
       bool reloadable;
-      mgl_core::string vertex_shader;
-      mgl_core::string geometry_shader;
-      mgl_core::string fragment_shader;
-      mgl_core::string tess_control_shader;
-      mgl_core::string tess_evaluation_shader;
       shader_defines defines;
-      mgl_core::string_list varyings;
+      mgl_opengl::shaders_outputs outputs;
     };
 
     extern program_load_opts program_load_defaults;
@@ -66,7 +61,12 @@ namespace mgl_window
     load_data_file(const mgl_core::string& path, mgl_core::input_file& file, const data_load_opts& opts = data_load_defaults);
     mgl_core::ref<mgl_opengl::Program> load_program(const mgl_core::string& path,
                                                     const program_load_opts& opts = program_load_defaults);
-    mgl_core::ref<mgl_opengl::Program> load_program(const program_load_opts& opts = program_load_defaults);
+    mgl_core::ref<mgl_opengl::Program> load_program(mgl_core::string vertex_shader,
+                                                    mgl_core::string fragment_shader = "",
+                                                    mgl_core::string geometry_shader = "",
+                                                    mgl_core::string tess_control_shader = "",
+                                                    mgl_core::string tess_evaluation_shader = "",
+                                                    const program_load_opts& opts = program_load_defaults);
 
   } // namespace resources
 } // namespace mgl_window

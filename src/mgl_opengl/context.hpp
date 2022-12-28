@@ -88,7 +88,7 @@ public:
     mgl_core::ref<Framebuffer> framebuffer(mgl_core::ref<Attachment> depth_attachment);
 
     // Program
-    mgl_core::ref<Program> program(const shaders_sources& shaders,
+    mgl_core::ref<Program> program(const glsl_sources& shaders,
                                    const shaders_outputs& outputs = {},
                                    const fragment_outputs& fragment_outputs = {},
                                    bool interleaved = true);

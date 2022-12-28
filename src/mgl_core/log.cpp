@@ -19,7 +19,7 @@
 
 namespace mgl_core
 {
-  namespace Log
+  namespace log
   {
 
     ref<spdlog::logger> logger;
@@ -44,5 +44,5 @@ namespace mgl_core
       logger->set_level(spdlog::level::trace);
       logger->flush_on(spdlog::level::trace);
     }
-  } // namespace Log
+  } // namespace log
 } // namespace mgl_core
