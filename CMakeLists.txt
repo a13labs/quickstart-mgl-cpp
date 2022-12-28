@@ -120,7 +120,12 @@ if(MGL_BUILD_TESTS)
   enable_testing()
   include(Dart)
 
-  add_subdirectory(tests)
+  ListTests(UNITTESTS)
+
+  foreach(UNITTEST ${UNITTESTS})
+    AddUnitTest(${UNITTEST})
+  endforeach(UNITTEST ${UNITTESTS})
+
 endif() 
 
 # Debug CMake Vars, uncomment to show CMake vars

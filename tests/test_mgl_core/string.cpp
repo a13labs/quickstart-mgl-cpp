@@ -13,11 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+#include "mgl_core/string.hpp"
 #include "gtest/gtest.h"
 
 TEST(AntomicCoreTest, LayerTests)
 {
 
+  auto str = mgl_core::format("This is a {0}!", "test");
   // A test layer
-  EXPECT_EQ("sample_test", "sample_test");
+  EXPECT_EQ(str, "This is a test!");
 }

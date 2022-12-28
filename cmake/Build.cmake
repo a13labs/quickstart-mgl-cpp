@@ -88,7 +88,7 @@ function(AddLibrary TGT_NAME)
   FILE(GLOB_RECURSE PRG_HDRS "${MGL_CURRENT_SOURCE}/*.hpp")
 
   add_library(${MGL_CURRENT_TARGET} ${PRG_SRCS} ${PRG_HDRS})
-
+  add_library("${MGL_CURRENT_TARGET}::${MGL_CURRENT_TARGET}" ALIAS ${MGL_CURRENT_TARGET})
   target_compile_features(
     ${MGL_CURRENT_TARGET} 
     PUBLIC ${MGL_CPP_STD}

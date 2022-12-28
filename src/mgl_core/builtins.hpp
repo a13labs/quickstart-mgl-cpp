@@ -221,7 +221,4 @@ namespace mgl_core
   using output_file = std::ofstream;
   using openmode = std::ifstream::openmode;
   extern const path null_path;
-
-  void split(string& str, const string& delimiter, string_list& list);
-
 } // namespace mgl_core
