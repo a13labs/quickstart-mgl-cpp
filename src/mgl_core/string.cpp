@@ -24,9 +24,7 @@ namespace mgl_core
 
   string trim(string s)
   {
-    // Remove leading whitespace
     s.erase(s.begin(), std::find_if_not(s.begin(), s.end(), isspace));
-    // Remove trailing whitespace
     s.erase(std::find_if_not(s.rbegin(), s.rend(), isspace).base(), s.end());
     return s;
   }
@@ -38,75 +36,30 @@ namespace mgl_core
     return s;
   }
 
-  string join(char delimiter, const string_list& list, size_t start, size_t end)
+  string join(char delimiter, const string_list& vec, size_t start_index, size_t end_index)
   {
-    MGL_CORE_ASSERT(start >= 0 && start < list.size(), "out of bounds");
-    MGL_CORE_ASSERT(end == npos || end < list.size(), "out of bounds");
+    if(end_index == npos)
+      end_index = vec.size();
 
-    if(end == npos)
-      end = list.size();
+    if(end_index < start_index)
+      return "";
 
     string ret;
-    for(auto it = list.begin() + start; it != list.begin() + end; it++)
+
+    if(start_index < vec.size() && end_index <= vec.size())
     {
-      if(!ret.empty())
-        ret += delimiter;
-      ret += *it;
+      if(end_index == start_index)
+        return vec.at(end_index);
+
+      for(auto it = vec.begin() + start_index; it != vec.begin() + end_index; it++)
+      {
+        if(!ret.empty())
+          ret += delimiter;
+        ret += *it;
+      }
     }
+
     return ret;
   }
 
-  template <typename t>
-  inline string join_impl(const string& delimiter, const list<t>& list, size_t start, size_t end)
-  {
-    MGL_CORE_ASSERT(start >= 0 && start < list.size(), "out of bounds");
-    MGL_CORE_ASSERT(end == npos || end < list.size(), "out of bounds");
-
-    if(end == npos)
-      end = list.size();
-
-    string ret;
-    for(auto it = list.begin() + start; it != list.begin() + end; it++)
-    {
-      if(!ret.empty())
-        ret += delimiter;
-      ret += std::to_string(*it);
-    }
-    return ret;
-  }
-
-  string join(const string& delimiter, const list<int32_t>& list, size_t start, size_t end)
-  {
-    return join_impl<int32_t>(delimiter, list, start, end);
-  }
-
-  string join(const string& delimiter, const list<int16_t>& list, size_t start, size_t end)
-  {
-    return join_impl<int16_t>(delimiter, list, start, end);
-  }
-
-  string join(const string& delimiter, const list<int8_t>& list, size_t start, size_t end)
-  {
-    return join_impl<int8_t>(delimiter, list, start, end);
-  }
-
-  string join(const string& delimiter, const list<uint32_t>& list, size_t start, size_t end)
-  {
-    return join_impl<uint32_t>(delimiter, list, start, end);
-  }
-
-  string join(const string& delimiter, const list<uint16_t>& list, size_t start, size_t end)
-  {
-    return join_impl<uint16_t>(delimiter, list, start, end);
-  }
-
-  string join(const string& delimiter, const list<uint8_t>& list, size_t start, size_t end)
-  {
-    return join_impl<uint8_t>(delimiter, list, start, end);
-  }
-
-  string join(const string& delimiter, const list<float>& list, size_t start, size_t end)
-  {
-    return join_impl<float>(delimiter, list, start, end);
-  }
 } // namespace mgl_core
