@@ -22,7 +22,7 @@
 
 namespace mgl_opengl
 {
-  void Scope::release()
+  void scope::release()
   {
     if(m_released)
     {
@@ -38,7 +38,7 @@ namespace mgl_opengl
     m_buffers.clear();
   }
 
-  void Scope::begin()
+  void scope::begin()
   {
     MGL_CORE_ASSERT(!m_released, "Scope released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -115,7 +115,7 @@ namespace mgl_opengl
     }
   }
 
-  void Scope::end()
+  void scope::end()
   {
     MGL_CORE_ASSERT(!m_released, "Scope released");
     MGL_CORE_ASSERT(m_context, "No context");

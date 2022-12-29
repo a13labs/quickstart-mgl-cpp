@@ -19,14 +19,14 @@
 
 namespace mgl_opengl
 {
-  class Varying
+  class varying
   {
 public:
-    ~Varying() = default;
+    ~varying() = default;
 
 private:
-    friend class Context;
-    Varying(const mgl_core::string& name, int number, size_t array_length, int m_dimension);
+    friend class context;
+    varying(const mgl_core::string& name, int number, size_t array_length, int m_dimension);
 
     mgl_core::string m_name;
     int m_number;

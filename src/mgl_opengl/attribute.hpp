@@ -35,7 +35,7 @@ public:
     ~attribute() = default;
 
 private:
-    friend class Context;
+    friend class context;
     attribute(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t array_length);
 
     mgl_core::string m_name;

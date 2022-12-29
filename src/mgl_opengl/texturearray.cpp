@@ -22,7 +22,7 @@
 
 namespace mgl_opengl
 {
-  void TextureArray::release()
+  void texture_array::release()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -37,7 +37,7 @@ namespace mgl_opengl
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  bool TextureArray::read_into(mgl_core::mem_buffer<uint8_t>& dst, int alignment, size_t write_offset)
+  bool texture_array::read_into(mgl_core::mem_buffer<uint8_t>& dst, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -65,7 +65,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureArray::read_into(buffer_ref& dst, int alignment, size_t write_offset)
+  bool texture_array::read_into(buffer_ref& dst, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -88,7 +88,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureArray::write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_3d& viewport, int alignment)
+  bool texture_array::write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -121,7 +121,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureArray::write(const mgl_core::mem_buffer<uint8_t>& src, int alignment)
+  bool texture_array::write(const mgl_core::mem_buffer<uint8_t>& src, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -154,7 +154,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureArray::write(const buffer_ref& src, const mgl_core::viewport_3d& viewport, int alignment)
+  bool texture_array::write(const buffer_ref& src, const mgl_core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -184,7 +184,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureArray::write(const buffer_ref& src, int alignment)
+  bool texture_array::write(const buffer_ref& src, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -214,7 +214,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  void TextureArray::bind_to_image(int unit, bool read, bool write, int level, int format)
+  void texture_array::bind_to_image(int unit, bool read, bool write, int level, int format)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -233,7 +233,7 @@ namespace mgl_opengl
     gl.BindImageTexture(unit, m_texture_obj, level, GL_TRUE, 0, access, frmt);
   }
 
-  void TextureArray::use(int index)
+  void texture_array::use(int index)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -244,7 +244,7 @@ namespace mgl_opengl
     gl.BindTexture(GL_TEXTURE_2D_ARRAY, m_texture_obj);
   }
 
-  void TextureArray::build_mipmaps(int base, int max_level)
+  void texture_array::build_mipmaps(int base, int max_level)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -267,7 +267,7 @@ namespace mgl_opengl
     m_max_level = max_level;
   }
 
-  void TextureArray::set_repeat_x(bool value)
+  void texture_array::set_repeat_x(bool value)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -288,7 +288,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   }
 
-  void TextureArray::set_repeat_y(bool value)
+  void texture_array::set_repeat_y(bool value)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -309,7 +309,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   }
 
-  void TextureArray::set_filter(const Texture::filter& value)
+  void texture_array::set_filter(const texture::filter& value)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -325,7 +325,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }
 
-  mgl_core::string TextureArray::swizzle()
+  mgl_core::string texture_array::swizzle()
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -352,7 +352,7 @@ namespace mgl_opengl
     return swizzle;
   }
 
-  void TextureArray::set_swizzle(const mgl_core::string& value)
+  void texture_array::set_swizzle(const mgl_core::string& value)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -389,7 +389,7 @@ namespace mgl_opengl
     }
   }
 
-  void TextureArray::set_anisotropy(float value)
+  void texture_array::set_anisotropy(float value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");

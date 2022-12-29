@@ -19,10 +19,10 @@
 
 namespace mgl_opengl
 {
-  class TextureArray
+  class texture_array
   {
 public:
-    ~TextureArray() = default;
+    ~texture_array() = default;
 
     void release();
     bool released();
@@ -38,8 +38,8 @@ public:
     bool repeat_y();
     void set_repeat_y(bool value);
 
-    const Texture::filter& filter() const;
-    void set_filter(const Texture::filter& value);
+    const texture::filter& filter() const;
+    void set_filter(const texture::filter& value);
 
     mgl_core::string swizzle();
     void set_swizzle(const mgl_core::string& value);
@@ -60,17 +60,17 @@ public:
     void build_mipmaps(int base = 0, int max_level = 1000);
 
 private:
-    friend class Context;
-    TextureArray() = default;
+    friend class context;
+    texture_array() = default;
 
-    Context* m_context;
+    context* m_context;
     data_type* m_data_type;
     int m_texture_obj;
     int m_width;
     int m_height;
     int m_layers;
     int m_components;
-    Texture::filter m_filter;
+    texture::filter m_filter;
     int m_max_level;
     bool m_repeat_x;
     bool m_repeat_y;
@@ -78,47 +78,47 @@ private:
     bool m_released;
   };
 
-  inline bool TextureArray::released()
+  inline bool texture_array::released()
   {
     return m_released;
   }
 
-  inline int TextureArray::components()
+  inline int texture_array::components()
   {
     return m_components;
   }
 
-  inline int TextureArray::width()
+  inline int texture_array::width()
   {
     return m_width;
   }
 
-  inline int TextureArray::height()
+  inline int texture_array::height()
   {
     return m_height;
   }
 
-  inline int TextureArray::layers()
+  inline int texture_array::layers()
   {
     return m_layers;
   }
 
-  inline bool TextureArray::repeat_x()
+  inline bool texture_array::repeat_x()
   {
     return m_repeat_x;
   }
 
-  inline bool TextureArray::repeat_y()
+  inline bool texture_array::repeat_y()
   {
     return m_repeat_y;
   }
 
-  inline const Texture::filter& TextureArray::filter() const
+  inline const texture::filter& texture_array::filter() const
   {
     return m_filter;
   }
 
-  inline float TextureArray::anisotropy()
+  inline float texture_array::anisotropy()
   {
     return m_anisotropy;
   }

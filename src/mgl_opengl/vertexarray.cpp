@@ -23,7 +23,7 @@
 
 namespace mgl_opengl
 {
-  void VertexArray::release()
+  void vertex_array::release()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -38,7 +38,7 @@ namespace mgl_opengl
     gl.DeleteVertexArrays(1, (GLuint*)&m_vertex_array_obj);
   }
 
-  void VertexArray::render(mgl_opengl::render_mode mode, int vertices, int first, int instances)
+  void vertex_array::render(mgl_opengl::render_mode mode, int vertices, int first, int instances)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -104,7 +104,7 @@ namespace mgl_opengl
     }
   }
 
-  void VertexArray::render_indirect(const buffer_ref& buffer, mgl_opengl::render_mode mode, int count, int first)
+  void vertex_array::render_indirect(const buffer_ref& buffer, mgl_opengl::render_mode mode, int count, int first)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -161,12 +161,12 @@ namespace mgl_opengl
     }
   }
 
-  void VertexArray::transform(const mgl_core::ref_list<Buffer>& buffers,
-                              mgl_opengl::render_mode mode,
-                              int vertices,
-                              int first,
-                              int instances,
-                              int buffer_offset)
+  void vertex_array::transform(const mgl_core::ref_list<buffer>& buffers,
+                               mgl_opengl::render_mode mode,
+                               int vertices,
+                               int first,
+                               int instances,
+                               int buffer_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -314,14 +314,14 @@ namespace mgl_opengl
     gl.Flush();
   }
 
-  void VertexArray::bind(int location,
-                         const char* type,
-                         const buffer_ref& buffer,
-                         const char* format,
-                         size_t offset,
-                         int stride,
-                         int divisor,
-                         bool normalize)
+  void vertex_array::bind(int location,
+                          const char* type,
+                          const buffer_ref& buffer,
+                          const char* format,
+                          size_t offset,
+                          int stride,
+                          int divisor,
+                          bool normalize)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -357,7 +357,7 @@ namespace mgl_opengl
     gl.EnableVertexAttribArray(location);
   }
 
-  void VertexArray::set_index_buffer(const buffer_ref& value)
+  void vertex_array::set_index_buffer(const buffer_ref& value)
   {
     m_index_buffer = value;
     m_num_vertices = (int)(m_index_buffer->size() / 4);

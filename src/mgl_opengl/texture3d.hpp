@@ -19,15 +19,15 @@
 
 namespace mgl_opengl
 {
-  class Texture3D : public Texture
+  class texture_3d : public texture
   {
 public:
-    ~Texture3D() = default;
+    ~texture_3d() = default;
 
     void release();
     bool released();
 
-    virtual Texture::type texture_type() override;
+    virtual texture::type texture_type() override;
     int width();
     int height();
     int depth();
@@ -42,8 +42,8 @@ public:
     bool repeat_z();
     void set_repeat_z(bool value);
 
-    const Texture::filter& filter() const;
-    void set_filter(const Texture::filter& value);
+    const texture::filter& filter() const;
+    void set_filter(const texture::filter& value);
 
     mgl_core::string swizzle();
     void set_swizzle(const mgl_core::string& value);
@@ -61,17 +61,17 @@ public:
     void build_mipmaps(int base = 0, int max_level = 1000);
 
 private:
-    friend class Context;
-    Texture3D() = default;
+    friend class context;
+    texture_3d() = default;
 
-    Context* m_context;
+    context* m_context;
     data_type* m_data_type;
     int m_texture_obj;
     int m_width;
     int m_height;
     int m_depth;
     int m_components;
-    Texture::filter m_filter;
+    texture::filter m_filter;
     int m_max_level;
     bool m_repeat_x;
     bool m_repeat_y;
@@ -79,42 +79,42 @@ private:
     bool m_released;
   };
 
-  inline bool Texture3D::released()
+  inline bool texture_3d::released()
   {
     return m_released;
   }
 
-  inline int Texture3D::components()
+  inline int texture_3d::components()
   {
     return m_components;
   }
 
-  inline int Texture3D::width()
+  inline int texture_3d::width()
   {
     return m_width;
   }
 
-  inline int Texture3D::height()
+  inline int texture_3d::height()
   {
     return m_height;
   }
 
-  inline int Texture3D::depth()
+  inline int texture_3d::depth()
   {
     return m_depth;
   }
 
-  inline bool Texture3D::repeat_x()
+  inline bool texture_3d::repeat_x()
   {
     return m_repeat_x;
   }
 
-  inline bool Texture3D::repeat_y()
+  inline bool texture_3d::repeat_y()
   {
     return m_repeat_y;
   }
 
-  inline const Texture::filter& Texture3D::filter() const
+  inline const texture::filter& texture_3d::filter() const
   {
     return m_filter;
   }

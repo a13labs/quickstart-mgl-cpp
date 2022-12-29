@@ -18,15 +18,15 @@
 
 namespace mgl_opengl
 {
-  class ConditionalRender
+  class conditional_render
   {
 public:
-    ~ConditionalRender() = default;
+    ~conditional_render() = default;
 
     void release();
 
 private:
-    friend class Context;
-    ConditionalRender();
+    friend class context;
+    conditional_render();
   };
 } // namespace mgl_opengl

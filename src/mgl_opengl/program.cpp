@@ -20,7 +20,7 @@
 
 namespace mgl_opengl
 {
-  void Program::release()
+  void program::release()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -33,7 +33,7 @@ namespace mgl_opengl
     gl.DeleteProgram(m_program_obj);
   }
 
-  const mgl_core::string_list Program::attributes()
+  const mgl_core::string_list program::attributes()
   {
     auto result = mgl_core::string_list();
 
@@ -45,7 +45,7 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list Program::uniforms()
+  const mgl_core::string_list program::uniforms()
   {
     auto result = mgl_core::string_list();
 
@@ -57,7 +57,7 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list Program::uniform_blocks()
+  const mgl_core::string_list program::uniform_blocks()
   {
     auto result = mgl_core::string_list();
 
@@ -69,7 +69,7 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list Program::varyings()
+  const mgl_core::string_list program::varyings()
   {
     auto result = mgl_core::string_list();
 
@@ -81,7 +81,7 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list Program::subroutines()
+  const mgl_core::string_list program::subroutines()
   {
     auto result = mgl_core::string_list();
 

@@ -21,7 +21,7 @@
 
 namespace mgl_opengl
 {
-  void Renderbuffer::release()
+  void renderbuffer::release()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -36,9 +36,9 @@ namespace mgl_opengl
     gl.DeleteRenderbuffers(1, (GLuint*)&m_renderbuffer_obj);
   }
 
-  Attachment::type Renderbuffer::attachment_type()
+  attachment::type renderbuffer::attachment_type()
   {
-    return Attachment::RENDERBUFFER;
+    return attachment::RENDERBUFFER;
   }
 
 } // namespace mgl_opengl

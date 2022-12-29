@@ -19,15 +19,15 @@
 
 namespace mgl_opengl
 {
-  class Renderbuffer : public Attachment
+  class renderbuffer : public attachment
   {
 public:
-    ~Renderbuffer() = default;
+    ~renderbuffer() = default;
 
     void release();
     bool released();
 
-    virtual Attachment::type attachment_type() override;
+    virtual attachment::type attachment_type() override;
     int width();
     int height();
     int samples();
@@ -35,10 +35,10 @@ public:
     int components();
 
 private:
-    friend class Context;
-    Renderbuffer(){};
+    friend class context;
+    renderbuffer(){};
 
-    Context* m_context;
+    context* m_context;
     data_type* m_data_type;
     int m_renderbuffer_obj;
     int m_width;
@@ -49,32 +49,32 @@ private:
     bool m_released;
   };
 
-  inline bool Renderbuffer::released()
+  inline bool renderbuffer::released()
   {
     return m_released;
   }
 
-  inline int Renderbuffer::components()
+  inline int renderbuffer::components()
   {
     return m_components;
   }
 
-  inline int Renderbuffer::width()
+  inline int renderbuffer::width()
   {
     return m_width;
   }
 
-  inline int Renderbuffer::height()
+  inline int renderbuffer::height()
   {
     return m_height;
   }
 
-  inline int Renderbuffer::samples()
+  inline int renderbuffer::samples()
   {
     return m_samples;
   }
 
-  inline bool Renderbuffer::depth()
+  inline bool renderbuffer::depth()
   {
     return m_depth;
   }

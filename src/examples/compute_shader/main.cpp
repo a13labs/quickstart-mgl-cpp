@@ -106,7 +106,7 @@ void main()
   uint32_t Z = 1;
   int FRAMES = 50;
 
-  auto ctx = mgl_opengl::Context::create_context(mgl_opengl::ContextMode::STANDALONE);
+  auto ctx = mgl_opengl::context::create_context(mgl_opengl::context_mode::STANDALONE);
 
   auto compute_shader = ctx->compute_shader(code.source({
       { "W", std::to_string(W) },

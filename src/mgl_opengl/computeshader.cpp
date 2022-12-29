@@ -20,7 +20,7 @@
 
 namespace mgl_opengl
 {
-  void ComputeShader::release()
+  void compute_shader::release()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -35,7 +35,7 @@ namespace mgl_opengl
     gl.DeleteProgram(m_program_obj);
   }
 
-  void ComputeShader::run(int x, int y, int z)
+  void compute_shader::run(int x, int y, int z)
   {
     MGL_CORE_ASSERT(!m_released, "Compute Shader already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -46,7 +46,7 @@ namespace mgl_opengl
     gl.DispatchCompute(x, y, z);
   }
 
-  const mgl_core::string_list ComputeShader::uniforms()
+  const mgl_core::string_list compute_shader::uniforms()
   {
     auto result = mgl_core::string_list();
 
@@ -58,7 +58,7 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list ComputeShader::uniform_blocks()
+  const mgl_core::string_list compute_shader::uniform_blocks()
   {
     auto result = mgl_core::string_list();
 

@@ -21,7 +21,7 @@
 
 namespace mgl_opengl
 {
-  struct ContextMode
+  struct context_mode
   {
     enum Enum
     {
@@ -31,10 +31,10 @@ namespace mgl_opengl
     };
   };
 
-  class Context
+  class context
   {
 public:
-    virtual ~Context() = default;
+    virtual ~context() = default;
 
     const GLMethods& gl() const;
     int version_code();
@@ -79,7 +79,7 @@ public:
     compute_shader_ref compute_shader(const mgl_core::string& source);
 
     // Create Shader
-    static context_ref create_context(ContextMode::Enum mode, int required = 330);
+    static context_ref create_context(context_mode::Enum mode, int required = 330);
 
     // Framebuffer
     framebuffer_ref framebuffer(const attachments_ref& color_attachments, attachment_ref depth_attachment);
@@ -165,7 +165,7 @@ public:
     virtual bool is_valid() = 0;
 
     bool released();
-    ContextMode::Enum mode();
+    context_mode::Enum mode();
     void clear(const glm::vec4& color, float depth = 0.0, const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d);
     void clear(float r,
                float g,
@@ -180,10 +180,10 @@ private:
 
 protected:
     bool m_released;
-    ContextMode::Enum m_mode;
+    context_mode::Enum m_mode;
 
 private:
-    friend class Framebuffer;
+    friend class framebuffer;
 
     GLMethods m_gl;
     int m_version_code;
@@ -210,11 +210,11 @@ private:
   };
 
 #ifdef MGL_OPENGL_EGL
-  class ContextEGL : public Context
+  class ContextEGL : public context
   {
 
 public:
-    ContextEGL(ContextMode::Enum mode, int required);
+    ContextEGL(context_mode::Enum mode, int required);
     virtual ~ContextEGL() override;
 
     virtual gl_function load(const mgl_core::string& method) override;
@@ -231,11 +231,11 @@ private:
 #endif
 
 #ifdef MGL_OPENGL_GLX
-  class ContextGLX : public Context
+  class ContextGLX : public context
   {
 
 public:
-    ContextGLX(ContextMode::Enum mode, int required);
+    ContextGLX(context_mode::Enum mode, int required);
     ContextGLX(){};
     virtual ~ContextGLX() override;
 
@@ -250,7 +250,7 @@ public:
     virtual bool is_valid() override;
 
 private:
-    ContextMode::Enum m_mode;
+    context_mode::Enum m_mode;
     gl_context m_context;
   };
 #endif
@@ -259,147 +259,147 @@ private:
 
 #endif
 
-  inline const GLMethods& Context::gl() const
+  inline const GLMethods& context::gl() const
   {
     return m_gl;
   }
 
-  inline ContextMode::Enum Context::mode()
+  inline context_mode::Enum context::mode()
   {
     return m_mode;
   }
 
-  inline bool Context::released()
+  inline bool context::released()
   {
     return m_released;
   }
 
-  inline int Context::version_code()
+  inline int context::version_code()
   {
     return m_version_code;
   }
 
-  inline int Context::max_samples()
+  inline int context::max_samples()
   {
     return m_max_samples;
   }
 
-  inline int Context::max_integer_samples()
+  inline int context::max_integer_samples()
   {
     return m_max_integer_samples;
   }
 
-  inline int Context::max_color_attachments()
+  inline int context::max_color_attachments()
   {
     return m_max_color_attachments;
   }
 
-  inline int Context::max_texture_units()
+  inline int context::max_texture_units()
   {
     return m_max_texture_units;
   }
 
-  inline int Context::default_texture_unit()
+  inline int context::default_texture_unit()
   {
     return m_default_texture_unit;
   }
 
-  inline float Context::max_anisotropy()
+  inline float context::max_anisotropy()
   {
     return m_max_anisotropy;
   }
 
-  inline const mgl_core::string_list& Context::extensions() const
+  inline const mgl_core::string_list& context::extensions() const
   {
     return m_extensions;
   }
 
-  inline const framebuffer_ref& Context::screen() const
+  inline const framebuffer_ref& context::screen() const
   {
     return m_default_framebuffer;
   }
 
-  inline int Context::enable_flags()
+  inline int context::enable_flags()
   {
     return m_enable_flags;
   }
 
-  inline int Context::front_face()
+  inline int context::front_face()
   {
     return m_front_face;
   }
 
-  inline int Context::cull_face()
+  inline int context::cull_face()
   {
     return m_cull_face;
   }
 
-  inline int Context::depth_func()
+  inline int context::depth_func()
   {
     return m_depth_func;
   }
 
-  inline int Context::blend_func_src()
+  inline int context::blend_func_src()
   {
     return m_blend_func_src;
   }
 
-  inline int Context::blend_func_dst()
+  inline int context::blend_func_dst()
   {
     return m_blend_func_dst;
   }
 
-  inline bool Context::wireframe()
+  inline bool context::wireframe()
   {
     return m_wireframe;
   }
 
-  inline bool Context::multisample()
+  inline bool context::multisample()
   {
     return m_multisample;
   }
 
-  inline int Context::provoking_vertex()
+  inline int context::provoking_vertex()
   {
     return m_provoking_vertex;
   }
 
-  inline float Context::polygon_offset_factor()
+  inline float context::polygon_offset_factor()
   {
     return m_polygon_offset_factor;
   }
 
-  inline float Context::polygon_offset_units()
+  inline float context::polygon_offset_units()
   {
     return m_polygon_offset_units;
   }
 
-  inline buffer_ref Context::buffer(const mgl_core::mem_buffer<float>& data, bool dynamic)
+  inline buffer_ref context::buffer(const mgl_core::mem_buffer<float>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(float), dynamic);
   }
 
-  inline buffer_ref Context::buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic)
+  inline buffer_ref context::buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(uint32_t), dynamic);
   }
 
-  inline buffer_ref Context::buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic)
+  inline buffer_ref context::buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(uint16_t), dynamic);
   }
 
-  inline buffer_ref Context::buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic)
+  inline buffer_ref context::buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(uint8_t), dynamic);
   }
 
-  inline framebuffer_ref Context::framebuffer(attachment_ref depth_attachment)
+  inline framebuffer_ref context::framebuffer(attachment_ref depth_attachment)
   {
     return framebuffer(attachments_ref(), depth_attachment);
   }
 
-  inline framebuffer_ref Context::framebuffer(const attachments_ref& color_attachments)
+  inline framebuffer_ref context::framebuffer(const attachments_ref& color_attachments)
   {
     return framebuffer(color_attachments, attachment_ref(nullptr));
   }

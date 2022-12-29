@@ -20,73 +20,73 @@
 
 namespace mgl_opengl
 {
-  void Query::begin()
+  void query::begin()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
-    if(m_query_obj[Query::keys::SAMPLES_PASSED])
+    if(m_query_obj[query::keys::SAMPLES_PASSED])
     {
-      gl.BeginQuery(GL_SAMPLES_PASSED, m_query_obj[Query::keys::SAMPLES_PASSED]);
+      gl.BeginQuery(GL_SAMPLES_PASSED, m_query_obj[query::keys::SAMPLES_PASSED]);
     }
 
-    if(m_query_obj[Query::keys::ANY_SAMPLES_PASSED])
+    if(m_query_obj[query::keys::ANY_SAMPLES_PASSED])
     {
-      gl.BeginQuery(GL_ANY_SAMPLES_PASSED, m_query_obj[Query::keys::ANY_SAMPLES_PASSED]);
+      gl.BeginQuery(GL_ANY_SAMPLES_PASSED, m_query_obj[query::keys::ANY_SAMPLES_PASSED]);
     }
 
-    if(m_query_obj[Query::keys::TIME_ELAPSED])
+    if(m_query_obj[query::keys::TIME_ELAPSED])
     {
-      gl.BeginQuery(GL_TIME_ELAPSED, m_query_obj[Query::keys::TIME_ELAPSED]);
+      gl.BeginQuery(GL_TIME_ELAPSED, m_query_obj[query::keys::TIME_ELAPSED]);
     }
 
-    if(m_query_obj[Query::keys::PRIMITIVES_GENERATED])
+    if(m_query_obj[query::keys::PRIMITIVES_GENERATED])
     {
-      gl.BeginQuery(GL_PRIMITIVES_GENERATED, m_query_obj[Query::keys::PRIMITIVES_GENERATED]);
+      gl.BeginQuery(GL_PRIMITIVES_GENERATED, m_query_obj[query::keys::PRIMITIVES_GENERATED]);
     }
   }
 
-  void Query::end()
+  void query::end()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
-    if(m_query_obj[Query::keys::SAMPLES_PASSED])
+    if(m_query_obj[query::keys::SAMPLES_PASSED])
     {
       gl.EndQuery(GL_SAMPLES_PASSED);
     }
 
-    if(m_query_obj[Query::keys::ANY_SAMPLES_PASSED])
+    if(m_query_obj[query::keys::ANY_SAMPLES_PASSED])
     {
       gl.EndQuery(GL_ANY_SAMPLES_PASSED);
     }
 
-    if(m_query_obj[Query::keys::TIME_ELAPSED])
+    if(m_query_obj[query::keys::TIME_ELAPSED])
     {
       gl.EndQuery(GL_TIME_ELAPSED);
     }
 
-    if(m_query_obj[Query::keys::PRIMITIVES_GENERATED])
+    if(m_query_obj[query::keys::PRIMITIVES_GENERATED])
     {
       gl.EndQuery(GL_PRIMITIVES_GENERATED);
     }
   }
 
-  void Query::begin_render()
+  void query::begin_render()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
 
-    if(m_query_obj[Query::keys::ANY_SAMPLES_PASSED])
+    if(m_query_obj[query::keys::ANY_SAMPLES_PASSED])
     {
-      gl.BeginConditionalRender(m_query_obj[Query::keys::ANY_SAMPLES_PASSED], GL_QUERY_NO_WAIT);
+      gl.BeginConditionalRender(m_query_obj[query::keys::ANY_SAMPLES_PASSED], GL_QUERY_NO_WAIT);
     }
-    else if(m_query_obj[Query::keys::SAMPLES_PASSED])
+    else if(m_query_obj[query::keys::SAMPLES_PASSED])
     {
-      gl.BeginConditionalRender(m_query_obj[Query::keys::SAMPLES_PASSED], GL_QUERY_NO_WAIT);
+      gl.BeginConditionalRender(m_query_obj[query::keys::SAMPLES_PASSED], GL_QUERY_NO_WAIT);
     }
     else
     {
@@ -94,7 +94,7 @@ namespace mgl_opengl
     }
   }
 
-  void Query::end_render()
+  void query::end_render()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -102,33 +102,33 @@ namespace mgl_opengl
     gl.EndConditionalRender();
   }
 
-  int Query::samples()
+  int query::samples()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     int samples = 0;
-    gl.GetQueryObjectiv(m_query_obj[Query::keys::SAMPLES_PASSED], GL_QUERY_RESULT, &samples);
+    gl.GetQueryObjectiv(m_query_obj[query::keys::SAMPLES_PASSED], GL_QUERY_RESULT, &samples);
     return samples;
   }
 
-  int Query::primitives()
+  int query::primitives()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     int primitives = 0;
-    gl.GetQueryObjectiv(m_query_obj[Query::keys::PRIMITIVES_GENERATED], GL_QUERY_RESULT, &primitives);
+    gl.GetQueryObjectiv(m_query_obj[query::keys::PRIMITIVES_GENERATED], GL_QUERY_RESULT, &primitives);
     return primitives;
   }
 
-  int Query::elapsed()
+  int query::elapsed()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     int elapsed = 0;
-    gl.GetQueryObjectiv(m_query_obj[Query::keys::TIME_ELAPSED], GL_QUERY_RESULT, &elapsed);
+    gl.GetQueryObjectiv(m_query_obj[query::keys::TIME_ELAPSED], GL_QUERY_RESULT, &elapsed);
     return elapsed;
   }
 

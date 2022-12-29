@@ -18,7 +18,7 @@
 
 namespace mgl_opengl
 {
-  class Query
+  class query
   {
 public:
     enum keys
@@ -31,7 +31,7 @@ public:
       COUNT,
     };
 
-    ~Query() = default;
+    ~query() = default;
 
     void begin();
     void end();
@@ -43,10 +43,10 @@ public:
     int elapsed();
 
 private:
-    friend class Context;
-    Query() = default;
+    friend class context;
+    query() = default;
 
-    Context* m_context;
-    int m_query_obj[Query::keys::COUNT];
+    context* m_context;
+    int m_query_obj[query::keys::COUNT];
   };
 } // namespace mgl_opengl

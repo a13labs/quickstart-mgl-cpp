@@ -18,10 +18,10 @@
 
 namespace mgl_opengl
 {
-  class Buffer
+  class buffer
   {
 public:
-    ~Buffer() = default;
+    ~buffer() = default;
 
 public:
     void release();
@@ -46,77 +46,77 @@ public:
     void orphan(size_t size);
 
 private:
-    friend class Context;
-    friend class Framebuffer;
-    friend class Texture2D;
-    friend class Texture3D;
-    friend class TextureArray;
-    friend class TextureCube;
-    friend class VertexArray;
+    friend class context;
+    friend class framebuffer;
+    friend class texture_2d;
+    friend class texture_3d;
+    friend class texture_array;
+    friend class texture_cube;
+    friend class vertex_array;
 
-    Buffer() = default;
+    buffer() = default;
 
     bool read_into(void* dst, size_t dst_size, size_t read_size, size_t read_offset, size_t write_offset);
     bool write(const void* src, size_t size, size_t offset);
 
-    Context* m_context;
+    context* m_context;
     int m_buffer_obj;
     size_t m_size;
     bool m_dynamic;
     bool m_released;
   };
 
-  inline bool Buffer::write(const mgl_core::mem_buffer<float>& src, size_t offset)
+  inline bool buffer::write(const mgl_core::mem_buffer<float>& src, size_t offset)
   {
     return write(src.data(), src.size() * sizeof(float), offset);
   }
 
-  inline bool Buffer::write(const mgl_core::mem_buffer<uint32_t>& src, size_t offset)
+  inline bool buffer::write(const mgl_core::mem_buffer<uint32_t>& src, size_t offset)
   {
     return write(src.data(), src.size() * sizeof(uint32_t), offset);
   }
 
-  inline bool Buffer::write(const mgl_core::mem_buffer<uint8_t>& src, size_t offset)
+  inline bool buffer::write(const mgl_core::mem_buffer<uint8_t>& src, size_t offset)
   {
     return write(src.data(), src.size() * sizeof(uint8_t), offset);
   }
 
-  inline bool Buffer::write(const mgl_core::mem_buffer<int>& src, size_t offset)
+  inline bool buffer::write(const mgl_core::mem_buffer<int>& src, size_t offset)
   {
     return write(src.data(), src.size() * sizeof(int), offset);
   }
 
-  inline bool Buffer::read_into(mgl_core::mem_buffer<float>& dst, size_t size, size_t offset, size_t write_offset)
+  inline bool buffer::read_into(mgl_core::mem_buffer<float>& dst, size_t size, size_t offset, size_t write_offset)
   {
     return read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline bool Buffer::read_into(mgl_core::mem_buffer<uint32_t>& dst, size_t size, size_t offset, size_t write_offset)
+  inline bool buffer::read_into(mgl_core::mem_buffer<uint32_t>& dst, size_t size, size_t offset, size_t write_offset)
   {
     return read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline bool Buffer::read_into(mgl_core::mem_buffer<uint8_t>& dst, size_t size, size_t offset, size_t write_offset)
+  inline bool buffer::read_into(mgl_core::mem_buffer<uint8_t>& dst, size_t size, size_t offset, size_t write_offset)
   {
     return read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline bool Buffer::read_into(mgl_core::mem_buffer<int>& dst, size_t size, size_t offset, size_t write_offset)
+  inline bool buffer::read_into(mgl_core::mem_buffer<int>& dst, size_t size, size_t offset, size_t write_offset)
   {
     return read_into(dst.data(), dst.size(), size, offset, write_offset);
   }
 
-  inline size_t Buffer::size()
+  inline size_t buffer::size()
   {
     return m_size;
   }
 
-  inline bool Buffer::dynamic()
+  inline bool buffer::dynamic()
   {
     return m_dynamic;
   }
 
-  inline bool Buffer::released()
+  inline bool buffer::released()
   {
     return m_released;
   }

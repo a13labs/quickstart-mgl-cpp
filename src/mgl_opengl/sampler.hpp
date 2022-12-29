@@ -19,7 +19,7 @@
 
 namespace mgl_opengl
 {
-  class Sampler
+  class sampler
   {
 public:
     struct Filter
@@ -28,7 +28,7 @@ public:
       int mag_filter;
     };
 
-    ~Sampler() = default;
+    ~sampler() = default;
 
 public:
     void use(int index = 0);
@@ -46,8 +46,8 @@ public:
     bool repeat_z();
     void set_repeat_z(bool value);
 
-    const Sampler::Filter& filter() const;
-    void set_filter(const Sampler::Filter& value);
+    const sampler::Filter& filter() const;
+    void set_filter(const sampler::Filter& value);
 
     mgl_opengl::compare_func compare_func();
     void set_compare_func(mgl_opengl::compare_func value);
@@ -66,10 +66,10 @@ public:
     void set_max_lod(float value);
 
 private:
-    friend class Context;
-    Sampler() = default;
+    friend class context;
+    sampler() = default;
 
-    Context* m_context;
+    context* m_context;
     int m_sampler_obj;
     float m_anisotropy;
     mgl_opengl::compare_func m_compare_func;
@@ -80,60 +80,60 @@ private:
     float m_min_lod;
     float m_max_lod;
     bool m_released;
-    Sampler::Filter m_filter;
+    sampler::Filter m_filter;
   };
 
-  inline bool Sampler::released()
+  inline bool sampler::released()
   {
     return m_released;
   }
 
-  inline bool Sampler::repeat_x()
+  inline bool sampler::repeat_x()
   {
     return m_repeat_x;
   }
 
-  inline bool Sampler::repeat_y()
+  inline bool sampler::repeat_y()
   {
     return m_repeat_y;
   }
 
-  inline bool Sampler::repeat_z()
+  inline bool sampler::repeat_z()
   {
     return m_repeat_z;
   }
 
-  inline float Sampler::anisotropy()
+  inline float sampler::anisotropy()
   {
     return m_anisotropy;
   }
 
-  inline float Sampler::min_lod()
+  inline float sampler::min_lod()
   {
     return m_min_lod;
   }
 
-  inline float Sampler::max_lod()
+  inline float sampler::max_lod()
   {
     return m_max_lod;
   }
 
-  inline const glm::vec4& Sampler::border_color() const
+  inline const glm::vec4& sampler::border_color() const
   {
     return m_border_color;
   }
 
-  inline const Sampler::Filter& Sampler::filter() const
+  inline const sampler::Filter& sampler::filter() const
   {
     return m_filter;
   }
 
-  inline mgl_opengl::compare_func Sampler::compare_func()
+  inline mgl_opengl::compare_func sampler::compare_func()
   {
     return m_compare_func;
   }
 
-  inline void Sampler::set_border_color(float r, float g, float b, float a)
+  inline void sampler::set_border_color(float r, float g, float b, float a)
   {
     set_border_color({ r, g, b, a });
   }

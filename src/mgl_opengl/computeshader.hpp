@@ -18,10 +18,10 @@
 
 namespace mgl_opengl
 {
-  class ComputeShader
+  class compute_shader
   {
 public:
-    ~ComputeShader() = default;
+    ~compute_shader() = default;
 
     void release();
     bool released();
@@ -40,10 +40,10 @@ public:
     const uniform_ref operator[](const mgl_core::string& name) const;
 
 private:
-    friend class Context;
-    ComputeShader() = default;
+    friend class context;
+    compute_shader() = default;
 
-    Context* m_context;
+    context* m_context;
     int m_program_obj;
     int m_shader_obj;
     uniforms_dict m_uniforms_map;
@@ -51,7 +51,7 @@ private:
     bool m_released;
   };
 
-  inline const uniform_ref ComputeShader::uniform(const mgl_core::string& name) const
+  inline const uniform_ref compute_shader::uniform(const mgl_core::string& name) const
   {
     if(m_uniforms_map.find(name) == m_uniforms_map.end())
     {
@@ -60,7 +60,7 @@ private:
     return m_uniforms_map.at(name);
   }
 
-  inline const uniform_block_ref ComputeShader::uniform_block(const mgl_core::string& name) const
+  inline const uniform_block_ref compute_shader::uniform_block(const mgl_core::string& name) const
   {
     if(m_uniform_blocks_map.find(name) == m_uniform_blocks_map.end())
     {
@@ -69,22 +69,22 @@ private:
     return m_uniform_blocks_map.at(name);
   }
 
-  inline size_t ComputeShader::num_uniforms()
+  inline size_t compute_shader::num_uniforms()
   {
     return m_uniforms_map.size();
   }
 
-  inline size_t ComputeShader::num_uniform_blocks()
+  inline size_t compute_shader::num_uniform_blocks()
   {
     return m_uniform_blocks_map.size();
   }
 
-  inline const uniform_ref ComputeShader::operator[](const mgl_core::string& name) const
+  inline const uniform_ref compute_shader::operator[](const mgl_core::string& name) const
   {
     return uniform(name);
   }
 
-  inline bool ComputeShader::released()
+  inline bool compute_shader::released()
   {
     return m_released;
   }

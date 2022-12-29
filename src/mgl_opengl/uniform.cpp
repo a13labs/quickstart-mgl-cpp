@@ -20,70 +20,70 @@
 
 namespace mgl_opengl
 {
-  static Uniform::data_type gl_bool = { false, 1, 4 };
-  static Uniform::data_type gl_bool_vec2 = { false, 2, 8 };
-  static Uniform::data_type gl_bool_vec3 = { false, 3, 12 };
-  static Uniform::data_type gl_bool_vec4 = { false, 4, 16 };
-  static Uniform::data_type gl_int = { false, 1, 4 };
-  static Uniform::data_type gl_int_vec2 = { false, 2, 8 };
-  static Uniform::data_type gl_int_vec3 = { false, 3, 12 };
-  static Uniform::data_type gl_int_vec4 = { false, 4, 16 };
-  static Uniform::data_type gl_unsigned_int = { false, 1, 4 };
-  static Uniform::data_type gl_unsigned_int_vec2 = { false, 2, 8 };
-  static Uniform::data_type gl_unsigned_int_vec3 = { false, 3, 12 };
-  static Uniform::data_type gl_unsigned_int_vec4 = { false, 4, 16 };
-  static Uniform::data_type gl_float = { false, 1, 4 };
-  static Uniform::data_type gl_float_vec2 = { false, 2, 8 };
-  static Uniform::data_type gl_float_vec3 = { false, 3, 12 };
-  static Uniform::data_type gl_float_vec4 = { false, 4, 16 };
-  static Uniform::data_type gl_double = { false, 1, 8 };
-  static Uniform::data_type gl_double_vec2 = { false, 2, 16 };
-  static Uniform::data_type gl_double_vec3 = { false, 3, 24 };
-  static Uniform::data_type gl_double_vec4 = { false, 4, 32 };
-  static Uniform::data_type gl_sampler_1_d = { false, 1, 4 };
-  static Uniform::data_type gl_sampler_1D_array = { false, 1, 4 };
-  static Uniform::data_type gl_int_sampler_1D = { false, 1, 4 };
-  static Uniform::data_type gl_int_sampler_1D_array = { false, 1, 4 };
-  static Uniform::data_type gl_sampler_2D = { false, 1, 4 };
-  static Uniform::data_type gl_int_sampler_2D = { false, 1, 4 };
-  static Uniform::data_type gl_unsigned_int_sampler_2D = { false, 1, 4 };
-  static Uniform::data_type gl_sampler_2D_array = { false, 1, 4 };
-  static Uniform::data_type gl_int_sampler_2D_array = { false, 1, 4 };
-  static Uniform::data_type gl_unsigned_int_sampler_2D_array = { false, 1, 4 };
-  static Uniform::data_type gl_sampler_3D = { false, 1, 4 };
-  static Uniform::data_type gl_int_sampler_3D = { false, 1, 4 };
-  static Uniform::data_type gl_unsigned_int_sampler_3D = { false, 1, 4 };
-  static Uniform::data_type gl_sampler_2D_shadow = { false, 1, 4 };
-  static Uniform::data_type gl_sampler_2D_multisample = { false, 1, 4 };
-  static Uniform::data_type gl_int_sampler_2D_multisample = { false, 1, 4 };
-  static Uniform::data_type gl_unsigned_int_sampler_2D_multisample = { false, 1, 4 };
-  static Uniform::data_type glSampler_2D_multisample_array = { false, 1, 4 };
-  static Uniform::data_type gl_int_sampler_2D_multisample_array = { false, 1, 4 };
-  static Uniform::data_type gl_unsigned_int_sampler_2D_multisample_array = { false, 1, 4 };
-  static Uniform::data_type gl_sampler_cube = { false, 1, 4 };
-  static Uniform::data_type gl_int_sampler_cube = { false, 1, 4 };
-  static Uniform::data_type gl_unsigned_int_sampler_cube = { false, 1, 4 };
-  static Uniform::data_type gl_image_2D = { false, 1, 4 };
-  static Uniform::data_type gl_float_mat_2 = { true, 4, 16 };
-  static Uniform::data_type gl_float_mat_2x3 = { true, 6, 24 };
-  static Uniform::data_type gl_float_mat_2x4 = { true, 8, 32 };
-  static Uniform::data_type gl_float_mat_3x2 = { true, 6, 24 };
-  static Uniform::data_type gl_float_mat_3 = { true, 9, 36 };
-  static Uniform::data_type gl_float_mat_3x4 = { true, 12, 48 };
-  static Uniform::data_type gl_float_mat_4x2 = { true, 8, 32 };
-  static Uniform::data_type gl_float_mat_4x3 = { true, 12, 48 };
-  static Uniform::data_type gl_float_mat_4 = { true, 16, 64 };
-  static Uniform::data_type gl_double_mat_2 = { true, 4, 32 };
-  static Uniform::data_type gl_double_mat_2x3 = { true, 6, 48 };
-  static Uniform::data_type gl_double_mat_2x4 = { true, 8, 64 };
-  static Uniform::data_type gl_double_mat_3x2 = { true, 6, 48 };
-  static Uniform::data_type gl_double_mat_3 = { true, 9, 72 };
-  static Uniform::data_type gl_double_mat_3x4 = { true, 12, 96 };
-  static Uniform::data_type gl_double_mat_4x2 = { true, 8, 64 };
-  static Uniform::data_type gl_double_mat_4x3 = { true, 12, 96 };
-  static Uniform::data_type gl_double_mat_4 = { true, 16, 128 };
+  static uniform::data_type gl_bool = { false, 1, 4 };
+  static uniform::data_type gl_bool_vec2 = { false, 2, 8 };
+  static uniform::data_type gl_bool_vec3 = { false, 3, 12 };
+  static uniform::data_type gl_bool_vec4 = { false, 4, 16 };
+  static uniform::data_type gl_int = { false, 1, 4 };
+  static uniform::data_type gl_int_vec2 = { false, 2, 8 };
+  static uniform::data_type gl_int_vec3 = { false, 3, 12 };
+  static uniform::data_type gl_int_vec4 = { false, 4, 16 };
+  static uniform::data_type gl_unsigned_int = { false, 1, 4 };
+  static uniform::data_type gl_unsigned_int_vec2 = { false, 2, 8 };
+  static uniform::data_type gl_unsigned_int_vec3 = { false, 3, 12 };
+  static uniform::data_type gl_unsigned_int_vec4 = { false, 4, 16 };
+  static uniform::data_type gl_float = { false, 1, 4 };
+  static uniform::data_type gl_float_vec2 = { false, 2, 8 };
+  static uniform::data_type gl_float_vec3 = { false, 3, 12 };
+  static uniform::data_type gl_float_vec4 = { false, 4, 16 };
+  static uniform::data_type gl_double = { false, 1, 8 };
+  static uniform::data_type gl_double_vec2 = { false, 2, 16 };
+  static uniform::data_type gl_double_vec3 = { false, 3, 24 };
+  static uniform::data_type gl_double_vec4 = { false, 4, 32 };
+  static uniform::data_type gl_sampler_1_d = { false, 1, 4 };
+  static uniform::data_type gl_sampler_1D_array = { false, 1, 4 };
+  static uniform::data_type gl_int_sampler_1D = { false, 1, 4 };
+  static uniform::data_type gl_int_sampler_1D_array = { false, 1, 4 };
+  static uniform::data_type gl_sampler_2D = { false, 1, 4 };
+  static uniform::data_type gl_int_sampler_2D = { false, 1, 4 };
+  static uniform::data_type gl_unsigned_int_sampler_2D = { false, 1, 4 };
+  static uniform::data_type gl_sampler_2D_array = { false, 1, 4 };
+  static uniform::data_type gl_int_sampler_2D_array = { false, 1, 4 };
+  static uniform::data_type gl_unsigned_int_sampler_2D_array = { false, 1, 4 };
+  static uniform::data_type gl_sampler_3D = { false, 1, 4 };
+  static uniform::data_type gl_int_sampler_3D = { false, 1, 4 };
+  static uniform::data_type gl_unsigned_int_sampler_3D = { false, 1, 4 };
+  static uniform::data_type gl_sampler_2D_shadow = { false, 1, 4 };
+  static uniform::data_type gl_sampler_2D_multisample = { false, 1, 4 };
+  static uniform::data_type gl_int_sampler_2D_multisample = { false, 1, 4 };
+  static uniform::data_type gl_unsigned_int_sampler_2D_multisample = { false, 1, 4 };
+  static uniform::data_type glSampler_2D_multisample_array = { false, 1, 4 };
+  static uniform::data_type gl_int_sampler_2D_multisample_array = { false, 1, 4 };
+  static uniform::data_type gl_unsigned_int_sampler_2D_multisample_array = { false, 1, 4 };
+  static uniform::data_type gl_sampler_cube = { false, 1, 4 };
+  static uniform::data_type gl_int_sampler_cube = { false, 1, 4 };
+  static uniform::data_type gl_unsigned_int_sampler_cube = { false, 1, 4 };
+  static uniform::data_type gl_image_2D = { false, 1, 4 };
+  static uniform::data_type gl_float_mat_2 = { true, 4, 16 };
+  static uniform::data_type gl_float_mat_2x3 = { true, 6, 24 };
+  static uniform::data_type gl_float_mat_2x4 = { true, 8, 32 };
+  static uniform::data_type gl_float_mat_3x2 = { true, 6, 24 };
+  static uniform::data_type gl_float_mat_3 = { true, 9, 36 };
+  static uniform::data_type gl_float_mat_3x4 = { true, 12, 48 };
+  static uniform::data_type gl_float_mat_4x2 = { true, 8, 32 };
+  static uniform::data_type gl_float_mat_4x3 = { true, 12, 48 };
+  static uniform::data_type gl_float_mat_4 = { true, 16, 64 };
+  static uniform::data_type gl_double_mat_2 = { true, 4, 32 };
+  static uniform::data_type gl_double_mat_2x3 = { true, 6, 48 };
+  static uniform::data_type gl_double_mat_2x4 = { true, 8, 64 };
+  static uniform::data_type gl_double_mat_3x2 = { true, 6, 48 };
+  static uniform::data_type gl_double_mat_3 = { true, 9, 72 };
+  static uniform::data_type gl_double_mat_3x4 = { true, 12, 96 };
+  static uniform::data_type gl_double_mat_4x2 = { true, 8, 64 };
+  static uniform::data_type gl_double_mat_4x3 = { true, 12, 96 };
+  static uniform::data_type gl_double_mat_4 = { true, 16, 128 };
 
-  Uniform::data_type* uniform_lookup_table(int gl_type)
+  uniform::data_type* uniform_lookup_table(int gl_type)
   {
 
     switch(gl_type)
@@ -154,7 +154,7 @@ namespace mgl_opengl
     };
   }
 
-  Uniform::Uniform(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t size, Context* ctx)
+  uniform::uniform(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t size, context* ctx)
   {
     m_context = ctx;
     m_name = name;
@@ -166,12 +166,12 @@ namespace mgl_opengl
     m_data = new uint8_t[m_data_type->element_size * size]();
   }
 
-  Uniform::~Uniform()
+  uniform::~uniform()
   {
     delete[] m_data;
   }
 
-  void Uniform::set_value(void* data, size_t size)
+  void uniform::set_value(void* data, size_t size)
   {
     MGL_CORE_ASSERT(size == (size_t)(m_size * m_data_type->element_size), "invalid data size");
 
@@ -435,7 +435,7 @@ namespace mgl_opengl
     }
   }
 
-  void Uniform::get_value(void* data, size_t size)
+  void uniform::get_value(void* data, size_t size)
   {
 
     MGL_CORE_ASSERT(size == (size_t)(m_size * m_data_type->element_size), "invalid data size");

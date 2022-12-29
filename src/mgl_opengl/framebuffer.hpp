@@ -19,10 +19,10 @@
 
 namespace mgl_opengl
 {
-  class Framebuffer : public mgl_core::ref_from_this<Framebuffer>
+  class framebuffer : public mgl_core::ref_from_this<framebuffer>
   {
 public:
-    ~Framebuffer() = default;
+    ~framebuffer() = default;
 
     void release();
     bool released();
@@ -75,13 +75,13 @@ public:
     void use();
 
 private:
-    friend class Context;
-    friend class Renderbuffer;
-    friend class Texture2D;
+    friend class context;
+    friend class renderbuffer;
+    friend class texture_2d;
 
-    Framebuffer() = default;
+    framebuffer() = default;
 
-    Context* m_context;
+    context* m_context;
     int m_framebuffer_obj;
 
     mgl_core::viewport_2d m_viewport;
@@ -102,56 +102,56 @@ private:
     bool m_released;
   };
 
-  inline bool Framebuffer::released()
+  inline bool framebuffer::released()
   {
     return m_released;
   }
 
-  inline const mgl_core::viewport_2d& Framebuffer::viewport()
+  inline const mgl_core::viewport_2d& framebuffer::viewport()
   {
     return m_viewport;
   }
 
-  inline const mgl_core::viewport_2d& Framebuffer::scissor()
+  inline const mgl_core::viewport_2d& framebuffer::scissor()
   {
     return m_scissor;
   }
 
-  inline void Framebuffer::enable_scissor()
+  inline void framebuffer::enable_scissor()
   {
     m_scissor_enabled = true;
   }
-  inline void Framebuffer::disable_scissor()
+  inline void framebuffer::disable_scissor()
   {
     m_scissor_enabled = false;
   }
 
-  inline void Framebuffer::clear(const glm::vec4& color, float depth, const mgl_core::viewport_2d& viewport)
+  inline void framebuffer::clear(const glm::vec4& color, float depth, const mgl_core::viewport_2d& viewport)
   {
     clear(color.r, color.g, color.b, color.a, depth, viewport);
   }
 
-  inline const color_masks& Framebuffer::color_mask() const
+  inline const color_masks& framebuffer::color_mask() const
   {
     return m_color_masks;
   }
 
-  inline bool Framebuffer::depth_mask()
+  inline bool framebuffer::depth_mask()
   {
     return m_depth_mask;
   }
 
-  inline int Framebuffer::width()
+  inline int framebuffer::width()
   {
     return m_width;
   }
 
-  inline int Framebuffer::height()
+  inline int framebuffer::height()
   {
     return m_height;
   }
 
-  inline void Framebuffer::set_color_mask(const mgl_opengl::color_mask& mask)
+  inline void framebuffer::set_color_mask(const mgl_opengl::color_mask& mask)
   {
     set_color_mask({ mask });
   }

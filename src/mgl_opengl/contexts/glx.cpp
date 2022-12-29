@@ -22,7 +22,7 @@
 
 namespace mgl_opengl
 {
-  ContextGLX::ContextGLX(ContextMode::Enum mode, int required)
+  ContextGLX::ContextGLX(context_mode::Enum mode, int required)
   {
     m_mode = mode;
     m_context = nullptr;

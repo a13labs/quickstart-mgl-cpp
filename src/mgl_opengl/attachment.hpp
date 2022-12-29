@@ -18,7 +18,7 @@
 
 namespace mgl_opengl
 {
-  class Attachment
+  class attachment
   {
 public:
     enum type
@@ -27,7 +27,7 @@ public:
       RENDERBUFFER
     };
 
-    virtual ~Attachment() = default;
-    virtual Attachment::type attachment_type() = 0;
+    virtual ~attachment() = default;
+    virtual attachment::type attachment_type() = 0;
   };
 } // namespace mgl_opengl

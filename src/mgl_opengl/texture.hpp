@@ -18,7 +18,7 @@
 
 namespace mgl_opengl
 {
-  class Texture
+  class texture
   {
 public:
     enum type
@@ -34,8 +34,8 @@ public:
       int mag_filter;
     };
 
-    virtual ~Texture() = default;
-    virtual Texture::type texture_type() = 0;
+    virtual ~texture() = default;
+    virtual texture::type texture_type() = 0;
   };
 
   inline int swizzle_from_char(char c)

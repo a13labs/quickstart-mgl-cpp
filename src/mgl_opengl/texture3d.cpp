@@ -22,7 +22,7 @@
 
 namespace mgl_opengl
 {
-  void Texture3D::release()
+  void texture_3d::release()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -37,12 +37,12 @@ namespace mgl_opengl
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  Texture::type Texture3D::texture_type()
+  texture::type texture_3d::texture_type()
   {
-    return Texture::TEXTURE_3D;
+    return texture::TEXTURE_3D;
   }
 
-  bool Texture3D::read_into(mgl_core::mem_buffer<uint8_t>& dst, int alignment, size_t write_offset)
+  bool texture_3d::read_into(mgl_core::mem_buffer<uint8_t>& dst, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -70,7 +70,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::read_into(buffer_ref& dst, int alignment, size_t write_offset)
+  bool texture_3d::read_into(buffer_ref& dst, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -93,7 +93,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_3d& viewport, int alignment)
+  bool texture_3d::write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -126,7 +126,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const mgl_core::mem_buffer<uint8_t>& src, int alignment)
+  bool texture_3d::write(const mgl_core::mem_buffer<uint8_t>& src, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -159,7 +159,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const buffer_ref& src, const mgl_core::viewport_3d& viewport, int alignment)
+  bool texture_3d::write(const buffer_ref& src, const mgl_core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -189,7 +189,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture3D::write(const buffer_ref& src, int alignment)
+  bool texture_3d::write(const buffer_ref& src, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -219,7 +219,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  void Texture3D::bind_to_image(int unit, bool read, bool write, int level, int format)
+  void texture_3d::bind_to_image(int unit, bool read, bool write, int level, int format)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -238,7 +238,7 @@ namespace mgl_opengl
     gl.BindImageTexture(unit, m_texture_obj, level, GL_TRUE, 0, access, frmt);
   }
 
-  void Texture3D::use(int index)
+  void texture_3d::use(int index)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -249,7 +249,7 @@ namespace mgl_opengl
     gl.BindTexture(GL_TEXTURE_3D, m_texture_obj);
   }
 
-  void Texture3D::build_mipmaps(int base, int max_level)
+  void texture_3d::build_mipmaps(int base, int max_level)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -272,7 +272,7 @@ namespace mgl_opengl
     m_max_level = max_level;
   }
 
-  void Texture3D::set_repeat_x(bool value)
+  void texture_3d::set_repeat_x(bool value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -293,7 +293,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   }
 
-  void Texture3D::set_repeat_y(bool value)
+  void texture_3d::set_repeat_y(bool value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -314,7 +314,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   }
 
-  void Texture3D::set_repeat_z(bool value)
+  void texture_3d::set_repeat_z(bool value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -335,7 +335,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
   }
 
-  void Texture3D::set_filter(const Texture::filter& value)
+  void texture_3d::set_filter(const texture::filter& value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -351,7 +351,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }
 
-  mgl_core::string Texture3D::swizzle()
+  mgl_core::string texture_3d::swizzle()
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -378,7 +378,7 @@ namespace mgl_opengl
     return swizzle;
   }
 
-  void Texture3D::set_swizzle(const mgl_core::string& value)
+  void texture_3d::set_swizzle(const mgl_core::string& value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");

@@ -19,19 +19,19 @@
 
 namespace mgl_opengl
 {
-  class UniformBlock
+  class uniform_block
   {
 public:
-    ~UniformBlock() = default;
+    ~uniform_block() = default;
 
     int binding();
     void set_binding(int value);
 
 private:
-    friend class Context;
-    UniformBlock(const mgl_core::string& name, int program_obj, int index, size_t size, Context* ctx);
+    friend class context;
+    uniform_block(const mgl_core::string& name, int program_obj, int index, size_t size, context* ctx);
 
-    Context* m_context;
+    context* m_context;
     mgl_core::string m_name;
     int m_program_obj;
     int m_index;

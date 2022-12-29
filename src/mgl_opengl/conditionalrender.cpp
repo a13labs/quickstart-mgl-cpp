@@ -19,5 +19,5 @@
 
 namespace mgl_opengl
 {
-  void ConditionalRender::release() { }
+  void conditional_render::release() { }
 } // namespace mgl_opengl

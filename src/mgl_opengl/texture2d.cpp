@@ -23,7 +23,7 @@
 
 namespace mgl_opengl
 {
-  void Texture2D::release()
+  void texture_2d::release()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -38,17 +38,17 @@ namespace mgl_opengl
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  Attachment::type Texture2D::attachment_type()
+  attachment::type texture_2d::attachment_type()
   {
-    return Attachment::TEXTURE;
+    return attachment::TEXTURE;
   }
 
-  Texture::type Texture2D::texture_type()
+  texture::type texture_2d::texture_type()
   {
-    return Texture::TEXTURE_2D;
+    return texture::TEXTURE_2D;
   }
 
-  bool Texture2D::read_into(mgl_core::mem_buffer<uint8_t>& dst, int level, int alignment, size_t write_offset)
+  bool texture_2d::read_into(mgl_core::mem_buffer<uint8_t>& dst, int level, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -85,7 +85,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::read_into(buffer_ref& dst, int level, int alignment, size_t write_offset)
+  bool texture_2d::read_into(buffer_ref& dst, int level, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -116,7 +116,8 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_2d& viewport, int level, int alignment)
+  bool
+  texture_2d::write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_2d& viewport, int level, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -150,7 +151,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::write(const mgl_core::mem_buffer<uint8_t>& src, int level, int alignment)
+  bool texture_2d::write(const mgl_core::mem_buffer<uint8_t>& src, int level, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -187,7 +188,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::write(const buffer_ref& src, const mgl_core::viewport_2d& viewport, int level, int alignment)
+  bool texture_2d::write(const buffer_ref& src, const mgl_core::viewport_2d& viewport, int level, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -217,7 +218,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::write(const buffer_ref& src, int level, int alignment)
+  bool texture_2d::write(const buffer_ref& src, int level, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -250,7 +251,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  void Texture2D::bind_to_image(int unit, bool read, bool write, int level, int format)
+  void texture_2d::bind_to_image(int unit, bool read, bool write, int level, int format)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -269,7 +270,7 @@ namespace mgl_opengl
     gl.BindImageTexture(unit, m_texture_obj, level, 0, 0, access, frmt);
   }
 
-  void Texture2D::use(int index)
+  void texture_2d::use(int index)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -282,7 +283,7 @@ namespace mgl_opengl
     gl.BindTexture(texture_target, m_texture_obj);
   }
 
-  void Texture2D::build_mipmaps(int base, int max_level)
+  void texture_2d::build_mipmaps(int base, int max_level)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -307,7 +308,7 @@ namespace mgl_opengl
     m_max_level = max_level;
   }
 
-  void Texture2D::set_repeat_x(bool value)
+  void texture_2d::set_repeat_x(bool value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -330,7 +331,7 @@ namespace mgl_opengl
     gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   }
 
-  void Texture2D::set_repeat_y(bool value)
+  void texture_2d::set_repeat_y(bool value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -353,7 +354,7 @@ namespace mgl_opengl
     gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   }
 
-  void Texture2D::set_filter(const Texture::filter& value)
+  void texture_2d::set_filter(const texture::filter& value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -370,7 +371,7 @@ namespace mgl_opengl
     gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }
 
-  mgl_core::string Texture2D::swizzle()
+  mgl_core::string texture_2d::swizzle()
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -400,7 +401,7 @@ namespace mgl_opengl
     return swizzle;
   }
 
-  void Texture2D::set_swizzle(const mgl_core::string& value)
+  void texture_2d::set_swizzle(const mgl_core::string& value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -440,7 +441,7 @@ namespace mgl_opengl
     }
   }
 
-  void Texture2D::set_compare_func(mgl_opengl::compare_func value)
+  void texture_2d::set_compare_func(mgl_opengl::compare_func value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -465,7 +466,7 @@ namespace mgl_opengl
     }
   }
 
-  void Texture2D::set_anisotropy(float value)
+  void texture_2d::set_anisotropy(float value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");

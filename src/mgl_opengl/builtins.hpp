@@ -75,68 +75,68 @@ namespace mgl_opengl
   class attribute;
   using attribute_ref = mgl_core::ref<mgl_opengl::attribute>;
 
-  class Attachment;
-  using attachment_ref = mgl_core::ref<mgl_opengl::Attachment>;
+  class attachment;
+  using attachment_ref = mgl_core::ref<mgl_opengl::attachment>;
 
-  class Buffer;
-  using buffer_ref = mgl_core::ref<mgl_opengl::Buffer>;
+  class buffer;
+  using buffer_ref = mgl_core::ref<mgl_opengl::buffer>;
 
-  class Context;
-  using context_ref = mgl_core::ref<mgl_opengl::Context>;
+  class context;
+  using context_ref = mgl_core::ref<mgl_opengl::context>;
 
-  class ConditionalRender;
-  using conditional_render_ref = mgl_core::ref<mgl_opengl::ConditionalRender>;
+  class conditional_render;
+  using conditional_render_ref = mgl_core::ref<mgl_opengl::conditional_render>;
 
-  class ComputeShader;
-  using compute_shader_ref = mgl_core::ref<mgl_opengl::ComputeShader>;
+  class compute_shader;
+  using compute_shader_ref = mgl_core::ref<mgl_opengl::compute_shader>;
 
-  class Framebuffer;
-  using framebuffer_ref = mgl_core::ref<mgl_opengl::Framebuffer>;
+  class framebuffer;
+  using framebuffer_ref = mgl_core::ref<mgl_opengl::framebuffer>;
 
-  class Program;
-  using program_ref = mgl_core::ref<mgl_opengl::Program>;
+  class program;
+  using program_ref = mgl_core::ref<mgl_opengl::program>;
 
-  class Query;
-  using query_ref = mgl_core::ref<mgl_opengl::Query>;
+  class query;
+  using query_ref = mgl_core::ref<mgl_opengl::query>;
 
-  class Renderbuffer;
-  using renderbuffer_ref = mgl_core::ref<mgl_opengl::Renderbuffer>;
+  class renderbuffer;
+  using renderbuffer_ref = mgl_core::ref<mgl_opengl::renderbuffer>;
 
-  class Sampler;
-  using sampler_ref = mgl_core::ref<mgl_opengl::Sampler>;
+  class sampler;
+  using sampler_ref = mgl_core::ref<mgl_opengl::sampler>;
 
-  class Scope;
-  using scope_ref = mgl_core::ref<mgl_opengl::Scope>;
+  class scope;
+  using scope_ref = mgl_core::ref<mgl_opengl::scope>;
 
-  class Subroutine;
-  using subroutine_ref = mgl_core::ref<mgl_opengl::Subroutine>;
+  class subroutine;
+  using subroutine_ref = mgl_core::ref<mgl_opengl::subroutine>;
 
-  class Texture;
-  using texture_ref = mgl_core::ref<mgl_opengl::Texture>;
+  class texture;
+  using texture_ref = mgl_core::ref<mgl_opengl::texture>;
 
-  class Texture2D;
-  using texture_2d_ref = mgl_core::ref<mgl_opengl::Texture2D>;
+  class texture_2d;
+  using texture_2d_ref = mgl_core::ref<mgl_opengl::texture_2d>;
 
-  class TextureArray;
-  using texture_array_ref = mgl_core::ref<mgl_opengl::TextureArray>;
+  class texture_array;
+  using texture_array_ref = mgl_core::ref<mgl_opengl::texture_array>;
 
-  class Texture3D;
-  using texture_3d_ref = mgl_core::ref<mgl_opengl::Texture3D>;
+  class texture_3d;
+  using texture_3d_ref = mgl_core::ref<mgl_opengl::texture_3d>;
 
-  class TextureCube;
-  using texture_cube_ref = mgl_core::ref<mgl_opengl::TextureCube>;
+  class texture_cube;
+  using texture_cube_ref = mgl_core::ref<mgl_opengl::texture_cube>;
 
-  class Uniform;
-  using uniform_ref = mgl_core::ref<mgl_opengl::Uniform>;
+  class uniform;
+  using uniform_ref = mgl_core::ref<mgl_opengl::uniform>;
 
-  class UniformBlock;
-  using uniform_block_ref = mgl_core::ref<mgl_opengl::UniformBlock>;
+  class uniform_block;
+  using uniform_block_ref = mgl_core::ref<mgl_opengl::uniform_block>;
 
-  class Varying;
-  using varying_ref = mgl_core::ref<mgl_opengl::Varying>;
+  class varying;
+  using varying_ref = mgl_core::ref<mgl_opengl::varying>;
 
-  class VertexArray;
-  using vertex_array_ref = mgl_core::ref<mgl_opengl::VertexArray>;
+  class vertex_array;
+  using vertex_array_ref = mgl_core::ref<mgl_opengl::vertex_array>;
 
   struct texture_binding
   {
@@ -162,13 +162,13 @@ namespace mgl_opengl
   using uniforms_dict = mgl_core::dict<mgl_core::string, uniform_ref>;
   using uniform_blocks_dict = mgl_core::dict<mgl_core::string, uniform_block_ref>;
   using varyings_dict = mgl_core::dict<mgl_core::string, varying_ref>;
-  using attachments_ref = mgl_core::ref_list<Attachment>;
+  using attachments_ref = mgl_core::ref_list<attachment>;
   using shaders_outputs = mgl_core::string_list;
   using fragment_outputs = mgl_core::dict<mgl_core::string, int>;
   using color_masks = mgl_core::list<color_mask>;
-  using textures = mgl_core::ref_list<Texture>;
-  using buffers = mgl_core::ref_list<Buffer>;
-  using samplers = mgl_core::ref_list<Sampler>;
+  using textures = mgl_core::ref_list<texture>;
+  using buffers = mgl_core::ref_list<buffer>;
+  using samplers = mgl_core::ref_list<sampler>;
   using texture_bindings = mgl_core::list<texture_binding>;
   using buffer_bindings = mgl_core::list<buffer_binding>;
   using sampler_bindings = mgl_core::list<sampler_binding>;

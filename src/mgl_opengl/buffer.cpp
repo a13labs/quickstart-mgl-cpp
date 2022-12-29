@@ -20,7 +20,7 @@
 
 namespace mgl_opengl
 {
-  void Buffer::release()
+  void buffer::release()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -36,7 +36,7 @@ namespace mgl_opengl
     gl.DeleteBuffers(1, (GLuint*)&m_buffer_obj);
   }
 
-  bool Buffer::write(const void* src, size_t size, size_t offset)
+  bool buffer::write(const void* src, size_t size, size_t offset)
   {
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -52,7 +52,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Buffer::read_into(void* dst, size_t dst_size, size_t read_size, size_t read_offset, size_t write_offset)
+  bool buffer::read_into(void* dst, size_t dst_size, size_t read_size, size_t read_offset, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -79,7 +79,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  void Buffer::clear()
+  void buffer::clear()
   {
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -101,7 +101,7 @@ namespace mgl_opengl
     gl.UnmapBuffer(GL_ARRAY_BUFFER);
   }
 
-  void Buffer::orphan(size_t size)
+  void buffer::orphan(size_t size)
   {
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -117,7 +117,7 @@ namespace mgl_opengl
     gl.BufferData(GL_ARRAY_BUFFER, size, 0, m_dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
   }
 
-  void Buffer::bind_to_uniform_block(int binding, size_t size, size_t offset)
+  void buffer::bind_to_uniform_block(int binding, size_t size, size_t offset)
   {
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -134,7 +134,7 @@ namespace mgl_opengl
     gl.BindBufferRange(GL_UNIFORM_BUFFER, binding, m_buffer_obj, offset, size);
   }
 
-  void Buffer::bind_to_storage_buffer(int binding, size_t size, size_t offset)
+  void buffer::bind_to_storage_buffer(int binding, size_t size, size_t offset)
   {
     MGL_CORE_ASSERT(!m_released, "Buffer already released");
     MGL_CORE_ASSERT(m_context, "No context");

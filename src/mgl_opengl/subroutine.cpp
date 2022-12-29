@@ -20,7 +20,7 @@
 
 namespace mgl_opengl
 {
-  Subroutine::Subroutine(const mgl_core::string& name, int index, Subroutine::type type)
+  subroutine::subroutine(const mgl_core::string& name, int index, subroutine::type type)
   {
     m_name = name;
     m_index = index;

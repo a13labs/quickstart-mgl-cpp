@@ -105,7 +105,7 @@ struct EGLContextData
 
 namespace mgl_opengl
 {
-  ContextEGL::ContextEGL(ContextMode::Enum mode, int required)
+  ContextEGL::ContextEGL(context_mode::Enum mode, int required)
   {
     m_mode = mode;
     m_released = true;
@@ -245,7 +245,7 @@ namespace mgl_opengl
 
     switch(mode)
     {
-      case ContextMode::STANDALONE: {
+      case context_mode::STANDALONE: {
         res->standalone = true;
         res->wnd = EGL_NO_SURFACE;
 
@@ -333,7 +333,7 @@ namespace mgl_opengl
         res->m_eglMakeCurrent(res->dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, res->ctx);
       }
       break;
-      case ContextMode::SHARE: {
+      case context_mode::SHARE: {
         res->standalone = false;
 
         EGLContext ctx_share = res->m_eglGetCurrentContext();

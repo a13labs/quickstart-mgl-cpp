@@ -18,7 +18,7 @@
 
 namespace mgl_opengl
 {
-  class Scope
+  class scope
   {
 public:
     struct BindingData
@@ -28,7 +28,7 @@ public:
       int gl_object;
     };
 
-    ~Scope() = default;
+    ~scope() = default;
 
     void release();
     bool released();
@@ -37,21 +37,21 @@ public:
     void end();
 
 private:
-    friend class Context;
-    Scope() = default;
+    friend class context;
+    scope() = default;
 
-    Context* m_context;
+    context* m_context;
     framebuffer_ref m_framebuffer;
     framebuffer_ref m_old_framebuffer;
     sampler_bindings m_samplers;
-    mgl_core::list<Scope::BindingData> m_textures;
-    mgl_core::list<Scope::BindingData> m_buffers;
+    mgl_core::list<scope::BindingData> m_textures;
+    mgl_core::list<scope::BindingData> m_buffers;
     int m_enable_flags;
     int m_old_enable_flags;
     bool m_released;
   };
 
-  inline bool Scope::released()
+  inline bool scope::released()
   {
     return m_released;
   }

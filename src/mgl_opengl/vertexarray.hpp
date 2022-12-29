@@ -18,10 +18,10 @@
 
 namespace mgl_opengl
 {
-  class VertexArray
+  class vertex_array
   {
 public:
-    ~VertexArray() = default;
+    ~vertex_array() = default;
 
 public:
     void release();
@@ -35,7 +35,7 @@ public:
     void render_indirect(const buffer_ref& buffer, mgl_opengl::render_mode mode, int count = -1, int first = -1);
     void transform(const buffer_ref& buffer, mgl_opengl::render_mode mode, int vertices = -1, int first = 0, int instances = -1);
 
-    void transform(const mgl_core::ref_list<Buffer>& buffers,
+    void transform(const mgl_core::ref_list<buffer>& buffers,
                    mgl_opengl::render_mode mode,
                    int vertices = -1,
                    int first = 0,
@@ -57,10 +57,10 @@ public:
     int instances();
 
 private:
-    friend class Context;
-    VertexArray() = default;
+    friend class context;
+    vertex_array() = default;
 
-    Context* m_context;
+    context* m_context;
     program_ref m_program;
     buffer_ref m_index_buffer;
     int m_index_element_size;
@@ -74,22 +74,22 @@ private:
   };
 
   inline void
-  VertexArray::transform(const buffer_ref& buffer, mgl_opengl::render_mode mode, int vertices, int first, int instances)
+  vertex_array::transform(const buffer_ref& buffer, mgl_opengl::render_mode mode, int vertices, int first, int instances)
   {
     transform({ buffer }, mode, vertices, first, instances);
   }
 
-  inline void VertexArray::render(int instances)
+  inline void vertex_array::render(int instances)
   {
     render(mgl_opengl::TRIANGLES, -1, 0, instances);
   }
 
-  inline int VertexArray::vertices()
+  inline int vertex_array::vertices()
   {
     return m_num_vertices;
   }
 
-  inline int VertexArray::instances()
+  inline int vertex_array::instances()
   {
     return m_num_instances;
   }

@@ -19,11 +19,11 @@
 
 namespace mgl_opengl
 {
-  class TextureCube : public Texture
+  class texture_cube : public texture
   {
 public:
-    ~TextureCube() = default;
-    virtual Texture::type texture_type() override;
+    ~texture_cube() = default;
+    virtual texture::type texture_type() override;
 
     void release();
     bool released();
@@ -32,8 +32,8 @@ public:
     int height();
     int components();
 
-    const Texture::filter& filter() const;
-    void set_filter(const Texture::filter& value);
+    const texture::filter& filter() const;
+    void set_filter(const texture::filter& value);
 
     mgl_core::string swizzle();
     void set_swizzle(const mgl_core::string& value);
@@ -53,47 +53,47 @@ public:
     void use(int index = 0);
 
 private:
-    friend class Context;
-    TextureCube() = default;
+    friend class context;
+    texture_cube() = default;
 
-    Context* m_context;
+    context* m_context;
     data_type* m_data_type;
     int m_texture_obj;
     int m_width;
     int m_height;
     int m_components;
-    Texture::filter m_filter;
+    texture::filter m_filter;
     int m_max_level;
     float m_anisotropy;
     bool m_released;
   };
 
-  inline bool TextureCube::released()
+  inline bool texture_cube::released()
   {
     return m_released;
   }
 
-  inline int TextureCube::components()
+  inline int texture_cube::components()
   {
     return m_components;
   }
 
-  inline int TextureCube::width()
+  inline int texture_cube::width()
   {
     return m_width;
   }
 
-  inline int TextureCube::height()
+  inline int texture_cube::height()
   {
     return m_height;
   }
 
-  inline const Texture::filter& TextureCube::filter() const
+  inline const texture::filter& texture_cube::filter() const
   {
     return m_filter;
   }
 
-  inline float TextureCube::anisotropy()
+  inline float texture_cube::anisotropy()
   {
     return m_anisotropy;
   }

@@ -18,10 +18,10 @@
 
 namespace mgl_opengl
 {
-  class Program
+  class program
   {
 public:
-    ~Program() = default;
+    ~program() = default;
 
     void release();
     bool released();
@@ -52,11 +52,11 @@ public:
     bool is_transform();
 
 private:
-    friend class Context;
-    friend class VertexArray;
-    Program() = default;
+    friend class context;
+    friend class vertex_array;
+    program() = default;
 
-    Context* m_context;
+    context* m_context;
     int m_program_obj;
     int m_geometry_input;
     int m_geometry_output;
@@ -76,12 +76,12 @@ private:
     subroutines_dict m_subroutines_map;
   };
 
-  inline bool Program::released()
+  inline bool program::released()
   {
     return m_released;
   }
 
-  inline const attribute_ref Program::attribute(const mgl_core::string& name) const
+  inline const attribute_ref program::attribute(const mgl_core::string& name) const
   {
     if(m_attributes_map.find(name) == m_attributes_map.end())
     {
@@ -90,7 +90,7 @@ private:
     return m_attributes_map.at(name);
   }
 
-  inline const uniform_ref Program::uniform(const mgl_core::string& name) const
+  inline const uniform_ref program::uniform(const mgl_core::string& name) const
   {
     if(m_uniforms_map.find(name) == m_uniforms_map.end())
     {
@@ -99,7 +99,7 @@ private:
     return m_uniforms_map.at(name);
   }
 
-  inline const uniform_block_ref Program::uniform_block(const mgl_core::string& name) const
+  inline const uniform_block_ref program::uniform_block(const mgl_core::string& name) const
   {
     if(m_uniform_blocks_map.find(name) == m_uniform_blocks_map.end())
     {
@@ -108,7 +108,7 @@ private:
     return m_uniform_blocks_map.at(name);
   }
 
-  inline const varying_ref Program::varying(const mgl_core::string& name) const
+  inline const varying_ref program::varying(const mgl_core::string& name) const
   {
     if(m_varyings_map.find(name) == m_varyings_map.end())
     {
@@ -117,7 +117,7 @@ private:
     return m_varyings_map.at(name);
   }
 
-  inline const subroutine_ref Program::subroutine(const mgl_core::string& name) const
+  inline const subroutine_ref program::subroutine(const mgl_core::string& name) const
   {
     if(m_subroutines_map.find(name) == m_subroutines_map.end())
     {
@@ -126,52 +126,52 @@ private:
     return m_subroutines_map.at(name);
   }
 
-  inline int Program::geometry_input()
+  inline int program::geometry_input()
   {
     return m_geometry_input;
   }
 
-  inline int Program::geometry_output()
+  inline int program::geometry_output()
   {
     return m_geometry_output;
   }
 
-  inline int Program::geometry_vertices()
+  inline int program::geometry_vertices()
   {
     return m_geometry_vertices;
   }
 
-  inline bool Program::is_transform()
+  inline bool program::is_transform()
   {
     return m_transform;
   }
 
-  inline size_t Program::num_attributes()
+  inline size_t program::num_attributes()
   {
     return m_attributes_map.size();
   }
 
-  inline size_t Program::num_uniforms()
+  inline size_t program::num_uniforms()
   {
     return m_uniforms_map.size();
   }
 
-  inline size_t Program::num_uniform_blocks()
+  inline size_t program::num_uniform_blocks()
   {
     return m_uniform_blocks_map.size();
   }
 
-  inline size_t Program::num_varyings()
+  inline size_t program::num_varyings()
   {
     return m_varyings_map.size();
   }
 
-  inline size_t Program::num_subroutines()
+  inline size_t program::num_subroutines()
   {
     return m_subroutines_map.size();
   }
 
-  inline const uniform_ref Program::operator[](const mgl_core::string& name) const
+  inline const uniform_ref program::operator[](const mgl_core::string& name) const
   {
     return uniform(name);
   }

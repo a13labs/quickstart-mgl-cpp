@@ -20,16 +20,16 @@
 
 namespace mgl_opengl
 {
-  class Texture2D : public Attachment, public Texture
+  class texture_2d : public attachment, public texture
   {
 public:
-    ~Texture2D() = default;
+    ~texture_2d() = default;
 
     void release();
     bool released();
 
-    virtual Attachment::type attachment_type() override;
-    virtual Texture::type texture_type() override;
+    virtual attachment::type attachment_type() override;
+    virtual texture::type texture_type() override;
     int width();
     int height();
     int samples();
@@ -42,8 +42,8 @@ public:
     bool repeat_y();
     void set_repeat_y(bool value);
 
-    const Texture::filter& filter() const;
-    void set_filter(const Texture::filter& value);
+    const texture::filter& filter() const;
+    void set_filter(const texture::filter& value);
 
     mgl_core::string swizzle();
     void set_swizzle(const mgl_core::string& value);
@@ -67,10 +67,10 @@ public:
     void build_mipmaps(int base = 0, int max_level = 1000);
 
 private:
-    friend class Context;
-    Texture2D() = default;
+    friend class context;
+    texture_2d() = default;
 
-    Context* m_context;
+    context* m_context;
     data_type* m_data_type;
     int m_texture_obj;
     int m_width;
@@ -78,7 +78,7 @@ private:
     bool m_depth;
     int m_samples;
     int m_components;
-    Texture::filter m_filter;
+    texture::filter m_filter;
     int m_max_level;
     mgl_opengl::compare_func m_compare_func;
     float m_anisotropy;
@@ -87,57 +87,57 @@ private:
     bool m_released;
   };
 
-  inline bool Texture2D::released()
+  inline bool texture_2d::released()
   {
     return m_released;
   }
 
-  inline int Texture2D::components()
+  inline int texture_2d::components()
   {
     return m_components;
   }
 
-  inline int Texture2D::width()
+  inline int texture_2d::width()
   {
     return m_width;
   }
 
-  inline int Texture2D::height()
+  inline int texture_2d::height()
   {
     return m_height;
   }
 
-  inline int Texture2D::samples()
+  inline int texture_2d::samples()
   {
     return m_samples;
   }
 
-  inline bool Texture2D::depth()
+  inline bool texture_2d::depth()
   {
     return m_depth;
   }
 
-  inline bool Texture2D::repeat_x()
+  inline bool texture_2d::repeat_x()
   {
     return m_repeat_x;
   }
 
-  inline bool Texture2D::repeat_y()
+  inline bool texture_2d::repeat_y()
   {
     return m_repeat_y;
   }
 
-  inline const Texture::filter& Texture2D::filter() const
+  inline const texture::filter& texture_2d::filter() const
   {
     return m_filter;
   }
 
-  inline mgl_opengl::compare_func Texture2D::compare_func()
+  inline mgl_opengl::compare_func texture_2d::compare_func()
   {
     return m_compare_func;
   }
 
-  inline float Texture2D::anisotropy()
+  inline float texture_2d::anisotropy()
   {
     return m_anisotropy;
   }

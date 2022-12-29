@@ -19,7 +19,7 @@
 
 namespace mgl_opengl
 {
-  class Subroutine
+  class subroutine
   {
     enum type
     {
@@ -31,14 +31,14 @@ namespace mgl_opengl
     };
 
 public:
-    ~Subroutine() = default;
+    ~subroutine() = default;
 
 private:
-    friend class Context;
-    Subroutine(const mgl_core::string& name, int index, Subroutine::type type);
+    friend class context;
+    subroutine(const mgl_core::string& name, int index, subroutine::type type);
 
     mgl_core::string m_name;
     int m_index;
-    Subroutine::type m_type;
+    subroutine::type m_type;
   };
 } // namespace mgl_opengl

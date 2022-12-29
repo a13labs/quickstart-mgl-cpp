@@ -22,7 +22,7 @@
 
 namespace mgl_opengl
 {
-  void Framebuffer::release()
+  void framebuffer::release()
   {
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
@@ -42,7 +42,7 @@ namespace mgl_opengl
     }
   }
 
-  void Framebuffer::clear(float r, float g, float b, float a, float depth, const mgl_core::viewport_2d& viewport)
+  void framebuffer::clear(float r, float g, float b, float a, float depth, const mgl_core::viewport_2d& viewport)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -98,7 +98,7 @@ namespace mgl_opengl
     gl.BindFramebuffer(GL_FRAMEBUFFER, m_context->m_bound_framebuffer->m_framebuffer_obj);
   }
 
-  void Framebuffer::use()
+  void framebuffer::use()
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -134,7 +134,7 @@ namespace mgl_opengl
     m_context->m_bound_framebuffer = shared_from_this();
   }
 
-  bool Framebuffer::read_into(mgl_core::mem_buffer<uint8_t>& dst,
+  bool framebuffer::read_into(mgl_core::mem_buffer<uint8_t>& dst,
                               const mgl_core::viewport_2d& viewport,
                               int components,
                               int attachment,
@@ -192,7 +192,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Framebuffer::read_into(buffer_ref dst,
+  bool framebuffer::read_into(buffer_ref dst,
                               const mgl_core::viewport_2d& viewport,
                               int components,
                               int attachment,
@@ -244,7 +244,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  void Framebuffer::set_color_mask(const color_masks& masks)
+  void framebuffer::set_color_mask(const color_masks& masks)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -263,7 +263,7 @@ namespace mgl_opengl
     }
   }
 
-  void Framebuffer::set_depth_mask(bool value)
+  void framebuffer::set_depth_mask(bool value)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -278,7 +278,7 @@ namespace mgl_opengl
     }
   }
 
-  bool Framebuffer::bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits)
+  bool framebuffer::bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -298,7 +298,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  void Framebuffer::set_viewport(const mgl_core::viewport_2d& r)
+  void framebuffer::set_viewport(const mgl_core::viewport_2d& r)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -315,7 +315,7 @@ namespace mgl_opengl
     }
   }
 
-  void Framebuffer::set_scissor(const mgl_core::viewport_2d& r)
+  void framebuffer::set_scissor(const mgl_core::viewport_2d& r)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");

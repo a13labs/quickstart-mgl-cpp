@@ -20,7 +20,7 @@
 
 namespace mgl_opengl
 {
-  UniformBlock::UniformBlock(const mgl_core::string& name, int program_obj, int index, size_t size, Context* ctx)
+  uniform_block::uniform_block(const mgl_core::string& name, int program_obj, int index, size_t size, context* ctx)
   {
     m_context = ctx;
     m_name = name;
@@ -29,7 +29,7 @@ namespace mgl_opengl
     m_size = size;
   }
 
-  int UniformBlock::binding()
+  int uniform_block::binding()
   {
     const GLMethods& gl = m_context->gl();
 
@@ -38,7 +38,7 @@ namespace mgl_opengl
     return binding;
   }
 
-  void UniformBlock::set_binding(int value)
+  void uniform_block::set_binding(int value)
   {
     const GLMethods& gl = m_context->gl();
     gl.UniformBlockBinding(m_program_obj, m_index, value);
