@@ -10,7 +10,7 @@
 #include "format.hpp"
 #include "framebuffer.hpp"
 #include "glmethods.hpp"
-#include "glslsources.hpp"
+#include "glslsource.hpp"
 #include "opengl.hpp"
 #include "program.hpp"
 #include "query.hpp"

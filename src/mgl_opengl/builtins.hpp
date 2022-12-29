@@ -70,6 +70,7 @@ namespace mgl_opengl
   struct data_type;
 
   struct glsl_sources;
+  class glsl_source;
 
   class Attribute;
   class Attachment;
@@ -113,6 +114,7 @@ namespace mgl_opengl
     int binding;
   };
 
+  using shader_defines = mgl_core::dict<mgl_core::string, mgl_core::string>;
   using attributes_dict = mgl_core::dict<mgl_core::string, mgl_core::ref<Attribute>>;
   using subroutines_dict = mgl_core::dict<mgl_core::string, mgl_core::ref<Subroutine>>;
   using uniforms_dict = mgl_core::dict<mgl_core::string, mgl_core::ref<Uniform>>;

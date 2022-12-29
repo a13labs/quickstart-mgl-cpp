@@ -1,5 +1,4 @@
 #include "registry.hpp"
-#include "glslsource.hpp"
 #include "stb/stb_image.hpp"
 
 namespace mgl_window
@@ -95,7 +94,7 @@ namespace mgl_window
       return false;
     }
 
-    static void stbi_kyon_horizontal_flip(void* image, int w, int h, int components)
+    static void horizontal_flip(void* image, int w, int h, int components)
     {
       size_t line_bytes = (size_t)w * components;
       stbi_uc temp[line_bytes];
@@ -138,7 +137,7 @@ namespace mgl_window
 
       if(opts.flip_x)
       {
-        stbi_kyon_horizontal_flip(data, width, height, components);
+        horizontal_flip(data, width, height, components);
       }
 
       auto texture = ctx->texture2d(width, height, components, data);
@@ -188,16 +187,8 @@ namespace mgl_window
       mgl_core::input_file shader_file(full_path, mgl_core::input_file::in);
       mgl_core::string shader_text((std::istreambuf_iterator<char>(shader_file)), std::istreambuf_iterator<char>());
 
-      ShaderSource shader_source(shader_text);
-
-      mgl_opengl::glsl_sources glsl = {
-        shader_source.source(ShaderSource::type::VERTEX_SHADER, opts.defines),
-        shader_source.source(ShaderSource::type::FRAGMENT_SHADER, opts.defines),
-        shader_source.source(ShaderSource::type::GEOMETRY_SHADER, opts.defines),
-        shader_source.source(ShaderSource::type::TESS_CONTROL_SHADER, opts.defines),
-        shader_source.source(ShaderSource::type::TESS_EVALUATION_SHADER, opts.defines),
-      };
-
+      mgl_opengl::glsl_source shader_source(shader_text);
+      mgl_opengl::glsl_sources glsl = { shader_source };
       mgl_opengl::shaders_outputs outputs = opts.outputs;
 
       if(outputs.size() == 0 && glsl.fragment().empty())
@@ -209,20 +200,14 @@ namespace mgl_window
       return ctx->program(glsl, outputs);
     }
 
-    mgl_core::ref<mgl_opengl::Program> load_program(mgl_core::string vertex_shader,
-                                                    mgl_core::string fragment_shader,
-                                                    mgl_core::string geometry_shader,
-                                                    mgl_core::string tess_control_shader,
-                                                    mgl_core::string tess_evaluation_shader,
-                                                    const program_load_opts& opts)
+    mgl_core::ref<mgl_opengl::Program> load_program(mgl_opengl::glsl_source& source, const program_load_opts& opts)
     {
       MGL_CORE_ASSERT(Window::current().context(), "No context!");
       const auto ctx = Window::current().context();
 
-      mgl_opengl::glsl_sources glsl = {
-        vertex_shader, fragment_shader, geometry_shader, tess_control_shader, tess_evaluation_shader,
-      };
+      mgl_opengl::glsl_sources glsl = { source };
 
+      MGL_CORE_ASSERT(!glsl.empty(), "Empty source");
       mgl_opengl::shaders_outputs outputs = opts.outputs;
 
       return ctx->program(glsl, outputs);

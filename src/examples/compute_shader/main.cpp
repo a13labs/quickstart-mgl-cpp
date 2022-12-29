@@ -8,16 +8,11 @@
 
 int main(int argc, char* argv[])
 {
-  auto code = R"(
-// author: minu jeong
+  mgl_core::log::init();
+
+  // author: minu jeong
+  auto code = mgl_opengl::glsl_source(R"(
 #version 440
-
-#define W 512
-#define H 256
-#define X W+1
-#define Y 1
-#define Z 1
-
 layout(local_size_x=X, local_size_y=Y, local_size_z=Z) in;
 layout (std430, binding=0) buffer in_0
 {
@@ -102,16 +97,24 @@ void main()
     // write to buffer
     outxs[frag_i] = vec4(median.xyz, 1.0);
 }    
-  )";
+  )");
 
   uint32_t W = 512;
   uint32_t H = 256;
+  uint32_t X = W + 1;
+  uint32_t Y = 1;
+  uint32_t Z = 1;
   int FRAMES = 50;
 
-  mgl_core::log::init();
   auto ctx = mgl_opengl::Context::create_context(mgl_opengl::ContextMode::STANDALONE);
 
-  auto compute_shader = ctx->compute_shader(code);
+  auto compute_shader = ctx->compute_shader(code.source({
+      { "W", std::to_string(W) },
+      { "H", std::to_string(H) },
+      { "X", std::to_string(X) },
+      { "Y", std::to_string(Y) },
+      { "Z", std::to_string(Z) },
+  }));
 
   if(!compute_shader)
   {

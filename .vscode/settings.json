@@ -74,6 +74,7 @@
         "span": "cpp",
         "future": "cpp",
         "typeindex": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "charconv": "cpp"
     }
 }
