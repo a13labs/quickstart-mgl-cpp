@@ -71,7 +71,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::read_into(mgl_core::ref<Buffer>& dst, int face, int alignment, size_t write_offset)
+  bool TextureCube::read_into(buffer_ref& dst, int face, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -160,7 +160,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const mgl_core::ref<Buffer>& src, int face, const mgl_core::viewport_2d& viewport, int alignment)
+  bool TextureCube::write(const buffer_ref& src, int face, const mgl_core::viewport_2d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -188,7 +188,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureCube::write(const mgl_core::ref<Buffer>& src, int face, int alignment)
+  bool TextureCube::write(const buffer_ref& src, int face, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");

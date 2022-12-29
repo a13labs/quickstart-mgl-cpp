@@ -104,7 +104,7 @@ namespace mgl_opengl
     }
   }
 
-  void VertexArray::render_indirect(const mgl_core::ref<Buffer>& buffer, mgl_opengl::render_mode mode, int count, int first)
+  void VertexArray::render_indirect(const buffer_ref& buffer, mgl_opengl::render_mode mode, int count, int first)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -316,7 +316,7 @@ namespace mgl_opengl
 
   void VertexArray::bind(int location,
                          const char* type,
-                         const mgl_core::ref<Buffer>& buffer,
+                         const buffer_ref& buffer,
                          const char* format,
                          size_t offset,
                          int stride,
@@ -357,7 +357,7 @@ namespace mgl_opengl
     gl.EnableVertexAttribArray(location);
   }
 
-  void VertexArray::set_index_buffer(const mgl_core::ref<Buffer>& value)
+  void VertexArray::set_index_buffer(const buffer_ref& value)
   {
     m_index_buffer = value;
     m_num_vertices = (int)(m_index_buffer->size() / 4);

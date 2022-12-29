@@ -49,12 +49,12 @@ public:
     void set_swizzle(const mgl_core::string& value);
 
     bool read_into(mgl_core::mem_buffer<uint8_t>& dst, int alignment = 1, size_t write_offset = 0);
-    bool read_into(mgl_core::ref<Buffer>& dst, int alignment = 1, size_t write_offset = 0);
+    bool read_into(buffer_ref& dst, int alignment = 1, size_t write_offset = 0);
 
     bool write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_3d& viewport, int alignment = 1);
     bool write(const mgl_core::mem_buffer<uint8_t>& src, int alignment = 1);
-    bool write(const mgl_core::ref<Buffer>& src, const mgl_core::viewport_3d& viewport, int alignment = 1);
-    bool write(const mgl_core::ref<Buffer>& src, int alignment = 1);
+    bool write(const buffer_ref& src, const mgl_core::viewport_3d& viewport, int alignment = 1);
+    bool write(const buffer_ref& src, int alignment = 1);
 
     void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
     void use(int index = 0);

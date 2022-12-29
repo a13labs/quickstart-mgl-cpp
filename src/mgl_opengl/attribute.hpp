@@ -19,7 +19,7 @@
 
 namespace mgl_opengl
 {
-  class Attribute
+  class attribute
   {
 public:
     struct data_type
@@ -32,11 +32,11 @@ public:
       const char* shape;
     };
 
-    ~Attribute() = default;
+    ~attribute() = default;
 
 private:
     friend class Context;
-    Attribute(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t array_length);
+    attribute(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t array_length);
 
     mgl_core::string m_name;
     int m_program_obj;

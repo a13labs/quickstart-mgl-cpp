@@ -65,7 +65,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureArray::read_into(mgl_core::ref<Buffer>& dst, int alignment, size_t write_offset)
+  bool TextureArray::read_into(buffer_ref& dst, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -154,7 +154,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureArray::write(const mgl_core::ref<Buffer>& src, const mgl_core::viewport_3d& viewport, int alignment)
+  bool TextureArray::write(const buffer_ref& src, const mgl_core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -184,7 +184,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool TextureArray::write(const mgl_core::ref<Buffer>& src, int alignment)
+  bool TextureArray::write(const buffer_ref& src, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");

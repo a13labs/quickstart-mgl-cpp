@@ -32,9 +32,8 @@ public:
                 int first = 0,
                 int instances = -1);
     void render(int instances);
-    void render_indirect(const mgl_core::ref<Buffer>& buffer, mgl_opengl::render_mode mode, int count = -1, int first = -1);
-    void transform(
-        const mgl_core::ref<Buffer>& buffer, mgl_opengl::render_mode mode, int vertices = -1, int first = 0, int instances = -1);
+    void render_indirect(const buffer_ref& buffer, mgl_opengl::render_mode mode, int count = -1, int first = -1);
+    void transform(const buffer_ref& buffer, mgl_opengl::render_mode mode, int vertices = -1, int first = 0, int instances = -1);
 
     void transform(const mgl_core::ref_list<Buffer>& buffers,
                    mgl_opengl::render_mode mode,
@@ -45,14 +44,14 @@ public:
 
     void bind(int location,
               const char* type,
-              const mgl_core::ref<Buffer>& buffer,
+              const buffer_ref& buffer,
               const char* format,
               size_t offset = 0,
               int stride = 0,
               int divisor = 0,
               bool normalize = false);
 
-    void set_index_buffer(const mgl_core::ref<Buffer>& value);
+    void set_index_buffer(const buffer_ref& value);
 
     int vertices();
     int instances();
@@ -62,8 +61,8 @@ private:
     VertexArray() = default;
 
     Context* m_context;
-    mgl_core::ref<Program> m_program;
-    mgl_core::ref<Buffer> m_index_buffer;
+    program_ref m_program;
+    buffer_ref m_index_buffer;
     int m_index_element_size;
     int m_index_element_type;
     unsigned* m_subroutines;
@@ -74,8 +73,8 @@ private:
     bool m_released;
   };
 
-  inline void VertexArray::transform(
-      const mgl_core::ref<Buffer>& buffer, mgl_opengl::render_mode mode, int vertices, int first, int instances)
+  inline void
+  VertexArray::transform(const buffer_ref& buffer, mgl_opengl::render_mode mode, int vertices, int first, int instances)
   {
     transform({ buffer }, mode, vertices, first, instances);
   }

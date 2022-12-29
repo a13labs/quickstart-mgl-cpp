@@ -85,7 +85,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::read_into(mgl_core::ref<Buffer>& dst, int level, int alignment, size_t write_offset)
+  bool Texture2D::read_into(buffer_ref& dst, int level, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -187,7 +187,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::write(const mgl_core::ref<Buffer>& src, const mgl_core::viewport_2d& viewport, int level, int alignment)
+  bool Texture2D::write(const buffer_ref& src, const mgl_core::viewport_2d& viewport, int level, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -217,7 +217,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Texture2D::write(const mgl_core::ref<Buffer>& src, int level, int alignment)
+  bool Texture2D::write(const buffer_ref& src, int level, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture2D already released");
     MGL_CORE_ASSERT(m_context, "No context");

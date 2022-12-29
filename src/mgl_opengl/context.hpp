@@ -45,7 +45,7 @@ public:
     int default_texture_unit();
     float max_anisotropy();
     const mgl_core::string_list& extensions() const;
-    const mgl_core::ref<Framebuffer>& screen() const;
+    const framebuffer_ref& screen() const;
 
     int enable_flags();
     void set_enable_flags(int flags);
@@ -67,99 +67,95 @@ public:
     int provoking_vertex();
     float polygon_offset_factor();
     float polygon_offset_units();
-    void copy_buffer(
-        const mgl_core::ref<Buffer>& src, const mgl_core::ref<Buffer>& dst, size_t size, size_t read_offset, size_t write_offset);
+    void copy_buffer(const buffer_ref& src, const buffer_ref& dst, size_t size, size_t read_offset, size_t write_offset);
 
     // Buffer
-    mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<float>& data, bool dynamic = false);
-    mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic = false);
-    mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic = false);
-    mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic = false);
+    buffer_ref buffer(const mgl_core::mem_buffer<float>& data, bool dynamic = false);
+    buffer_ref buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic = false);
+    buffer_ref buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic = false);
+    buffer_ref buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic = false);
 
     // Compute Shader
-    mgl_core::ref<ComputeShader> compute_shader(const mgl_core::string& source);
+    compute_shader_ref compute_shader(const mgl_core::string& source);
 
     // Create Shader
-    static mgl_core::ref<Context> create_context(ContextMode::Enum mode, int required = 330);
+    static context_ref create_context(ContextMode::Enum mode, int required = 330);
 
     // Framebuffer
-    mgl_core::ref<Framebuffer> framebuffer(const attachments_ref& color_attachments, mgl_core::ref<Attachment> depth_attachment);
-    mgl_core::ref<Framebuffer> framebuffer(const attachments_ref& color_attachments);
-    mgl_core::ref<Framebuffer> framebuffer(mgl_core::ref<Attachment> depth_attachment);
+    framebuffer_ref framebuffer(const attachments_ref& color_attachments, attachment_ref depth_attachment);
+    framebuffer_ref framebuffer(const attachments_ref& color_attachments);
+    framebuffer_ref framebuffer(attachment_ref depth_attachment);
 
     // Program
-    mgl_core::ref<Program> program(const glsl_sources& shaders,
-                                   const shaders_outputs& outputs = {},
-                                   const fragment_outputs& fragment_outputs = {},
-                                   bool interleaved = true);
+    program_ref program(const glsl_sources& shaders,
+                        const shaders_outputs& outputs = {},
+                        const fragment_outputs& fragment_outputs = {},
+                        bool interleaved = true);
 
     // Query
-    mgl_core::ref<Query>
-    query(bool samples = false, bool any_samples = false, bool time_elapsed = false, bool primitives_generated = false);
+    query_ref query(bool samples = false, bool any_samples = false, bool time_elapsed = false, bool primitives_generated = false);
 
     // Renderbuffer
-    mgl_core::ref<Renderbuffer>
-    renderbuffer(int width, int height, int components = 4, int samples = 0, const char* dtype = "f1");
-    mgl_core::ref<Renderbuffer> depth_renderbuffer(int width, int height, int samples = 0);
+    renderbuffer_ref renderbuffer(int width, int height, int components = 4, int samples = 0, const char* dtype = "f1");
+    renderbuffer_ref depth_renderbuffer(int width, int height, int samples = 0);
 
     // Sampler
-    mgl_core::ref<Sampler> sampler();
+    sampler_ref sampler();
 
     // Scope
-    mgl_core::ref<Scope> scope(mgl_core::ref<Framebuffer> framebuffer = nullptr,
-                               int enable_flags = 0,
-                               const texture_bindings& textures = {},
-                               const buffer_bindings& uniform_buffers = {},
-                               const buffer_bindings& storage_buffers = {},
-                               const sampler_bindings& samplers = {});
+    scope_ref scope(framebuffer_ref framebuffer = nullptr,
+                    int enable_flags = 0,
+                    const texture_bindings& textures = {},
+                    const buffer_bindings& uniform_buffers = {},
+                    const buffer_bindings& storage_buffers = {},
+                    const sampler_bindings& samplers = {});
 
     // Texture
-    mgl_core::ref<Texture2D> texture2d(int width,
-                                       int height,
-                                       int components,
-                                       const void* data = nullptr,
-                                       int samples = 0,
-                                       int alignment = 1,
-                                       const char* dtype = "f1",
-                                       int internal_format_override = 0);
+    texture_2d_ref texture2d(int width,
+                             int height,
+                             int components,
+                             const void* data = nullptr,
+                             int samples = 0,
+                             int alignment = 1,
+                             const char* dtype = "f1",
+                             int internal_format_override = 0);
 
-    mgl_core::ref<Texture2D>
-    depth_texture2d(int width, int height, const void* data = nullptr, int samples = 0, int alignment = 0);
+    texture_2d_ref depth_texture2d(int width, int height, const void* data = nullptr, int samples = 0, int alignment = 0);
 
     // Texture3D
-    mgl_core::ref<Texture3D> texture3d(int width,
-                                       int height,
-                                       int depth,
-                                       int components,
-                                       const void* data = nullptr,
-                                       int alignment = 1,
-                                       const char* dtype = "f1");
+    texture_3d_ref texture3d(int width,
+                             int height,
+                             int depth,
+                             int components,
+                             const void* data = nullptr,
+                             int alignment = 1,
+                             const char* dtype = "f1");
 
     // TextureArray
-    mgl_core::ref<TextureArray> texture_array(int width,
-                                              int height,
-                                              int layers,
-                                              int components,
-                                              const void* data = nullptr,
-                                              int alignment = 1,
-                                              const char* dtype = "f1");
+    texture_array_ref texture_array(int width,
+                                    int height,
+                                    int layers,
+                                    int components,
+                                    const void* data = nullptr,
+                                    int alignment = 1,
+                                    const char* dtype = "f1");
 
     // TextureCube
-    mgl_core::ref<TextureCube> texture_cube(int width,
-                                            int height,
-                                            int components,
-                                            const void* data = nullptr,
-                                            int alignment = 1,
-                                            const char* dtype = "f1",
-                                            int internal_format_override = 0);
+    texture_cube_ref texture_cube(int width,
+                                  int height,
+                                  int components,
+                                  const void* data = nullptr,
+                                  int alignment = 1,
+                                  const char* dtype = "f1",
+                                  int internal_format_override = 0);
 
     // VertexArray
-    mgl_core::ref<VertexArray> vertex_array(mgl_core::ref<Program> program,
-                                            mgl_opengl::vertex_data_list vertex_data,
-                                            mgl_core::ref<Buffer> index_buffer = nullptr,
-                                            int index_element_size = 4,
-                                            bool skip_errors = false,
-                                            mgl_opengl::render_mode mode = mgl_opengl::render_mode::POINTS);
+    vertex_array_ref vertex_array(program_ref program,
+                                  mgl_opengl::vertex_data_list vertex_data,
+                                  buffer_ref index_buffer = nullptr,
+                                  int index_element_size = 4,
+                                  bool skip_errors = false,
+                                  mgl_opengl::render_mode mode = mgl_opengl::render_mode::POINTS);
 
     virtual gl_function load(const mgl_core::string& method) = 0;
     virtual void enter() = 0;
@@ -180,7 +176,7 @@ public:
 
 private:
     void load_functions();
-    mgl_core::ref<Buffer> buffer(void* data, size_t size, bool dynamic);
+    buffer_ref buffer(void* data, size_t size, bool dynamic);
 
 protected:
     bool m_released;
@@ -209,8 +205,8 @@ private:
     float m_polygon_offset_factor;
     float m_polygon_offset_units;
     mgl_core::string_list m_extensions;
-    mgl_core::ref<Framebuffer> m_default_framebuffer;
-    mgl_core::ref<Framebuffer> m_bound_framebuffer;
+    framebuffer_ref m_default_framebuffer;
+    framebuffer_ref m_bound_framebuffer;
   };
 
 #ifdef MGL_OPENGL_EGL
@@ -318,7 +314,7 @@ private:
     return m_extensions;
   }
 
-  inline const mgl_core::ref<Framebuffer>& Context::screen() const
+  inline const framebuffer_ref& Context::screen() const
   {
     return m_default_framebuffer;
   }
@@ -378,33 +374,33 @@ private:
     return m_polygon_offset_units;
   }
 
-  inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<float>& data, bool dynamic)
+  inline buffer_ref Context::buffer(const mgl_core::mem_buffer<float>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(float), dynamic);
   }
 
-  inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic)
+  inline buffer_ref Context::buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(uint32_t), dynamic);
   }
 
-  inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic)
+  inline buffer_ref Context::buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(uint16_t), dynamic);
   }
 
-  inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic)
+  inline buffer_ref Context::buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(uint8_t), dynamic);
   }
 
-  inline mgl_core::ref<Framebuffer> Context::framebuffer(mgl_core::ref<Attachment> depth_attachment)
+  inline framebuffer_ref Context::framebuffer(attachment_ref depth_attachment)
   {
     return framebuffer(attachments_ref(), depth_attachment);
   }
 
-  inline mgl_core::ref<Framebuffer> Context::framebuffer(const attachments_ref& color_attachments)
+  inline framebuffer_ref Context::framebuffer(const attachments_ref& color_attachments)
   {
-    return framebuffer(color_attachments, mgl_core::ref<Attachment>(nullptr));
+    return framebuffer(color_attachments, attachment_ref(nullptr));
   }
 } // namespace mgl_opengl

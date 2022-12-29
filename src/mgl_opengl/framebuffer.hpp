@@ -64,7 +64,7 @@ public:
                    const char* dtype = "f1",
                    size_t write_offset = 0);
 
-    bool read_into(mgl_core::ref<Buffer> dst,
+    bool read_into(buffer_ref dst,
                    const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d,
                    int components = 3,
                    int attachment = 0,

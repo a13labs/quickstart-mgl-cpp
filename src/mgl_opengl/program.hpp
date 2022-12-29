@@ -26,11 +26,11 @@ public:
     void release();
     bool released();
 
-    const mgl_core::ref<Attribute> attribute(const mgl_core::string& name) const;
-    const mgl_core::ref<Uniform> uniform(const mgl_core::string& name) const;
-    const mgl_core::ref<UniformBlock> uniform_block(const mgl_core::string& name) const;
-    const mgl_core::ref<Varying> varying(const mgl_core::string& name) const;
-    const mgl_core::ref<Subroutine> subroutine(const mgl_core::string& name) const;
+    const attribute_ref attribute(const mgl_core::string& name) const;
+    const uniform_ref uniform(const mgl_core::string& name) const;
+    const uniform_block_ref uniform_block(const mgl_core::string& name) const;
+    const varying_ref varying(const mgl_core::string& name) const;
+    const subroutine_ref subroutine(const mgl_core::string& name) const;
 
     const mgl_core::string_list attributes();
     const mgl_core::string_list uniforms();
@@ -44,7 +44,7 @@ public:
     size_t num_varyings();
     size_t num_subroutines();
 
-    const mgl_core::ref<Uniform> operator[](const mgl_core::string& name) const;
+    const uniform_ref operator[](const mgl_core::string& name) const;
 
     int geometry_input();
     int geometry_output();
@@ -81,7 +81,7 @@ private:
     return m_released;
   }
 
-  inline const mgl_core::ref<Attribute> Program::attribute(const mgl_core::string& name) const
+  inline const attribute_ref Program::attribute(const mgl_core::string& name) const
   {
     if(m_attributes_map.find(name) == m_attributes_map.end())
     {
@@ -90,7 +90,7 @@ private:
     return m_attributes_map.at(name);
   }
 
-  inline const mgl_core::ref<Uniform> Program::uniform(const mgl_core::string& name) const
+  inline const uniform_ref Program::uniform(const mgl_core::string& name) const
   {
     if(m_uniforms_map.find(name) == m_uniforms_map.end())
     {
@@ -99,7 +99,7 @@ private:
     return m_uniforms_map.at(name);
   }
 
-  inline const mgl_core::ref<UniformBlock> Program::uniform_block(const mgl_core::string& name) const
+  inline const uniform_block_ref Program::uniform_block(const mgl_core::string& name) const
   {
     if(m_uniform_blocks_map.find(name) == m_uniform_blocks_map.end())
     {
@@ -108,7 +108,7 @@ private:
     return m_uniform_blocks_map.at(name);
   }
 
-  inline const mgl_core::ref<Varying> Program::varying(const mgl_core::string& name) const
+  inline const varying_ref Program::varying(const mgl_core::string& name) const
   {
     if(m_varyings_map.find(name) == m_varyings_map.end())
     {
@@ -117,7 +117,7 @@ private:
     return m_varyings_map.at(name);
   }
 
-  inline const mgl_core::ref<Subroutine> Program::subroutine(const mgl_core::string& name) const
+  inline const subroutine_ref Program::subroutine(const mgl_core::string& name) const
   {
     if(m_subroutines_map.find(name) == m_subroutines_map.end())
     {
@@ -171,7 +171,7 @@ private:
     return m_subroutines_map.size();
   }
 
-  inline const mgl_core::ref<Uniform> Program::operator[](const mgl_core::string& name) const
+  inline const uniform_ref Program::operator[](const mgl_core::string& name) const
   {
     return uniform(name);
   }

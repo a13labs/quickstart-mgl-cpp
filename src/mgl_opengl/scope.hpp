@@ -41,8 +41,8 @@ private:
     Scope() = default;
 
     Context* m_context;
-    mgl_core::ref<Framebuffer> m_framebuffer;
-    mgl_core::ref<Framebuffer> m_old_framebuffer;
+    framebuffer_ref m_framebuffer;
+    framebuffer_ref m_old_framebuffer;
     sampler_bindings m_samplers;
     mgl_core::list<Scope::BindingData> m_textures;
     mgl_core::list<Scope::BindingData> m_buffers;

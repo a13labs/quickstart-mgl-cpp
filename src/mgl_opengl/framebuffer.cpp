@@ -192,7 +192,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool Framebuffer::read_into(mgl_core::ref<Buffer> dst,
+  bool Framebuffer::read_into(buffer_ref dst,
                               const mgl_core::viewport_2d& viewport,
                               int components,
                               int attachment,
