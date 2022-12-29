@@ -89,7 +89,10 @@ namespace mgl_core
   using ref_from_this = std::enable_shared_from_this<T>;
 
   template <typename T>
-  using mem_buffer = tcb::span<T>;
+  using mem_buffer = std::vector<T>;
+
+  template <typename T>
+  using span = tcb::span<T>;
 
   template <typename T>
   using list = std::vector<T>;

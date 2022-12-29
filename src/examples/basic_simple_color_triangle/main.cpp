@@ -55,7 +55,7 @@ void ExampleWindow::on_load()
 
   });
 
-  float vertices[] = {
+  mgl_core::mem_buffer<float> vertices = {
     // x, y, red, green, blue
     0.0,  0.8,  1.0, 0.0, 0.0, //
     -0.6, -0.8, 0.0, 1.0, 0.0, //

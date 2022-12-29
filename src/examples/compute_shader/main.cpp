@@ -119,17 +119,14 @@ void main()
     return 1;
   }
 
-  auto a = nc::random::uniform<float>({ H, W * 4 }, 0.0, 2.0);
-  auto b = nc::zeros<float>({ H, W * 4 });
-
-  auto buffer_a = ctx->buffer(a.data(), a.size());
-  auto buffer_b = ctx->buffer(b.data(), b.size());
+  auto buffer_a = ctx->buffer(nc::random::uniform<float>({ H, W * 4 }, 0.0, 2.0).toStlVector());
+  auto buffer_b = ctx->buffer(nc::zeros<float>({ H, W * 4 }).toStlVector());
 
   GifWriter writer = {};
   GifBegin(&writer, "debug.gif", (int)W, (int)H, 2, 8, true);
 
   auto out_size = H * W * 4 * sizeof(float);
-  uint8_t out[out_size];
+  mgl_core::mem_buffer<uint8_t> out(out_size);
   auto last_buffer = buffer_b;
 
   for(int i = 0; i < FRAMES; i++)
@@ -147,8 +144,8 @@ void main()
     compute_shader->run(H, 1);
 
     // print out
-    last_buffer->read_into(out, out_size);
-    auto output = nc::frombuffer<float>((char*)out, out_size).astype<uint8_t>();
+    last_buffer->read_into(out);
+    auto output = nc::frombuffer<float>((char*)out.data(), out_size).astype<uint8_t>();
     output = nc::multiply<uint8_t>(output, 255);
 
     GifWriteFrame(&writer, output.data(), W, H, 2, 8, true);

@@ -175,7 +175,7 @@ namespace mgl_opengl
     expected_size = (expected_size + alignment - 1) / alignment * alignment;
     expected_size = expected_size * height;
 
-    MGL_CORE_ASSERT(dst.size_bytes() >= write_offset + expected_size, "out of bounds");
+    MGL_CORE_ASSERT(dst.size() >= write_offset + expected_size, "out of bounds");
 
     int pixel_type = data_type->gl_type;
     int base_format = read_depth ? GL_DEPTH_COMPONENT : data_type->base_format[components];

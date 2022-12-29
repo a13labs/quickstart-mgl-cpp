@@ -75,10 +75,6 @@ public:
     mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic = false);
     mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic = false);
     mgl_core::ref<Buffer> buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic = false);
-    mgl_core::ref<Buffer> buffer(const float* data, size_t size, bool dynamic = false);
-    mgl_core::ref<Buffer> buffer(const uint32_t* data, size_t size, bool dynamic = false);
-    mgl_core::ref<Buffer> buffer(const uint16_t* data, size_t size, bool dynamic = false);
-    mgl_core::ref<Buffer> buffer(const uint8_t* data, size_t size, bool dynamic = false);
 
     // Compute Shader
     mgl_core::ref<ComputeShader> compute_shader(const mgl_core::string& source);
@@ -384,42 +380,22 @@ private:
 
   inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<float>& data, bool dynamic)
   {
-    return buffer(data.data(), data.size_bytes(), dynamic);
+    return buffer((void*)data.data(), data.size() * sizeof(float), dynamic);
   }
 
   inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic)
   {
-    return buffer(data.data(), data.size_bytes(), dynamic);
+    return buffer((void*)data.data(), data.size() * sizeof(uint32_t), dynamic);
   }
 
   inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic)
   {
-    return buffer(data.data(), data.size_bytes(), dynamic);
+    return buffer((void*)data.data(), data.size() * sizeof(uint16_t), dynamic);
   }
 
   inline mgl_core::ref<Buffer> Context::buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic)
   {
-    return buffer(data.data(), data.size_bytes(), dynamic);
-  }
-
-  inline mgl_core::ref<Buffer> Context::buffer(const float* data, size_t size, bool dynamic)
-  {
-    return buffer((void*)data, size * sizeof(float), dynamic);
-  }
-
-  inline mgl_core::ref<Buffer> Context::buffer(const uint32_t* data, size_t size, bool dynamic)
-  {
-    return buffer((void*)data, size * sizeof(uint32_t), dynamic);
-  }
-
-  inline mgl_core::ref<Buffer> Context::buffer(const uint16_t* data, size_t size, bool dynamic)
-  {
-    return buffer((void*)data, size * sizeof(uint16_t), dynamic);
-  }
-
-  inline mgl_core::ref<Buffer> Context::buffer(const uint8_t* data, size_t size, bool dynamic)
-  {
-    return buffer((void*)data, size * sizeof(uint8_t), dynamic);
+    return buffer((void*)data.data(), data.size() * sizeof(uint8_t), dynamic);
   }
 
   inline mgl_core::ref<Framebuffer> Context::framebuffer(mgl_core::ref<Attachment> depth_attachment)

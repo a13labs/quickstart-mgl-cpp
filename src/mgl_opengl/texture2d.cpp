@@ -68,7 +68,7 @@ namespace mgl_opengl
     expected_size = (expected_size + alignment - 1) / alignment * alignment;
     expected_size = expected_size * height;
 
-    MGL_CORE_ASSERT(dst.size_bytes() >= write_offset + expected_size, "out of bounds");
+    MGL_CORE_ASSERT(dst.size() >= write_offset + expected_size, "out of bounds");
 
     int pixel_type = m_data_type->gl_type;
     int base_format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];
@@ -135,7 +135,7 @@ namespace mgl_opengl
     expected_size = (expected_size + alignment - 1) / alignment * alignment;
     expected_size = expected_size * height;
 
-    MGL_CORE_ASSERT(src.size_bytes() >= expected_size, "out of bounds");
+    MGL_CORE_ASSERT(src.size() >= expected_size, "out of bounds");
 
     int pixel_type = m_data_type->gl_type;
     int format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];
@@ -172,7 +172,7 @@ namespace mgl_opengl
     expected_size = (expected_size + alignment - 1) / alignment * alignment;
     expected_size = expected_size * height;
 
-    MGL_CORE_ASSERT(src.size_bytes() >= expected_size, "out of bounds");
+    MGL_CORE_ASSERT(src.size() >= expected_size, "out of bounds");
 
     int pixel_type = m_data_type->gl_type;
     int format = m_depth ? GL_DEPTH_COMPONENT : m_data_type->base_format[m_components];
