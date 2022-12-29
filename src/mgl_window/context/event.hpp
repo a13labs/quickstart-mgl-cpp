@@ -74,7 +74,7 @@ namespace mgl_window
     return category;                                                                                                             \
   }
 
-  class Event
+  class event
   {
 public:
     virtual EventType get_event_type() const = 0;
@@ -95,7 +95,7 @@ protected:
   class EventDispatcher
   {
 public:
-    EventDispatcher(Event& event)
+    EventDispatcher(event& event)
         : mEvent(event)
     { }
 
@@ -112,18 +112,18 @@ public:
     }
 
 private:
-    Event& mEvent;
+    event& mEvent;
   };
 
-  inline std::ostream& operator<<(std::ostream& os, const Event& e)
+  inline std::ostream& operator<<(std::ostream& os, const event& e)
   {
     return os << e.to_string();
   }
 
-  class WindowResizeEvent : public Event
+  class window_resize_event : public event
   {
 public:
-    WindowResizeEvent(uint32_t width, uint32_t height)
+    window_resize_event(uint32_t width, uint32_t height)
         : m_width(width)
         , m_height(height)
     { }
@@ -144,19 +144,19 @@ private:
     uint32_t m_width, m_height;
   };
 
-  class WindowCloseEvent : public Event
+  class window_close_event : public event
   {
 public:
-    WindowCloseEvent() = default;
+    window_close_event() = default;
 
     EVENT_CLASS_TYPE(WindowClose)
     EVENT_CLASS_CATEGORY(EventCategoryApplication)
   };
 
-  class MouseMovedEvent : public Event
+  class mouse_moved_event : public event
   {
 public:
-    MouseMovedEvent(float x, float y)
+    mouse_moved_event(float x, float y)
         : m_mouse_x(x)
         , m_mouse_y(y)
     { }
@@ -177,10 +177,10 @@ private:
     float m_mouse_x, m_mouse_y;
   };
 
-  class MouseScrolledEvent : public Event
+  class mouse_scrolled_event : public event
   {
 public:
-    MouseScrolledEvent(float xOffset, float yOffset)
+    mouse_scrolled_event(float xOffset, float yOffset)
         : m_x_offset(xOffset)
         , m_y_offset(yOffset)
     { }
@@ -201,24 +201,24 @@ private:
     float m_x_offset, m_y_offset;
   };
 
-  class MouseButtonEvent : public Event
+  class MouseButtonEvent : public event
   {
 public:
-    inline MouseButton::Enum get_mouse_button() const { return m_button; }
+    inline mouse_button::name get_mouse_button() const { return m_button; }
 
     EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryMouseButton | EventCategoryInput)
 protected:
-    MouseButtonEvent(MouseButton::Enum button)
+    MouseButtonEvent(mouse_button::name button)
         : m_button(button)
     { }
 
-    MouseButton::Enum m_button;
+    mouse_button::name m_button;
   };
 
-  class MouseButtonPressedEvent : public MouseButtonEvent
+  class mouse_button_pressed_event : public MouseButtonEvent
   {
 public:
-    MouseButtonPressedEvent(MouseButton::Enum button)
+    mouse_button_pressed_event(mouse_button::name button)
         : MouseButtonEvent(button)
     { }
 
@@ -232,10 +232,10 @@ public:
     EVENT_CLASS_TYPE(MouseButtonPressed)
   };
 
-  class MouseButtonReleasedEvent : public MouseButtonEvent
+  class mouse_button_released_event : public MouseButtonEvent
   {
 public:
-    MouseButtonReleasedEvent(MouseButton::Enum button)
+    mouse_button_released_event(mouse_button::name button)
         : MouseButtonEvent(button)
     { }
 
@@ -249,27 +249,27 @@ public:
     EVENT_CLASS_TYPE(MouseButtonReleased)
   };
 
-  class KeyEvent : public Event
+  class KeyEvent : public event
   {
 public:
-    Key::Enum get_key_code() const { return m_key_code; }
+    key::name get_key_code() const { return m_key_code; }
     uint8_t get_key_modifiers() const { return m_modifiers; }
 
     EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 protected:
-    KeyEvent(Key::Enum keycode, uint8_t modifiers)
+    KeyEvent(key::name keycode, uint8_t modifiers)
         : m_key_code(keycode)
         , m_modifiers(modifiers)
     { }
 
-    Key::Enum m_key_code;
+    key::name m_key_code;
     uint8_t m_modifiers;
   };
 
-  class KeyPressedEvent : public KeyEvent
+  class key_pressed_event : public KeyEvent
   {
 public:
-    KeyPressedEvent(Key::Enum keycode, uint8_t modifiers, int repeat)
+    key_pressed_event(key::name keycode, uint8_t modifiers, int repeat)
         : KeyEvent(keycode, modifiers)
         , m_repeat(repeat)
     { }
@@ -288,10 +288,10 @@ private:
     bool m_repeat;
   };
 
-  class KeyReleasedEvent : public KeyEvent
+  class key_released_event : public KeyEvent
   {
 public:
-    KeyReleasedEvent(Key::Enum keycode, uint8_t modifiers)
+    key_released_event(key::name keycode, uint8_t modifiers)
         : KeyEvent(keycode, modifiers)
     { }
 
@@ -305,10 +305,10 @@ public:
     EVENT_CLASS_TYPE(KeyReleased)
   };
 
-  class KeyTypedEvent : public KeyEvent
+  class key_typed_event : public KeyEvent
   {
 public:
-    KeyTypedEvent(Key::Enum keycode, uint8_t modifiers)
+    key_typed_event(key::name keycode, uint8_t modifiers)
         : KeyEvent(keycode, modifiers)
     { }
 

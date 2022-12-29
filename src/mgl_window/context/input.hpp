@@ -18,25 +18,9 @@
 
 namespace mgl_window
 {
-  struct Modifier
+  struct key
   {
-    enum Enum
-    {
-      None = 0,
-      LeftAlt = 0x0001,
-      RightAlt = 0x0002,
-      LeftCtrl = 0x0040,
-      RightCtrl = 0x0080,
-      LeftShift = 0x0100,
-      RightShift = 0x0200,
-      LeftMeta = 0x0400,
-      RightMeta = 0x0800,
-    };
-  };
-
-  struct Key
-  {
-    enum Enum
+    enum name
     {
       None = 0,
       Esc,
@@ -139,9 +123,9 @@ namespace mgl_window
     };
   };
 
-  struct MouseButton
+  struct mouse_button
   {
-    enum Enum
+    enum name
     {
       Left,
       Middle,
@@ -152,9 +136,9 @@ namespace mgl_window
     };
   };
 
-  struct GamepadAxis
+  struct gamepad_axis
   {
-    enum Enum
+    enum name
     {
       LeftX,
       LeftY,
@@ -167,22 +151,22 @@ namespace mgl_window
     };
   };
 
-  typedef struct
+  struct input_state
   {
-    bool pressed_keys[Key::Count];
-    bool pressed_mouse_buttons[MouseButton::Count];
-  } InputState;
+    bool pressed_keys[key::Count];
+    bool pressed_mouse_buttons[mouse_button::Count];
+  };
 
-  extern InputState input_state;
+  extern input_state s_input_state;
 
-  inline bool is_key_pressed(Key::Enum key)
+  inline bool is_key_pressed(key::name key)
   {
-    return input_state.pressed_keys[key & 0xff];
+    return s_input_state.pressed_keys[key & 0xff];
   }
 
-  inline bool IsMouseButtonPressed(MouseButton::Enum button)
+  inline bool IsMouseButtonPressed(mouse_button::name button)
   {
-    return input_state.pressed_mouse_buttons[button & 0xff];
+    return s_input_state.pressed_mouse_buttons[button & 0xff];
   }
 
 } // namespace mgl_window

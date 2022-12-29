@@ -1,6 +1,6 @@
 #include "mgl_window/mgl_window.hpp"
 
-class ExampleWindow : public mgl_window::Window
+class example_window : public mgl_window::window
 {
 
   public:
@@ -14,14 +14,14 @@ class ExampleWindow : public mgl_window::Window
   mgl_core::ref<mgl_opengl::vertex_array> m_vao;
 };
 
-void ExampleWindow::on_draw(float time, float frame_time)
+void example_window::on_draw(float time, float frame_time)
 {
   const auto ctx = context();
   ctx->clear(1.0, 1.0, 1.0);
   m_vao->render();
 }
 
-void ExampleWindow::on_load()
+void example_window::on_load()
 {
   MGL_CORE_INFO("ExampleWindow::on_load");
   set_title("basic_simple_color_triangle");
@@ -66,7 +66,7 @@ void ExampleWindow::on_load()
   m_vao = ctx->vertex_array(m_program, { { m_vbo, "2f 3f", { "in_vert", "in_color" } } });
 }
 
-void ExampleWindow::on_unload()
+void example_window::on_unload()
 {
   MGL_CORE_INFO("ExampleWindow::on_unload");
   m_vao->release();
@@ -76,7 +76,7 @@ void ExampleWindow::on_unload()
 
 int main(int argc, char* argv[])
 {
-  ExampleWindow app;
+  example_window app;
   app.run();
 
   return 0;

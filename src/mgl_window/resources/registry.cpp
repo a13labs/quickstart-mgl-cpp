@@ -118,8 +118,8 @@ namespace mgl_window
 
     mgl_core::ref<mgl_opengl::texture> load_texture_2d(const mgl_core::string& path, const texture_2d_load_opts& opts)
     {
-      MGL_CORE_ASSERT(Window::current().context(), "No context!");
-      const auto ctx = Window::current().context();
+      MGL_CORE_ASSERT(window::current().context(), "No context!");
+      const auto ctx = window::current().context();
 
       auto base_path = find(path, s_settings.textures_dirs);
 
@@ -171,8 +171,8 @@ namespace mgl_window
 
     mgl_core::ref<mgl_opengl::program> load_program(const mgl_core::string& path, const program_load_opts& opts)
     {
-      MGL_CORE_ASSERT(Window::current().context(), "No context!");
-      const auto ctx = Window::current().context();
+      MGL_CORE_ASSERT(window::current().context(), "No context!");
+      const auto ctx = window::current().context();
 
       auto base_path = find(path, s_settings.textures_dirs);
 
@@ -202,8 +202,8 @@ namespace mgl_window
 
     mgl_core::ref<mgl_opengl::program> load_program(mgl_opengl::glsl_source& source, const program_load_opts& opts)
     {
-      MGL_CORE_ASSERT(Window::current().context(), "No context!");
-      const auto ctx = Window::current().context();
+      MGL_CORE_ASSERT(window::current().context(), "No context!");
+      const auto ctx = window::current().context();
 
       mgl_opengl::glsl_sources glsl = { source };
 

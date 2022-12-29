@@ -31,12 +31,12 @@ namespace mgl_window
     int height;
   };
 
-  class WindowSDL : public NativeWindow
+  class sdl_window : public native_window
   {
 
 public:
-    WindowSDL(const window_config& config = window_config());
-    virtual ~WindowSDL() = default;
+    sdl_window(const window_config& config = window_config());
+    virtual ~sdl_window() = default;
 
 public:
     virtual bool create_window() override;

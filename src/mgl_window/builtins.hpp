@@ -4,19 +4,18 @@
 
 namespace mgl_window
 {
-  class Event;
-  class EventListener;
-  class WindowCloseEvent;
-  class WindowResizeEvent;
-  class KeyPressedEvent;
-  class KeyReleasedEvent;
-  class KeyTypedEvent;
-  class MouseMovedEvent;
-  class MouseScrolledEvent;
-  class MouseButtonPressedEvent;
-  class MouseButtonReleasedEvent;
+  class event;
+  class window_close_event;
+  class window_resize_event;
+  class key_pressed_event;
+  class key_released_event;
+  class key_typed_event;
+  class mouse_moved_event;
+  class mouse_scrolled_event;
+  class mouse_button_pressed_event;
+  class mouse_button_released_event;
 
-  using event_handler = std::function<void(Event&)>;
+  using event_handler = std::function<void(event&)>;
 
   using shader_defines = mgl_core::dict<mgl_core::string, mgl_core::string>;
 

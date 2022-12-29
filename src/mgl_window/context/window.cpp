@@ -24,44 +24,44 @@
 namespace mgl_window
 {
 
-  Window* Window::s_instance = nullptr;
+  window* window::s_instance = nullptr;
 
-  Window::Window(const window_config& config)
+  window::window(const window_config& config)
   {
     MGL_CORE_ASSERT(!s_instance, "BaseWindow already running!");
     mgl_core::log::init();
 
-    m_native_window = mgl_core::create_scope<WindowSDL>(config);
+    m_native_window = mgl_core::create_scope<sdl_window>(config);
     s_instance = this;
     m_running = false;
   }
 
-  void Window::on_event(Event& event)
+  void window::on_event(event& event)
   {
     EventDispatcher dispatcher(event);
 
     // Dispatch Windows Events
-    dispatcher.dispatch<WindowCloseEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_window_close));
-    dispatcher.dispatch<WindowResizeEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_window_resize));
+    dispatcher.dispatch<window_close_event>(MGL_CORE_BIND_EVENT_FN(window::on_window_close));
+    dispatcher.dispatch<window_resize_event>(MGL_CORE_BIND_EVENT_FN(window::on_window_resize));
 
     // Dispatch key events to be handled by the application
-    dispatcher.dispatch<KeyPressedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_key_pressed));
-    dispatcher.dispatch<KeyReleasedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_key_released));
+    dispatcher.dispatch<key_pressed_event>(MGL_CORE_BIND_EVENT_FN(window::on_key_pressed));
+    dispatcher.dispatch<key_released_event>(MGL_CORE_BIND_EVENT_FN(window::on_key_released));
 
     // Dispatch mouse events to be handled by the application
-    dispatcher.dispatch<MouseMovedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_mouse_moved));
-    dispatcher.dispatch<MouseScrolledEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_mouse_scrolled));
-    dispatcher.dispatch<MouseButtonPressedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_mouse_button_pressed));
-    dispatcher.dispatch<MouseButtonReleasedEvent>(MGL_CORE_BIND_EVENT_FN(Window::on_mouse_button_released));
+    dispatcher.dispatch<mouse_moved_event>(MGL_CORE_BIND_EVENT_FN(window::on_mouse_moved));
+    dispatcher.dispatch<mouse_scrolled_event>(MGL_CORE_BIND_EVENT_FN(window::on_mouse_scrolled));
+    dispatcher.dispatch<mouse_button_pressed_event>(MGL_CORE_BIND_EVENT_FN(window::on_mouse_button_pressed));
+    dispatcher.dispatch<mouse_button_released_event>(MGL_CORE_BIND_EVENT_FN(window::on_mouse_button_released));
   }
 
-  bool Window::on_window_close(WindowCloseEvent& event)
+  bool window::on_window_close(window_close_event& event)
   {
     m_running = false;
     return true;
   }
 
-  void Window::run()
+  void window::run()
   {
     if(m_running)
       return;
@@ -81,7 +81,7 @@ namespace mgl_window
       return;
     }
 
-    m_native_window->initialize_event_handler(MGL_CORE_BIND_EVENT_FN(Window::on_event));
+    m_native_window->initialize_event_handler(MGL_CORE_BIND_EVENT_FN(window::on_event));
 
     m_running = true;
     MGL_CORE_PROFILE_BEGIN_SESSION();
@@ -108,7 +108,7 @@ namespace mgl_window
     m_native_window->destroy_window();
   }
 
-  bool Window::on_window_resize(WindowResizeEvent& event)
+  bool window::on_window_resize(window_resize_event& event)
   {
     auto size = m_native_window->get_drawable_size();
     m_context->screen()->set_viewport({ 0, 0, size.width, size.height });

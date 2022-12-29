@@ -20,5 +20,5 @@
 
 namespace mgl_window
 {
-  InputState input_state;
+  input_state s_input_state;
 } // namespace mgl_window

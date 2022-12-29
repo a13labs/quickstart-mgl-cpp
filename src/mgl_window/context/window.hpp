@@ -29,15 +29,15 @@ namespace mgl_window
     bool VSync = true;
     uint32_t samples = 0;
     bool cursor = true;
-    Key::Enum exit_key = Key::Esc;
-    Key::Enum fullscreen_key = Key::F11;
+    key::name exit_key = key::Esc;
+    key::name fullscreen_key = key::F11;
   };
 
-  class NativeWindow
+  class native_window
   {
 public:
-    NativeWindow(const window_config& config = window_config()){};
-    virtual ~NativeWindow() = default;
+    native_window(const window_config& config = window_config()){};
+    virtual ~native_window() = default;
 
     virtual bool create_window() = 0;
     virtual void destroy_window() = 0;
@@ -55,12 +55,12 @@ public:
     virtual void set_title(const mgl_core::string& value) = 0;
   };
 
-  class Window
+  class window
   {
 
 public:
-    Window(const window_config& config = window_config());
-    virtual ~Window() = default;
+    window(const window_config& config = window_config());
+    virtual ~window() = default;
 
 public:
     void run();
@@ -76,73 +76,73 @@ public:
     void toggle_full_screen();
     mgl_core::ref<mgl_opengl::context> context();
 
-    inline static Window& current() { return *s_instance; }
+    inline static window& current() { return *s_instance; }
 
     // Events
-    void on_event(Event& event);
+    void on_event(event& event);
 
     // Windows Events
-    virtual bool on_window_close(WindowCloseEvent& event);
-    virtual bool on_window_resize(WindowResizeEvent& event);
+    virtual bool on_window_close(window_close_event& event);
+    virtual bool on_window_resize(window_resize_event& event);
 
     // Keys Events
-    virtual bool on_key_pressed(KeyPressedEvent& event) { return true; }
-    virtual bool on_key_released(KeyReleasedEvent& event) { return true; }
+    virtual bool on_key_pressed(key_pressed_event& event) { return true; }
+    virtual bool on_key_released(key_released_event& event) { return true; }
 
     // Mouse Events
-    virtual bool on_mouse_moved(MouseMovedEvent& event) { return true; }
-    virtual bool on_mouse_scrolled(MouseScrolledEvent& event) { return true; }
-    virtual bool on_mouse_button_pressed(MouseButtonPressedEvent& event) { return true; }
-    virtual bool on_mouse_button_released(MouseButtonReleasedEvent& event) { return true; }
+    virtual bool on_mouse_moved(mouse_moved_event& event) { return true; }
+    virtual bool on_mouse_scrolled(mouse_scrolled_event& event) { return true; }
+    virtual bool on_mouse_button_pressed(mouse_button_pressed_event& event) { return true; }
+    virtual bool on_mouse_button_released(mouse_button_released_event& event) { return true; }
 
     virtual void on_draw(float time, float frame_time){};
     virtual void on_load(){};
     virtual void on_unload(){};
 
 private:
-    static Window* s_instance;
+    static window* s_instance;
     bool m_running;
     mgl_core::Timer m_timer;
-    mgl_core::scope<NativeWindow> m_native_window;
+    mgl_core::scope<native_window> m_native_window;
     mgl_core::ref<mgl_opengl::context> m_context;
   };
 
-  inline int Window::width()
+  inline int window::width()
   {
     return m_native_window->width();
   }
 
-  inline int Window::height()
+  inline int window::height()
   {
     return m_native_window->height();
   }
 
-  inline int Window::aspect_ratio()
+  inline int window::aspect_ratio()
   {
     return m_native_window->aspect_ratio();
   }
 
-  inline const mgl_core::string& Window::title() const
+  inline const mgl_core::string& window::title() const
   {
     return m_native_window->title();
   }
 
-  inline void Window::set_title(const mgl_core::string& value)
+  inline void window::set_title(const mgl_core::string& value)
   {
     return m_native_window->set_title(value);
   }
 
-  inline void Window::toggle_full_screen()
+  inline void window::toggle_full_screen()
   {
     return m_native_window->toggle_full_screen();
   }
 
-  inline void Window::quit()
+  inline void window::quit()
   {
     m_running = false;
   }
 
-  inline mgl_core::ref<mgl_opengl::context> Window::context()
+  inline mgl_core::ref<mgl_opengl::context> window::context()
   {
     return m_context;
   }
