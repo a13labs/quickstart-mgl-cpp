@@ -43,6 +43,14 @@
             "program": "${workspaceFolder}/output/bin/basic_perspective_projection",
             "args": [],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "test_mgl_window",
+            "program": "${workspaceFolder}/output/bin/test_mgl_window",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

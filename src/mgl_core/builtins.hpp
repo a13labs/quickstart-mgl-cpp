@@ -97,8 +97,11 @@ namespace mgl_core
   template <typename T>
   using list = std::vector<T>;
 
-  template <typename k, typename v>
-  using dict = std::map<k, v>;
+  template <typename T, typename U>
+  using pair = std::pair<T, U>;
+
+  template <typename T, typename U>
+  using dict = std::map<T, U>;
 
   using string = std::string;
   using string_list = list<string>;

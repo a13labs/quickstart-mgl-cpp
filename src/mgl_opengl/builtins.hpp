@@ -178,7 +178,7 @@ namespace mgl_opengl
   struct vertex_data
   {
     buffer_ref buffer;
-    const char* format;
+    mgl_core::string format;
     mgl_core::string_list attributes;
   };
 

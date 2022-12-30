@@ -1815,7 +1815,7 @@ namespace mgl_opengl
         return nullptr;
       }
 
-      format_iterator it = format_iterator(v_data.format);
+      format_iterator it = format_iterator(v_data.format.c_str());
       format_info format_info = it.info();
 
       if(!format_info.valid)
@@ -1880,7 +1880,7 @@ namespace mgl_opengl
     for(auto&& v_data : vertex_data)
     {
       auto buffer = v_data.buffer;
-      const char* format = v_data.format;
+      const char* format = v_data.format.c_str();
 
       format_iterator it = format_iterator(format);
       format_info format_info = it.info();

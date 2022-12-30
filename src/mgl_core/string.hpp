@@ -44,6 +44,11 @@ namespace mgl_core
     return str.find(e) != npos;
   }
 
+  inline bool in(const string& e, const string_list& l)
+  {
+    return !(std::find(l.begin(), l.end(), e) == l.end());
+  }
+
   inline bool starts_with(const string& str, string e)
   {
     return str.rfind(e, 0) == 0;

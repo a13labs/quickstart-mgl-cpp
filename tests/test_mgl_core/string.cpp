@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "mgl_core/string.hpp"
+#include "mgl_core/mgl_core.hpp"
 #include "gtest/gtest.h"
 
 TEST(mgl_core, string_fmt_test)
@@ -95,4 +95,15 @@ TEST(mgl_core, string_split_test)
   EXPECT_EQ(5, l.size());
   EXPECT_EQ("banana", l[1]);
   EXPECT_EQ("grape", l[4]);
+
+  s = "3f";
+  l = mgl_core::split(s, '/');
+  EXPECT_EQ(1, l.size());
+  EXPECT_EQ("3f", l[0]);
+
+  s = "3f3";
+  l = mgl_core::re_split(s, "([fiudn])");
+  EXPECT_EQ(2, l.size());
+  EXPECT_EQ("3", l[0]);
+  EXPECT_EQ("3", l[1]);
 }
