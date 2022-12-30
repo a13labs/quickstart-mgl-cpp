@@ -1,3 +1,4 @@
+
 #include "mgl_window/mgl_window.hpp"
 
 class example_window : public mgl_window::window
@@ -11,6 +12,7 @@ class example_window : public mgl_window::window
   private:
   mgl_core::ref<mgl_opengl::program> m_program;
   mgl_core::ref<mgl_opengl::buffer> m_vbo;
+  mgl_core::ref<mgl_opengl::buffer> m_ibo;
   mgl_core::ref<mgl_opengl::vertex_array> m_vao;
 };
 
@@ -23,7 +25,7 @@ void example_window::on_draw(float time, float frame_time)
 
 void example_window::on_load()
 {
-  set_title("Simple Color Triangle");
+  set_title("Index Buffer");
 
   const auto ctx = context();
   m_program = ctx->program({
@@ -32,41 +34,44 @@ void example_window::on_load()
 
                 in vec2 in_vert;
 
-                in vec3 in_color;
-                out vec3 v_color;    // Goes to the fragment shader
-
                 void main() {
-                    gl_Position = vec4(in_vert, 0.0, 1.0);
-                    v_color = in_color;
+                  gl_Position = vec4(in_vert, 0.0, 1.0);
                 }
               )",
       R"(
                 #version 330
 
-                in vec3 v_color;
                 out vec4 f_color;
 
                 void main() {
-                    // We're not interested in changing the alpha value
-                    f_color = vec4(v_color, 1.0);
+                  f_color = vec4(0.3, 0.5, 1.0, 1.0);
                 }
             )",
 
   });
 
   mgl_core::mem_buffer<float> vertices = {
-    // x, y, red, green, blue
-    0.0,  0.8,  1.0, 0.0, 0.0, //
-    -0.6, -0.8, 0.0, 1.0, 0.0, //
-    0.6,  -0.8, 0.0, 0.0, 1.0, //
+    0.0,  0.0, //
+
+    -0.6, -0.8, //
+    0.6,  -0.8, //
+
+    0.6,  0.8, //
+    -0.6, 0.8, //
   };
 
+  mgl_core::mem_buffer<uint32_t> indices = { 0, 1, 2, 0, 3, 4 };
+
   m_vbo = ctx->buffer(vertices);
-  m_vao = ctx->vertex_array(m_program, { { m_vbo, "2f 3f", { "in_vert", "in_color" } } });
+  m_ibo = ctx->buffer(indices);
+  mgl_opengl::vertex_data_list m_content = { { m_vbo, "2f", { "in_vert" } } };
+
+  m_vao = ctx->vertex_array(m_program, m_content, m_ibo);
 }
 
 void example_window::on_unload()
 {
+  m_ibo->release();
   m_vao->release();
   m_vbo->release();
   m_program->release();

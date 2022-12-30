@@ -219,24 +219,6 @@ private:
     set_value((void*)&tmp, sizeof(bool));
   }
 
-  inline void uniform::set_value(uint8_t value)
-  {
-    auto tmp = value;
-    set_value((void*)&tmp, sizeof(uint8_t));
-  }
-
-  inline void uniform::set_value(uint16_t value)
-  {
-    auto tmp = value;
-    set_value((void*)&tmp, sizeof(uint16_t));
-  }
-
-  inline void uniform::set_value(uint32_t value)
-  {
-    auto tmp = value;
-    set_value((void*)&tmp, sizeof(uint32_t));
-  }
-
   inline void uniform::set_value(int value)
   {
     auto tmp = value;

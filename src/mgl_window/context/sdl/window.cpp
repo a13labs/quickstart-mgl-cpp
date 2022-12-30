@@ -432,9 +432,9 @@ namespace mgl_window
     return m_state.height;
   }
 
-  int sdl_window::aspect_ratio()
+  float sdl_window::aspect_ratio()
   {
-    return m_state.width / m_state.height;
+    return static_cast<float>(m_state.width) / m_state.height;
   }
 
   mgl_core::size sdl_window::get_drawable_size()

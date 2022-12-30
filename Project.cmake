@@ -30,6 +30,9 @@ set(MGL_EXAMPLES
     "basic_simple_color_triangle"
     "basic_alpha_blending"
     "compute_shader"
+    "basic_index_buffer"
+    "basic_perspective_projection"
+    "basic_uniforms_and_attributes"
    )
 set(NUMCPP_NO_USE_BOOST ON)
 set(MGL_SHOW_CMAKE_VARS OFF)

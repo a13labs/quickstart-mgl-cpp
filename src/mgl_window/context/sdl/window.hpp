@@ -46,7 +46,7 @@ public:
 
     virtual int width() override;
     virtual int height() override;
-    virtual int aspect_ratio() override;
+    virtual float aspect_ratio() override;
 
     virtual void initialize_event_handler(const event_handler& handler) override;
     virtual void toggle_full_screen() override;

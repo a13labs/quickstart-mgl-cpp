@@ -35,6 +35,14 @@
             "program": "${workspaceFolder}/output/bin/compute_shader",
             "args": [],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "basic_perspective_projection",
+            "program": "${workspaceFolder}/output/bin/basic_perspective_projection",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

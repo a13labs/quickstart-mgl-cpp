@@ -49,7 +49,7 @@ public:
 
     virtual int width() = 0;
     virtual int height() = 0;
-    virtual int aspect_ratio() = 0;
+    virtual float aspect_ratio() = 0;
 
     virtual const mgl_core::string& title() const = 0;
     virtual void set_title(const mgl_core::string& value) = 0;
@@ -68,7 +68,7 @@ public:
 
     int width();
     int height();
-    int aspect_ratio();
+    float aspect_ratio();
 
     const mgl_core::string& title() const;
     void set_title(const mgl_core::string& value);
@@ -117,7 +117,7 @@ private:
     return m_native_window->height();
   }
 
-  inline int window::aspect_ratio()
+  inline float window::aspect_ratio()
   {
     return m_native_window->aspect_ratio();
   }

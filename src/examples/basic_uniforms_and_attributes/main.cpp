@@ -1,4 +1,5 @@
 #include "mgl_window/mgl_window.hpp"
+#include <cmath>
 
 class example_window : public mgl_window::window
 {
@@ -12,57 +13,70 @@ class example_window : public mgl_window::window
   mgl_core::ref<mgl_opengl::program> m_program;
   mgl_core::ref<mgl_opengl::buffer> m_vbo;
   mgl_core::ref<mgl_opengl::vertex_array> m_vao;
+  mgl_core::ref<mgl_opengl::uniform> m_scale, m_rotation;
+  float m_time = 0;
 };
 
 void example_window::on_draw(float time, float frame_time)
 {
   const auto ctx = context();
+
+  float sin_scale = static_cast<float>(sin(mgl_core::deg2rad(time * 60)));
+
   ctx->clear(1.0, 1.0, 1.0);
+  ctx->enable(mgl_opengl::enable_flag::BLEND);
   m_vao->render();
+
+  m_rotation->set_value(time);
+  m_scale->set_value({ sin_scale * 0.75, 0.75 });
 }
 
 void example_window::on_load()
 {
-  set_title("Simple Color Triangle");
+  set_title("Alpha Blending");
 
   const auto ctx = context();
   m_program = ctx->program({
       R"(
                 #version 330
+                in vec2 vert;
 
-                in vec2 in_vert;
-
-                in vec3 in_color;
-                out vec3 v_color;    // Goes to the fragment shader
+                uniform vec2 scale;
+                uniform float rotation;
 
                 void main() {
-                    gl_Position = vec4(in_vert, 0.0, 1.0);
-                    v_color = in_color;
+
+                    mat2 rot = mat2(
+                        cos(rotation), sin(rotation),
+                        -sin(rotation), cos(rotation)
+                    );
+                    gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
                 }
               )",
       R"(
                 #version 330
 
-                in vec3 v_color;
-                out vec4 f_color;
-
+                out vec4 color;
                 void main() {
-                    // We're not interested in changing the alpha value
-                    f_color = vec4(v_color, 1.0);
+                    color = vec4(0.3, 0.5, 1.0, 1.0);
                 }
             )",
 
   });
 
+  m_scale = m_program->uniform("scale");
+  m_rotation = m_program->uniform("rotation");
+
+  m_scale->set_value({ width() / height() * 0.75, 0.25 });
+
   mgl_core::mem_buffer<float> vertices = {
-    // x, y, red, green, blue
-    0.0,  0.8,  1.0, 0.0, 0.0, //
-    -0.6, -0.8, 0.0, 1.0, 0.0, //
-    0.6,  -0.8, 0.0, 0.0, 1.0, //
+    1.0,  0.0, //
+    -0.5, 0.86, //
+    -0.5, -0.86 //
   };
 
   m_vbo = ctx->buffer(vertices);
-  m_vao = ctx->vertex_array(m_program, { { m_vbo, "2f 3f", { "in_vert", "in_color" } } });
+  m_vao = ctx->vertex_array(m_program, { { m_vbo, "2f", { "vert" } } });
 }
 
 void example_window::on_unload()

@@ -27,8 +27,7 @@ void example_window::on_draw(float time, float frame_time)
 
 void example_window::on_load()
 {
-  MGL_CORE_INFO("ExampleWindow::on_load");
-  set_title("basic_alpha_blending");
+  set_title("Alpha Blending");
 
   const auto ctx = context();
   m_program = ctx->program({
@@ -84,7 +83,6 @@ void example_window::on_load()
 
 void example_window::on_unload()
 {
-  MGL_CORE_INFO("ExampleWindow::on_unload");
   m_vao->release();
   m_vbo->release();
   m_program->release();
