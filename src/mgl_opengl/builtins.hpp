@@ -175,12 +175,12 @@ namespace mgl_opengl
 
   extern const std::string no_shader;
 
-  struct vertex_data
+  struct vertex_buffer
   {
     buffer_ref buffer;
-    mgl_core::string format;
+    mgl_core::string buffer_layout;
     mgl_core::string_list attributes;
   };
 
-  using vertex_data_list = mgl_core::list<vertex_data>;
+  using vertex_buffer_list = mgl_core::list<vertex_buffer>;
 } // namespace mgl_opengl

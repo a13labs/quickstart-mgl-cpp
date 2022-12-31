@@ -64,7 +64,7 @@ void example_window::on_load()
 
   m_vbo = ctx->buffer(vertices);
   m_ibo = ctx->buffer(indices);
-  mgl_opengl::vertex_data_list m_content = { { m_vbo, "2f", { "in_vert" } } };
+  mgl_opengl::vertex_buffer_list m_content = { { m_vbo, "2f", { "in_vert" } } };
 
   m_vao = ctx->vertex_array(m_program, m_content, m_ibo);
 }

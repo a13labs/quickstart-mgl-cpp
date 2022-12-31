@@ -32,7 +32,7 @@ namespace mgl_window
       ~buffer_info();
 
       int vertex_size();
-      mgl_opengl::vertex_data vertex_data();
+      mgl_opengl::vertex_buffer vertex_data();
       const buffer_formats& formats() const;
       bool has_attribute(const mgl_core::string& name);
 
@@ -49,7 +49,7 @@ namespace mgl_window
       return components * byte_per_component;
     }
 
-    inline mgl_opengl::vertex_data buffer_info::vertex_data()
+    inline mgl_opengl::vertex_buffer buffer_info::vertex_data()
     {
       return { m_buffer, m_format, m_attrs };
     }

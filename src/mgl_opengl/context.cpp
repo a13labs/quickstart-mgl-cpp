@@ -1779,7 +1779,7 @@ namespace mgl_opengl
   }
 
   vertex_array_ref context::vertex_array(program_ref program,
-                                         mgl_opengl::vertex_data_list vertex_data,
+                                         mgl_opengl::vertex_buffer_list vertex_buffers,
                                          buffer_ref index_buffer,
                                          int index_element_size,
                                          bool skip_errors,
@@ -1801,39 +1801,41 @@ namespace mgl_opengl
     }
 
     int i = 0;
-    for(auto&& v_data : vertex_data)
+    for(auto&& v_data : vertex_buffers)
     {
       if(v_data.buffer == nullptr)
       {
-        MGL_CORE_ERROR("vertex_data[{0}]: verempty vertex buffer", i);
+        MGL_CORE_ERROR("vertex_buffers[{0}]: verempty vertex buffer", i);
         return nullptr;
       }
 
       if(v_data.buffer->m_context != this)
       {
-        MGL_CORE_ERROR("vertex_data[{0}]: vertex buffer belongs to a different context", i);
+        MGL_CORE_ERROR("vertex_buffers[{0}]: vertex buffer belongs to a different context", i);
         return nullptr;
       }
 
-      format_iterator it = format_iterator(v_data.format.c_str());
+      format_iterator it = format_iterator(v_data.buffer_layout.c_str());
       format_info format_info = it.info();
 
       if(!format_info.valid)
       {
-        MGL_CORE_ERROR("vertex_data[{0}]: invalid invalid format", i);
+        MGL_CORE_ERROR("vertex_buffers[{0}]: invalid invalid format", i);
         return nullptr;
       }
 
       if(!v_data.attributes.size())
       {
-        MGL_CORE_ERROR("vertex_data[{0}]: attributes must not be empty", i);
+        MGL_CORE_ERROR("vertex_buffers[{0}]: attributes must not be empty", i);
         return nullptr;
       }
 
       if((int)v_data.attributes.size() != format_info.nodes)
       {
-        MGL_CORE_ERROR(
-            "vertex_data[{0}]: format and attributes size mismatch {1} != {2}", i, format_info.nodes, v_data.attributes.size());
+        MGL_CORE_ERROR("vertex_buffers[{0}]: format and attributes size mismatch {1} != {2}",
+                       i,
+                       format_info.nodes,
+                       v_data.attributes.size());
         return nullptr;
       }
 
@@ -1877,10 +1879,10 @@ namespace mgl_opengl
     }
 
     i = 0;
-    for(auto&& v_data : vertex_data)
+    for(auto&& v_data : vertex_buffers)
     {
       auto buffer = v_data.buffer;
-      const char* format = v_data.format.c_str();
+      const char* format = v_data.buffer_layout.c_str();
 
       format_iterator it = format_iterator(format);
       format_info format_info = it.info();

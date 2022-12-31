@@ -151,7 +151,7 @@ public:
 
     // VertexArray
     vertex_array_ref vertex_array(program_ref program,
-                                  mgl_opengl::vertex_data_list vertex_data,
+                                  mgl_opengl::vertex_buffer_list vertex_buffers,
                                   buffer_ref index_buffer = nullptr,
                                   int index_element_size = 4,
                                   bool skip_errors = false,
