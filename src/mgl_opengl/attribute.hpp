@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class attribute
   {
@@ -36,13 +36,13 @@ public:
 
 private:
     friend class context;
-    attribute(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t array_length);
+    attribute(const mgl::core::string& name, int gl_type, int program_obj, int location, size_t array_length);
 
-    mgl_core::string m_name;
+    mgl::core::string m_name;
     int m_program_obj;
     int m_gl_type;
     data_type* m_data_type;
     int m_location;
     size_t m_array_length;
   };
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

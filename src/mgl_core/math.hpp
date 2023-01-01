@@ -1,7 +1,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_core
+namespace mgl::core
 {
   static constexpr double pi = 3.14159265358979323846;
 
@@ -9,4 +9,4 @@ namespace mgl_core
   {
     return degrees * pi / 180.0;
   }
-} // namespace mgl_core
+} // namespace  mgl::core

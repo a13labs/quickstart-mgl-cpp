@@ -1,7 +1,7 @@
 #include "format.hpp"
 #include "opengl.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   format_node* InvalidFormat = (format_node*)(-1);
 
@@ -268,4 +268,4 @@ namespace mgl_opengl
     }
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

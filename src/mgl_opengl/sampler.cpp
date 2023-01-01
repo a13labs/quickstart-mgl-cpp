@@ -18,7 +18,7 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void sampler::release()
   {
@@ -113,14 +113,14 @@ namespace mgl_opengl
     gl.SamplerParameteri(m_sampler_obj, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }
 
-  void sampler::set_compare_func(mgl_opengl::compare_func value)
+  void sampler::set_compare_func(mgl::opengl::compare_func value)
   {
     MGL_CORE_ASSERT(!m_released, "Sampler already released");
     MGL_CORE_ASSERT(m_context, "No context");
     MGL_CORE_ASSERT(!m_context->released(), "Context already released");
     const GLMethods& gl = m_context->gl();
     m_compare_func = value;
-    if(m_compare_func == mgl_opengl::compare_func::NONE)
+    if(m_compare_func == mgl::opengl::compare_func::NONE)
     {
       gl.SamplerParameteri(m_sampler_obj, GL_TEXTURE_COMPARE_MODE, GL_NONE);
       return;
@@ -177,4 +177,4 @@ namespace mgl_opengl
     gl.SamplerParameterf(m_sampler_obj, GL_TEXTURE_MAX_LOD, m_max_lod);
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

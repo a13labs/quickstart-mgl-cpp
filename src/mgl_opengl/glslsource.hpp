@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
 
   class glsl_source
@@ -33,57 +33,57 @@ public:
       GENERIC_PROGRAM
     };
 
-    glsl_source(const mgl_core::string& source, glsl_source::type type = glsl_source::type::GENERIC_PROGRAM);
+    glsl_source(const mgl::core::string& source, glsl_source::type type = glsl_source::type::GENERIC_PROGRAM);
     ~glsl_source() = default;
 
-    const mgl_core::string source(glsl_source::type type, const shader_defines& defines = {});
-    const mgl_core::string source(const shader_defines& defines);
+    const mgl::core::string source(glsl_source::type type, const shader_defines& defines = {});
+    const mgl::core::string source(const shader_defines& defines);
 
-    const mgl_core::string_list outputs();
+    const mgl::core::string_list outputs();
 
-    const mgl_core::string vertex(const shader_defines& defines = {});
-    const mgl_core::string fragment(const shader_defines& defines = {});
-    const mgl_core::string geometry(const shader_defines& defines = {});
-    const mgl_core::string tess_control(const shader_defines& defines = {});
-    const mgl_core::string tess_evaluation(const shader_defines& defines = {});
+    const mgl::core::string vertex(const shader_defines& defines = {});
+    const mgl::core::string fragment(const shader_defines& defines = {});
+    const mgl::core::string geometry(const shader_defines& defines = {});
+    const mgl::core::string tess_control(const shader_defines& defines = {});
+    const mgl::core::string tess_evaluation(const shader_defines& defines = {});
 
 private:
     void handle_includes(int depth = 0, int source_id = 0);
 
-    mgl_core::string m_source;
+    mgl::core::string m_source;
     int m_version_code;
     glsl_source::type m_type;
-    mgl_core::string_list m_attributes;
+    mgl::core::string_list m_attributes;
   };
 
   struct glsl_sources
   {
-    const mgl_core::string_list sources;
+    const mgl::core::string_list sources;
 
-    glsl_sources(const mgl_core::string& vs_source,
-                 const mgl_core::string& fs_source,
-                 const mgl_core::string& gs_source,
-                 const mgl_core::string& tes_source,
-                 const mgl_core::string& tcs_source)
+    glsl_sources(const mgl::core::string& vs_source,
+                 const mgl::core::string& fs_source,
+                 const mgl::core::string& gs_source,
+                 const mgl::core::string& tes_source,
+                 const mgl::core::string& tcs_source)
         : sources{ vs_source, fs_source, gs_source, tes_source, tcs_source }
     { }
 
-    glsl_sources(const mgl_core::string& vs_source,
-                 const mgl_core::string& fs_source,
-                 const mgl_core::string& gs_source,
-                 const mgl_core::string& tes_source)
+    glsl_sources(const mgl::core::string& vs_source,
+                 const mgl::core::string& fs_source,
+                 const mgl::core::string& gs_source,
+                 const mgl::core::string& tes_source)
         : sources{ vs_source, fs_source, gs_source, tes_source, no_shader }
     { }
 
-    glsl_sources(const mgl_core::string& vs_source, const mgl_core::string& fs_source, const mgl_core::string& gs_source)
+    glsl_sources(const mgl::core::string& vs_source, const mgl::core::string& fs_source, const mgl::core::string& gs_source)
         : sources{ vs_source, fs_source, gs_source, no_shader, no_shader }
     { }
 
-    glsl_sources(const mgl_core::string& vs_source, const mgl_core::string& fs_source)
+    glsl_sources(const mgl::core::string& vs_source, const mgl::core::string& fs_source)
         : sources{ vs_source, fs_source, no_shader, no_shader, no_shader }
     { }
 
-    glsl_sources(const mgl_core::string& vs_source)
+    glsl_sources(const mgl::core::string& vs_source)
         : sources{ vs_source, no_shader, no_shader, no_shader, no_shader }
     { }
 
@@ -95,37 +95,37 @@ private:
                    source.tess_evaluation(defines) }
     { }
 
-    inline bool empty() { return mgl_core::all_empty(sources); }
-    inline const mgl_core::string& vertex() { return sources[glsl_source::type::VERTEX_SHADER]; }
-    inline const mgl_core::string& fragment() { return sources[glsl_source::type::FRAGMENT_SHADER]; }
-    inline const mgl_core::string& geometry() { return sources[glsl_source::type::GEOMETRY_SHADER]; }
-    inline const mgl_core::string& tess_control() { return sources[glsl_source::type::TESS_CONTROL_SHADER]; }
-    inline const mgl_core::string& tess_evaluation() { return sources[glsl_source::type::TESS_EVALUATION_SHADER]; }
+    inline bool empty() { return mgl::core::all_empty(sources); }
+    inline const mgl::core::string& vertex() { return sources[glsl_source::type::VERTEX_SHADER]; }
+    inline const mgl::core::string& fragment() { return sources[glsl_source::type::FRAGMENT_SHADER]; }
+    inline const mgl::core::string& geometry() { return sources[glsl_source::type::GEOMETRY_SHADER]; }
+    inline const mgl::core::string& tess_control() { return sources[glsl_source::type::TESS_CONTROL_SHADER]; }
+    inline const mgl::core::string& tess_evaluation() { return sources[glsl_source::type::TESS_EVALUATION_SHADER]; }
   };
 
-  inline const mgl_core::string glsl_source::vertex(const shader_defines& defines)
+  inline const mgl::core::string glsl_source::vertex(const shader_defines& defines)
   {
     return source(glsl_source::type::VERTEX_SHADER, defines);
   }
 
-  inline const mgl_core::string glsl_source::fragment(const shader_defines& defines)
+  inline const mgl::core::string glsl_source::fragment(const shader_defines& defines)
   {
     return source(glsl_source::type::FRAGMENT_SHADER, defines);
   }
 
-  inline const mgl_core::string glsl_source::geometry(const shader_defines& defines)
+  inline const mgl::core::string glsl_source::geometry(const shader_defines& defines)
   {
     return source(glsl_source::type::GEOMETRY_SHADER, defines);
   }
 
-  inline const mgl_core::string glsl_source::tess_control(const shader_defines& defines)
+  inline const mgl::core::string glsl_source::tess_control(const shader_defines& defines)
   {
     return source(glsl_source::type::TESS_CONTROL_SHADER, defines);
   }
 
-  inline const mgl_core::string glsl_source::tess_evaluation(const shader_defines& defines)
+  inline const mgl::core::string glsl_source::tess_evaluation(const shader_defines& defines)
   {
     return source(glsl_source::type::TESS_EVALUATION_SHADER, defines);
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

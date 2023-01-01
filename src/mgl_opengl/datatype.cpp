@@ -17,7 +17,7 @@
 #include "datatype.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   static int float_base_format[5] = { 0, GL_RED, GL_RG, GL_RGB, GL_RGBA };
   static int int_base_format[5] = { 0, GL_RED_INTEGER, GL_RG_INTEGER, GL_RGB_INTEGER, GL_RGBA_INTEGER };
@@ -98,4 +98,4 @@ namespace mgl_opengl
     return nullptr;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

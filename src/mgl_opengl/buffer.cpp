@@ -18,7 +18,7 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void buffer::release()
   {
@@ -151,4 +151,4 @@ namespace mgl_opengl
     gl.BindBufferRange(GL_SHADER_STORAGE_BUFFER, binding, m_buffer_obj, offset, size);
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

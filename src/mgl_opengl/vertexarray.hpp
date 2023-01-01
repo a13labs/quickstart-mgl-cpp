@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class vertex_array
   {
@@ -27,16 +27,16 @@ public:
     void release();
     bool released();
 
-    void render(mgl_opengl::render_mode mode = mgl_opengl::render_mode::TRIANGLES,
+    void render(mgl::opengl::render_mode mode = mgl::opengl::render_mode::TRIANGLES,
                 int vertices = -1,
                 int first = 0,
                 int instances = -1);
     void render(int instances);
-    void render_indirect(const buffer_ref& buffer, mgl_opengl::render_mode mode, int count = -1, int first = -1);
-    void transform(const buffer_ref& b, mgl_opengl::render_mode mode, int vertices = -1, int first = 0, int instances = -1);
+    void render_indirect(const buffer_ref& buffer, mgl::opengl::render_mode mode, int count = -1, int first = -1);
+    void transform(const buffer_ref& b, mgl::opengl::render_mode mode, int vertices = -1, int first = 0, int instances = -1);
 
-    void transform(const mgl_core::ref_list<buffer>& buffers,
-                   mgl_opengl::render_mode mode,
+    void transform(const mgl::core::ref_list<buffer>& buffers,
+                   mgl::opengl::render_mode mode,
                    int vertices = -1,
                    int first = 0,
                    int instances = -1,
@@ -71,14 +71,14 @@ private:
     bool m_released;
   };
 
-  inline void vertex_array::transform(const buffer_ref& b, mgl_opengl::render_mode mode, int vertices, int first, int instances)
+  inline void vertex_array::transform(const buffer_ref& b, mgl::opengl::render_mode mode, int vertices, int first, int instances)
   {
-    transform(mgl_core::ref_list<buffer>({ b }), mode, vertices, first, instances);
+    transform(mgl::core::ref_list<buffer>({ b }), mode, vertices, first, instances);
   }
 
   inline void vertex_array::render(int instances)
   {
-    render(mgl_opengl::TRIANGLES, -1, 0, instances);
+    render(mgl::opengl::TRIANGLES, -1, 0, instances);
   }
 
   inline int vertex_array::vertices()
@@ -91,4 +91,4 @@ private:
     return m_num_instances;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

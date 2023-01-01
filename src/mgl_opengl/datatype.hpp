@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
 
   struct data_type
@@ -30,4 +30,4 @@ namespace mgl_opengl
 
   data_type* from_dtype(const char* dtype, size_t size);
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

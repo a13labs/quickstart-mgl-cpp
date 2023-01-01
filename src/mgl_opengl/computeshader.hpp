@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class compute_shader
   {
@@ -26,18 +26,18 @@ public:
     void release();
     bool released();
 
-    const uniform_ref uniform(const mgl_core::string& name) const;
-    const uniform_block_ref uniform_block(const mgl_core::string& name) const;
+    const uniform_ref uniform(const mgl::core::string& name) const;
+    const uniform_block_ref uniform_block(const mgl::core::string& name) const;
 
-    const mgl_core::string_list uniforms();
-    const mgl_core::string_list uniform_blocks();
+    const mgl::core::string_list uniforms();
+    const mgl::core::string_list uniform_blocks();
 
     size_t num_uniforms();
     size_t num_uniform_blocks();
 
     void run(int x = 1, int y = 1, int z = 1);
 
-    const uniform_ref operator[](const mgl_core::string& name) const;
+    const uniform_ref operator[](const mgl::core::string& name) const;
 
     int glo();
 
@@ -58,7 +58,7 @@ private:
     return m_program_obj;
   }
 
-  inline const uniform_ref compute_shader::uniform(const mgl_core::string& name) const
+  inline const uniform_ref compute_shader::uniform(const mgl::core::string& name) const
   {
     if(m_uniforms_map.find(name) == m_uniforms_map.end())
     {
@@ -67,7 +67,7 @@ private:
     return m_uniforms_map.at(name);
   }
 
-  inline const uniform_block_ref compute_shader::uniform_block(const mgl_core::string& name) const
+  inline const uniform_block_ref compute_shader::uniform_block(const mgl::core::string& name) const
   {
     if(m_uniform_blocks_map.find(name) == m_uniform_blocks_map.end())
     {
@@ -86,7 +86,7 @@ private:
     return m_uniform_blocks_map.size();
   }
 
-  inline const uniform_ref compute_shader::operator[](const mgl_core::string& name) const
+  inline const uniform_ref compute_shader::operator[](const mgl::core::string& name) const
   {
     return uniform(name);
   }
@@ -96,4 +96,4 @@ private:
     return m_released;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

@@ -18,7 +18,7 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void query::begin()
   {
@@ -132,4 +132,4 @@ namespace mgl_opengl
     return elapsed;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

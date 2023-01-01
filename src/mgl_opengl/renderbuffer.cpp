@@ -19,7 +19,7 @@
 #include "framebuffer.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void renderbuffer::release()
   {
@@ -41,4 +41,4 @@ namespace mgl_opengl
     return attachment::RENDERBUFFER;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

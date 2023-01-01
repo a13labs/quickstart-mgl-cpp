@@ -20,7 +20,7 @@
 #include "datatype.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void texture_3d::release()
   {
@@ -42,7 +42,7 @@ namespace mgl_opengl
     return texture::TEXTURE_3D;
   }
 
-  bool texture_3d::read_into(mgl_core::mem_buffer<uint8_t>& dst, int alignment, size_t write_offset)
+  bool texture_3d::read_into(mgl::core::mem_buffer<uint8_t>& dst, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -93,7 +93,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool texture_3d::write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_3d& viewport, int alignment)
+  bool texture_3d::write(const mgl::core::mem_buffer<uint8_t>& src, const mgl::core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -126,7 +126,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool texture_3d::write(const mgl_core::mem_buffer<uint8_t>& src, int alignment)
+  bool texture_3d::write(const mgl::core::mem_buffer<uint8_t>& src, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -159,7 +159,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool texture_3d::write(const buffer_ref& src, const mgl_core::viewport_3d& viewport, int alignment)
+  bool texture_3d::write(const buffer_ref& src, const mgl::core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -351,7 +351,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }
 
-  mgl_core::string texture_3d::swizzle()
+  mgl::core::string texture_3d::swizzle()
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -378,7 +378,7 @@ namespace mgl_opengl
     return swizzle;
   }
 
-  void texture_3d::set_swizzle(const mgl_core::string& value)
+  void texture_3d::set_swizzle(const mgl::core::string& value)
   {
     MGL_CORE_ASSERT(!m_released, "Texture3D already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -414,4 +414,4 @@ namespace mgl_opengl
       }
     }
   }
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

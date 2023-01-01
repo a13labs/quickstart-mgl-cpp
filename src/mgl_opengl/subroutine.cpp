@@ -18,13 +18,13 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
-  subroutine::subroutine(const mgl_core::string& name, int index, subroutine::type type)
+  subroutine::subroutine(const mgl::core::string& name, int index, subroutine::type type)
   {
     m_name = name;
     m_index = index;
     m_type = type;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

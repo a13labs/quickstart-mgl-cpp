@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "texture.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class texture_3d : public texture
   {
@@ -45,15 +45,15 @@ public:
     const texture::filter& filter() const;
     void set_filter(const texture::filter& value);
 
-    mgl_core::string swizzle();
-    void set_swizzle(const mgl_core::string& value);
+    mgl::core::string swizzle();
+    void set_swizzle(const mgl::core::string& value);
 
-    bool read_into(mgl_core::mem_buffer<uint8_t>& dst, int alignment = 1, size_t write_offset = 0);
+    bool read_into(mgl::core::mem_buffer<uint8_t>& dst, int alignment = 1, size_t write_offset = 0);
     bool read_into(buffer_ref& dst, int alignment = 1, size_t write_offset = 0);
 
-    bool write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_3d& viewport, int alignment = 1);
-    bool write(const mgl_core::mem_buffer<uint8_t>& src, int alignment = 1);
-    bool write(const buffer_ref& src, const mgl_core::viewport_3d& viewport, int alignment = 1);
+    bool write(const mgl::core::mem_buffer<uint8_t>& src, const mgl::core::viewport_3d& viewport, int alignment = 1);
+    bool write(const mgl::core::mem_buffer<uint8_t>& src, int alignment = 1);
+    bool write(const buffer_ref& src, const mgl::core::viewport_3d& viewport, int alignment = 1);
     bool write(const buffer_ref& src, int alignment = 1);
 
     void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
@@ -126,4 +126,4 @@ private:
     return m_filter;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

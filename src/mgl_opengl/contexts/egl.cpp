@@ -103,7 +103,7 @@ struct EGLContextData
   m_eglGetCurrentDisplayProc m_eglGetCurrentDisplay;
 };
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   ContextEGL::ContextEGL(context_mode::Enum mode, int required)
   {
@@ -420,7 +420,7 @@ namespace mgl_opengl
       delete(EGLContextData*)m_context;
   }
 
-  gl_function ContextEGL::load(const mgl_core::string& method)
+  gl_function ContextEGL::load(const mgl::core::string& method)
   {
     if(!m_context)
       return nullptr;
@@ -468,5 +468,5 @@ namespace mgl_opengl
   {
     return m_context != nullptr && !m_released;
   }
-} // namespace mgl_opengl
+} // namespace  mgl::opengl
 #endif

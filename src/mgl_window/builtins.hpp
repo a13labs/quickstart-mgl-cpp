@@ -2,7 +2,7 @@
 #include "mgl_core/mgl_core.hpp"
 #include "mgl_opengl/mgl_opengl.hpp"
 
-namespace mgl_window
+namespace mgl::window
 {
   class window;
   class event;
@@ -19,17 +19,17 @@ namespace mgl_window
   namespace render
   {
     struct buffer_element;
-    using buffer_layout = mgl_core::list<buffer_element>;
+    using buffer_layout = mgl::core::list<buffer_element>;
 
     class vertex_buffer;
-    using vertex_buffers_list = mgl_core::list<vertex_buffer>;
+    using vertex_buffers_list = mgl::core::list<vertex_buffer>;
   } // namespace render
 
   using event_handler = std::function<void(event&)>;
 
-  using shader_defines = mgl_core::dict<mgl_core::string, mgl_core::string>;
+  using shader_defines = mgl::core::dict<mgl::core::string, mgl::core::string>;
 
-  mgl_opengl::context_ref current_context();
+  mgl::opengl::context_ref current_context();
   window& current_window();
 
-} // namespace mgl_window
+} // namespace  mgl::window

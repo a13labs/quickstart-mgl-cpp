@@ -1,6 +1,6 @@
 #include "mgl_window/mgl_window.hpp"
 
-class example_window : public mgl_window::window
+class example_window : public mgl::window::window
 {
 
   public:
@@ -9,9 +9,9 @@ class example_window : public mgl_window::window
   virtual void on_unload() override;
 
   private:
-  mgl_core::ref<mgl_opengl::program> m_program;
-  mgl_core::ref<mgl_opengl::buffer> m_vbo;
-  mgl_core::ref<mgl_opengl::vertex_array> m_vao;
+  mgl::core::ref<mgl::opengl::program> m_program;
+  mgl::core::ref<mgl::opengl::buffer> m_vbo;
+  mgl::core::ref<mgl::opengl::vertex_array> m_vao;
 };
 
 void example_window::on_draw(float time, float frame_time)
@@ -54,7 +54,7 @@ void example_window::on_load()
 
   });
 
-  mgl_core::mem_buffer<float> vertices = {
+  mgl::core::mem_buffer<float> vertices = {
     // x, y, red, green, blue
     0.0,  0.8,  1.0, 0.0, 0.0, //
     -0.6, -0.8, 0.0, 1.0, 0.0, //

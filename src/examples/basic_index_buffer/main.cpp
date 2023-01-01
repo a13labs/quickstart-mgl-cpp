@@ -1,7 +1,7 @@
 
 #include "mgl_window/mgl_window.hpp"
 
-class example_window : public mgl_window::window
+class example_window : public mgl::window::window
 {
 
   public:
@@ -10,10 +10,10 @@ class example_window : public mgl_window::window
   virtual void on_unload() override;
 
   private:
-  mgl_core::ref<mgl_opengl::program> m_program;
-  mgl_core::ref<mgl_opengl::buffer> m_vbo;
-  mgl_core::ref<mgl_opengl::buffer> m_ibo;
-  mgl_core::ref<mgl_opengl::vertex_array> m_vao;
+  mgl::core::ref<mgl::opengl::program> m_program;
+  mgl::core::ref<mgl::opengl::buffer> m_vbo;
+  mgl::core::ref<mgl::opengl::buffer> m_ibo;
+  mgl::core::ref<mgl::opengl::vertex_array> m_vao;
 };
 
 void example_window::on_draw(float time, float frame_time)
@@ -50,7 +50,7 @@ void example_window::on_load()
 
   });
 
-  mgl_core::mem_buffer<float> vertices = {
+  mgl::core::mem_buffer<float> vertices = {
     0.0,  0.0, //
 
     -0.6, -0.8, //
@@ -60,11 +60,11 @@ void example_window::on_load()
     -0.6, 0.8, //
   };
 
-  mgl_core::mem_buffer<uint32_t> indices = { 0, 1, 2, 0, 3, 4 };
+  mgl::core::mem_buffer<uint32_t> indices = { 0, 1, 2, 0, 3, 4 };
 
   m_vbo = ctx->buffer(vertices);
   m_ibo = ctx->buffer(indices);
-  mgl_opengl::vertex_buffer_list m_content = { { m_vbo, "2f", { "in_vert" } } };
+  mgl::opengl::vertex_buffer_list m_content = { { m_vbo, "2f", { "in_vert" } } };
 
   m_vao = ctx->vertex_array(m_program, m_content, m_ibo);
 }

@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class program
   {
@@ -29,17 +29,17 @@ public:
     void bind();
     void unbind();
 
-    const attribute_ref attribute(const mgl_core::string& name) const;
-    const uniform_ref uniform(const mgl_core::string& name) const;
-    const uniform_block_ref uniform_block(const mgl_core::string& name) const;
-    const varying_ref varying(const mgl_core::string& name) const;
-    const subroutine_ref subroutine(const mgl_core::string& name) const;
+    const attribute_ref attribute(const mgl::core::string& name) const;
+    const uniform_ref uniform(const mgl::core::string& name) const;
+    const uniform_block_ref uniform_block(const mgl::core::string& name) const;
+    const varying_ref varying(const mgl::core::string& name) const;
+    const subroutine_ref subroutine(const mgl::core::string& name) const;
 
-    const mgl_core::string_list attributes(bool all = true);
-    const mgl_core::string_list uniforms();
-    const mgl_core::string_list uniform_blocks();
-    const mgl_core::string_list varyings();
-    const mgl_core::string_list subroutines();
+    const mgl::core::string_list attributes(bool all = true);
+    const mgl::core::string_list uniforms();
+    const mgl::core::string_list uniform_blocks();
+    const mgl::core::string_list varyings();
+    const mgl::core::string_list subroutines();
 
     size_t num_attributes();
     size_t num_uniforms();
@@ -47,7 +47,7 @@ public:
     size_t num_varyings();
     size_t num_subroutines();
 
-    const uniform_ref operator[](const mgl_core::string& name) const;
+    const uniform_ref operator[](const mgl::core::string& name) const;
 
     int geometry_input();
     int geometry_output();
@@ -91,7 +91,7 @@ private:
     return m_released;
   }
 
-  inline const attribute_ref program::attribute(const mgl_core::string& name) const
+  inline const attribute_ref program::attribute(const mgl::core::string& name) const
   {
     if(m_attributes_map.find(name) == m_attributes_map.end())
     {
@@ -100,7 +100,7 @@ private:
     return m_attributes_map.at(name);
   }
 
-  inline const uniform_ref program::uniform(const mgl_core::string& name) const
+  inline const uniform_ref program::uniform(const mgl::core::string& name) const
   {
     if(m_uniforms_map.find(name) == m_uniforms_map.end())
     {
@@ -109,7 +109,7 @@ private:
     return m_uniforms_map.at(name);
   }
 
-  inline const uniform_block_ref program::uniform_block(const mgl_core::string& name) const
+  inline const uniform_block_ref program::uniform_block(const mgl::core::string& name) const
   {
     if(m_uniform_blocks_map.find(name) == m_uniform_blocks_map.end())
     {
@@ -118,7 +118,7 @@ private:
     return m_uniform_blocks_map.at(name);
   }
 
-  inline const varying_ref program::varying(const mgl_core::string& name) const
+  inline const varying_ref program::varying(const mgl::core::string& name) const
   {
     if(m_varyings_map.find(name) == m_varyings_map.end())
     {
@@ -127,7 +127,7 @@ private:
     return m_varyings_map.at(name);
   }
 
-  inline const subroutine_ref program::subroutine(const mgl_core::string& name) const
+  inline const subroutine_ref program::subroutine(const mgl::core::string& name) const
   {
     if(m_subroutines_map.find(name) == m_subroutines_map.end())
     {
@@ -181,9 +181,9 @@ private:
     return m_subroutines_map.size();
   }
 
-  inline const uniform_ref program::operator[](const mgl_core::string& name) const
+  inline const uniform_ref program::operator[](const mgl::core::string& name) const
   {
     return uniform(name);
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

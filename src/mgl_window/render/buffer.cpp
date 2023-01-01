@@ -1,14 +1,14 @@
 #include "buffer.hpp"
 #include <cctype>
 
-namespace mgl_window
+namespace mgl::window
 {
 
   namespace render
   {
     const buffer_element null_buffer_format = { "", 0, 0 };
-    const static mgl_core::string_list s_valid_divisors = { "v", "i", "r" };
-    const static mgl_core::dict<const mgl_core::string, const buffer_element> s_buffer_formats = {
+    const static mgl::core::string_list s_valid_divisors = { "v", "i", "r" };
+    const static mgl::core::dict<const mgl::core::string, const buffer_element> s_buffer_formats = {
       { "f", buffer_element{ "f", 1, 4, false } },
       { "f1", buffer_element{ "f1", 1, 1, false } },
       { "f2", buffer_element{ "f2", 1, 2, false } },
@@ -41,7 +41,7 @@ namespace mgl_window
       { "ni4", buffer_element{ "ni4", 1, 4, false } }
     };
 
-    const buffer_element& to_buffer_element(const mgl_core::string& str)
+    const buffer_element& to_buffer_element(const mgl::core::string& str)
     {
       if(s_buffer_formats.find(str) == s_buffer_formats.end())
       {
@@ -50,26 +50,26 @@ namespace mgl_window
       return s_buffer_formats.at(str);
     }
 
-    buffer_element attribute_format(const mgl_core::string& str)
+    buffer_element attribute_format(const mgl::core::string& str)
     {
-      auto parts = mgl_core::split(str, '/');
+      auto parts = mgl::core::split(str, '/');
 
       auto format = parts[0];
-      mgl_core::string divisor;
+      mgl::core::string divisor;
 
       if(parts.size() > 1)
       {
         MGL_CORE_ASSERT(parts.size() == 2, "invalid divisor");
-        MGL_CORE_ASSERT(mgl_core::in(parts[1], s_valid_divisors), "invalid divisor");
+        MGL_CORE_ASSERT(mgl::core::in(parts[1], s_valid_divisors), "invalid divisor");
         divisor = parts[1];
       }
 
       int components = 1;
-      mgl_core::string bformat = format;
+      mgl::core::string bformat = format;
       if(!isalpha(format[0]))
       {
-        parts = mgl_core::re_split(format, "([fiudn])");
-        components = mgl_core::to_int(parts[0]);
+        parts = mgl::core::re_split(format, "([fiudn])");
+        components = mgl::core::to_int(parts[0]);
         bformat = format.substr(parts[0].size());
       }
 
@@ -78,11 +78,11 @@ namespace mgl_window
       return { str, components, fmt_info.byte_per_component, divisor == "i" };
     }
 
-    buffer_layout parse_layout(const mgl_core::string& str)
+    buffer_layout parse_layout(const mgl::core::string& str)
     {
       buffer_layout r;
 
-      auto formats = mgl_core::split(str, ' ');
+      auto formats = mgl::core::split(str, ' ');
 
       for(auto&& f : formats)
       {
@@ -92,9 +92,9 @@ namespace mgl_window
       return r;
     }
 
-    vertex_buffer::vertex_buffer(mgl_opengl::buffer_ref buffer,
-                                 const mgl_core::string& format,
-                                 const mgl_core::string_list& attrs,
+    vertex_buffer::vertex_buffer(mgl::opengl::buffer_ref buffer,
+                                 const mgl::core::string& format,
+                                 const mgl::core::string_list& attrs,
                                  bool per_instance)
     {
       MGL_CORE_ASSERT(m_buffer != nullptr, "invalid buffer");
@@ -124,4 +124,4 @@ namespace mgl_window
     }
 
   } // namespace render
-} // namespace mgl_window
+} // namespace  mgl::window

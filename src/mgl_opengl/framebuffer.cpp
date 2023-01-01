@@ -20,7 +20,7 @@
 #include "datatype.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void framebuffer::release()
   {
@@ -42,7 +42,7 @@ namespace mgl_opengl
     }
   }
 
-  void framebuffer::clear(float r, float g, float b, float a, float depth, const mgl_core::viewport_2d& viewport)
+  void framebuffer::clear(float r, float g, float b, float a, float depth, const mgl::core::viewport_2d& viewport)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -67,7 +67,7 @@ namespace mgl_opengl
     gl.DepthMask(m_depth_mask);
 
     // Respect the passed in viewport even with scissor enabled
-    if(viewport != mgl_core::null_viewport_2d)
+    if(viewport != mgl::core::null_viewport_2d)
     {
       gl.Enable(GL_SCISSOR_TEST);
       gl.Scissor(viewport.x, viewport.y, viewport.width, viewport.height);
@@ -134,8 +134,8 @@ namespace mgl_opengl
     m_context->m_bound_framebuffer = shared_from_this();
   }
 
-  bool framebuffer::read_into(mgl_core::mem_buffer<uint8_t>& dst,
-                              const mgl_core::viewport_2d& viewport,
+  bool framebuffer::read_into(mgl::core::mem_buffer<uint8_t>& dst,
+                              const mgl::core::viewport_2d& viewport,
                               int components,
                               int attachment,
                               int alignment,
@@ -163,7 +163,7 @@ namespace mgl_opengl
     int y = 0;
     int width = m_width;
     int height = m_height;
-    if(viewport != mgl_core::null_viewport_2d)
+    if(viewport != mgl::core::null_viewport_2d)
     {
       x = viewport.x;
       y = viewport.y;
@@ -193,7 +193,7 @@ namespace mgl_opengl
   }
 
   bool framebuffer::read_into(buffer_ref dst,
-                              const mgl_core::viewport_2d& viewport,
+                              const mgl::core::viewport_2d& viewport,
                               int components,
                               int attachment,
                               int alignment,
@@ -221,7 +221,7 @@ namespace mgl_opengl
     int y = 0;
     int width = m_width;
     int height = m_height;
-    if(viewport != mgl_core::null_viewport_2d)
+    if(viewport != mgl::core::null_viewport_2d)
     {
       x = viewport.x;
       y = viewport.y;
@@ -298,7 +298,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  void framebuffer::set_viewport(const mgl_core::viewport_2d& r)
+  void framebuffer::set_viewport(const mgl::core::viewport_2d& r)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -315,7 +315,7 @@ namespace mgl_opengl
     }
   }
 
-  void framebuffer::set_scissor(const mgl_core::viewport_2d& r)
+  void framebuffer::set_scissor(const mgl::core::viewport_2d& r)
   {
     MGL_CORE_ASSERT(!m_released, "Framebuffer already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -332,4 +332,4 @@ namespace mgl_opengl
     }
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

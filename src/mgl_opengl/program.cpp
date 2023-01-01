@@ -18,7 +18,7 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void program::release()
   {
@@ -33,13 +33,13 @@ namespace mgl_opengl
     gl.DeleteProgram(m_program_obj);
   }
 
-  const mgl_core::string_list program::attributes(bool all)
+  const mgl::core::string_list program::attributes(bool all)
   {
-    auto result = mgl_core::string_list();
+    auto result = mgl::core::string_list();
 
     for(auto&& a : m_attributes_map)
     {
-      if(!all && mgl_core::starts_with(a.first, "gl_"))
+      if(!all && mgl::core::starts_with(a.first, "gl_"))
         continue;
       result.push_back(a.first);
     }
@@ -47,9 +47,9 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list program::uniforms()
+  const mgl::core::string_list program::uniforms()
   {
-    auto result = mgl_core::string_list();
+    auto result = mgl::core::string_list();
 
     for(auto&& a : m_uniforms_map)
     {
@@ -59,9 +59,9 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list program::uniform_blocks()
+  const mgl::core::string_list program::uniform_blocks()
   {
-    auto result = mgl_core::string_list();
+    auto result = mgl::core::string_list();
 
     for(auto&& a : m_uniform_blocks_map)
     {
@@ -71,9 +71,9 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list program::varyings()
+  const mgl::core::string_list program::varyings()
   {
-    auto result = mgl_core::string_list();
+    auto result = mgl::core::string_list();
 
     for(auto&& a : m_varyings_map)
     {
@@ -83,9 +83,9 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list program::subroutines()
+  const mgl::core::string_list program::subroutines()
   {
-    auto result = mgl_core::string_list();
+    auto result = mgl::core::string_list();
 
     for(auto&& a : m_subroutines_map)
     {
@@ -115,4 +115,4 @@ namespace mgl_opengl
     gl.UseProgram(0);
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

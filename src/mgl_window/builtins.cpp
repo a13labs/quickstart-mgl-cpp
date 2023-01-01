@@ -1,9 +1,9 @@
 #include "builtins.hpp"
 #include "mgl_window/context/window.hpp"
 
-namespace mgl_window
+namespace mgl::window
 {
-  mgl_opengl::context_ref current_context()
+  mgl::opengl::context_ref current_context()
   {
     return window::current().context();
   }
@@ -13,4 +13,4 @@ namespace mgl_window
     return window::current();
   }
 
-} // namespace mgl_window
+} // namespace  mgl::window

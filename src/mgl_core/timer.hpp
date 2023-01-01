@@ -1,7 +1,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_core
+namespace mgl::core
 {
 
   class Timer
@@ -56,4 +56,4 @@ private:
     }
   }
 
-} // namespace mgl_core
+} // namespace  mgl::core

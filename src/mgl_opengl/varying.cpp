@@ -18,9 +18,9 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
-  varying::varying(const mgl_core::string& name, int number, size_t array_length, int dimension)
+  varying::varying(const mgl::core::string& name, int number, size_t array_length, int dimension)
   {
     m_name = name;
     m_number = number;
@@ -28,4 +28,4 @@ namespace mgl_opengl
     m_dimension = dimension;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

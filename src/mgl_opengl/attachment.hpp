@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class attachment
   {
@@ -30,4 +30,4 @@ public:
     virtual ~attachment() = default;
     virtual attachment::type attachment_type() = 0;
   };
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

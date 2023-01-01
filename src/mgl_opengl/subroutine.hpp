@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class subroutine
   {
@@ -35,10 +35,10 @@ public:
 
 private:
     friend class context;
-    subroutine(const mgl_core::string& name, int index, subroutine::type type);
+    subroutine(const mgl::core::string& name, int index, subroutine::type type);
 
-    mgl_core::string m_name;
+    mgl::core::string m_name;
     int m_index;
     subroutine::type m_type;
   };
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

@@ -20,7 +20,7 @@
 #  include "mgl_opengl/context.hpp"
 #  include <dlfcn.h>
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   ContextGLX::ContextGLX(context_mode::Enum mode, int required)
   {
@@ -30,7 +30,7 @@ namespace mgl_opengl
 
   ContextGLX::~ContextGLX() { }
 
-  gl_function ContextGLX::load(const mgl_core::string& method)
+  gl_function ContextGLX::load(const mgl::core::string& method)
   {
     return nullptr;
   }
@@ -45,5 +45,5 @@ namespace mgl_opengl
   {
     return false;
   }
-} // namespace mgl_opengl
+} // namespace  mgl::opengl
 #endif

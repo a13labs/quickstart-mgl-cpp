@@ -1,6 +1,6 @@
 #include "mgl_window/mgl_window.hpp"
 
-class example_window : public mgl_window::window
+class example_window : public mgl::window::window
 {
 
   public:
@@ -9,16 +9,16 @@ class example_window : public mgl_window::window
   virtual void on_unload() override;
 
   private:
-  mgl_core::ref<mgl_opengl::program> m_program;
-  mgl_core::ref<mgl_opengl::buffer> m_vbo;
-  mgl_core::ref<mgl_opengl::vertex_array> m_vao;
+  mgl::core::ref<mgl::opengl::program> m_program;
+  mgl::core::ref<mgl::opengl::buffer> m_vbo;
+  mgl::core::ref<mgl::opengl::vertex_array> m_vao;
 };
 
 void example_window::on_draw(float time, float frame_time)
 {
   const auto ctx = context();
   ctx->clear(1.0, 1.0, 1.0);
-  m_vao->render(mgl_opengl::render_mode::LINES, 65 * 4);
+  m_vao->render(mgl::opengl::render_mode::LINES, 65 * 4);
 }
 
 void example_window::on_load()
@@ -95,7 +95,7 @@ void example_window::on_load()
   m_program->uniform("center")->set_value({ 0.f, 0.f, 0.f });
   m_program->uniform("up")->set_value({ 0.f, 0.f, 1.f });
 
-  mgl_core::mem_buffer<float> grid;
+  mgl::core::mem_buffer<float> grid;
 
   grid.reserve(65 * 12);
 

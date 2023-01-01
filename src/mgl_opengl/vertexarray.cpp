@@ -21,7 +21,7 @@
 #include "mgl_core/log.hpp"
 #include "program.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void vertex_array::release()
   {
@@ -38,7 +38,7 @@ namespace mgl_opengl
     gl.DeleteVertexArrays(1, (GLuint*)&m_vertex_array_obj);
   }
 
-  void vertex_array::render(mgl_opengl::render_mode mode, int vertices, int first, int instances)
+  void vertex_array::render(mgl::opengl::render_mode mode, int vertices, int first, int instances)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -70,7 +70,7 @@ namespace mgl_opengl
     }
   }
 
-  void vertex_array::render_indirect(const buffer_ref& buffer, mgl_opengl::render_mode mode, int count, int first)
+  void vertex_array::render_indirect(const buffer_ref& buffer, mgl::opengl::render_mode mode, int count, int first)
   {
     MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -93,8 +93,8 @@ namespace mgl_opengl
     }
   }
 
-  void vertex_array::transform(const mgl_core::ref_list<buffer>& buffers,
-                               mgl_opengl::render_mode mode,
+  void vertex_array::transform(const mgl::core::ref_list<buffer>& buffers,
+                               mgl::opengl::render_mode mode,
                                int vertices,
                                int first,
                                int instances,
@@ -205,7 +205,7 @@ namespace mgl_opengl
     }
 
     gl.EndTransformFeedback();
-    if(~m_context->enable_flags() & mgl_opengl::enable_flag::RASTERIZER_DISCARD)
+    if(~m_context->enable_flags() & mgl::opengl::enable_flag::RASTERIZER_DISCARD)
     {
       gl.Disable(GL_RASTERIZER_DISCARD);
     }
@@ -261,4 +261,4 @@ namespace mgl_opengl
     m_num_vertices = (int)(m_index_buffer->size() / 4);
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

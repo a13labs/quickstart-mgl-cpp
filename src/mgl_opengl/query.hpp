@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class query
   {
@@ -49,4 +49,4 @@ private:
     context* m_context;
     int m_query_obj[query::keys::COUNT];
   };
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

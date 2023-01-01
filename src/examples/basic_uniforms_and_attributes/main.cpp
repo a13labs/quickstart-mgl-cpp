@@ -1,7 +1,7 @@
 #include "mgl_window/mgl_window.hpp"
 #include <cmath>
 
-class example_window : public mgl_window::window
+class example_window : public mgl::window::window
 {
 
   public:
@@ -10,10 +10,10 @@ class example_window : public mgl_window::window
   virtual void on_unload() override;
 
   private:
-  mgl_core::ref<mgl_opengl::program> m_program;
-  mgl_core::ref<mgl_opengl::buffer> m_vbo;
-  mgl_core::ref<mgl_opengl::vertex_array> m_vao;
-  mgl_core::ref<mgl_opengl::uniform> m_scale, m_rotation;
+  mgl::core::ref<mgl::opengl::program> m_program;
+  mgl::core::ref<mgl::opengl::buffer> m_vbo;
+  mgl::core::ref<mgl::opengl::vertex_array> m_vao;
+  mgl::core::ref<mgl::opengl::uniform> m_scale, m_rotation;
   float m_time = 0;
 };
 
@@ -21,10 +21,10 @@ void example_window::on_draw(float time, float frame_time)
 {
   const auto ctx = context();
 
-  float sin_scale = static_cast<float>(sin(mgl_core::deg2rad(time * 60)));
+  float sin_scale = static_cast<float>(sin(mgl::core::deg2rad(time * 60)));
 
   ctx->clear(1.0, 1.0, 1.0);
-  ctx->enable(mgl_opengl::enable_flag::BLEND);
+  ctx->enable(mgl::opengl::enable_flag::BLEND);
   m_vao->render();
 
   m_rotation->set_value(time);
@@ -69,7 +69,7 @@ void example_window::on_load()
 
   m_scale->set_value({ width() / height() * 0.75, 0.25 });
 
-  mgl_core::mem_buffer<float> vertices = {
+  mgl::core::mem_buffer<float> vertices = {
     1.0,  0.0, //
     -0.5, 0.86, //
     -0.5, -0.86 //

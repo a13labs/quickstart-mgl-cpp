@@ -1,7 +1,7 @@
 #include "string.hpp"
 #include "log.hpp"
 
-namespace mgl_core
+namespace mgl::core
 {
   string_list split(const string& s, char delimiter)
   {
@@ -62,4 +62,4 @@ namespace mgl_core
     return ret;
   }
 
-} // namespace mgl_core
+} // namespace  mgl::core

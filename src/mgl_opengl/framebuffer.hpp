@@ -17,9 +17,9 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
-  class framebuffer : public mgl_core::ref_from_this<framebuffer>
+  class framebuffer : public mgl::core::ref_from_this<framebuffer>
   {
 public:
     ~framebuffer() = default;
@@ -27,18 +27,18 @@ public:
     void release();
     bool released();
 
-    const mgl_core::viewport_2d& viewport();
-    void set_viewport(const mgl_core::viewport_2d& r);
+    const mgl::core::viewport_2d& viewport();
+    void set_viewport(const mgl::core::viewport_2d& r);
 
-    const mgl_core::viewport_2d& scissor();
-    void set_scissor(const mgl_core::viewport_2d& r);
+    const mgl::core::viewport_2d& scissor();
+    void set_scissor(const mgl::core::viewport_2d& r);
 
     void enable_scissor();
     void disable_scissor();
 
     const color_masks& color_mask() const;
-    void set_color_mask(const mgl_opengl::color_mask& mask);
-    void set_color_mask(const mgl_opengl::color_masks& masks);
+    void set_color_mask(const mgl::opengl::color_mask& mask);
+    void set_color_mask(const mgl::opengl::color_masks& masks);
 
     bool depth_mask();
     void set_depth_mask(bool value);
@@ -48,16 +48,16 @@ public:
 
     bool bits(int& red_bits, int& green_bits, int& blue_bits, int& alpha_bits, int& depth_bits, int& stencil_bits);
 
-    void clear(const glm::vec4& color, float depth = 0.0, const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d);
+    void clear(const glm::vec4& color, float depth = 0.0, const mgl::core::viewport_2d& viewport = mgl::core::null_viewport_2d);
     void clear(float r,
                float g,
                float b,
                float a = 0.0,
                float depth = 0.0,
-               const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d);
+               const mgl::core::viewport_2d& viewport = mgl::core::null_viewport_2d);
 
-    bool read_into(mgl_core::mem_buffer<u_int8_t>& dst,
-                   const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d,
+    bool read_into(mgl::core::mem_buffer<u_int8_t>& dst,
+                   const mgl::core::viewport_2d& viewport = mgl::core::null_viewport_2d,
                    int components = 3,
                    int attachment = 0,
                    int alignment = 1,
@@ -65,7 +65,7 @@ public:
                    size_t write_offset = 0);
 
     bool read_into(buffer_ref dst,
-                   const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d,
+                   const mgl::core::viewport_2d& viewport = mgl::core::null_viewport_2d,
                    int components = 3,
                    int attachment = 0,
                    int alignment = 1,
@@ -86,9 +86,9 @@ private:
     context* m_context;
     int m_framebuffer_obj;
 
-    mgl_core::viewport_2d m_viewport;
+    mgl::core::viewport_2d m_viewport;
     bool m_scissor_enabled;
-    mgl_core::viewport_2d m_scissor;
+    mgl::core::viewport_2d m_scissor;
     color_masks m_color_masks;
 
     int m_draw_buffers_len;
@@ -114,12 +114,12 @@ private:
     return m_released;
   }
 
-  inline const mgl_core::viewport_2d& framebuffer::viewport()
+  inline const mgl::core::viewport_2d& framebuffer::viewport()
   {
     return m_viewport;
   }
 
-  inline const mgl_core::viewport_2d& framebuffer::scissor()
+  inline const mgl::core::viewport_2d& framebuffer::scissor()
   {
     return m_scissor;
   }
@@ -133,7 +133,7 @@ private:
     m_scissor_enabled = false;
   }
 
-  inline void framebuffer::clear(const glm::vec4& color, float depth, const mgl_core::viewport_2d& viewport)
+  inline void framebuffer::clear(const glm::vec4& color, float depth, const mgl::core::viewport_2d& viewport)
   {
     clear(color.r, color.g, color.b, color.a, depth, viewport);
   }
@@ -158,9 +158,9 @@ private:
     return m_height;
   }
 
-  inline void framebuffer::set_color_mask(const mgl_opengl::color_mask& mask)
+  inline void framebuffer::set_color_mask(const mgl::opengl::color_mask& mask)
   {
     set_color_mask({ mask });
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

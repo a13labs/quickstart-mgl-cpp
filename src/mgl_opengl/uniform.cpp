@@ -18,7 +18,7 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   static uniform::data_type gl_bool = { false, 1, 4 };
   static uniform::data_type gl_bool_vec2 = { false, 2, 8 };
@@ -154,7 +154,7 @@ namespace mgl_opengl
     };
   }
 
-  uniform::uniform(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t size, context* ctx)
+  uniform::uniform(const mgl::core::string& name, int gl_type, int program_obj, int location, size_t size, context* ctx)
   {
     m_context = ctx;
     m_name = name;
@@ -702,4 +702,4 @@ namespace mgl_opengl
       }
     }
   }
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

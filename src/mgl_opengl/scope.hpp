@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class scope
   {
@@ -44,8 +44,8 @@ private:
     framebuffer_ref m_framebuffer;
     framebuffer_ref m_old_framebuffer;
     sampler_bindings m_samplers;
-    mgl_core::list<scope::BindingData> m_textures;
-    mgl_core::list<scope::BindingData> m_buffers;
+    mgl::core::list<scope::BindingData> m_textures;
+    mgl::core::list<scope::BindingData> m_buffers;
     int m_enable_flags;
     int m_old_enable_flags;
     bool m_released;
@@ -55,4 +55,4 @@ private:
   {
     return m_released;
   }
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

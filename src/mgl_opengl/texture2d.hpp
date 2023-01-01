@@ -18,7 +18,7 @@
 #include "builtins.hpp"
 #include "texture.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class texture_2d : public attachment, public texture
   {
@@ -45,21 +45,22 @@ public:
     const texture::filter& filter() const;
     void set_filter(const texture::filter& value);
 
-    mgl_core::string swizzle();
-    void set_swizzle(const mgl_core::string& value);
+    mgl::core::string swizzle();
+    void set_swizzle(const mgl::core::string& value);
 
-    mgl_opengl::compare_func compare_func();
-    void set_compare_func(mgl_opengl::compare_func value);
+    mgl::opengl::compare_func compare_func();
+    void set_compare_func(mgl::opengl::compare_func value);
 
     float anisotropy();
     void set_anisotropy(float value);
 
-    bool read_into(mgl_core::mem_buffer<uint8_t>& dst, int level = 0, int alignment = 1, size_t write_offset = 0);
+    bool read_into(mgl::core::mem_buffer<uint8_t>& dst, int level = 0, int alignment = 1, size_t write_offset = 0);
     bool read_into(buffer_ref& dst, int level = 0, int alignment = 1, size_t write_offset = 0);
 
-    bool write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_2d& viewport, int level = 0, int alignment = 1);
-    bool write(const mgl_core::mem_buffer<uint8_t>& src, int level = 0, int alignment = 1);
-    bool write(const buffer_ref& src, const mgl_core::viewport_2d& viewport, int level = 0, int alignment = 1);
+    bool
+    write(const mgl::core::mem_buffer<uint8_t>& src, const mgl::core::viewport_2d& viewport, int level = 0, int alignment = 1);
+    bool write(const mgl::core::mem_buffer<uint8_t>& src, int level = 0, int alignment = 1);
+    bool write(const buffer_ref& src, const mgl::core::viewport_2d& viewport, int level = 0, int alignment = 1);
     bool write(const buffer_ref& src, int level = 0, int alignment = 1);
 
     void bind_to_image(int unit, bool read_into = true, bool write = true, int level = 0, int format = 0);
@@ -82,7 +83,7 @@ private:
     int m_components;
     texture::filter m_filter;
     int m_max_level;
-    mgl_opengl::compare_func m_compare_func;
+    mgl::opengl::compare_func m_compare_func;
     float m_anisotropy;
     bool m_repeat_x;
     bool m_repeat_y;
@@ -139,7 +140,7 @@ private:
     return m_filter;
   }
 
-  inline mgl_opengl::compare_func texture_2d::compare_func()
+  inline mgl::opengl::compare_func texture_2d::compare_func()
   {
     return m_compare_func;
   }
@@ -149,4 +150,4 @@ private:
     return m_anisotropy;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

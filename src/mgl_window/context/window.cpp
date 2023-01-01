@@ -21,7 +21,7 @@
 #include "mgl_opengl/context.hpp"
 #include "mgl_window/context/sdl/window.hpp"
 
-namespace mgl_window
+namespace mgl::window
 {
 
   window* window::s_instance = nullptr;
@@ -29,9 +29,9 @@ namespace mgl_window
   window::window(const window_config& config)
   {
     MGL_CORE_ASSERT(!s_instance, "BaseWindow already running!");
-    mgl_core::log::init();
+    mgl::core::log::init();
 
-    m_native_window = mgl_core::create_scope<sdl_window>(config);
+    m_native_window = mgl::core::create_scope<sdl_window>(config);
     s_instance = this;
     m_running = false;
   }
@@ -72,7 +72,7 @@ namespace mgl_window
       return;
     }
 
-    m_context = mgl_opengl::context::create_context(mgl_opengl::context_mode::SHARE, 330);
+    m_context = mgl::opengl::context::create_context(mgl::opengl::context_mode::SHARE, 330);
 
     if(!m_context)
     {
@@ -115,9 +115,9 @@ namespace mgl_window
     return true;
   }
 
-  window_config load_window_configuration(const mgl_core::string& filename)
+  window_config load_window_configuration(const mgl::core::string& filename)
   {
     // TODO: Implement load from JSON
     return window_config();
   }
-} // namespace mgl_window
+} // namespace  mgl::window

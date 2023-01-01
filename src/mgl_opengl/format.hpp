@@ -1,5 +1,5 @@
 #pragma once
-namespace mgl_opengl
+namespace mgl::opengl
 {
   struct format_node
   {
@@ -37,4 +37,4 @@ namespace mgl_opengl
     format_info info();
     format_node* next();
   };
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

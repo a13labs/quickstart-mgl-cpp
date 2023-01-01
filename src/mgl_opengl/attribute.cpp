@@ -18,7 +18,7 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   static attribute::data_type gl_int = { 1, 0x1404, 1, 1, false, "i" };
   static attribute::data_type gl_int_vec2 = { 2, 0x1404, 1, 2, false, "i" };
@@ -98,7 +98,7 @@ namespace mgl_opengl
     };
   }
 
-  attribute::attribute(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t array_length)
+  attribute::attribute(const mgl::core::string& name, int gl_type, int program_obj, int location, size_t array_length)
   {
     m_name = name;
     m_gl_type = gl_type;
@@ -108,4 +108,4 @@ namespace mgl_opengl
     m_array_length = array_length;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

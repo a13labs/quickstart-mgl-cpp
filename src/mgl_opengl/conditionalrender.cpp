@@ -17,7 +17,7 @@
 #include "conditionalrender.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void conditional_render::release() { }
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

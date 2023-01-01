@@ -18,11 +18,11 @@
 #include "mgl_window/builtins.hpp"
 #include "mgl_window/render/buffer.hpp"
 
-namespace mgl_window
+namespace mgl::window
 {
   struct window_config
   {
-    mgl_core::string title = "BaseWindow";
+    mgl::core::string title = "BaseWindow";
     uint32_t width = 800;
     uint32_t height = 600;
     bool fullscreen = false;
@@ -46,14 +46,14 @@ public:
     virtual void swap_buffers() = 0;
     virtual void initialize_event_handler(const event_handler& handler) = 0;
     virtual void toggle_full_screen() = 0;
-    virtual mgl_core::size get_drawable_size() = 0;
+    virtual mgl::core::size get_drawable_size() = 0;
 
     virtual int width() = 0;
     virtual int height() = 0;
     virtual float aspect_ratio() = 0;
 
-    virtual const mgl_core::string& title() const = 0;
-    virtual void set_title(const mgl_core::string& value) = 0;
+    virtual const mgl::core::string& title() const = 0;
+    virtual void set_title(const mgl::core::string& value) = 0;
   };
 
   class window
@@ -71,11 +71,11 @@ public:
     int height();
     float aspect_ratio();
 
-    const mgl_core::string& title() const;
-    void set_title(const mgl_core::string& value);
+    const mgl::core::string& title() const;
+    void set_title(const mgl::core::string& value);
 
     void toggle_full_screen();
-    mgl_core::ref<mgl_opengl::context> context();
+    mgl::core::ref<mgl::opengl::context> context();
 
     inline static window& current() { return *s_instance; }
 
@@ -103,9 +103,9 @@ public:
 private:
     static window* s_instance;
     bool m_running;
-    mgl_core::Timer m_timer;
-    mgl_core::scope<native_window> m_native_window;
-    mgl_opengl::context_ref m_context;
+    mgl::core::Timer m_timer;
+    mgl::core::scope<native_window> m_native_window;
+    mgl::opengl::context_ref m_context;
   };
 
   inline int window::width()
@@ -123,12 +123,12 @@ private:
     return m_native_window->aspect_ratio();
   }
 
-  inline const mgl_core::string& window::title() const
+  inline const mgl::core::string& window::title() const
   {
     return m_native_window->title();
   }
 
-  inline void window::set_title(const mgl_core::string& value)
+  inline void window::set_title(const mgl::core::string& value)
   {
     return m_native_window->set_title(value);
   }
@@ -143,10 +143,10 @@ private:
     m_running = false;
   }
 
-  inline mgl_core::ref<mgl_opengl::context> window::context()
+  inline mgl::core::ref<mgl::opengl::context> window::context()
   {
     return m_context;
   }
 
-  window_config load_window_configuration(const mgl_core::string& filename);
-} // namespace mgl_window
+  window_config load_window_configuration(const mgl::core::string& filename);
+} // namespace  mgl::window

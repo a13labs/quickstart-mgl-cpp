@@ -20,7 +20,7 @@
 #include "datatype.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   texture::type texture_cube::texture_type()
   {
@@ -42,7 +42,7 @@ namespace mgl_opengl
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  bool texture_cube::read_into(mgl_core::mem_buffer<uint8_t>& dst, int face, int alignment, size_t write_offset)
+  bool texture_cube::read_into(mgl::core::mem_buffer<uint8_t>& dst, int face, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -96,7 +96,7 @@ namespace mgl_opengl
   }
 
   bool
-  texture_cube::write(const mgl_core::mem_buffer<uint8_t>& src, int face, const mgl_core::viewport_2d& viewport, int alignment)
+  texture_cube::write(const mgl::core::mem_buffer<uint8_t>& src, int face, const mgl::core::viewport_2d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -128,7 +128,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool texture_cube::write(const mgl_core::mem_buffer<uint8_t>& src, int face, int alignment)
+  bool texture_cube::write(const mgl::core::mem_buffer<uint8_t>& src, int face, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -160,7 +160,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool texture_cube::write(const buffer_ref& src, int face, const mgl_core::viewport_2d& viewport, int alignment)
+  bool texture_cube::write(const buffer_ref& src, int face, const mgl::core::viewport_2d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -262,7 +262,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }
 
-  mgl_core::string texture_cube::swizzle()
+  mgl::core::string texture_cube::swizzle()
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -289,7 +289,7 @@ namespace mgl_opengl
     return swizzle;
   }
 
-  void texture_cube::set_swizzle(const mgl_core::string& value)
+  void texture_cube::set_swizzle(const mgl::core::string& value)
   {
     MGL_CORE_ASSERT(!m_released, "TextureCube already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -340,4 +340,4 @@ namespace mgl_opengl
 
     gl.TexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_ANISOTROPY, m_anisotropy);
   }
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

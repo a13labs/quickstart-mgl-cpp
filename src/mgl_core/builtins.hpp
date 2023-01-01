@@ -54,7 +54,7 @@
 #define MGL_MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MGL_MIN(a, b) (((a) < (b)) ? (a) : (b))
 
-namespace mgl_core
+namespace mgl::core
 {
 
   /*************************************************************
@@ -226,11 +226,11 @@ namespace mgl_core
   }
 
   using path = std::filesystem::path;
-  using path_list = mgl_core::list<path>;
+  using path_list = mgl::core::list<path>;
   using input_file = std::ifstream;
   using output_file = std::ofstream;
   using openmode = std::ifstream::openmode;
   extern const path null_path;
 
   using json = nlohmann::json;
-} // namespace mgl_core
+} // namespace  mgl::core

@@ -17,7 +17,7 @@
 #include "attachment.hpp"
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class renderbuffer : public attachment
   {
@@ -86,4 +86,4 @@ private:
     return m_depth;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

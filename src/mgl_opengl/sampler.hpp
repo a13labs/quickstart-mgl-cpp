@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/vec4.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class sampler
   {
@@ -49,8 +49,8 @@ public:
     const sampler::Filter& filter() const;
     void set_filter(const sampler::Filter& value);
 
-    mgl_opengl::compare_func compare_func();
-    void set_compare_func(mgl_opengl::compare_func value);
+    mgl::opengl::compare_func compare_func();
+    void set_compare_func(mgl::opengl::compare_func value);
 
     float anisotropy();
     void set_anisotropy(float value);
@@ -74,7 +74,7 @@ private:
     context* m_context;
     int m_sampler_obj;
     float m_anisotropy;
-    mgl_opengl::compare_func m_compare_func;
+    mgl::opengl::compare_func m_compare_func;
     bool m_repeat_x;
     bool m_repeat_y;
     bool m_repeat_z;
@@ -135,7 +135,7 @@ private:
     return m_filter;
   }
 
-  inline mgl_opengl::compare_func sampler::compare_func()
+  inline mgl::opengl::compare_func sampler::compare_func()
   {
     return m_compare_func;
   }
@@ -145,4 +145,4 @@ private:
     set_border_color({ r, g, b, a });
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

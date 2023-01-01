@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class uniform
   {
@@ -83,13 +83,13 @@ public:
 
 private:
     friend class context;
-    uniform(const mgl_core::string& name, int gl_type, int program_obj, int location, size_t size, context* ctx);
+    uniform(const mgl::core::string& name, int gl_type, int program_obj, int location, size_t size, context* ctx);
 
     void set_value(void* data, size_t size);
     void get_value(void* data, size_t size);
 
     context* m_context;
-    mgl_core::string m_name;
+    mgl::core::string m_name;
     int m_program_obj;
     int m_gl_type;
     int m_location;
@@ -334,4 +334,4 @@ private:
     set_value((void*)&value, size * sizeof(float));
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

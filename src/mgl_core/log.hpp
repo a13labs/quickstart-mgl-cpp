@@ -18,7 +18,7 @@
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/spdlog.h>
 
-namespace mgl_core
+namespace mgl::core
 {
   namespace log
   {
@@ -26,11 +26,11 @@ namespace mgl_core
     extern ref<spdlog::logger> logger;
   }; // namespace log
 
-} // namespace mgl_core
+} // namespace  mgl::core
 
 // log macros
-#define MGL_CORE_TRACE(...) ::mgl_core::log::logger->trace(__VA_ARGS__)
-#define MGL_CORE_INFO(...) ::mgl_core::log::logger->info(__VA_ARGS__)
-#define MGL_CORE_WARN(...) ::mgl_core::log::logger->warn(__VA_ARGS__)
-#define MGL_CORE_ERROR(...) ::mgl_core::log::logger->error(__VA_ARGS__)
-#define MGL_CORE_CRITICAL(...) ::mgl_core::log::logger->critical(__VA_ARGS__)
+#define MGL_CORE_TRACE(...) ::mgl::core::log::logger->trace(__VA_ARGS__)
+#define MGL_CORE_INFO(...) ::mgl::core::log::logger->info(__VA_ARGS__)
+#define MGL_CORE_WARN(...) ::mgl::core::log::logger->warn(__VA_ARGS__)
+#define MGL_CORE_ERROR(...) ::mgl::core::log::logger->error(__VA_ARGS__)
+#define MGL_CORE_CRITICAL(...) ::mgl::core::log::logger->critical(__VA_ARGS__)

@@ -1,6 +1,6 @@
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   const std::string no_shader = "";
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

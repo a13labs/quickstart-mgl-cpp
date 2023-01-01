@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class texture
   {
@@ -72,4 +72,4 @@ public:
     return '?';
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

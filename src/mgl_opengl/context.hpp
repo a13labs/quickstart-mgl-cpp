@@ -19,7 +19,7 @@
 #include "glm/glm.hpp"
 #include "glmethods.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   struct context_mode
   {
@@ -44,7 +44,7 @@ public:
     int max_texture_units();
     int default_texture_unit();
     float max_anisotropy();
-    const mgl_core::string_list& extensions() const;
+    const mgl::core::string_list& extensions() const;
     const framebuffer_ref& screen() const;
 
     int enable_flags();
@@ -70,13 +70,13 @@ public:
     void copy_buffer(const buffer_ref& src, const buffer_ref& dst, size_t size, size_t read_offset, size_t write_offset);
 
     // Buffer
-    buffer_ref buffer(const mgl_core::mem_buffer<float>& data, bool dynamic = false);
-    buffer_ref buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic = false);
-    buffer_ref buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic = false);
-    buffer_ref buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic = false);
+    buffer_ref buffer(const mgl::core::mem_buffer<float>& data, bool dynamic = false);
+    buffer_ref buffer(const mgl::core::mem_buffer<uint32_t>& data, bool dynamic = false);
+    buffer_ref buffer(const mgl::core::mem_buffer<uint16_t>& data, bool dynamic = false);
+    buffer_ref buffer(const mgl::core::mem_buffer<uint8_t>& data, bool dynamic = false);
 
     // Compute Shader
-    compute_shader_ref compute_shader(const mgl_core::string& source);
+    compute_shader_ref compute_shader(const mgl::core::string& source);
 
     // Create Shader
     static context_ref create_context(context_mode::Enum mode, int required = 330);
@@ -151,13 +151,13 @@ public:
 
     // VertexArray
     vertex_array_ref vertex_array(program_ref program,
-                                  mgl_opengl::vertex_buffer_list vertex_buffers,
+                                  mgl::opengl::vertex_buffer_list vertex_buffers,
                                   buffer_ref index_buffer = nullptr,
                                   int index_element_size = 4,
                                   bool skip_errors = false,
-                                  mgl_opengl::render_mode mode = mgl_opengl::render_mode::POINTS);
+                                  mgl::opengl::render_mode mode = mgl::opengl::render_mode::POINTS);
 
-    virtual gl_function load(const mgl_core::string& method) = 0;
+    virtual gl_function load(const mgl::core::string& method) = 0;
     virtual void enter() = 0;
     virtual void exit() = 0;
 
@@ -166,13 +166,13 @@ public:
 
     bool released();
     context_mode::Enum mode();
-    void clear(const glm::vec4& color, float depth = 0.0, const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d);
+    void clear(const glm::vec4& color, float depth = 0.0, const mgl::core::viewport_2d& viewport = mgl::core::null_viewport_2d);
     void clear(float r,
                float g,
                float b,
                float a = 0.0,
                float depth = 0.0,
-               const mgl_core::viewport_2d& viewport = mgl_core::null_viewport_2d);
+               const mgl::core::viewport_2d& viewport = mgl::core::null_viewport_2d);
 
 private:
     void load_functions();
@@ -204,7 +204,7 @@ private:
     int m_provoking_vertex;
     float m_polygon_offset_factor;
     float m_polygon_offset_units;
-    mgl_core::string_list m_extensions;
+    mgl::core::string_list m_extensions;
     framebuffer_ref m_default_framebuffer;
     framebuffer_ref m_bound_framebuffer;
   };
@@ -217,7 +217,7 @@ public:
     ContextEGL(context_mode::Enum mode, int required);
     virtual ~ContextEGL() override;
 
-    virtual gl_function load(const mgl_core::string& method) override;
+    virtual gl_function load(const mgl::core::string& method) override;
     virtual void enter() override;
     virtual void exit() override;
 
@@ -240,7 +240,7 @@ public:
     virtual ~ContextGLX() override;
 
 public:
-    virtual gl_function load(const mgl_core::string& method) override;
+    virtual gl_function load(const mgl::core::string& method) override;
 
     virtual void enter() override;
     virtual void exit() override;
@@ -309,7 +309,7 @@ private:
     return m_max_anisotropy;
   }
 
-  inline const mgl_core::string_list& context::extensions() const
+  inline const mgl::core::string_list& context::extensions() const
   {
     return m_extensions;
   }
@@ -374,22 +374,22 @@ private:
     return m_polygon_offset_units;
   }
 
-  inline buffer_ref context::buffer(const mgl_core::mem_buffer<float>& data, bool dynamic)
+  inline buffer_ref context::buffer(const mgl::core::mem_buffer<float>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(float), dynamic);
   }
 
-  inline buffer_ref context::buffer(const mgl_core::mem_buffer<uint32_t>& data, bool dynamic)
+  inline buffer_ref context::buffer(const mgl::core::mem_buffer<uint32_t>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(uint32_t), dynamic);
   }
 
-  inline buffer_ref context::buffer(const mgl_core::mem_buffer<uint16_t>& data, bool dynamic)
+  inline buffer_ref context::buffer(const mgl::core::mem_buffer<uint16_t>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(uint16_t), dynamic);
   }
 
-  inline buffer_ref context::buffer(const mgl_core::mem_buffer<uint8_t>& data, bool dynamic)
+  inline buffer_ref context::buffer(const mgl::core::mem_buffer<uint8_t>& data, bool dynamic)
   {
     return buffer((void*)data.data(), data.size() * sizeof(uint8_t), dynamic);
   }
@@ -403,4 +403,4 @@ private:
   {
     return framebuffer(color_attachments, attachment_ref(nullptr));
   }
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

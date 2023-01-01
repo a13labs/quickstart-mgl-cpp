@@ -1,14 +1,14 @@
 #include "registry.hpp"
 #include "stb/stb_image.hpp"
 
-namespace mgl_window
+namespace mgl::window
 {
   namespace resources
   {
     struct settings
     {
-      mgl_core::path_list textures_dirs;
-      mgl_core::path_list programs_dirs;
+      mgl::core::path_list textures_dirs;
+      mgl::core::path_list programs_dirs;
     };
 
     static settings s_settings;
@@ -16,12 +16,12 @@ namespace mgl_window
     mipmap_levels null_mipmap_levels = { 0, 0 };
     texture_2d_load_opts texture_2d_load_defaults = { false, true, null_mipmap_levels, 1.0 };
     program_load_opts program_load_defaults = { {}, {} };
-    data_load_opts data_load_defaults = { mgl_core::input_file::in | mgl_core::input_file::binary };
+    data_load_opts data_load_defaults = { mgl::core::input_file::in | mgl::core::input_file::binary };
 
-    bool append_unique_path(const mgl_core::string& value, mgl_core::path_list& list)
+    bool append_unique_path(const mgl::core::string& value, mgl::core::path_list& list)
     {
 
-      auto path = mgl_core::path(value);
+      auto path = mgl::core::path(value);
 
       if(path.is_relative())
       {
@@ -50,7 +50,7 @@ namespace mgl_window
       return true;
     }
 
-    const mgl_core::path& find(const mgl_core::string& value, mgl_core::path_list& list)
+    const mgl::core::path& find(const mgl::core::string& value, mgl::core::path_list& list)
     {
       for(auto&& base : list)
       {
@@ -62,10 +62,10 @@ namespace mgl_window
         }
       }
 
-      return mgl_core::null_path;
+      return mgl::core::null_path;
     }
 
-    bool register_dir(const mgl_core::string& path)
+    bool register_dir(const mgl::core::string& path)
     {
       auto result = register_program_dir(path);
       result &= register_texture_dir(path);
@@ -74,22 +74,22 @@ namespace mgl_window
       return result;
     }
 
-    bool register_program_dir(const mgl_core::string& path)
+    bool register_program_dir(const mgl::core::string& path)
     {
       return append_unique_path(path, s_settings.programs_dirs);
     }
 
-    bool register_texture_dir(const mgl_core::string& path)
+    bool register_texture_dir(const mgl::core::string& path)
     {
       return append_unique_path(path, s_settings.textures_dirs);
     }
 
-    bool register_scene_dir(const mgl_core::string& path)
+    bool register_scene_dir(const mgl::core::string& path)
     {
       return false;
     }
 
-    bool register_data_dir(const mgl_core::string& path)
+    bool register_data_dir(const mgl::core::string& path)
     {
       return false;
     }
@@ -116,7 +116,7 @@ namespace mgl_window
       }
     }
 
-    mgl_core::ref<mgl_opengl::texture> load_texture_2d(const mgl_core::string& path, const texture_2d_load_opts& opts)
+    mgl::core::ref<mgl::opengl::texture> load_texture_2d(const mgl::core::string& path, const texture_2d_load_opts& opts)
     {
       MGL_CORE_ASSERT(window::current().context(), "No context!");
       const auto ctx = window::current().context();
@@ -153,7 +153,7 @@ namespace mgl_window
       return texture;
     }
 
-    bool load_data_file(const mgl_core::string& path, mgl_core::input_file& file, const data_load_opts& opts)
+    bool load_data_file(const mgl::core::string& path, mgl::core::input_file& file, const data_load_opts& opts)
     {
       auto base_path = find(path, s_settings.textures_dirs);
 
@@ -169,7 +169,7 @@ namespace mgl_window
       return true;
     }
 
-    mgl_core::ref<mgl_opengl::program> load_program(const mgl_core::string& path, const program_load_opts& opts)
+    mgl::core::ref<mgl::opengl::program> load_program(const mgl::core::string& path, const program_load_opts& opts)
     {
       MGL_CORE_ASSERT(window::current().context(), "No context!");
       const auto ctx = window::current().context();
@@ -184,12 +184,12 @@ namespace mgl_window
 
       auto full_path = base_path / path;
 
-      mgl_core::input_file shader_file(full_path, mgl_core::input_file::in);
-      mgl_core::string shader_text((std::istreambuf_iterator<char>(shader_file)), std::istreambuf_iterator<char>());
+      mgl::core::input_file shader_file(full_path, mgl::core::input_file::in);
+      mgl::core::string shader_text((std::istreambuf_iterator<char>(shader_file)), std::istreambuf_iterator<char>());
 
-      mgl_opengl::glsl_source shader_source(shader_text);
-      mgl_opengl::glsl_sources glsl = { shader_source };
-      mgl_opengl::shaders_outputs outputs = opts.outputs;
+      mgl::opengl::glsl_source shader_source(shader_text);
+      mgl::opengl::glsl_sources glsl = { shader_source };
+      mgl::opengl::shaders_outputs outputs = opts.outputs;
 
       if(outputs.size() == 0 && glsl.fragment().empty())
       {
@@ -200,18 +200,18 @@ namespace mgl_window
       return ctx->program(glsl, outputs);
     }
 
-    mgl_core::ref<mgl_opengl::program> load_program(mgl_opengl::glsl_source& source, const program_load_opts& opts)
+    mgl::core::ref<mgl::opengl::program> load_program(mgl::opengl::glsl_source& source, const program_load_opts& opts)
     {
       MGL_CORE_ASSERT(window::current().context(), "No context!");
       const auto ctx = window::current().context();
 
-      mgl_opengl::glsl_sources glsl = { source };
+      mgl::opengl::glsl_sources glsl = { source };
 
       MGL_CORE_ASSERT(!glsl.empty(), "Empty source");
-      mgl_opengl::shaders_outputs outputs = opts.outputs;
+      mgl::opengl::shaders_outputs outputs = opts.outputs;
 
       return ctx->program(glsl, outputs);
     }
 
   } // namespace resources
-} // namespace mgl_window
+} // namespace  mgl::window

@@ -18,7 +18,7 @@
 
 #include "SDL2/SDL.h"
 
-namespace mgl_window
+namespace mgl::window
 {
   input_state s_input_state;
-} // namespace mgl_window
+} // namespace  mgl::window

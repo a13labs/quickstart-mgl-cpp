@@ -18,7 +18,7 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void compute_shader::release()
   {
@@ -46,9 +46,9 @@ namespace mgl_opengl
     gl.DispatchCompute(x, y, z);
   }
 
-  const mgl_core::string_list compute_shader::uniforms()
+  const mgl::core::string_list compute_shader::uniforms()
   {
-    auto result = mgl_core::string_list();
+    auto result = mgl::core::string_list();
 
     for(auto&& a : m_uniforms_map)
     {
@@ -58,9 +58,9 @@ namespace mgl_opengl
     return result;
   }
 
-  const mgl_core::string_list compute_shader::uniform_blocks()
+  const mgl::core::string_list compute_shader::uniform_blocks()
   {
-    auto result = mgl_core::string_list();
+    auto result = mgl::core::string_list();
 
     for(auto&& a : m_uniform_blocks_map)
     {
@@ -70,4 +70,4 @@ namespace mgl_opengl
     return result;
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

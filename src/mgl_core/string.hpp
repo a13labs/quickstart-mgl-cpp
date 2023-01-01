@@ -2,7 +2,7 @@
 #include "builtins.hpp"
 #include <spdlog/fmt/fmt.h>
 
-namespace mgl_core
+namespace mgl::core
 {
   static const size_t npos = std::string::npos;
 
@@ -63,4 +63,4 @@ namespace mgl_core
   {
     return std::all_of(lst.begin(), lst.end(), [](const string& str) { return str.empty(); });
   }
-} // namespace mgl_core
+} // namespace  mgl::core

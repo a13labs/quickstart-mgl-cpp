@@ -20,7 +20,7 @@
 #include "mgl_core/log.hpp"
 #include "sampler.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void scope::release()
   {
@@ -69,7 +69,7 @@ namespace mgl_opengl
       sampler.sampler->use(sampler.binding);
     }
 
-    if(flags & mgl_opengl::enable_flag::BLEND)
+    if(flags & mgl::opengl::enable_flag::BLEND)
     {
       gl.Enable(GL_BLEND);
     }
@@ -78,7 +78,7 @@ namespace mgl_opengl
       gl.Disable(GL_BLEND);
     }
 
-    if(flags & mgl_opengl::enable_flag::DEPTH_TEST)
+    if(flags & mgl::opengl::enable_flag::DEPTH_TEST)
     {
       gl.Enable(GL_DEPTH_TEST);
     }
@@ -87,7 +87,7 @@ namespace mgl_opengl
       gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & mgl_opengl::enable_flag::CULL_FACE)
+    if(flags & mgl::opengl::enable_flag::CULL_FACE)
     {
       gl.Enable(GL_CULL_FACE);
     }
@@ -96,7 +96,7 @@ namespace mgl_opengl
       gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & mgl_opengl::enable_flag::RASTERIZER_DISCARD)
+    if(flags & mgl::opengl::enable_flag::RASTERIZER_DISCARD)
     {
       gl.Enable(GL_RASTERIZER_DISCARD);
     }
@@ -105,7 +105,7 @@ namespace mgl_opengl
       gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & mgl_opengl::enable_flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::opengl::enable_flag::PROGRAM_POINT_SIZE)
     {
       gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -127,7 +127,7 @@ namespace mgl_opengl
 
     m_old_framebuffer->use();
 
-    if(flags & mgl_opengl::enable_flag::BLEND)
+    if(flags & mgl::opengl::enable_flag::BLEND)
     {
       gl.Enable(GL_BLEND);
     }
@@ -136,7 +136,7 @@ namespace mgl_opengl
       gl.Disable(GL_BLEND);
     }
 
-    if(flags & mgl_opengl::enable_flag::DEPTH_TEST)
+    if(flags & mgl::opengl::enable_flag::DEPTH_TEST)
     {
       gl.Enable(GL_DEPTH_TEST);
     }
@@ -145,7 +145,7 @@ namespace mgl_opengl
       gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & mgl_opengl::enable_flag::CULL_FACE)
+    if(flags & mgl::opengl::enable_flag::CULL_FACE)
     {
       gl.Enable(GL_CULL_FACE);
     }
@@ -154,7 +154,7 @@ namespace mgl_opengl
       gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & mgl_opengl::enable_flag::RASTERIZER_DISCARD)
+    if(flags & mgl::opengl::enable_flag::RASTERIZER_DISCARD)
     {
       gl.Enable(GL_RASTERIZER_DISCARD);
     }
@@ -163,7 +163,7 @@ namespace mgl_opengl
       gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & mgl_opengl::enable_flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::opengl::enable_flag::PROGRAM_POINT_SIZE)
     {
       gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -173,4 +173,4 @@ namespace mgl_opengl
     }
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

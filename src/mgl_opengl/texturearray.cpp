@@ -20,7 +20,7 @@
 #include "datatype.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   void texture_array::release()
   {
@@ -37,7 +37,7 @@ namespace mgl_opengl
     gl.DeleteTextures(1, (GLuint*)&m_texture_obj);
   }
 
-  bool texture_array::read_into(mgl_core::mem_buffer<uint8_t>& dst, int alignment, size_t write_offset)
+  bool texture_array::read_into(mgl::core::mem_buffer<uint8_t>& dst, int alignment, size_t write_offset)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -88,7 +88,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool texture_array::write(const mgl_core::mem_buffer<uint8_t>& src, const mgl_core::viewport_3d& viewport, int alignment)
+  bool texture_array::write(const mgl::core::mem_buffer<uint8_t>& src, const mgl::core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -121,7 +121,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool texture_array::write(const mgl_core::mem_buffer<uint8_t>& src, int alignment)
+  bool texture_array::write(const mgl::core::mem_buffer<uint8_t>& src, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -154,7 +154,7 @@ namespace mgl_opengl
     return gl.GetError() == GL_NO_ERROR;
   }
 
-  bool texture_array::write(const buffer_ref& src, const mgl_core::viewport_3d& viewport, int alignment)
+  bool texture_array::write(const buffer_ref& src, const mgl::core::viewport_3d& viewport, int alignment)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -325,7 +325,7 @@ namespace mgl_opengl
     gl.TexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, m_filter.mag_filter);
   }
 
-  mgl_core::string texture_array::swizzle()
+  mgl::core::string texture_array::swizzle()
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -352,7 +352,7 @@ namespace mgl_opengl
     return swizzle;
   }
 
-  void texture_array::set_swizzle(const mgl_core::string& value)
+  void texture_array::set_swizzle(const mgl::core::string& value)
   {
     MGL_CORE_ASSERT(!m_released, "TextureArray already released");
     MGL_CORE_ASSERT(m_context, "No context");
@@ -403,4 +403,4 @@ namespace mgl_opengl
 
     gl.TexParameterf(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_ANISOTROPY, m_anisotropy);
   }
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

@@ -18,7 +18,7 @@
 
 TEST(gml_opengl, glsl_source_test)
 {
-  auto shader = mgl_opengl::glsl_source(R"(
+  auto shader = mgl::opengl::glsl_source(R"(
 #version 330
 #ifdef VERTEX_SHADER
   layout (std140) uniform Common {
@@ -62,7 +62,7 @@ TEST(gml_opengl, glsl_source_test)
 #endif
 )");
 
-  auto vs_expected = mgl_core::string(R"(
+  auto vs_expected = mgl::core::string(R"(
 #version 330
 #define VERTEX_SHADER
 #define A 1
@@ -103,7 +103,7 @@ TEST(gml_opengl, glsl_source_test)
 #endif
 )");
 
-  auto fs_expected = mgl_core::string(R"(
+  auto fs_expected = mgl::core::string(R"(
 #version 330
 #define FRAGMENT_SHADER
 #define A 1
@@ -144,8 +144,8 @@ TEST(gml_opengl, glsl_source_test)
 #endif
 )");
 
-  vs_expected = mgl_core::trim(vs_expected);
-  fs_expected = mgl_core::trim(fs_expected);
+  vs_expected = mgl::core::trim(vs_expected);
+  fs_expected = mgl::core::trim(fs_expected);
 
   auto vs_source = shader.vertex({ { "A", "1" }, { "B", "2" } });
   auto fs_source = shader.fragment({ { "A", "1" }, { "B", "2" } });

@@ -16,7 +16,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class conditional_render
   {
@@ -29,4 +29,4 @@ private:
     friend class context;
     conditional_render();
   };
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

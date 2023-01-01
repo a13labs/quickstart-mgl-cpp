@@ -18,9 +18,9 @@
 #include "context.hpp"
 #include "mgl_core/log.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
-  uniform_block::uniform_block(const mgl_core::string& name, int program_obj, int index, size_t size, context* ctx)
+  uniform_block::uniform_block(const mgl::core::string& name, int program_obj, int index, size_t size, context* ctx)
   {
     m_context = ctx;
     m_name = name;
@@ -44,4 +44,4 @@ namespace mgl_opengl
     gl.UniformBlockBinding(m_program_obj, m_index, value);
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

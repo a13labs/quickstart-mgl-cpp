@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class varying
   {
@@ -26,11 +26,11 @@ public:
 
 private:
     friend class context;
-    varying(const mgl_core::string& name, int number, size_t array_length, int m_dimension);
+    varying(const mgl::core::string& name, int number, size_t array_length, int m_dimension);
 
-    mgl_core::string m_name;
+    mgl::core::string m_name;
     int m_number;
     size_t m_array_length;
     int m_dimension;
   };
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

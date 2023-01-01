@@ -1,7 +1,7 @@
 #include "re.hpp"
 #include <regex>
 
-namespace mgl_core
+namespace mgl::core
 {
   string_list re_split(const string& input, string re)
   {
@@ -16,4 +16,4 @@ namespace mgl_core
 
     return tokens;
   }
-} // namespace mgl_core
+} // namespace  mgl::core

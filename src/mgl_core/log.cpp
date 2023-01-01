@@ -17,7 +17,7 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-namespace mgl_core
+namespace mgl::core
 {
   namespace log
   {
@@ -45,4 +45,4 @@ namespace mgl_core
       logger->flush_on(spdlog::level::trace);
     }
   } // namespace log
-} // namespace mgl_core
+} // namespace  mgl::core

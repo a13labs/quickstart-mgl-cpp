@@ -8,10 +8,10 @@
 
 int main(int argc, char* argv[])
 {
-  mgl_core::log::init();
+  mgl::core::log::init();
 
   // author: minu jeong
-  auto code = mgl_opengl::glsl_source(R"(
+  auto code = mgl::opengl::glsl_source(R"(
 #version 440
 layout(local_size_x=X, local_size_y=Y, local_size_z=Z) in;
 layout (std430, binding=0) buffer in_0
@@ -106,7 +106,7 @@ void main()
   uint32_t Z = 1;
   int FRAMES = 50;
 
-  auto ctx = mgl_opengl::context::create_context(mgl_opengl::context_mode::STANDALONE);
+  auto ctx = mgl::opengl::context::create_context(mgl::opengl::context_mode::STANDALONE);
 
   auto compute_shader = ctx->compute_shader(code.source({
       { "W", std::to_string(W) },
@@ -129,7 +129,7 @@ void main()
   GifBegin(&writer, "debug.gif", (int)W, (int)H, 2, 8, true);
 
   auto out_size = H * W * 4 * sizeof(float);
-  mgl_core::mem_buffer<uint8_t> out(out_size);
+  mgl::core::mem_buffer<uint8_t> out(out_size);
   auto last_buffer = buffer_b;
 
   for(int i = 0; i < FRAMES; i++)

@@ -17,7 +17,7 @@
 #include "builtins.hpp"
 #include "glm/glm.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
   class uniform_block
   {
@@ -29,12 +29,12 @@ public:
 
 private:
     friend class context;
-    uniform_block(const mgl_core::string& name, int program_obj, int index, size_t size, context* ctx);
+    uniform_block(const mgl::core::string& name, int program_obj, int index, size_t size, context* ctx);
 
     context* m_context;
-    mgl_core::string m_name;
+    mgl::core::string m_name;
     int m_program_obj;
     int m_index;
     int m_size;
   };
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

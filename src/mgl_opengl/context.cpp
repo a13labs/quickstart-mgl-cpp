@@ -38,7 +38,7 @@
 #include "varying.hpp"
 #include "vertexarray.hpp"
 
-namespace mgl_opengl
+namespace mgl::opengl
 {
 
   static const int SHADER_TYPE[5] = {
@@ -218,7 +218,7 @@ namespace mgl_opengl
     }
 #endif
     {
-      auto framebuffer = new mgl_opengl::framebuffer();
+      auto framebuffer = new mgl::opengl::framebuffer();
       framebuffer->m_released = false;
       framebuffer->m_context = ctx;
       framebuffer->m_framebuffer_obj = 0;
@@ -289,7 +289,7 @@ namespace mgl_opengl
 
     const GLMethods& gl = m_gl;
 
-    auto buffer = new mgl_opengl::buffer();
+    auto buffer = new mgl::opengl::buffer();
     buffer->m_released = false;
     buffer->m_size = reserve;
     buffer->m_dynamic = dynamic;
@@ -311,12 +311,12 @@ namespace mgl_opengl
     return buffer_ref(buffer);
   }
 
-  compute_shader_ref context::compute_shader(const mgl_core::string& source)
+  compute_shader_ref context::compute_shader(const mgl::core::string& source)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
-    auto compute_shader = new mgl_opengl::compute_shader();
+    auto compute_shader = new mgl::opengl::compute_shader();
 
     compute_shader->m_released = false;
     compute_shader->m_context = this;
@@ -490,7 +490,7 @@ namespace mgl_opengl
       }
       else if(attachment->attachment_type() == attachment::type::TEXTURE)
       {
-        auto renderbuffer = std::dynamic_pointer_cast<mgl_opengl::renderbuffer>(attachment);
+        auto renderbuffer = std::dynamic_pointer_cast<mgl::opengl::renderbuffer>(attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
 
         if(renderbuffer->m_depth)
@@ -553,7 +553,7 @@ namespace mgl_opengl
       }
       else if(depth_attachment->attachment_type() == attachment::type::TEXTURE)
       {
-        auto renderbuffer = std::dynamic_pointer_cast<mgl_opengl::renderbuffer>(depth_attachment);
+        auto renderbuffer = std::dynamic_pointer_cast<mgl::opengl::renderbuffer>(depth_attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
 
         if(!renderbuffer->m_depth)
@@ -590,7 +590,7 @@ namespace mgl_opengl
       }
     }
 
-    auto framebuffer = new mgl_opengl::framebuffer();
+    auto framebuffer = new mgl::opengl::framebuffer();
     framebuffer->m_released = false;
     framebuffer->m_draw_buffers_len = color_attachments.size();
     framebuffer->m_draw_buffers = new unsigned[color_attachments.size()];
@@ -612,7 +612,7 @@ namespace mgl_opengl
       }
       else if(attachment->attachment_type() == attachment::type::TEXTURE)
       {
-        auto renderbuffer = std::dynamic_pointer_cast<mgl_opengl::renderbuffer>(attachment);
+        auto renderbuffer = std::dynamic_pointer_cast<mgl::opengl::renderbuffer>(attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
         framebuffer->m_color_masks[i] = { renderbuffer->m_components >= 1,
                                           renderbuffer->m_components >= 2,
@@ -663,7 +663,7 @@ namespace mgl_opengl
       }
       else if(attachment->attachment_type() == attachment::type::TEXTURE)
       {
-        auto renderbuffer = std::dynamic_pointer_cast<mgl_opengl::renderbuffer>(attachment);
+        auto renderbuffer = std::dynamic_pointer_cast<mgl::opengl::renderbuffer>(attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
 
         gl.FramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_RENDERBUFFER, renderbuffer->m_renderbuffer_obj);
@@ -685,7 +685,7 @@ namespace mgl_opengl
       }
       else if(depth_attachment->attachment_type() == attachment::type::TEXTURE)
       {
-        auto renderbuffer = std::dynamic_pointer_cast<mgl_opengl::renderbuffer>(depth_attachment);
+        auto renderbuffer = std::dynamic_pointer_cast<mgl::opengl::renderbuffer>(depth_attachment);
         MGL_CORE_ASSERT(renderbuffer, "Not a Renderbuffer");
 
         gl.FramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer->m_renderbuffer_obj);
@@ -714,7 +714,7 @@ namespace mgl_opengl
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
-    auto program = new mgl_opengl::program();
+    auto program = new mgl::opengl::program();
     program->m_released = false;
     program->m_context = this;
     program->m_transform = shaders.sources[glsl_source::type::FRAGMENT_SHADER].empty();
@@ -1054,7 +1054,7 @@ namespace mgl_opengl
       for(int st = 0; st < 5; ++st)
       {
         int num_subroutines = 0;
-        auto type = mgl_opengl::subroutine::type(SHADER_TYPE[st]);
+        auto type = mgl::opengl::subroutine::type(SHADER_TYPE[st]);
 
         gl.GetProgramStageiv(program_obj, type, GL_ACTIVE_SUBROUTINES, &num_subroutines);
 
@@ -1090,7 +1090,7 @@ namespace mgl_opengl
       primitives_generated = true;
     }
 
-    auto query = new mgl_opengl::query();
+    auto query = new mgl::opengl::query();
     query->m_context = this;
 
     if(samples)
@@ -1159,7 +1159,7 @@ namespace mgl_opengl
 
     int format = data_type->internal_format[components];
 
-    auto renderbuffer = new mgl_opengl::renderbuffer();
+    auto renderbuffer = new mgl::opengl::renderbuffer();
     renderbuffer->m_released = false;
     renderbuffer->m_context = this;
     renderbuffer->m_width = width;
@@ -1204,7 +1204,7 @@ namespace mgl_opengl
       return nullptr;
     }
 
-    auto renderbuffer = new mgl_opengl::renderbuffer();
+    auto renderbuffer = new mgl::opengl::renderbuffer();
     renderbuffer->m_released = false;
     renderbuffer->m_context = this;
     renderbuffer->m_width = width;
@@ -1243,7 +1243,7 @@ namespace mgl_opengl
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
 
-    auto sampler = new mgl_opengl::sampler();
+    auto sampler = new mgl::opengl::sampler();
     sampler->m_released = false;
     sampler->m_context = this;
     sampler->m_filter = { GL_LINEAR, GL_LINEAR };
@@ -1251,7 +1251,7 @@ namespace mgl_opengl
     sampler->m_repeat_x = true;
     sampler->m_repeat_y = true;
     sampler->m_repeat_z = true;
-    sampler->m_compare_func = mgl_opengl::compare_func::NONE;
+    sampler->m_compare_func = mgl::opengl::compare_func::NONE;
     sampler->m_border_color[0] = 0.0;
     sampler->m_border_color[1] = 0.0;
     sampler->m_border_color[2] = 0.0;
@@ -1274,15 +1274,15 @@ namespace mgl_opengl
 
     MGL_CORE_ASSERT(!released(), "Context already released");
 
-    auto scope = new mgl_opengl::scope();
+    auto scope = new mgl::opengl::scope();
     scope->m_released = false;
     scope->m_context = this;
     scope->m_enable_flags = enable_flags;
-    scope->m_old_enable_flags = mgl_opengl::enable_flag::INVALID;
+    scope->m_old_enable_flags = mgl::opengl::enable_flag::INVALID;
     scope->m_framebuffer = framebuffer;
     scope->m_old_framebuffer = m_bound_framebuffer;
-    scope->m_textures = mgl_core::list<scope::BindingData>(textures.size());
-    scope->m_buffers = mgl_core::list<scope::BindingData>(uniform_buffers.size() + storage_buffers.size());
+    scope->m_textures = mgl::core::list<scope::BindingData>(textures.size());
+    scope->m_buffers = mgl::core::list<scope::BindingData>(uniform_buffers.size() + storage_buffers.size());
     scope->m_samplers = samplers;
 
     int i = 0;
@@ -1414,7 +1414,7 @@ namespace mgl_opengl
     texture->m_samples = samples;
     texture->m_data_type = data_type;
     texture->m_max_level = 0;
-    texture->m_compare_func = mgl_opengl::compare_func::NONE;
+    texture->m_compare_func = mgl::opengl::compare_func::NONE;
     texture->m_anisotropy = 1.0f;
     texture->m_depth = false;
 
@@ -1492,7 +1492,7 @@ namespace mgl_opengl
     texture->m_samples = samples;
     texture->m_data_type = from_dtype("f4", 2);
     texture->m_max_level = 0;
-    texture->m_compare_func = mgl_opengl::compare_func::EQUAL;
+    texture->m_compare_func = mgl::opengl::compare_func::EQUAL;
     texture->m_anisotropy = 1.0f;
     texture->m_depth = true;
     texture->m_filter = { GL_LINEAR, GL_LINEAR };
@@ -1637,7 +1637,7 @@ namespace mgl_opengl
       return nullptr;
     }
 
-    auto texture = new mgl_opengl::texture_array();
+    auto texture = new mgl::opengl::texture_array();
     texture->m_released = false;
     texture->m_context = this;
     texture->m_width = width;
@@ -1715,7 +1715,7 @@ namespace mgl_opengl
       return nullptr;
     }
 
-    auto texture = new mgl_opengl::texture_cube();
+    auto texture = new mgl::opengl::texture_cube();
     texture->m_released = false;
     texture->m_context = this;
     texture->m_width = width;
@@ -1779,11 +1779,11 @@ namespace mgl_opengl
   }
 
   vertex_array_ref context::vertex_array(program_ref program,
-                                         mgl_opengl::vertex_buffer_list vertex_buffers,
+                                         mgl::opengl::vertex_buffer_list vertex_buffers,
                                          buffer_ref index_buffer,
                                          int index_element_size,
                                          bool skip_errors,
-                                         mgl_opengl::render_mode mode)
+                                         mgl::opengl::render_mode mode)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     const GLMethods& gl = m_gl;
@@ -1848,7 +1848,7 @@ namespace mgl_opengl
       return nullptr;
     }
 
-    auto array = new mgl_opengl::vertex_array();
+    auto array = new mgl::opengl::vertex_array();
     array->m_released = false;
     array->m_context = this;
     array->m_num_vertices = 0;
@@ -1951,7 +1951,7 @@ namespace mgl_opengl
     MGL_CORE_ASSERT(!released(), "Context already released");
     m_enable_flags = flags;
 
-    if(flags & mgl_opengl::enable_flag::BLEND)
+    if(flags & mgl::opengl::enable_flag::BLEND)
     {
       m_gl.Enable(GL_BLEND);
     }
@@ -1960,7 +1960,7 @@ namespace mgl_opengl
       m_gl.Disable(GL_BLEND);
     }
 
-    if(flags & mgl_opengl::enable_flag::DEPTH_TEST)
+    if(flags & mgl::opengl::enable_flag::DEPTH_TEST)
     {
       m_gl.Enable(GL_DEPTH_TEST);
     }
@@ -1969,7 +1969,7 @@ namespace mgl_opengl
       m_gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & mgl_opengl::enable_flag::CULL_FACE)
+    if(flags & mgl::opengl::enable_flag::CULL_FACE)
     {
       m_gl.Enable(GL_CULL_FACE);
     }
@@ -1978,7 +1978,7 @@ namespace mgl_opengl
       m_gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & mgl_opengl::enable_flag::RASTERIZER_DISCARD)
+    if(flags & mgl::opengl::enable_flag::RASTERIZER_DISCARD)
     {
       m_gl.Enable(GL_RASTERIZER_DISCARD);
     }
@@ -1987,7 +1987,7 @@ namespace mgl_opengl
       m_gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & mgl_opengl::enable_flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::opengl::enable_flag::PROGRAM_POINT_SIZE)
     {
       m_gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -2002,27 +2002,27 @@ namespace mgl_opengl
     MGL_CORE_ASSERT(!released(), "Context already released");
     m_enable_flags |= flags;
 
-    if(flags & mgl_opengl::enable_flag::BLEND)
+    if(flags & mgl::opengl::enable_flag::BLEND)
     {
       m_gl.Enable(GL_BLEND);
     }
 
-    if(flags & mgl_opengl::enable_flag::DEPTH_TEST)
+    if(flags & mgl::opengl::enable_flag::DEPTH_TEST)
     {
       m_gl.Enable(GL_DEPTH_TEST);
     }
 
-    if(flags & mgl_opengl::enable_flag::CULL_FACE)
+    if(flags & mgl::opengl::enable_flag::CULL_FACE)
     {
       m_gl.Enable(GL_CULL_FACE);
     }
 
-    if(flags & mgl_opengl::enable_flag::RASTERIZER_DISCARD)
+    if(flags & mgl::opengl::enable_flag::RASTERIZER_DISCARD)
     {
       m_gl.Enable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & mgl_opengl::enable_flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::opengl::enable_flag::PROGRAM_POINT_SIZE)
     {
       m_gl.Enable(GL_PROGRAM_POINT_SIZE);
     }
@@ -2034,27 +2034,27 @@ namespace mgl_opengl
 
     m_enable_flags &= ~flags;
 
-    if(flags & mgl_opengl::enable_flag::BLEND)
+    if(flags & mgl::opengl::enable_flag::BLEND)
     {
       m_gl.Disable(GL_BLEND);
     }
 
-    if(flags & mgl_opengl::enable_flag::DEPTH_TEST)
+    if(flags & mgl::opengl::enable_flag::DEPTH_TEST)
     {
       m_gl.Disable(GL_DEPTH_TEST);
     }
 
-    if(flags & mgl_opengl::enable_flag::CULL_FACE)
+    if(flags & mgl::opengl::enable_flag::CULL_FACE)
     {
       m_gl.Disable(GL_CULL_FACE);
     }
 
-    if(flags & mgl_opengl::enable_flag::RASTERIZER_DISCARD)
+    if(flags & mgl::opengl::enable_flag::RASTERIZER_DISCARD)
     {
       m_gl.Disable(GL_RASTERIZER_DISCARD);
     }
 
-    if(flags & mgl_opengl::enable_flag::PROGRAM_POINT_SIZE)
+    if(flags & mgl::opengl::enable_flag::PROGRAM_POINT_SIZE)
     {
       m_gl.Disable(GL_PROGRAM_POINT_SIZE);
     }
@@ -2115,18 +2115,18 @@ namespace mgl_opengl
     }
   }
 
-  void context::clear(const glm::vec4& color, float depth, const mgl_core::viewport_2d& viewport)
+  void context::clear(const glm::vec4& color, float depth, const mgl::core::viewport_2d& viewport)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     MGL_CORE_ASSERT(m_bound_framebuffer, "Context already released");
     m_bound_framebuffer->clear(color, depth, viewport);
   }
 
-  void context::clear(float r, float g, float b, float a, float depth, const mgl_core::viewport_2d& viewport)
+  void context::clear(float r, float g, float b, float a, float depth, const mgl::core::viewport_2d& viewport)
   {
     MGL_CORE_ASSERT(!released(), "Context already released");
     MGL_CORE_ASSERT(m_bound_framebuffer, "Context already released");
     m_bound_framebuffer->clear(r, g, b, a, depth, viewport);
   }
 
-} // namespace mgl_opengl
+} // namespace  mgl::opengl

@@ -1,7 +1,7 @@
 #pragma once
 #include "builtins.hpp"
 
-namespace mgl_core
+namespace mgl::core
 {
 
   template <typename T, typename U>
@@ -16,4 +16,4 @@ namespace mgl_core
 
     return zipped;
   }
-} // namespace mgl_core
+} // namespace  mgl::core

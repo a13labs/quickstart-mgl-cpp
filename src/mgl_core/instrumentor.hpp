@@ -26,7 +26,7 @@
 #  define GET_PROCESS_ID getpid
 #endif
 
-namespace mgl_core
+namespace mgl::core
 {
   using floating_point_microseconds = std::chrono::duration<double, std::micro>;
 
@@ -200,7 +200,7 @@ private:
       return result;
     }
   } // namespace instrumentor_utils
-} // namespace mgl_core
+} // namespace  mgl::core
 
 #ifndef MGL_CORE_PROFILE
 #  define MGL_CORE_PROFILE 0
@@ -228,11 +228,11 @@ private:
 #    define MGL_CORE_FUNC_SIG "MGL_CORE_FUNC_SIG unknown!"
 #  endif
 
-#  define MGL_CORE_PROFILE_BEGIN_SESSION() ::mgl_core::Instrumentor::get().begin_session("mgl_core")
-#  define MGL_CORE_PROFILE_END_SESSION() ::mgl_core::Instrumentor::get().end_session()
+#  define MGL_CORE_PROFILE_BEGIN_SESSION() ::mgl::core::Instrumentor::get().begin_session("mgl_core")
+#  define MGL_CORE_PROFILE_END_SESSION() ::mgl::core::Instrumentor::get().end_session()
 #  define MGL_CORE_PROFILE_SCOPE(name, category)                                                                                 \
-    constexpr auto fixedName = ::mgl_core::instrumentor_utils::cleanup_output_string(name, "__cdecl ");                          \
-    ::mgl_core::InstrumentationTimer timer##__LINE__(fixedName.Data, category)
+    constexpr auto fixedName = ::mgl::core::instrumentor_utils::cleanup_output_string(name, "__cdecl ");                         \
+    ::mgl::core::InstrumentationTimer timer##__LINE__(fixedName.Data, category)
 #  define MGL_CORE_PROFILE_FUNCTION(category) MGL_CORE_PROFILE_SCOPE(MGL_CORE_FUNC_SIG, category)
 #else
 #  define MGL_CORE_PROFILE_BEGIN_SESSION()
