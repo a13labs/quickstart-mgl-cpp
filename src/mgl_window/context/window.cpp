@@ -72,7 +72,7 @@ namespace mgl::window
       return;
     }
 
-    m_context = mgl::opengl::context::create_context(mgl::opengl::context_mode::SHARE, 330);
+    m_context = mgl::opengl::create_context(mgl::opengl::context_mode::SHARE, 330);
 
     if(!m_context)
     {

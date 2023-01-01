@@ -27,3 +27,12 @@
 #include "uniformblock.hpp"
 #include "varying.hpp"
 #include "vertexarray.hpp"
+
+namespace mgl::opengl
+{
+
+  inline context_ref create_context(context_mode::Enum mode, int required = 330)
+  {
+    return context::create_context(mode, required);
+  }
+} // namespace mgl::opengl
