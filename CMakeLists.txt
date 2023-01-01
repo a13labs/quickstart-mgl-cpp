@@ -96,7 +96,15 @@ if(MGL_APP_BUILD_TESTS)
   # Prevent overriding the parent project's compiler/linker
   # settings on Windows
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-  
+
+  if(NOT GOOGLE_TEST_PRESENT)
+    AddExternalProject(
+        googletest
+        "https://github.com/google/googletest.git" 
+        "release-1.11.0"
+    )    
+  endif()
+
   # The gtest/gtest_main targets carry header search path
   # dependencies automatically when using CMake 2.8.11 or
   # later. Otherwise we have to add them here ourselves.
