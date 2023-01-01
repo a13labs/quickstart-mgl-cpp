@@ -13,28 +13,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#pragma once
-#include "builtins.hpp"
-#include "glm/glm.hpp"
+#include "gtest/gtest.h"
 
-namespace mgl::opengl
+TEST(mgl_app, sample_test)
 {
-  class uniform_block
-  {
-public:
-    ~uniform_block() = default;
-
-    int binding();
-    void set_binding(int value);
-
-private:
-    friend class context;
-    uniform_block(const mgl::core::string& name, int program_obj, int index, size_t size, context* ctx);
-
-    context* m_context;
-    mgl::core::string m_name;
-    int m_program_obj;
-    int m_index;
-    int m_size;
-  };
-} // namespace  mgl::opengl
+  EXPECT_TRUE(true);
+}

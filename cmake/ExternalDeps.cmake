@@ -1,4 +1,4 @@
-function(AddExternalProject PRJ_NAME GIT_REPOSITORY GIT_TAG)
+function(Add_External_Project PRJ_NAME GIT_REPOSITORY GIT_TAG)
 
     set(
         oneValueArgs 
