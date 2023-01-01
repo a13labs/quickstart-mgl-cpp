@@ -26,13 +26,16 @@ public:
     void release();
     bool released();
 
+    void bind();
+    void unbind();
+
     const attribute_ref attribute(const mgl_core::string& name) const;
     const uniform_ref uniform(const mgl_core::string& name) const;
     const uniform_block_ref uniform_block(const mgl_core::string& name) const;
     const varying_ref varying(const mgl_core::string& name) const;
     const subroutine_ref subroutine(const mgl_core::string& name) const;
 
-    const mgl_core::string_list attributes();
+    const mgl_core::string_list attributes(bool all = true);
     const mgl_core::string_list uniforms();
     const mgl_core::string_list uniform_blocks();
     const mgl_core::string_list varyings();
@@ -50,6 +53,8 @@ public:
     int geometry_output();
     int geometry_vertices();
     bool is_transform();
+
+    int glo();
 
 private:
     friend class context;
@@ -75,6 +80,11 @@ private:
     varyings_dict m_varyings_map;
     subroutines_dict m_subroutines_map;
   };
+
+  inline int program::glo()
+  {
+    return m_program_obj;
+  }
 
   inline bool program::released()
   {

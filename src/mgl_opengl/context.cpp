@@ -1943,19 +1943,6 @@ namespace mgl_opengl
       i++;
     }
 
-    array->m_num_subroutines = 0;
-    array->m_subroutines = nullptr;
-    array->m_num_subroutines += array->m_program->m_num_vertex_shader_subroutines;
-    array->m_num_subroutines += array->m_program->m_num_fragment_shader_subroutines;
-    array->m_num_subroutines += array->m_program->m_num_geometry_shader_subroutines;
-    array->m_num_subroutines += array->m_program->m_num_tess_evaluation_shader_subroutines;
-    array->m_num_subroutines += array->m_program->m_num_tess_control_shader_subroutines;
-
-    if(array->m_num_subroutines)
-    {
-      array->m_subroutines = new unsigned[array->m_num_subroutines];
-    }
-
     return vertex_array_ref(array);
   }
 

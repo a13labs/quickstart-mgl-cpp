@@ -45,6 +45,8 @@ public:
     void bind_to_storage_buffer(int binding = 0, size_t size = 0, size_t offset = 0);
     void orphan(size_t size);
 
+    int glo();
+
 private:
     friend class context;
     friend class framebuffer;
@@ -65,6 +67,11 @@ private:
     bool m_dynamic;
     bool m_released;
   };
+
+  inline int buffer::glo()
+  {
+    return m_buffer_obj;
+  }
 
   inline bool buffer::write(const mgl_core::mem_buffer<float>& src, size_t offset)
   {

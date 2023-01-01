@@ -59,40 +59,6 @@ namespace mgl_opengl
     gl.UseProgram(m_program->m_program_obj);
     gl.BindVertexArray(m_vertex_array_obj);
 
-    if(m_subroutines)
-    {
-      unsigned* subroutines = m_subroutines;
-
-      if(m_program->m_num_vertex_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_VERTEX_SHADER, m_program->m_num_vertex_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_vertex_shader_subroutines;
-      }
-
-      if(m_program->m_num_fragment_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_FRAGMENT_SHADER, m_program->m_num_fragment_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_fragment_shader_subroutines;
-      }
-
-      if(m_program->m_num_geometry_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_GEOMETRY_SHADER, m_program->m_num_geometry_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_geometry_shader_subroutines;
-      }
-
-      if(m_program->m_num_tess_evaluation_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, m_program->m_num_tess_evaluation_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_tess_evaluation_shader_subroutines;
-      }
-
-      if(m_program->m_num_tess_control_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_TESS_CONTROL_SHADER, m_program->m_num_tess_control_shader_subroutines, subroutines);
-      }
-    }
-
     if(m_index_buffer != nullptr)
     {
       const void* ptr = (const void*)((GLintptr)first * m_index_element_size);
@@ -114,40 +80,6 @@ namespace mgl_opengl
     gl.UseProgram(m_program->m_program_obj);
     gl.BindVertexArray(m_vertex_array_obj);
     gl.BindBuffer(GL_DRAW_INDIRECT_BUFFER, buffer->m_buffer_obj);
-
-    if(m_subroutines)
-    {
-      unsigned* subroutines = m_subroutines;
-
-      if(m_program->m_num_vertex_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_VERTEX_SHADER, m_program->m_num_vertex_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_vertex_shader_subroutines;
-      }
-
-      if(m_program->m_num_fragment_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_FRAGMENT_SHADER, m_program->m_num_fragment_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_fragment_shader_subroutines;
-      }
-
-      if(m_program->m_num_geometry_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_GEOMETRY_SHADER, m_program->m_num_geometry_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_geometry_shader_subroutines;
-      }
-
-      if(m_program->m_num_tess_evaluation_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, m_program->m_num_tess_evaluation_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_tess_evaluation_shader_subroutines;
-      }
-
-      if(m_program->m_num_tess_control_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_TESS_CONTROL_SHADER, m_program->m_num_tess_control_shader_subroutines, subroutines);
-      }
-    }
 
     const void* ptr = (const void*)((GLintptr)first * 20);
 
@@ -261,40 +193,6 @@ namespace mgl_opengl
 
     gl.Enable(GL_RASTERIZER_DISCARD);
     gl.BeginTransformFeedback(output_mode);
-
-    if(m_subroutines)
-    {
-      unsigned* subroutines = m_subroutines;
-
-      if(m_program->m_num_vertex_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_VERTEX_SHADER, m_program->m_num_vertex_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_vertex_shader_subroutines;
-      }
-
-      if(m_program->m_num_fragment_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_FRAGMENT_SHADER, m_program->m_num_fragment_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_fragment_shader_subroutines;
-      }
-
-      if(m_program->m_num_geometry_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_GEOMETRY_SHADER, m_program->m_num_geometry_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_geometry_shader_subroutines;
-      }
-
-      if(m_program->m_num_tess_evaluation_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, m_program->m_num_tess_evaluation_shader_subroutines, subroutines);
-        subroutines += m_program->m_num_tess_evaluation_shader_subroutines;
-      }
-
-      if(m_program->m_num_tess_control_shader_subroutines)
-      {
-        gl.UniformSubroutinesuiv(GL_TESS_CONTROL_SHADER, m_program->m_num_tess_control_shader_subroutines, subroutines);
-      }
-    }
 
     if(m_index_buffer != nullptr)
     {

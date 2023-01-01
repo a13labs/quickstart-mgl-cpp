@@ -74,6 +74,8 @@ public:
 
     void use();
 
+    int glo();
+
 private:
     friend class context;
     friend class renderbuffer;
@@ -101,6 +103,11 @@ private:
     bool m_depth_mask;
     bool m_released;
   };
+
+  inline int framebuffer::glo()
+  {
+    return m_framebuffer_obj;
+  }
 
   inline bool framebuffer::released()
   {

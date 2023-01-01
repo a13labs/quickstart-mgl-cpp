@@ -65,6 +65,8 @@ public:
     float max_lod();
     void set_max_lod(float value);
 
+    int glo();
+
 private:
     friend class context;
     sampler() = default;
@@ -82,6 +84,11 @@ private:
     bool m_released;
     sampler::Filter m_filter;
   };
+
+  inline int sampler::glo()
+  {
+    return m_sampler_obj;
+  }
 
   inline bool sampler::released()
   {

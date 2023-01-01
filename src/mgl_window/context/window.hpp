@@ -16,6 +16,7 @@
 #pragma once
 #include "input.hpp"
 #include "mgl_window/builtins.hpp"
+#include "mgl_window/render/buffer.hpp"
 
 namespace mgl_window
 {
@@ -104,7 +105,7 @@ private:
     bool m_running;
     mgl_core::Timer m_timer;
     mgl_core::scope<native_window> m_native_window;
-    mgl_core::ref<mgl_opengl::context> m_context;
+    mgl_opengl::context_ref m_context;
   };
 
   inline int window::width()

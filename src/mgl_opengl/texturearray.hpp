@@ -59,6 +59,8 @@ public:
     void use(int index = 0);
     void build_mipmaps(int base = 0, int max_level = 1000);
 
+    int glo();
+
 private:
     friend class context;
     texture_array() = default;
@@ -77,6 +79,11 @@ private:
     float m_anisotropy;
     bool m_released;
   };
+
+  inline int texture_array::glo()
+  {
+    return m_texture_obj;
+  }
 
   inline bool texture_array::released()
   {

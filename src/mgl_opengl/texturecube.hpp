@@ -52,6 +52,8 @@ public:
     void bind_to_image(int unit, bool read = true, bool write = true, int level = 0, int format = 0);
     void use(int index = 0);
 
+    int glo();
+
 private:
     friend class context;
     texture_cube() = default;
@@ -67,6 +69,11 @@ private:
     float m_anisotropy;
     bool m_released;
   };
+
+  inline int texture_cube::glo()
+  {
+    return m_texture_obj;
+  }
 
   inline bool texture_cube::released()
   {

@@ -34,6 +34,8 @@ public:
     bool depth();
     int components();
 
+    int glo();
+
 private:
     friend class context;
     renderbuffer(){};
@@ -48,6 +50,11 @@ private:
     bool m_depth;
     bool m_released;
   };
+
+  inline int renderbuffer::glo()
+  {
+    return m_renderbuffer_obj;
+  }
 
   inline bool renderbuffer::released()
   {

@@ -60,6 +60,8 @@ public:
     void use(int index = 0);
     void build_mipmaps(int base = 0, int max_level = 1000);
 
+    int glo();
+
 private:
     friend class context;
     texture_3d() = default;
@@ -78,6 +80,11 @@ private:
     bool m_repeat_z;
     bool m_released;
   };
+
+  inline int texture_3d::glo()
+  {
+    return m_texture_obj;
+  }
 
   inline bool texture_3d::released()
   {

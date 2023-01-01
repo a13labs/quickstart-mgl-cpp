@@ -39,6 +39,8 @@ public:
 
     const uniform_ref operator[](const mgl_core::string& name) const;
 
+    int glo();
+
 private:
     friend class context;
     compute_shader() = default;
@@ -50,6 +52,11 @@ private:
     uniform_blocks_dict m_uniform_blocks_map;
     bool m_released;
   };
+
+  inline int compute_shader::glo()
+  {
+    return m_program_obj;
+  }
 
   inline const uniform_ref compute_shader::uniform(const mgl_core::string& name) const
   {

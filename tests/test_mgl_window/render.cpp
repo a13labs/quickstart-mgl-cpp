@@ -20,7 +20,7 @@ TEST(gml_opengl, buffers_test)
 {
 
   mgl_core::string format = "3f 2f 1f 3f/i";
-  auto parsed = mgl_window::render::parse_attribute_formats(format);
+  auto parsed = mgl_window::render::parse_layout(format);
 
   EXPECT_EQ(4, parsed.size());
   EXPECT_EQ(parsed[0].format_string, "3f");

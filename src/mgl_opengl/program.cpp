@@ -33,12 +33,14 @@ namespace mgl_opengl
     gl.DeleteProgram(m_program_obj);
   }
 
-  const mgl_core::string_list program::attributes()
+  const mgl_core::string_list program::attributes(bool all)
   {
     auto result = mgl_core::string_list();
 
     for(auto&& a : m_attributes_map)
     {
+      if(!all && mgl_core::starts_with(a.first, "gl_"))
+        continue;
       result.push_back(a.first);
     }
 
@@ -91,6 +93,26 @@ namespace mgl_opengl
     }
 
     return result;
+  }
+
+  void program::bind()
+  {
+    MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
+    const GLMethods& gl = m_context->gl();
+
+    gl.UseProgram(m_program_obj);
+  }
+
+  void program::unbind()
+  {
+    MGL_CORE_ASSERT(!m_released, "Vertex Array already released");
+    MGL_CORE_ASSERT(m_context, "No context");
+    MGL_CORE_ASSERT(!m_context->released(), "Context already released");
+    const GLMethods& gl = m_context->gl();
+
+    gl.UseProgram(0);
   }
 
 } // namespace mgl_opengl

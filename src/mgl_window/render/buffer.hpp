@@ -5,64 +5,88 @@ namespace mgl_window
 {
   namespace render
   {
-    struct buffer_format
+    struct buffer_element
     {
       const mgl_core::string format_string;
       const int components;
       const int byte_per_component;
       const bool per_instance;
 
-      int bytes_total();
+      size_t size();
     };
 
-    extern const buffer_format null_buffer_format;
-    using buffer_formats = mgl_core::list<buffer_format>;
+    extern const buffer_element null_buffer_format;
 
-    buffer_formats parse_attribute_formats(const mgl_core::string& str);
-    const buffer_format& get_buffer_format(const mgl_core::string& str);
+    buffer_layout parse_layout(const mgl_core::string& str);
+    const buffer_element& to_buffer_element(const mgl_core::string& str);
 
-    class buffer_info
+    class vertex_buffer
     {
 
   public:
-      buffer_info(mgl_opengl::buffer_ref buffer,
-                  const mgl_core::string& format,
-                  const mgl_core::string_list& attrs = {},
-                  bool per_instance = false);
-      ~buffer_info();
+      vertex_buffer(mgl_opengl::buffer_ref buffer,
+                    const mgl_core::string& format,
+                    const mgl_core::string_list& attrs = {},
+                    bool per_instance = false);
+      ~vertex_buffer() = default;
 
-      int vertex_size();
-      mgl_opengl::vertex_buffer vertex_data();
-      const buffer_formats& formats() const;
+      size_t size();
+      const buffer_layout& layout() const;
+      const mgl_core::string_list& attributes() const;
       bool has_attribute(const mgl_core::string& name);
+      const mgl_opengl::buffer_ref& buffer() const;
+      bool per_instance();
+      int vertices();
+
+      operator mgl_opengl::vertex_buffer();
 
   private:
       mgl_opengl::buffer_ref m_buffer;
-      mgl_core::string m_format;
-      buffer_formats m_formats;
+      mgl_core::string m_layout_str;
+      buffer_layout m_layout;
       mgl_core::string_list m_attrs;
       bool m_per_instance;
+      int m_vertices;
     };
 
-    inline int buffer_format::bytes_total()
+    inline size_t buffer_element::size()
     {
       return components * byte_per_component;
     }
 
-    inline mgl_opengl::vertex_buffer buffer_info::vertex_data()
+    inline const buffer_layout& vertex_buffer::layout() const
     {
-      return { m_buffer, m_format, m_attrs };
+      return m_layout;
     }
 
-    inline const buffer_formats& buffer_info::formats() const
+    inline const mgl_core::string_list& vertex_buffer::attributes() const
     {
-      return m_formats;
+      return m_attrs;
     }
 
-    inline bool buffer_info::has_attribute(const mgl_core::string& name)
+    inline bool vertex_buffer::has_attribute(const mgl_core::string& name)
     {
       return mgl_core::in(name, m_attrs);
     }
 
+    inline const mgl_opengl::buffer_ref& vertex_buffer::buffer() const
+    {
+      return m_buffer;
+    }
+
+    inline vertex_buffer::operator mgl_opengl::vertex_buffer()
+    {
+      return { m_buffer, m_layout_str, m_attrs };
+    }
+
+    inline bool vertex_buffer::per_instance()
+    {
+      return m_per_instance;
+    }
+
+    inline int vertex_buffer::vertices()
+    {
+      return m_vertices;
+    }
   } // namespace render
 } // namespace mgl_window
