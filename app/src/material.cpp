@@ -1,5 +1,5 @@
 #include "material.hpp"
-#include "mgl_graphics/application.hpp"
+#include "mgl_application/application.hpp"
 #include "mgl_graphics/render.hpp"
 #include "mgl_window/api.hpp"
 
