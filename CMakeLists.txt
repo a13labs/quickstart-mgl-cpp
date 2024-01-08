@@ -4,9 +4,6 @@ project(app
         LANGUAGES CXX
        )
 
-# Add paths to modules
-list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/" )       
-
 # Enable the FetchContent module
 include(FetchContent)
 

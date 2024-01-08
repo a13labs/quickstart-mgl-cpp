@@ -16,3 +16,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(mgl)
 
 set(MGL_BINARY_DIR "${mgl_BINARY_DIR}" CACHE PATH "Path to mgl binary directory")
+
+# Add paths to modules
+list( APPEND CMAKE_MODULE_PATH "${MGL_BINARY_DIR}/cmake/" )       

@@ -6,15 +6,15 @@
 static mgl::window::api::program_ref s_program;
 static mgl::string_list s_attributes = { "in_vert", "in_color" };
 
+#include "shaders/fragment/fragment.hpp"
+#include "shaders/vertex/vertex.hpp"
+
 custom_shader::custom_shader()
     : mgl::graphics::shader()
 {
 
   if(s_program == nullptr)
   {
-
-#include "shaders/fragment/fragment.hpp"
-#include "shaders/vertex/vertex.hpp"
 
     auto& render = mgl::graphics::current_render();
     auto ctx = render.context();
