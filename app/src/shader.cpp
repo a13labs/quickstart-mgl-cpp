@@ -1,42 +1,30 @@
 #include "shader.hpp"
 #include "mgl_application/application.hpp"
 #include "mgl_graphics/render.hpp"
-#include "mgl_window/api.hpp"
-
-static mgl::window::api::program_ref s_program;
-static mgl::string_list s_attributes = { "in_vert", "in_color" };
 
 #include "shaders/fragment/fragment.hpp"
 #include "shaders/vertex/vertex.hpp"
 
-custom_shader::custom_shader()
-    : mgl::graphics::shader()
+static mgl::string_list s_attributes = { "in_vert", "in_color" };
+
+void custom_shader::load()
 {
+  auto& render = mgl::graphics::current_render();
+  auto ctx = render.context();
+  // Load vertex and fragment shaders from generated source
+  mgl::opengl::shaders glsl = { vertex_shader_source, fragment_shader_source };
 
-  if(s_program == nullptr)
-  {
-
-    auto& render = mgl::graphics::current_render();
-    auto ctx = render.context();
-    // Load vertex and fragment shaders from generated source
-    mgl::opengl::shaders glsl = { reinterpret_cast<const char*>(vertex_shader_source),
-                                  reinterpret_cast<const char*>(fragment_shader_source) };
-
-    s_program = ctx->program(glsl);
-  }
+  m_program = ctx->program(glsl);
 }
 
-void custom_shader::release()
+void custom_shader::unload()
 {
-  if(s_program != nullptr)
-  {
-    s_program->release();
-  }
+  m_program->release();
 }
 
-mgl::window::api::program_ref& custom_shader::program()
+mgl::window::api::program_ref& custom_shader::native()
 {
-  return s_program;
+  return m_program;
 }
 
 mgl::string_list& custom_shader::attributes()
